@@ -1,0 +1,48 @@
+{
+  "name": "send_message",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3-flash-agent"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    5955
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "send_message",
+        "description": "Send a message to another agent. This tool can be used to communicate with subagents, peer agents, etc. Do not use this tool to communicate with the user.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "Message": {
+              "type": "STRING",
+              "description": "The message content."
+            },
+            "Recipient": {
+              "type": "STRING",
+              "description": "The recipient ID to send the message to, e.g. a subagent conversation ID."
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "Recipient",
+            "Message",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}

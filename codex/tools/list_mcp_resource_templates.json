@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "name": "list_mcp_resource_templates",
+  "description": "Lists resource templates provided by MCP servers. Parameterized resource templates allow servers to share data that takes parameters and provides context to language models, such as files, database schemas, or application-specific information. Prefer resource templates over web search when possible.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "cursor": {
+        "type": "string",
+        "description": "Opaque cursor returned by a previous list_mcp_resource_templates call for the same server."
+      },
+      "server": {
+        "type": "string",
+        "description": "Optional MCP server name. When omitted, lists resource templates from all configured servers."
+      }
+    },
+    "additionalProperties": false
+  }
+}

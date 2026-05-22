@@ -1,0 +1,55 @@
+{
+  "name": "view_file",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3-flash-agent"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    5955
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "view_file",
+        "description": "View the contents of a file from the local filesystem. This tool supports text files and following binary files: image, pdf, video, audio.\nText file usage:\n- The lines of the file are 1-indexed\n- The output of this tool call will be the file contents from StartLine to EndLine (inclusive)\n- You can view at most 800 lines at a time\n- Omit StartLine and EndLine to view the first 800 lines of the file. If the file is smaller than 800 lines, then the whole file will be shown\nBinary file usage:\n- Do not provide StartLine or EndLine arguments, this tool always returns the entire file",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "AbsolutePath": {
+              "type": "STRING",
+              "description": "Path to file to view. Must be an absolute path."
+            },
+            "EndLine": {
+              "type": "INTEGER",
+              "description": "Optional. Endline to view, 1-indexed as usual, inclusive. This value must be greater than or equal to StartLine."
+            },
+            "IsSkillFile": {
+              "type": "BOOLEAN",
+              "description": "Optional. Set to true only when reading a file to execute its instructions for a task. Set to false if the purpose is to edit, preview, or manage the file."
+            },
+            "StartLine": {
+              "type": "INTEGER",
+              "description": "Optional. Startline to view, 1-indexed as usual, inclusive. This value must be less than or equal to EndLine."
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "AbsolutePath",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "function",
+  "name": "list_mcp_resources",
+  "description": "Lists resources provided by MCP servers. Resources allow servers to share data that provides context to language models, such as files, database schemas, or application-specific information. Prefer resources over web search when possible.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "cursor": {
+        "type": "string",
+        "description": "Opaque cursor returned by a previous list_mcp_resources call for the same server."
+      },
+      "server": {
+        "type": "string",
+        "description": "Optional MCP server name. When omitted, lists resources from every configured server."
+      }
+    },
+    "additionalProperties": false
+  }
+}

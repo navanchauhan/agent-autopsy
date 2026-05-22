@@ -1,0 +1,12 @@
+{
+  "type": "function",
+  "name": "get_goal",
+  "description": "Get the current goal for this thread, including status, budgets, token and elapsed-time usage, and remaining token budget.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+  }
+}

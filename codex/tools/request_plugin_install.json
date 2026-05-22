@@ -1,0 +1,34 @@
+{
+  "type": "function",
+  "name": "request_plugin_install",
+  "description": "# Request plugin/connector install\n\nUse this tool only after `list_available_plugins_to_install` returns a plugin or connector that exactly matches the user's explicit request.\n\nDo not use it for adjacent capabilities, broad recommendations, or tools that merely seem useful. Pass the returned `tool_type` through directly, and pass the returned `id` as `tool_id`.\n\nIMPORTANT: DO NOT call this tool in parallel with other tools.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "action_type": {
+        "type": "string",
+        "description": "Suggested action for the tool. Use \"install\"."
+      },
+      "suggest_reason": {
+        "type": "string",
+        "description": "Concise one-line user-facing reason why this plugin or connector can help with the current request."
+      },
+      "tool_id": {
+        "type": "string",
+        "description": "Connector or plugin id to suggest."
+      },
+      "tool_type": {
+        "type": "string",
+        "description": "Type of discoverable tool to suggest. Use \"connector\" or \"plugin\"."
+      }
+    },
+    "required": [
+      "tool_type",
+      "action_type",
+      "tool_id",
+      "suggest_reason"
+    ],
+    "additionalProperties": false
+  }
+}

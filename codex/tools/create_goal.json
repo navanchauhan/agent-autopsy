@@ -1,0 +1,23 @@
+{
+  "type": "function",
+  "name": "create_goal",
+  "description": "Create a goal only when explicitly requested by the user or system/developer instructions; do not infer goals from ordinary tasks.\nSet token_budget only when an explicit token budget is requested. Fails if a goal exists; use update_goal only for status.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "objective": {
+        "type": "string",
+        "description": "Required. The concrete objective to start pursuing. This starts a new active goal only when no goal is currently defined; if a goal already exists, this tool fails."
+      },
+      "token_budget": {
+        "type": "integer",
+        "description": "Optional positive token budget for the new active goal."
+      }
+    },
+    "required": [
+      "objective"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "web_search",
+  "external_web_access": true,
+  "search_content_types": [
+    "text",
+    "image"
+  ]
+}

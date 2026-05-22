@@ -1,0 +1,39 @@
+{
+  "type": "function",
+  "name": "update_plan",
+  "description": "Updates the task plan.\nProvide an optional explanation and a list of plan items, each with a step and status.\nAt most one step can be in_progress at a time.\n",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "explanation": {
+        "type": "string"
+      },
+      "plan": {
+        "type": "array",
+        "description": "The list of steps",
+        "items": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "One of: pending, in_progress, completed"
+            },
+            "step": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "step",
+            "status"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "plan"
+    ],
+    "additionalProperties": false
+  }
+}

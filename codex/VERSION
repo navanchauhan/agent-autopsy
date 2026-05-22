@@ -1,0 +1,9 @@
+source = openai/codex
+revision = 7e802b22f13e2714efd2fb2a6e396319958d6506
+describe = rusty-v8-v146.4.0-2079-g7e802b22f1
+codex_cli_package_version = 0.0.0-dev
+codex_rs_workspace_version = 0.0.0
+generated_at = 2026-05-22T01:41:37.055392+00:00
+reference_path = references/codex
+prompts = 13
+tools = 20

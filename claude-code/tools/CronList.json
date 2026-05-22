@@ -1,0 +1,11 @@
+{
+  "name": "CronList",
+  "description": "List all cron jobs scheduled via CronCreate in this session.",
+  "input_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  },
+  "eager_input_streaming": true
+}

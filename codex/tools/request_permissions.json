@@ -1,0 +1,55 @@
+{
+  "type": "function",
+  "name": "request_permissions",
+  "description": "Request additional filesystem or network permissions from the user and wait for the client to grant a subset of the requested permission profile. Granted permissions apply automatically to later shell-like commands in the current turn, or for the rest of the session if the client approves them at session scope.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "permissions": {
+        "type": "object",
+        "properties": {
+          "file_system": {
+            "type": "object",
+            "properties": {
+              "read": {
+                "type": "array",
+                "description": "Absolute paths to grant read access to.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "write": {
+                "type": "array",
+                "description": "Absolute paths to grant write access to.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "network": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean",
+                "description": "Set to true to request network access."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "reason": {
+        "type": "string",
+        "description": "Optional short explanation for why additional permissions are needed."
+      }
+    },
+    "required": [
+      "permissions"
+    ],
+    "additionalProperties": false
+  }
+}

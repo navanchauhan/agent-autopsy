@@ -1,0 +1,55 @@
+{
+  "name": "generate_image",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3-flash-agent"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    5955
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "generate_image",
+        "description": "Generate an image or edit existing images based on a text prompt. The resulting image will be saved as an artifact for use. You can use this tool to generate user interfaces and iterate on a design with the USER for an application or website that you are building. When creating UI designs, generate only the interface itself without surrounding device frames (laptops, phones, tablets, etc.) unless the user explicitly requests them. You can also use this tool to generate assets for use in an application or website.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "ImageName": {
+              "type": "STRING",
+              "description": "Name of the generated image to save. Should be all lowercase with underscores, describing what the image contains. Maximum 3 words. Example: 'login_page_mockup'"
+            },
+            "ImagePaths": {
+              "type": "ARRAY",
+              "description": "Optional absolute paths to the images to use in generation. You can pass in images here if you would like to edit or combine images. You can pass in artifact images and any images in the file system. Note: you cannot pass in more than 3 images.",
+              "items": {
+                "type": "STRING"
+              }
+            },
+            "Prompt": {
+              "type": "STRING",
+              "description": "The text prompt to generate an image for."
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "Prompt",
+            "ImageName",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}

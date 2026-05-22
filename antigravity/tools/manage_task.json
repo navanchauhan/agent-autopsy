@@ -1,0 +1,57 @@
+{
+  "name": "manage_task",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3-flash-agent"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    5955
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "manage_task",
+        "description": "Manage background tasks. Use this tool to list running tasks or interact with tasks that were sent to the background.\n\nActions:\n- 'list': List all currently running background tasks\n- 'kill': Cancel the task's execution\n- 'status': Check the task's current status and log file location\n- 'send_input': Send input to a running task\n\nWhen mentioning tasks to the user, avoid using full task IDs and start timestamps; keep them human-readable.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "Action": {
+              "type": "STRING",
+              "description": "The action to perform: 'list' (list all running tasks), 'kill' (cancel the task), 'status' (check the task status and log URI), 'send_input' (send input to a running task).",
+              "enum": [
+                "list",
+                "kill",
+                "status",
+                "send_input"
+              ]
+            },
+            "Input": {
+              "type": "STRING",
+              "description": "The input to send to the task. Required when Action is 'send_input'."
+            },
+            "TaskId": {
+              "type": "STRING",
+              "description": "The task ID to manage. Required when Action is 'kill', 'status', or 'send_input'."
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "Action",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}
