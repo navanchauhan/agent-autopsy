@@ -1,0 +1,31 @@
+{
+  "name": "skill",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "skill",
+    "description": "Load a specialized skill when the task matches one of the skills listed in the system prompt.\n\nUse this tool to inject that skill's instructions and bundled resources into the current conversation. A loaded skill may provide:\n- task-specific workflow guidance\n- references to scripts, templates, or files in the skill directory\n- additional builtin or MCP tools that become available after loading\n\nUse this tool when:\n- the user explicitly asks for a skill by name\n- the task clearly matches a skill description from the system prompt\n\nYou usually only need to load a skill once per context window. After it is loaded, continue following its instructions instead of reloading it.\n\nParameters:\n- name: The name of the skill to load (must match one of the skills listed below)\n\nExample: To use the web-browser skill for interacting with web pages, call this tool with name: \"web-browser\"",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the skill to load"
+        },
+        "arguments": {
+          "type": "string",
+          "description": "Optional arguments to pass to the skill"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "source": "builtin"
+  }
+}

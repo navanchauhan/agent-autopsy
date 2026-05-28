@@ -1,0 +1,27 @@
+{
+  "name": "finder",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "finder",
+    "description": "Intelligently search your codebase: Use it for complex, multi-step search tasks where you need to find code based on functionality or concepts rather than exact matches. Anytime you want to chain multiple grep calls you should use this tool.\n\nWHEN TO USE THIS TOOL:\n- You must locate code by behavior or concept\n- You need to run multiple greps in sequence\n- You must correlate or look for connection between several areas of the codebase.\n- You must filter broad terms (\"config\", \"logger\", \"cache\") by context.\n- You need answers to questions such as \"Where do we validate JWT authentication headers?\" or \"Which module handles file-watcher retry logic\"\n\nWHEN NOT TO USE THIS TOOL:\n- When you know the exact file path - use Read directly\n- When looking for specific symbols or exact strings - use glob or Grep\n- When you need to create, modify files, or run terminal commands\n\nUSAGE GUIDELINES:\n1. Always spawn multiple search agents in parallel to maximise speed.\n2. Formulate your query as a precise engineering request.\n   ✓ \"Find every place we build an HTTP error response.\"\n   ✗ \"error handling search\"\n3. Name concrete artifacts, patterns, or APIs to narrow scope (e.g., \"Express middleware\", \"fs.watch debounce\").\n4. State explicit success criteria so the agent knows when to stop (e.g., \"Return file paths and line numbers for all JWT verification calls\").\n5. Never issue vague or exploratory commands - be definitive and goal-oriented.\n6. Avoid broad root-level filename globs when you can scope to a directory.\n   ✓ \"Find watchdog-related files under core and server/src.\"\n   ✗ \"Find files named watchdog anywhere.\"\n7. Prefer scoped Grep searches before falling back to repo-wide filename scans.\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The search query describing to the agent what it should. Be specific and include technical terms, file types, or expected code patterns to help the agent find relevant code. Formulate the query in a way that makes it clear to the agent when it has found the right thing."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    },
+    "source": "builtin"
+  }
+}

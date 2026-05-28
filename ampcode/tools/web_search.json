@@ -1,0 +1,38 @@
+{
+  "name": "web_search",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "web_search",
+    "description": "Search the web for information relevant to a research objective.\n\nUse when you need up-to-date or precise documentation. Use `read_web_page` to fetch full content from a specific URL.\n\n# Examples\n\nGet API documentation for a specific provider\n```json\n{\"objective\":\"I want to know the request fields for the Stripe billing create customer API. Prefer Stripe's docs site.\"}\n```\n\nSee usage documentation for newly released library features\n```json\n{\"objective\":\"I want to know how to use SvelteKit remote functions, which is a new feature shipped in the last month.\",\"search_queries\":[\"sveltekit\",\"remote function\"]}\n```\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objective": {
+          "type": "string",
+          "description": "A natural-language description of the broader task or research goal, including any source or freshness guidance"
+        },
+        "search_queries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional keyword queries to ensure matches for specific terms are prioritized (recommended for best results)"
+        },
+        "max_results": {
+          "type": "number",
+          "description": "The maximum number of results to return (default: 5)"
+        }
+      },
+      "required": [
+        "objective"
+      ]
+    },
+    "source": "builtin"
+  }
+}

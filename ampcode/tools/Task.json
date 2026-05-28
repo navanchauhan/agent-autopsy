@@ -1,0 +1,32 @@
+{
+  "name": "Task",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "Task",
+    "description": "Perform a task (a sub-task of the user's overall task) using a sub-agent that has access to the following tools: Read, Bash, edit_file, create_file, read_web_page, web_search, finder, skill, task_list, view_media.\n\n\nWhen to use the Task tool:\n- When you need to perform complex multi-step tasks\n- When you need to run an operation that will produce a lot of output (tokens) that is not needed after the sub-agent's task completes\n- When you are making changes across many layers of an application (frontend, backend, API layer, etc.), after you have first planned and spec'd out the changes so they can be implemented independently by multiple sub-agents\n- When the user asks you to launch an \"agent\" or \"subagent\", because the user assumes that the agent will do a good job\n\nWhen NOT to use the Task tool:\n- When you are performing a single logical task, such as adding a new feature to a single part of an application.\n- When you're reading a single file (use Read), performing a text search (use Grep), editing a single file (use edit_file)\n- When you're not sure what changes you want to make. Use all tools available to you to determine the changes to make.\n\nHow to use the Task tool:\n- You will not see the individual steps of the sub-agent's execution, and you can't communicate with it until it finishes, at which point you will receive a summary of its work.\n- Use Task for bounded worker jobs: implementation units, focused investigation, test repair, UI checking, or review. You are still the orchestrator responsible for integration and the final user-facing result.\n- Write outcome-first prompts. Include the goal, scope, relevant context, files or evidence to inspect first, constraints and non-goals, validation to run, and the expected return shape.\n- Tell the worker whether it is coding, reviewing, verifying, or investigating. Avoid asking one Task subagent to do all of those roles unless the task is small.\n- Ask for compact results, not transcripts. The worker should report the outcome, files changed or inspected, validation result, concerns or blockers, and next action.\n- Run multiple Task subagents concurrently only for independent work. Prefer parallel Tasks for read-only investigation, review, or verification. Keep code-writing single-threaded unless write targets are clearly disjoint or isolated.\n- When the worker finishes, inspect its diff or evidence, run the relevant combined validation, and summarize the user-relevant result yourself.\n- When the agent is done, it will return a single message back to you. The result returned by the agent is not visible to the user. To show the user the result, you should send a text message back to the user with a concise summary of the result.\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "The task for the agent to perform. Be specific about what needs to be done and include any relevant context."
+        },
+        "description": {
+          "type": "string",
+          "description": "A very short description of the task that can be displayed to the user."
+        }
+      },
+      "required": [
+        "prompt",
+        "description"
+      ]
+    },
+    "source": "builtin"
+  }
+}

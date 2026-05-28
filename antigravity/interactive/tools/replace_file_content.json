@@ -1,0 +1,85 @@
+{
+  "name": "replace_file_content",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3.5-flash-low"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    4720
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "replace_file_content",
+        "description": "Use this tool to edit an existing file. Follow these rules:\n1. Use this tool ONLY when you are making a SINGLE CONTIGUOUS block of edits to the same file (i.e. replacing a single contiguous block of text). If you are making edits to multiple non-adjacent lines, use the multi_replace_file_content tool instead.\n2. Do NOT make multiple parallel calls to this tool or the multi_replace_file_content tool for the same file.\n3. To edit multiple, non-adjacent lines of code in the same file, make a single call to the multi_replace_file_content tool..\n4. For the ReplacementChunk, specify StartLine, EndLine, TargetContent and ReplacementContent. StartLine and EndLine should specify a range of lines containing precisely the instances of TargetContent that you wish to edit. To edit a single instance of the TargetContent, the range should be such that it contains that specific instance of the TargetContent and no other instances. In TargetContent, specify the precise lines of code to edit. These lines MUST EXACTLY MATCH text in the existing file content. In ReplacementContent, specify the replacement content for the specified target content. This must be a complete drop-in replacement of the TargetContent, with necessary modifications made.\n5. If you are making multiple edits across a single file, use the multi_replace_file_content tool instead. DO NOT try to replace the entire existing content with the new content, this is very expensive.\n6. You may not edit file extensions: [.ipynb]",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "AllowMultiple": {
+              "type": "BOOLEAN",
+              "description": "If true, multiple occurrences of 'targetContent' will be replaced by 'replacementContent' if they are found. Otherwise if multiple occurences are found, an error will be returned."
+            },
+            "Description": {
+              "type": "STRING",
+              "description": "Brief, user-facing explanation of what this change did. Focus on non-obvious rationale, design decisions, or important context. Don't just restate what the code does."
+            },
+            "EndLine": {
+              "type": "INTEGER",
+              "description": "The ending line number of the chunk (1-indexed). Should be at or after the last line containing the target content. Must satisfy StartLine <= EndLine <= number of lines in the file. The target content is searched for within the [StartLine, EndLine] range."
+            },
+            "Instruction": {
+              "type": "STRING",
+              "description": "A description of the changes that you are making to the file."
+            },
+            "ReplacementContent": {
+              "type": "STRING",
+              "description": "The content to replace the target content with."
+            },
+            "StartLine": {
+              "type": "INTEGER",
+              "description": "The starting line number of the chunk (1-indexed). Should be at or before the first line containing the target content. Must satisfy 1 <= StartLine <= EndLine. The target content is searched for within the [StartLine, EndLine] range."
+            },
+            "TargetContent": {
+              "type": "STRING",
+              "description": "The exact string to be replaced. This must be the exact character-sequence to be replaced, including whitespace. Be very careful to include any leading whitespace otherwise this will not work at all. This must be a unique substring within the file, or else it will error."
+            },
+            "TargetFile": {
+              "type": "STRING",
+              "description": "The target file to modify. Must be an absolute path. Always specify the target file as the very first argument."
+            },
+            "TargetLintErrorIds": {
+              "type": "ARRAY",
+              "description": "If applicable, IDs of lint errors this edit aims to fix (they'll have been given in recent IDE feedback). If you believe the edit could fix lints, do specify lint IDs; if the edit is wholly unrelated, do not. A rule of thumb is, if your edit was influenced by lint feedback, include lint IDs. Exercise honest judgement here.",
+              "items": {
+                "type": "STRING"
+              }
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "TargetFile",
+            "Instruction",
+            "Description",
+            "AllowMultiple",
+            "TargetContent",
+            "ReplacementContent",
+            "StartLine",
+            "EndLine",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "shell_command",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "rush"
+  ],
+  "schema": {
+    "name": "shell_command",
+    "description": "Runs a shell command and returns its output.\n- Always set the `workdir` param when using the shell_command function. Do not use `cd` unless absolutely necessary. For doing file changes, use the apply_patch\n- Set `timeout_ms` to kill the command after the given wall-clock duration; omit it to let the command run without a timeout",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "string",
+          "description": "Shell command to execute."
+        },
+        "workdir": {
+          "type": "string",
+          "description": "Optional working directory to run the command in; defaults to the turn cwd."
+        },
+        "timeout_ms": {
+          "type": "number",
+          "description": "The timeout for the command in milliseconds"
+        }
+      },
+      "required": [
+        "command"
+      ],
+      "additionalProperties": false
+    },
+    "source": "builtin"
+  }
+}

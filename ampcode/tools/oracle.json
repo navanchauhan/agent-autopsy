@@ -1,0 +1,38 @@
+{
+  "name": "oracle",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "oracle",
+    "description": "Consult the oracle - an AI advisor powered by OpenAI's GPT-5.5 reasoning model that can plan, review, and provide expert guidance.\n\nThe oracle has access to the following tools:\n- Read\n- Grep\n- glob\n- web_search\n- read_web_page\n- read_thread\n- find_thread.\n\nYou should consult the oracle for:\n- Code reviews and architecture feedback\n- Finding difficult bugs in codepaths that flow across many files\n- Planning complex implementations or refactors\n- Answering complex technical questions that require deep technical reasoning\n- Providing an alternative point of view when you are struggling to solve a problem\n\nYou should NOT consult the oracle for:\n- File reads or simple keyword searches (use Read or Grep directly)\n- Codebase searches (use finder)\n- Web browsing and searching (use read_web_page or web_search)\n- Basic code modifications and when you need to execute code changes (do it yourself or use Task)\n\nUsage guidelines:\n- Be specific about what you want the oracle to review, plan, or debug\n- Provide relevant context about what you're trying to achieve. If you know that 3 files are involved, list them and they will be attached.\n\n# Examples\n\nReview the authentication system architecture and suggest improvements\n```json\n{\"task\":\"Review the authentication architecture and suggest improvements\",\"files\":[\"src/auth/index.ts\",\"src/auth/jwt.ts\"]}\n```\n\nPlan the implementation of real-time collaboration features\n```json\n{\"task\":\"Plan the implementation of real-time collaboration feature\"}\n```\n\nAnalyze the performance bottlenecks in the data processing pipeline\n```json\n{\"task\":\"Analyze performance bottlenecks\",\"context\":\"Users report slow response times when processing large datasets\"}\n```\n\nReview this API design and suggest better patterns\n```json\n{\"task\":\"Review API design\",\"context\":\"This is a REST API for user management\",\"files\":[\"src/api/users.ts\"]}\n```\n\nDebug failing tests after refactor\n```json\n{\"task\":\"Help debug why tests are failing\",\"context\":\"Tests fail with \\\"undefined is not a function\\\" after refactoring the auth module\",\"files\":[\"src/auth/auth.test.ts\"]}\n```\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "description": "The task or question you want the oracle to help with. Be specific about what kind of guidance, review, or planning you need."
+        },
+        "context": {
+          "type": "string",
+          "description": "Optional context about the current situation, what you've tried, or background information that would help the oracle provide better guidance."
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of specific file paths (text files, images) that the oracle should examine as part of its analysis. These files will be attached to the oracle input."
+        }
+      },
+      "required": [
+        "task"
+      ]
+    },
+    "source": "builtin"
+  }
+}

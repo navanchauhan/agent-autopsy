@@ -1,0 +1,43 @@
+{
+  "name": "read_url_content",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3.5-flash-low"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    4720
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "read_url_content",
+        "description": "Fetch content from a URL via HTTP request (invisible to USER). Use when: (1) extracting text from public pages, (2) reading static content/documentation, (3) batch processing multiple URLs, (4) speed is important, or (5) no visual interaction needed. Converts HTML to markdown. No JavaScript execution, no authentication. For pages requiring login, JavaScript, or USER visibility, use read_browser_page instead.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "Url": {
+              "type": "STRING",
+              "description": "URL to read content from"
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "Url",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "librarian",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "librarian",
+    "description": "The Librarian is a codebase-understanding subagent for\nrepositories outside the local workspace.\n\nIt can read public GitHub repositories, connected private GitHub repositories, and connected\nBitbucket Enterprise repositories.\n\nUse this when you need deep understanding of existing code across one or more repositories:\n- explaining architecture, flows, or subsystem design\n- finding where a feature is implemented in an external codebase\n- comparing patterns across repositories\n- understanding how code evolved through commit history\n- reading or diffing files in a remote repository\n\nDo not use this for:\n- local workspace reads or searches\n- code modifications or implementations\n- simple local lookups when a direct local tool is enough\n- questions unrelated to understanding existing repositories\n\nGuidance:\n- name the repository or project when you know it\n- ask a specific question or describe the feature or codepath you want understood\n- include context about what you are trying to achieve\n- expect a thorough answer suitable for sharing\n- return the answer in full rather than summarizing it\n\nExamples:\n- \"How does authentication work in the Kubernetes codebase?\"\n- \"Explain the architecture of the React rendering system\"\n- \"Compare how different web frameworks handle routing\"\n- \"What changed in commit abc123 in my private repository?\"\n- \"Read the README from the main API repo on our Bitbucket Enterprise instance\"\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Your question about the codebase. Be specific about what you want to understand or explore."
+        },
+        "context": {
+          "type": "string",
+          "description": "Optional context about what you're trying to achieve or background information."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    },
+    "source": "builtin"
+  }
+}

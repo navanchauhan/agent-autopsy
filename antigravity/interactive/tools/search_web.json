@@ -1,0 +1,46 @@
+{
+  "name": "search_web",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3.5-flash-low"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    4720
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "search_web",
+        "description": "Performs a web search for a given query. Returns a summary of relevant information along with URL citations.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "domain": {
+              "type": "STRING",
+              "description": "Optional domain to recommend the search prioritize"
+            },
+            "query": {
+              "type": "STRING"
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "query",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}

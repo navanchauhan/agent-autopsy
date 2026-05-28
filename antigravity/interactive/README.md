@@ -5,12 +5,20 @@ Antigravity CLI is Google's coding agent. These artifacts were extracted from th
 - `prompts/` contains raw captured prompt text grouped by model. Run-specific values are marked with `<harnessVariable>example</harnessVariable>`.
 - `tools/` contains one JSON file per observed Gemini function declaration. The nested `schema` is the exact `request.tools[]` wrapper sent for that function.
 - `VERSION` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.
-- `interactive/` contains a tmux interactive capture from the CLI REPL.
 
-Run a fresh capture with:
+Run a fresh non-interactive capture with:
 
 ```sh
 trace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)
 CODEIUM_VMODULE='*=5' agy --add-dir "$PWD" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file "$trace_dir/agy.log"
 node antigravity/scripts/extract-antigravity-log.cjs "$trace_dir/agy.log"
+```
+
+Run a fresh interactive capture with:
+
+```sh
+trace_dir=$(mktemp -d /tmp/agy-interactive.XXXXXX)
+tmux new-session -d -s agy-trace "cd $PWD && CODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --dangerously-skip-permissions --log-file \"$trace_dir/agy.log\""
+tmux send-keys -t agy-trace 'Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK' Enter
+AGY_CAPTURE_MODE=interactive node antigravity/scripts/extract-antigravity-log.cjs "$trace_dir/agy.log" antigravity/interactive
 ```

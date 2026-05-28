@@ -1,0 +1,31 @@
+{
+  "name": "read_mcp_resource",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "read_mcp_resource",
+    "description": "Read a resource from an MCP (Model Context Protocol) server.\n\nUse when the user references an MCP resource, e.g. \"read @filesystem-server:file:///path/to/document.txt\"\n\n# Examples\n\nRead a file from an MCP file server\n```json\n{\"server\":\"filesystem-server\",\"uri\":\"file:///path/to/document.txt\"}\n```\n\nRead a database record from an MCP database server\n```json\n{\"server\":\"database-server\",\"uri\":\"db://users/123\"}\n```\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "server": {
+          "type": "string",
+          "description": "The name or identifier of the MCP server to read from"
+        },
+        "uri": {
+          "type": "string",
+          "description": "The URI of the resource to read"
+        }
+      },
+      "required": [
+        "server",
+        "uri"
+      ]
+    },
+    "source": "builtin"
+  }
+}

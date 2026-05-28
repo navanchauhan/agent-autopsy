@@ -7,8 +7,10 @@ const path = require("path");
 
 const MARKER = "Cortex API Request: ";
 const DEFAULT_OUT_DIR = path.resolve(process.cwd(), "antigravity");
-const TRACE_COMMAND =
+const PRINT_TRACE_COMMAND =
   "CODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file <trace>/agy.log";
+const INTERACTIVE_TRACE_COMMAND =
+  "tmux new-session with `CODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --dangerously-skip-permissions --log-file <trace>/agy.log`, then send `Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK`";
 
 function usage() {
   console.error(
@@ -179,7 +181,7 @@ function requestText(req) {
 
 function selectPromptRecord(records) {
   const traceRecords = records.filter((record) =>
-    requestText(record.payload.request).includes("ANTIGRAVITY_TRACE_OK"),
+    /ANTIGRAVITY.*TRACE_OK/.test(requestText(record.payload.request)),
   );
   return traceRecords.at(-1) || records.at(-1);
 }
@@ -312,6 +314,8 @@ function main() {
   const responseModelVersions = [
     ...new Set([...logText.matchAll(/"modelVersion":\s*"([^"]+)"/g)].map((m) => m[1])),
   ].sort();
+  const captureCommand =
+    process.env.AGY_CAPTURE_MODE === "interactive" ? INTERACTIVE_TRACE_COMMAND : PRINT_TRACE_COMMAND;
 
   const versionLines = [
     "source = antigravity.google/cli",
@@ -330,7 +334,7 @@ function main() {
     "auth_source = local Antigravity Google OAuth/keyring",
     "trace_script = antigravity/scripts/extract-antigravity-log.cjs",
     "trace_source = local CODEIUM_VMODULE verbose agy.log (not stored)",
-    `capture = ${TRACE_COMMAND}`,
+    `capture = ${captureCommand}`,
     `endpoint = ${endpoint}`,
     `selected_model_label = ${selectedModelLabel}`,
     `response_model_versions = ${responseModelVersions.join(", ") || "unknown"}`,
@@ -345,7 +349,7 @@ function main() {
 
   fs.writeFileSync(
     path.join(outDir, "README.md"),
-    `# Antigravity CLI\n\nAntigravity CLI is Google's coding agent. These artifacts were extracted from the installed \`agy\` binary by enabling verbose \`CODEIUM_VMODULE='*=5'\` logging and parsing the real \`Cortex API Request\` payload sent to \`streamGenerateContent\`.\n\n- \`prompts/\` contains raw captured prompt text grouped by model. Run-specific values are marked with \`<harnessVariable>example</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Gemini function declaration. The nested \`schema\` is the exact \`request.tools[]\` wrapper sent for that function.\n- \`VERSION\` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.\n\nRun a fresh capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)\nCODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file \"$trace_dir/agy.log\"\nnode antigravity/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n`,
+    `# Antigravity CLI\n\nAntigravity CLI is Google's coding agent. These artifacts were extracted from the installed \`agy\` binary by enabling verbose \`CODEIUM_VMODULE='*=5'\` logging and parsing the real \`Cortex API Request\` payload sent to \`streamGenerateContent\`.\n\n- \`prompts/\` contains raw captured prompt text grouped by model. Run-specific values are marked with \`<harnessVariable>example</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Gemini function declaration. The nested \`schema\` is the exact \`request.tools[]\` wrapper sent for that function.\n- \`VERSION\` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.\n\nRun a fresh non-interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)\nCODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file \"$trace_dir/agy.log\"\nnode antigravity/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n\nRun a fresh interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-interactive.XXXXXX)\ntmux new-session -d -s agy-trace \"cd $PWD && CODEIUM_VMODULE='*=5' agy --add-dir \\\"$PWD\\\" --dangerously-skip-permissions --log-file \\\"$trace_dir/agy.log\\\"\"\ntmux send-keys -t agy-trace 'Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK' Enter\nAGY_CAPTURE_MODE=interactive node antigravity/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\" antigravity/interactive\n\`\`\`\n`,
   );
 
   console.log(

@@ -1,0 +1,42 @@
+{
+  "name": "edit_file",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "large",
+    "smart"
+  ],
+  "schema": {
+    "name": "edit_file",
+    "description": "Make edits to a text file.\n\nReplaces `old_str` with `new_str` in the given file.\n\nReturns a git-style diff showing the changes made as formatted markdown, along with the line range ([startLine, endLine]) of the changed content. The diff is also shown to the user.\n\nThe file specified by `path` MUST exist, and it MUST be an absolute path. If you need to create a new file, use `create_file` instead.\n\n`old_str` MUST exist in the file. Use tools like `Read` to understand the files you are editing before changing them.\n\n`old_str` and `new_str` MUST be different from each other.\n\nSet `replace_all` to true to replace all occurrences of `old_str` in the file. Else, `old_str` MUST be unique within the file or the edit will fail. Additional lines of context can be added to make the string more unique.\n\nIf you need to replace the entire contents of a file, use `create_file` instead, since it requires less tokens for the same action (since you won't have to repeat the contents before replacing).\n\nIf you see `[REDACTED:_____]` in your inputs and edits fail, Amp's secret redaction may have changed the text; ask the user to manually make the edit.\n",
+    "inputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "The absolute path to the file (MUST be absolute, not relative). File must exist. ALWAYS generate this argument first."
+        },
+        "old_str": {
+          "type": "string",
+          "description": "Text to search for. Must match exactly."
+        },
+        "new_str": {
+          "type": "string",
+          "description": "Text to replace old_str with."
+        },
+        "replace_all": {
+          "description": "Set to true to replace all matches of old_str. Else, old_str must be an unique match.",
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path",
+        "old_str",
+        "new_str"
+      ],
+      "additionalProperties": false
+    },
+    "source": "builtin"
+  }
+}

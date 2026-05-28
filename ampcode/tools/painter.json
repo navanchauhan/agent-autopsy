@@ -1,0 +1,39 @@
+{
+  "name": "painter",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "painter",
+    "description": "Generate an image using an AI model.\n\nIMPORTANT: Only invoke this tool when the user explicitly asks to use the \"painter\" tool. Do not use this tool automatically or proactively.\n\n- When using this tool, request a single image at a time. Multiple input reference images are OK.\n- Use savePath to specify the output file path only if the user explicitly asks for it.\n\n## When to use this tool\n\n- When the user explicitly asks to use the \"painter\" tool\n- When the user explicitly requests image generation using this tool\n\n## When NOT to use this tool\n\n- Do NOT use automatically for UI mockups, diagrams, or icons—only unless explicitly requested by user\n- For diagrams—write a plain-text box-drawing `diagram` code block with rounded-corner boxes where possible. Keep diagrams readable when rendered as monospaced text. Only write Mermaid syntax for diagrams if the user explicitly asks for Mermaid diagrams.\n- For analyzing existing images or media files—use the \"view_media\" tool instead\n\n## Example Scenarios\n\n- **Generate a image from user description**: Provide only a prompt with detailed visual instructions. No inputImagePaths needed.\n- **Create with reference**: Provide one or more reference images provided by the user for style/content inspiration. The model will use these as guidance to create a new image matching your prompt. Your prompt should describe how to use each reference (e.g., \"match the color palette from the first image\", \"use the icon style from the second\").\n- **Edit/composite images**: Provide the image to edit and optionally another image with elements to incorporate. The prompt should describe what to change or how to combine them.\n\n# Examples\n\nGenerate an app icon for a CLI tool\n```json\n{\"prompt\":\"1024x1024 app icon. Dark background #1a1a2e. Glowing terminal cursor symbol in cyan #00d9ff. Minimal, modern style for macOS dock.\"}\n```\n\nGenerate a hero image using existing brand assets as reference\n```json\n{\"prompt\":\"Hero image for documentation landing page. Match the color palette from the first image and icon style from the second. Abstract flowing code symbols. 1920x600 dimensions.\",\"inputImagePaths\":[\"/Users/alice/project/docs/assets/brand-colors.png\",\"/Users/alice/project/docs/assets/icon-style.png\"]}\n```\n\nRedact sensitive data from a terminal screenshot\n```json\n{\"prompt\":\"Blur or redact any visible API keys, tokens, passwords, or email addresses in this terminal screenshot. Keep command output readable. Preserve dimensions.\",\"inputImagePaths\":[\"/Users/alice/project/docs/screenshots/terminal-output.png\"]}\n```\n\nGenerate an image and save to the Documents folder (Windows)\n```json\n{\"prompt\":\"A modern company logo with blue and white colors. Clean, minimalist design.\",\"savePath\":\"C:\\\\Users\\\\alice\\\\Documents\\\\logo.png\"}\n```\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "Detailed instructions for image generation based on user requirements. Include specifics about design, layout, style, colors, composition, and any other visual details the user mentioned."
+        },
+        "inputImagePaths": {
+          "type": "array",
+          "description": "Optional image paths provided by the user for editing or style guidance. Maximum 3 images allowed. Each image path should be same as the `sourcePath` provided by the user.",
+          "maxItems": 3,
+          "items": {
+            "type": "string"
+          }
+        },
+        "savePath": {
+          "type": "string",
+          "description": "Optional absolute path to save the generated image (e.g., C:/Users/name/Documents/image.png on Windows, /home/user/Documents/image.png on Linux/Mac). Only valid when a single image is generated."
+        }
+      },
+      "required": [
+        "prompt"
+      ]
+    },
+    "source": "builtin"
+  }
+}

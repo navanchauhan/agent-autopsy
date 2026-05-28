@@ -1,0 +1,30 @@
+{
+  "name": "create_file",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "large",
+    "smart"
+  ],
+  "schema": {
+    "name": "create_file",
+    "description": "Create or overwrite a file in the workspace.\n\nUse this tool to create a **new file** that does not yet exist.\n\nFor **existing files**, prefer `edit_file` instead—even for extensive changes. Only use `create_file` to overwrite an existing file when you are replacing nearly all of its content AND the file is small (under ~250 lines).\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "The absolute path of the file to be created (must be absolute, not relative). If the file exists, it will be overwritten. ALWAYS generate this argument first."
+        },
+        "content": {
+          "type": "string",
+          "description": "The content for the file."
+        }
+      },
+      "required": [
+        "path",
+        "content"
+      ]
+    },
+    "source": "builtin"
+  }
+}

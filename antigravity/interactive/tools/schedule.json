@@ -1,0 +1,54 @@
+{
+  "name": "schedule",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3.5-flash-low"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    4720
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "schedule",
+        "description": "Schedule a one-shot timer or a recurring cron job that sends notifications in the background.\n\n**NOTE**: This tool call returns immediately and does not pause execution. To wait for the timer to fire, you must stop calling tools to end your turn.\n\nModes:\n1. **One-shot timer**: This should be used when there are tasks happening asynchronously (either background tasks, or other subagents) and you plan to go idle. This timer ensures you will wake up by this time if no other updates are received. If it expires, a notification with your Prompt is sent. If you receive any message (from ANY task or subagent) before the timer expires, the timer is cancelled silently.\n\nExamples:\n- Set a 60-second reminder while waiting for a long build: DurationSeconds=60, Prompt=\"Check if the build has completed\"\n- Set a 3-minute reminder after delegating a task to a group of subagents: DurationSeconds=180, Prompt=\"Check if the subagents have completed their tasks\"\n\n2. **Recurring cron**: Set CronExpression to a standard 5-field cron expression (e.g., '*/5 * * * *' for every 5 minutes). Each time the cron triggers, a notification with your Prompt is sent. The cron runs as a background task. Optionally set MaxIterations to limit the number of triggers.\n\nExamples:\n- Poll deployment status every 5 minutes: CronExpression=\"*/5 * * * *\", Prompt=\"Check deployment status and report progress\"\n- Run a health check every hour, up to 3 times: CronExpression=\"0 * * * *\", MaxIterations=3, Prompt=\"Run the health check script and report results\"\n\nYou must specify exactly one of DurationSeconds or CronExpression.\nAlways provide a Prompt describing what the notification should say.\nNever run a background 'sleep' command to set a timer, use this tool instead.\nTo cancel a running timer or cron schedule, use the manage_task tool with the task ID returned by this tool.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "CronExpression": {
+              "type": "STRING",
+              "description": "A standard cron expression (5 fields: minute hour day-of-month month day-of-week). Use for recurring schedules. Mutually exclusive with DurationSeconds. Example: '*/5 * * * *' for every 5 minutes."
+            },
+            "DurationSeconds": {
+              "type": "STRING",
+              "description": "The number of seconds to wait (max 900). Use for one-shot timers. Mutually exclusive with CronExpression."
+            },
+            "MaxIterations": {
+              "type": "STRING",
+              "description": "Optional. Maximum number of times the cron schedule will fire before stopping. Only applicable when CronExpression is set. Defaults to unlimited."
+            },
+            "Prompt": {
+              "type": "STRING",
+              "description": "The message content to include in the notification when the timer fires or cron triggers. This is sent to the agent as a high-priority message."
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}

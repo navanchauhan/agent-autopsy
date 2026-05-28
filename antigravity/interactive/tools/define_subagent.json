@@ -1,0 +1,65 @@
+{
+  "name": "define_subagent",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3.5-flash-low"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    4720
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "define_subagent",
+        "description": "Defines a new type of subagent that can be invoked via invoke_subagent.\n\n\tGuidelines:\n\t* Use this tool if you need a specialized subagent for a task and none of the existing subagents are suitable.\n\t* Once the subagent is defined, it can be invoked repeatedly using invoke_subagent without calling this tool again.\n\t* The subagent will be defined with the specified name, description, system prompt, and tool groups.\n\t* By default, all subagents have read tools to research the codebase, and tools to communicate with other agents.\n\t",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "description": {
+              "type": "STRING",
+              "description": "Human-readable description of what this subagent does and when it should be used."
+            },
+            "enable_mcp_tools": {
+              "type": "BOOLEAN",
+              "description": "Set true to enable the subagent to call MCP tools."
+            },
+            "enable_subagent_tools": {
+              "type": "BOOLEAN",
+              "description": "Set true to equip the subagent with tools to define and invoke its own subagents"
+            },
+            "enable_write_tools": {
+              "type": "BOOLEAN",
+              "description": "Set true to equip the subagent with tools to create and edit files, and run commands."
+            },
+            "name": {
+              "type": "STRING",
+              "description": "Unique name for the subagent. Used to invoke it via invoke_subagent."
+            },
+            "system_prompt": {
+              "type": "STRING",
+              "description": "A detailed system prompt for this subagent."
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "name",
+            "description",
+            "system_prompt",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}

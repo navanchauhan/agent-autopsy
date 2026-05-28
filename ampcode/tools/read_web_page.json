@@ -1,0 +1,35 @@
+{
+  "name": "read_web_page",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "read_web_page",
+    "description": "Read the contents of a web page at a given URL.\n\nWhen only the url parameter is set, it returns the contents of the webpage converted to Markdown.\n\nWhen an objective is provided, it returns excerpts relevant to that objective.\n\nIf the user asks for the latest or recent contents, pass `forceRefetch: true` to ensure the latest content is fetched.\n\nDo NOT use for access to localhost or any other local or non-Internet-accessible URLs; use `curl` via the Bash instead.\n\n# Examples\n\nSummarize recent changes for a library. Force refresh because freshness is important.\n```json\n{\"url\":\"https://example.com/changelog\",\"objective\":\"Summarize the API changes in this software library.\",\"forceRefetch\":true}\n```\n\nExtract all text content from a web page\n```json\n{\"url\":\"https://example.com/docs/getting-started\"}\n```\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "The URL of the web page to read"
+        },
+        "objective": {
+          "type": "string",
+          "description": "A natural-language description of the research goal. If set, only relevant excerpts will be returned. If not set, the full content of the web page will be returned. "
+        },
+        "forceRefetch": {
+          "type": "boolean",
+          "description": "Force a live fetch of the URL (default: use a cached version that may be a few days old)"
+        }
+      },
+      "required": [
+        "url"
+      ]
+    },
+    "source": "builtin"
+  }
+}

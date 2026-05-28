@@ -1,0 +1,25 @@
+source = antigravity.google/cli
+distribution = native Go binary
+version = 1.0.2
+platform = darwin-arm64
+binary_path = /Users/navanchauhan/.local/bin/agy
+sha256 = f53ff89f3137a2f43e25eebf0f296c9f71d7d7e58cc2c43fd9d1b3b1141da7ee
+sha512 = ec986364669dcff1ceb3d3e2cf54741a747801ea157f2b39f18aed3eade6aa5ea3c0bf7177d8b88df19626f2165a5b8e08e077bf676518a5714cc92c01d3f4ea
+installer_url = https://antigravity.google/cli/install.sh
+manifest_url = https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/darwin_arm64.json
+manifest_version = 1.0.2
+manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.2-6109799369277440/darwin-arm/cli_mac_arm64.tar.gz
+manifest_tarball_sha512 = 9e177599230ed22605879b8e96f4ba9b8d8bab98586fedae14dae4536bf75529c7e0c7a6dee4134c913927c8b02fbb212e6fc81bcf982d06d6850663eb3fbfe0
+generated_at = 2026-05-28T01:17:47.363Z
+auth_source = local Antigravity Google OAuth/keyring
+trace_script = antigravity/scripts/extract-antigravity-log.cjs
+trace_source = local CODEIUM_VMODULE verbose agy.log (not stored)
+capture = tmux new-session with `CODEIUM_VMODULE='*=5' agy --add-dir "$PWD" --dangerously-skip-permissions --log-file <trace>/agy.log`, then send `Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK`
+endpoint = https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse
+selected_model_label = Gemini 3.5 Flash (Medium)
+response_model_versions = gemini-3-flash-a
+prompt_models = gemini-3.5-flash-low
+prompts = 1
+tools = 19
+tool_names = ask_permission, ask_question, define_subagent, generate_image, grep_search, invoke_subagent, list_dir, list_permissions, manage_subagents, manage_task, multi_replace_file_content, read_url_content, replace_file_content, run_command, schedule, search_web, send_message, view_file, write_to_file
+tool_notes = Antigravity sends Gemini function declarations inside request.tools[]; each tool file stores the exact request.tools[] wrapper observed for that function in the agent request.

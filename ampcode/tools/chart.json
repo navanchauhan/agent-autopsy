@@ -1,0 +1,82 @@
+{
+  "name": "chart",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep"
+  ],
+  "schema": {
+    "name": "chart",
+    "description": "Render a chart visualization by running a command that produces JSON data. The chart is displayed inline to the user.\n\nUse this tool to visualize data as bar charts, line charts, or area charts. You provide a shell command that outputs JSON, and specify which columns map to the X and Y axes, the chart type, and display options.\n\n# Parameters\n\n- **cmd**: A shell command to execute that must produce JSON output (a JSON array of objects). The command is run via the Bash tool internally. Pipe through `jq -c .` if needed to produce compact JSON.\n- **chartType**: \"bar\", \"line\", or \"area\"\n- **xColumn**: The column name to use for the X axis (labels)\n- **yColumns**: Array of column names for the Y axis. Multiple columns create multiple series (e.g., overlay revenue and expenses on the same chart).\n- **title**: Chart title displayed above the chart\n- **stacked**: When true with multiple yColumns, stack the series instead of overlaying them. Works with bar and area charts.\n- **horizontal**: When true with bar chartType, renders horizontal bars (good for categorical data with long labels).\n- **hoverColumns**: Extra column names to show in the hover tooltip but not plotted on the Y axis.\n- **groupColumn**: A column whose unique values become separate series. Use with a single yColumn to pivot unpivoted data — e.g., rows with a \"type\" column become one series per type. Commonly used with stacked charts.\n\n# When to use this tool\n\n- When the user explicitly asks to \"chart\", \"graph\", \"plot\", or \"visualize\" data\n- When the user explicitly requests a visual representation of data\n- Do NOT use this tool proactively for tabular data unless the user asks for a visualization\n\n# Examples\n\nBar chart from a BigQuery query:\n{\"cmd\":\"bq query --format=json --nouse_legacy_sql 'SELECT name, score FROM dataset.table LIMIT 10'\",\"chartType\":\"bar\",\"xColumn\":\"name\",\"yColumns\":[\"score\"],\"title\":\"Test Scores\"}\n\nMulti-series comparison:\n{\"cmd\":\"cat data.json\",\"chartType\":\"bar\",\"xColumn\":\"month\",\"yColumns\":[\"revenue\",\"expenses\"],\"title\":\"Revenue vs Expenses\"}\n\nHorizontal bar chart:\n{\"cmd\":\"echo '[{\\\"tool\\\":\\\"Bash\\\",\\\"count\\\":42},{\\\"tool\\\":\\\"Read\\\",\\\"count\\\":31}]'\",\"chartType\":\"bar\",\"xColumn\":\"tool\",\"yColumns\":[\"count\"],\"title\":\"Tool Usage\",\"horizontal\":true}\n\nStacked area chart:\n{\"cmd\":\"cat commits.json\",\"chartType\":\"area\",\"xColumn\":\"date\",\"yColumns\":[\"frontend\",\"backend\"],\"title\":\"Commits by Team\",\"stacked\":true}\n\nStacked area chart with groupColumn (auto-pivots rows by credit_type):\n{\"cmd\":\"bq query --format=json --nouse_legacy_sql 'SELECT hour, credits, credit_type FROM dataset.usage'\",\"chartType\":\"area\",\"xColumn\":\"hour\",\"yColumns\":[\"credits\"],\"groupColumn\":\"credit_type\",\"title\":\"Credits by Type\",\"stacked\":true}\n\n# Best practices\n\n- Pipe through `jq -c .` if the command might produce non-JSON text (headers, warnings) or pretty-printed output that could break parsing.\n- The chart renders at most 100 points per series (extra rows are silently dropped). Use aggregation (GROUP BY) or LIMIT so the JSON output stays under this threshold.\n- Use `groupColumn` to pivot flat rows into multiple series instead of running separate queries or reshaping data manually.\n- ISO-date xColumn values (YYYY-MM-DD…) are automatically sorted ascending; categorical labels preserve source order.\n- Include a `link` key in JSON rows to make tooltip values clickable hyperlinks.\n- Use `hoverColumns` to surface extra context (IDs, descriptions) in tooltips without adding chart clutter.\n- Choose `horizontal: true` for bar charts when labels are long (e.g. file paths, URLs).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cmd": {
+          "type": "string",
+          "description": "A shell command to execute that produces JSON output (a JSON array of objects)."
+        },
+        "chartType": {
+          "type": "string",
+          "enum": [
+            "bar",
+            "line",
+            "area"
+          ],
+          "description": "The type of chart to render."
+        },
+        "xColumn": {
+          "type": "string",
+          "description": "Column name to use for the X axis (labels)."
+        },
+        "yColumns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Column name(s) for the Y axis. Multiple columns create multiple series."
+        },
+        "title": {
+          "type": "string",
+          "description": "Chart title."
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Optional subtitle shown below the title."
+        },
+        "xAxisLabel": {
+          "type": "string",
+          "description": "Label for the X axis. Defaults to the xColumn name."
+        },
+        "yAxisLabel": {
+          "type": "string",
+          "description": "Label for the Y axis. Defaults to the first yColumn name."
+        },
+        "stacked": {
+          "type": "boolean",
+          "description": "Stack multiple series instead of overlaying. Works with bar and area charts."
+        },
+        "horizontal": {
+          "type": "boolean",
+          "description": "Render bars horizontally. Only applies to bar chartType."
+        },
+        "hoverColumns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Extra columns to display in hover tooltips but not plotted on the Y axis."
+        },
+        "groupColumn": {
+          "type": "string",
+          "description": "Column whose unique values become separate series. Pivots unpivoted data — e.g., a \"type\" column creates one series per type. Use with a single yColumn."
+        }
+      },
+      "required": [
+        "cmd",
+        "chartType",
+        "xColumn",
+        "yColumns"
+      ]
+    },
+    "source": "builtin"
+  }
+}

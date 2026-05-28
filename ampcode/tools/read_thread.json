@@ -1,0 +1,32 @@
+{
+  "name": "read_thread",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "read_thread",
+    "description": "Read and extract relevant content from another Amp thread by its ID or ampcode.com URL.\n\nThis tool uses a bounded reader subagent over Postgres-backed thread messages to answer your specific question. This keeps context concise while preserving important details and avoids loading huge threads into the caller.\n\n## When to use this tool\n\n- When the user pastes or references an Amp thread URL on ampcode.com whose last path segment is a thread ID (for example https://ampcode.com/threads/T-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or https://ampcode.com/v2/workspace/project/T-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) in their message\n- When the user references a thread ID (format: T-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or @T-abc123)\n- When the user asks to \"apply the same approach from [thread URL]\"\n- When the user says \"do what we did in [thread URL]\"\n- When the user says \"implement the plan we devised in [thread URL]\"\n- When you need to extract specific information from a referenced thread\n\n## When NOT to use this tool\n\n- When no thread ID is mentioned\n- When working within the current thread (context is already available)\n\n## Parameters\n\n- **threadID**: The thread identifier in format T-{uuid}, or an ampcode.com URL whose last path segment is T-{uuid} (e.g., \"T-a38f981d-52da-47b1-818c-fbaa9ab56e0c\" or \"https://ampcode.com/v2/workspace/project/T-a38f981d-52da-47b1-818c-fbaa9ab56e0c\")\n- **question**: The question you want to ask the thread. Be clear and specific.\n\n# Examples\n\nUser asks \"Implement the plan we devised in https://ampcode.com/threads/T-3f1beb2b-bded-4fda-96cc-1af7192f24b6\"\n```json\n{\"threadID\":\"T-3f1beb2b-bded-4fda-96cc-1af7192f24b6\",\"question\":\"What implementation plan, design decisions, architecture approach, and code patterns were discussed?\"}\n```\n\nUser asks: \"Do what we did in https://ampcode.com/threads/T-f916b832-c070-4853-8ab3-5e7596953bec, but for the Oracle tool\"\n```json\n{\"threadID\":\"T-f916b832-c070-4853-8ab3-5e7596953bec\",\"question\":\"What implementation approach, code patterns, techniques, and code examples can be adapted for the Oracle tool?\"}\n```\n\nUser asks: \"Take the SQL queries from https://ampcode.com/threads/T-95e73a95-f4fe-4f22-8d5c-6297467c97a5 and turn it into a reusable script\"\n```json\n{\"threadID\":\"T-95e73a95-f4fe-4f22-8d5c-6297467c97a5\",\"question\":\"What SQL queries were used, what are their purposes and parameters, and what context is needed to make them reusable?\"}\n```\n\nUser asks: \"Apply the same fix from https://ampcode.com/v2/amp/amp/T-019d01b5-f70d-73ea-9445-f6d358f7213e to this issue\"\n```json\n{\"threadID\":\"https://ampcode.com/v2/amp/amp/T-019d01b5-f70d-73ea-9445-f6d358f7213e\",\"question\":\"What was the bug, root cause, fix, and relevant code change?\"}\n```\n\nUser asks: \"Apply the same fix from @T-95e73a95-f4fe-4f22-8d5c-6297467c97a5 to this issue\"\n```json\n{\"threadID\":\"T-95e73a95-f4fe-4f22-8d5c-6297467c97a5\",\"question\":\"What was the bug, root cause, fix, and relevant code change?\"}\n```\n",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "threadID": {
+          "type": "string",
+          "description": "The thread ID in format T-{uuid}, or an ampcode.com URL whose last path segment is T-{uuid} (e.g., \"T-a38f981d-52da-47b1-818c-fbaa9ab56e0c\" or \"https://ampcode.com/v2/workspace/project/T-a38f981d-52da-47b1-818c-fbaa9ab56e0c\")"
+        },
+        "question": {
+          "type": "string",
+          "description": "The question you want to ask the thread. Be clear and specific."
+        }
+      },
+      "required": [
+        "threadID",
+        "question"
+      ]
+    },
+    "source": "builtin"
+  }
+}

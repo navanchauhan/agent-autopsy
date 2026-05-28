@@ -1,0 +1,91 @@
+{
+  "name": "write_to_file",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "models": [
+    "gemini-3.5-flash-low"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "trace_lines": [
+    4720
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "write_to_file",
+        "description": "Use this tool to create new files. The file and any parent directories will be created for you if they do not already exist.\n\t\tFollow these instructions:\n\t\t1. By default this tool will error if TargetFile already exists. To overwrite an existing file, set Overwrite to true.\n\t\t2. You MUST specify TargetFile as the FIRST argument. Please specify the full TargetFile before any of the code contents.\n\t\t3. When creating an artifact, make sure to set IsArtifact to true and provide an ArtifactMetadata.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "ArtifactMetadata": {
+              "type": "OBJECT",
+              "description": "Metadata for the artifact, required when IsArtifact is true.",
+              "properties": {
+                "ArtifactType": {
+                  "type": "STRING",
+                  "description": "Type of artifact: 'implementation_plan', 'walkthrough', 'task', or 'other'. Use 'other' when the artifact type doesn't fit the first three categories.",
+                  "enum": [
+                    "implementation_plan",
+                    "walkthrough",
+                    "task",
+                    "other"
+                  ]
+                },
+                "RequestFeedback": {
+                  "type": "BOOLEAN",
+                  "description": "Set to true to request user feedback on this artifact."
+                },
+                "Summary": {
+                  "type": "STRING",
+                  "description": "Detailed multi-line summary of the artifact file, after edits have been made. Summary does not need to mention the artifact name and should focus on the contents and purpose of the artifact."
+                }
+              },
+              "required": [
+                "Summary",
+                "ArtifactType"
+              ]
+            },
+            "CodeContent": {
+              "type": "STRING",
+              "description": "The code contents to write to the file."
+            },
+            "Description": {
+              "type": "STRING",
+              "description": "Brief, user-facing explanation of what this change did. Focus on non-obvious rationale, design decisions, or important context. Don't just restate what the code does."
+            },
+            "IsArtifact": {
+              "type": "BOOLEAN",
+              "description": "Set this to true when creating an artifact file."
+            },
+            "Overwrite": {
+              "type": "BOOLEAN",
+              "description": "Set this to true to overwrite an existing file. WARNING: This will replace the entire file contents. Only use when you explicitly intend to overwrite. Otherwise, use a code edit tool to modify existing files."
+            },
+            "TargetFile": {
+              "type": "STRING",
+              "description": "The target file to create and write code to. Must be an absolute path."
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "TargetFile",
+            "Overwrite",
+            "CodeContent",
+            "Description",
+            "IsArtifact",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  }
+}
