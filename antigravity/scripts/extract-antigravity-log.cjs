@@ -45,6 +45,14 @@ function execOrUnknown(command) {
   }
 }
 
+function fetchJsonOrNull(url) {
+  try {
+    return JSON.parse(childProcess.execFileSync("curl", ["-fsSL", url], { encoding: "utf8" }));
+  } catch {
+    return null;
+  }
+}
+
 function sha256File(filePath) {
   try {
     const hash = crypto.createHash("sha256");
@@ -69,69 +77,116 @@ function writeJson(filePath, value) {
   fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-function renderPrompt(model, records) {
-  const first = records[0];
-  const req = first.payload.request;
-  const system = req.systemInstruction || {};
-  const parts = system.parts || [];
-  const contentBlocks = req.contents || [];
-
-  const out = [];
-  out.push(`# ${model}`);
-  out.push("");
-  out.push(
-    "Source: Antigravity CLI verbose `Cortex API Request` trace captured from the real `streamGenerateContent` request.",
-  );
-  out.push(`Request type: ${first.payload.requestType}`);
-  out.push(`Trace line: ${first.line}`);
-  out.push(`Tool mode: ${req.toolConfig?.functionCallingConfig?.mode || "unknown"}`);
-  out.push("");
-  out.push("## systemInstruction");
-  out.push("");
-  out.push(
-    "The blocks below are the exact `request.systemInstruction.parts[]` text entries in order.",
-  );
-
-  for (const [index, part] of parts.entries()) {
-    const metadata = { ...part };
-    delete metadata.text;
-    out.push("");
-    out.push(`### systemInstruction.parts[${index}]`);
-    out.push("");
-    out.push("```json");
-    out.push(JSON.stringify(metadata, null, 2));
-    out.push("```");
-    out.push("");
-    out.push("```text");
-    out.push(part.text || "");
-    out.push("```");
+function removeGeneratedFiles(dir, extension) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isFile() && entry.name.endsWith(extension)) {
+      fs.rmSync(path.join(dir, entry.name));
+    }
   }
+}
 
-  out.push("");
-  out.push("## request contents");
-  out.push("");
-  out.push(
-    "These are the non-tool text blocks observed in `request.contents[]` for the same agent request. They contain dynamic workspace, artifact, timestamp, and trace-user-request values.",
+function harnessVariable(value) {
+  return `<harnessVariable>${value}</harnessVariable>`;
+}
+
+function replaceAllLiteral(text, search, replacement) {
+  return text.split(search).join(replacement);
+}
+
+function firstMatch(text, regexp) {
+  return text.match(regexp)?.[1] || "";
+}
+
+function markHarnessVariables(text) {
+  let out = text;
+  const literalExamples = [];
+  const addLiteralExample = (value) => {
+    if (value && !literalExamples.includes(value)) literalExamples.push(value);
+  };
+
+  const appDataDir = firstMatch(text, /^App Data Directory: (.+)$/m);
+  const conversationId =
+    firstMatch(
+      text,
+      /^Conversation ID: ([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/im,
+    ) ||
+    firstMatch(
+      text,
+      /\/brain\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\b/i,
+    );
+  const userRequest = firstMatch(text, /<USER_REQUEST>\n([\s\S]*?)\n<\/USER_REQUEST>/);
+  const localTime = firstMatch(text, /The current local time is: ([^.]+)\./);
+  const osVersion = firstMatch(text, /The USER's OS version is ([^.]+)\./);
+  const activeWorkspaceCount = firstMatch(text, /The user has (\d+) active workspaces/);
+  const modelSettingChange = text.match(
+    /^The user changed setting `Model Selection` from (.+) to (.+)\. No need/m,
   );
 
-  for (const [contentIndex, content] of contentBlocks.entries()) {
-    for (const [partIndex, part] of (content.parts || []).entries()) {
-      const metadata = { role: content.role, ...part };
-      delete metadata.text;
-      out.push("");
-      out.push(`### contents[${contentIndex}].parts[${partIndex}]`);
-      out.push("");
-      out.push("```json");
-      out.push(JSON.stringify(metadata, null, 2));
-      out.push("```");
-      out.push("");
-      out.push("```text");
-      out.push(part.text || "");
-      out.push("```");
+  addLiteralExample(appDataDir);
+  addLiteralExample(conversationId);
+  addLiteralExample(userRequest);
+  addLiteralExample(localTime);
+
+  for (const match of text.matchAll(/^(.+) -> (.+)$/gm)) {
+    if (match[1].startsWith("/")) {
+      addLiteralExample(match[1]);
+      addLiteralExample(match[2]);
     }
   }
 
-  return `${out.join("\n")}\n`;
+  for (const value of literalExamples.sort((a, b) => b.length - a.length)) {
+    out = replaceAllLiteral(out, value, harnessVariable(value));
+  }
+
+  if (osVersion) {
+    out = out.replace(
+      /The USER's OS version is [^.]+\./g,
+      `The USER's OS version is ${harnessVariable(osVersion)}.`,
+    );
+  }
+  if (activeWorkspaceCount) {
+    out = out.replace(
+      /The user has \d+ active workspaces/g,
+      `The user has ${harnessVariable(activeWorkspaceCount)} active workspaces`,
+    );
+  }
+  if (modelSettingChange) {
+    out = replaceAllLiteral(
+      out,
+      `from ${modelSettingChange[1]} to ${modelSettingChange[2]}`,
+      `from ${harnessVariable(modelSettingChange[1])} to ${harnessVariable(modelSettingChange[2])}`,
+    );
+  }
+
+  if (appDataDir) {
+    out = replaceAllLiteral(out, "<appDataDir>", harnessVariable(appDataDir));
+  }
+  if (conversationId) {
+    out = replaceAllLiteral(out, "<conversation-id>", harnessVariable(conversationId));
+  }
+
+  return out;
+}
+
+function requestText(req) {
+  const out = [];
+  for (const part of req.systemInstruction?.parts || []) out.push(part.text || "");
+  for (const content of req.contents || []) {
+    for (const part of content.parts || []) out.push(part.text || "");
+  }
+  return out.join("\n\n");
+}
+
+function selectPromptRecord(records) {
+  const traceRecords = records.filter((record) =>
+    requestText(record.payload.request).includes("ANTIGRAVITY_TRACE_OK"),
+  );
+  return traceRecords.at(-1) || records.at(-1);
+}
+
+function renderPrompt(model, records) {
+  const selected = selectPromptRecord(records);
+  return `${markHarnessVariables(requestText(selected.payload.request)).trimEnd()}\n`;
 }
 
 function groupTools(records) {
@@ -180,6 +235,8 @@ function main() {
   const toolsDir = path.join(outDir, "tools");
   fs.mkdirSync(promptsDir, { recursive: true });
   fs.mkdirSync(toolsDir, { recursive: true });
+  removeGeneratedFiles(promptsDir, ".md");
+  removeGeneratedFiles(toolsDir, ".json");
 
   const requests = readJsonRequests(logPath);
   const agentRecords = requests.filter((record) => record.payload.requestType === "agent");
@@ -238,10 +295,13 @@ function main() {
   const modelNames = [...byModel.keys()].sort();
   const manifestUrl =
     "https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/darwin_arm64.json";
-  const tarballUrl =
-    "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.1-5826024320139264/darwin-arm/cli_mac_arm64.tar.gz";
-  const manifestSha512 =
-    "6e0bc8a8996680d06fb70cf6e52d3b8c0da06bceee97106c3d76726eaee8c94ec0385798ebc85fe0018088c94fe3cdd23fb61fbd39ec207ab958980c985d0ef0";
+  const manifest =
+    fetchJsonOrNull(manifestUrl) || {
+      version: "1.0.2",
+      url: "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.2-6109799369277440/darwin-arm/cli_mac_arm64.tar.gz",
+      sha512:
+        "9e177599230ed22605879b8e96f4ba9b8d8bab98586fedae14dae4536bf75529c7e0c7a6dee4134c913927c8b02fbb212e6fc81bcf982d06d6850663eb3fbfe0",
+    };
   const selectedModelLabel =
     logText.match(/display_name:"([^"]+)"/)?.[1] ||
     logText.match(/label="([^"]+)"/)?.[1] ||
@@ -263,9 +323,9 @@ function main() {
     `sha512 = ${sha512File(agyPath)}`,
     `installer_url = https://antigravity.google/cli/install.sh`,
     `manifest_url = ${manifestUrl}`,
-    `manifest_version = 1.0.1`,
-    `manifest_tarball_url = ${tarballUrl}`,
-    `manifest_tarball_sha512 = ${manifestSha512}`,
+    `manifest_version = ${manifest.version || "unknown"}`,
+    `manifest_tarball_url = ${manifest.url || "unknown"}`,
+    `manifest_tarball_sha512 = ${manifest.sha512 || "unknown"}`,
     `generated_at = ${generatedAt}`,
     "auth_source = local Antigravity Google OAuth/keyring",
     "trace_script = antigravity/scripts/extract-antigravity-log.cjs",
@@ -285,7 +345,7 @@ function main() {
 
   fs.writeFileSync(
     path.join(outDir, "README.md"),
-    `# Antigravity CLI\n\nAntigravity CLI is Google's coding agent. These artifacts were extracted from the installed \`agy\` binary by enabling verbose \`CODEIUM_VMODULE='*=5'\` logging and parsing the real \`Cortex API Request\` payload sent to \`streamGenerateContent\`.\n\n- \`prompts/\` contains captured \`systemInstruction\` prompt blocks and the observed request context blocks grouped by model.\n- \`tools/\` contains one JSON file per observed Gemini function declaration. The nested \`schema\` is the exact \`request.tools[]\` wrapper sent for that function.\n- \`VERSION\` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.\n\nRun a fresh capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)\nCODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file \"$trace_dir/agy.log\"\nnode antigravity/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n`,
+    `# Antigravity CLI\n\nAntigravity CLI is Google's coding agent. These artifacts were extracted from the installed \`agy\` binary by enabling verbose \`CODEIUM_VMODULE='*=5'\` logging and parsing the real \`Cortex API Request\` payload sent to \`streamGenerateContent\`.\n\n- \`prompts/\` contains raw captured prompt text grouped by model. Run-specific values are marked with \`<harnessVariable>example</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Gemini function declaration. The nested \`schema\` is the exact \`request.tools[]\` wrapper sent for that function.\n- \`VERSION\` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.\n\nRun a fresh capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)\nCODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file \"$trace_dir/agy.log\"\nnode antigravity/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n`,
   );
 
   console.log(

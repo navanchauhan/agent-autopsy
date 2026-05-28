@@ -2,13 +2,13 @@
   "name": "read_url_content",
   "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
   "models": [
-    "gemini-3-flash-agent"
+    "gemini-3.5-flash-low"
   ],
   "request_kinds": [
     "agent"
   ],
   "trace_lines": [
-    5955
+    4086
   ],
   "schema": {
     "functionDeclarations": [
