@@ -1,6 +1,6 @@
 {
   "name": "Read",
-  "note": "This tool had different exact payloads across traced model requests. Each schema entry below is an exact tool object sent to the listed model(s).",
+  "note": "This tool had different exact payloads across traced model requests and capture modes. Each schema entry below is an exact Claude /v1/messages tools[] object sent to the listed model(s)/capture mode(s).",
   "variants": [
     {
       "models": [
@@ -9,7 +9,8 @@
       ],
       "runs": [
         "haiku",
-        "sonnet"
+        "sonnet",
+        "interactive"
       ],
       "request_kind": "agent",
       "schema": {
@@ -46,7 +47,14 @@
           "additionalProperties": false
         },
         "eager_input_streaming": true
-      }
+      },
+      "capture_modes": [
+        "non-interactive",
+        "interactive"
+      ],
+      "trace_files": [
+        "2026-05-28T01-13-42-521Z-a9cf939a-dafb-44c2-8c9d-d7f28a9d40b9.json"
+      ]
     },
     {
       "models": [
@@ -90,7 +98,10 @@
           "additionalProperties": false
         },
         "eager_input_streaming": true
-      }
+      },
+      "capture_modes": [
+        "non-interactive"
+      ]
     }
   ]
 }

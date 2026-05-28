@@ -14,7 +14,7 @@ const INTERACTIVE_TRACE_COMMAND =
 
 function usage() {
   console.error(
-    "Usage: node antigravity/scripts/extract-antigravity-log.cjs <agy.log> [out-dir]",
+    "Usage: node antigravity/misc/scripts/extract-antigravity-log.cjs <agy.log> [out-dir]",
   );
   process.exit(2);
 }
@@ -80,11 +80,29 @@ function writeJson(filePath, value) {
 }
 
 function removeGeneratedFiles(dir, extension) {
+  if (!fs.existsSync(dir)) return;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.isFile() && entry.name.endsWith(extension)) {
       fs.rmSync(path.join(dir, entry.name));
     }
   }
+}
+
+function removeMatchingFiles(dir, predicate) {
+  if (!fs.existsSync(dir)) return;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isFile() && predicate(entry.name)) {
+      fs.rmSync(path.join(dir, entry.name));
+    }
+  }
+}
+
+function sameJson(left, right) {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function mergeList(target, key, values) {
+  target[key] = [...new Set([...(target[key] || []), ...(values || [])].filter(Boolean))];
 }
 
 function harnessVariable(value) {
@@ -227,18 +245,89 @@ function groupTools(records) {
   return groups;
 }
 
+function mergeInteractiveTool(toolPath, name, interactiveVariants) {
+  const incoming = interactiveVariants.map((variant) => ({
+    capture_modes: ["interactive"],
+    models: variant.models,
+    request_kinds: variant.request_kinds,
+    trace_lines: variant.trace_lines,
+    schema: variant.schema,
+  }));
+
+  if (!fs.existsSync(toolPath)) {
+    writeJson(toolPath, {
+      name,
+      note:
+        "This function declaration was observed in an interactive Antigravity agent request. Each variant schema is the exact request.tools[] wrapper.",
+      variants: incoming,
+    });
+    return;
+  }
+
+  const existing = JSON.parse(fs.readFileSync(toolPath, "utf8"));
+  if (Array.isArray(existing.variants)) {
+    for (const next of incoming) {
+      const match = existing.variants.find((variant) => sameJson(variant.schema, next.schema));
+      if (match) {
+        mergeList(match, "capture_modes", next.capture_modes);
+        mergeList(match, "models", next.models);
+        mergeList(match, "request_kinds", next.request_kinds);
+        mergeList(match, "trace_lines", next.trace_lines);
+      } else {
+        existing.variants.push(next);
+      }
+    }
+    writeJson(toolPath, existing);
+    return;
+  }
+
+  if (existing.schema && incoming.length === 1 && sameJson(existing.schema, incoming[0].schema)) {
+    existing.note =
+      "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request. The same schema was observed in each listed capture mode.";
+    mergeList(existing, "capture_modes", ["non-interactive", "interactive"]);
+    mergeList(existing, "models", incoming[0].models);
+    mergeList(existing, "request_kinds", incoming[0].request_kinds);
+    mergeList(existing, "trace_lines", incoming[0].trace_lines);
+    writeJson(toolPath, existing);
+    return;
+  }
+
+  writeJson(toolPath, {
+    name: existing.name || name,
+    note:
+      "This function declaration had different exact request.tools[] payloads across capture modes. Each variant schema is the exact wrapper sent for that capture mode.",
+    variants: [
+      {
+        capture_modes: ["non-interactive"],
+        models: existing.models || [],
+        request_kinds: existing.request_kinds || [],
+        trace_lines: existing.trace_lines || [],
+        schema: existing.schema || existing,
+      },
+      ...incoming,
+    ],
+  });
+}
+
 function main() {
   const logPath = process.argv[2];
   if (!logPath) usage();
 
   const logText = fs.readFileSync(logPath, "utf8");
+  const captureMode = process.env.AGY_CAPTURE_MODE === "interactive" ? "interactive" : "non-interactive";
   const outDir = process.argv[3] ? path.resolve(process.argv[3]) : DEFAULT_OUT_DIR;
   const promptsDir = path.join(outDir, "prompts");
   const toolsDir = path.join(outDir, "tools");
+  const miscDir = path.join(outDir, "misc");
   fs.mkdirSync(promptsDir, { recursive: true });
   fs.mkdirSync(toolsDir, { recursive: true });
-  removeGeneratedFiles(promptsDir, ".md");
-  removeGeneratedFiles(toolsDir, ".json");
+  fs.mkdirSync(miscDir, { recursive: true });
+  if (captureMode === "interactive") {
+    removeMatchingFiles(promptsDir, (name) => name.endsWith("-interactive.md"));
+  } else {
+    removeGeneratedFiles(promptsDir, ".md");
+    removeGeneratedFiles(toolsDir, ".json");
+  }
 
   const requests = readJsonRequests(logPath);
   const agentRecords = requests.filter((record) => record.payload.requestType === "agent");
@@ -255,7 +344,12 @@ function main() {
 
   for (const [model, records] of byModel.entries()) {
     fs.writeFileSync(
-      path.join(promptsDir, `${safeFileName(model)}.md`),
+      path.join(
+        promptsDir,
+        captureMode === "interactive"
+          ? `${safeFileName(model)}-interactive.md`
+          : `${safeFileName(model)}.md`,
+      ),
       renderPrompt(model, records),
     );
   }
@@ -287,7 +381,12 @@ function main() {
             variants,
           };
 
-    writeJson(path.join(toolsDir, `${safeFileName(name)}.json`), value);
+    const toolPath = path.join(toolsDir, `${safeFileName(name)}.json`);
+    if (captureMode === "interactive") {
+      mergeInteractiveTool(toolPath, name, variants);
+    } else {
+      writeJson(toolPath, value);
+    }
   }
 
   const agyPath = execOrUnknown("command -v agy");
@@ -314,8 +413,7 @@ function main() {
   const responseModelVersions = [
     ...new Set([...logText.matchAll(/"modelVersion":\s*"([^"]+)"/g)].map((m) => m[1])),
   ].sort();
-  const captureCommand =
-    process.env.AGY_CAPTURE_MODE === "interactive" ? INTERACTIVE_TRACE_COMMAND : PRINT_TRACE_COMMAND;
+  const captureCommand = captureMode === "interactive" ? INTERACTIVE_TRACE_COMMAND : PRINT_TRACE_COMMAND;
 
   const versionLines = [
     "source = antigravity.google/cli",
@@ -332,8 +430,9 @@ function main() {
     `manifest_tarball_sha512 = ${manifest.sha512 || "unknown"}`,
     `generated_at = ${generatedAt}`,
     "auth_source = local Antigravity Google OAuth/keyring",
-    "trace_script = antigravity/scripts/extract-antigravity-log.cjs",
+    "trace_script = antigravity/misc/scripts/extract-antigravity-log.cjs",
     "trace_source = local CODEIUM_VMODULE verbose agy.log (not stored)",
+    `capture_mode = ${captureMode}`,
     `capture = ${captureCommand}`,
     `endpoint = ${endpoint}`,
     `selected_model_label = ${selectedModelLabel}`,
@@ -345,12 +444,16 @@ function main() {
     "tool_notes = Antigravity sends Gemini function declarations inside request.tools[]; each tool file stores the exact request.tools[] wrapper observed for that function in the agent request.",
     "",
   ];
-  fs.writeFileSync(path.join(outDir, "VERSION"), versionLines.join("\n"));
+  if (captureMode === "interactive") {
+    fs.writeFileSync(path.join(miscDir, "interactive-capture.VERSION"), versionLines.join("\n"));
+  } else {
+    fs.writeFileSync(path.join(outDir, "VERSION"), versionLines.join("\n"));
 
-  fs.writeFileSync(
-    path.join(outDir, "README.md"),
-    `# Antigravity CLI\n\nAntigravity CLI is Google's coding agent. These artifacts were extracted from the installed \`agy\` binary by enabling verbose \`CODEIUM_VMODULE='*=5'\` logging and parsing the real \`Cortex API Request\` payload sent to \`streamGenerateContent\`.\n\n- \`prompts/\` contains raw captured prompt text grouped by model. Run-specific values are marked with \`<harnessVariable>example</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Gemini function declaration. The nested \`schema\` is the exact \`request.tools[]\` wrapper sent for that function.\n- \`VERSION\` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.\n\nRun a fresh non-interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)\nCODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file \"$trace_dir/agy.log\"\nnode antigravity/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n\nRun a fresh interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-interactive.XXXXXX)\ntmux new-session -d -s agy-trace \"cd $PWD && CODEIUM_VMODULE='*=5' agy --add-dir \\\"$PWD\\\" --dangerously-skip-permissions --log-file \\\"$trace_dir/agy.log\\\"\"\ntmux send-keys -t agy-trace 'Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK' Enter\nAGY_CAPTURE_MODE=interactive node antigravity/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\" antigravity/interactive\n\`\`\`\n`,
-  );
+    fs.writeFileSync(
+      path.join(outDir, "README.md"),
+      `# Antigravity CLI\n\nAntigravity CLI is Google's coding agent. These artifacts were extracted from the installed \`agy\` binary by enabling verbose \`CODEIUM_VMODULE='*=5'\` logging and parsing the real \`Cortex API Request\` payload sent to \`streamGenerateContent\`.\n\n- \`prompts/\` contains raw captured prompt text grouped by model. Run-specific values are marked with \`<harnessVariable>example</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Gemini function declaration. The nested \`schema\` is the exact \`request.tools[]\` wrapper sent for that function. Files may contain \`variants[]\` when capture modes differ.\n- \`misc/\` contains support scripts and capture side artifacts.\n- \`VERSION\` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.\n\nRun a fresh non-interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)\nCODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file \"$trace_dir/agy.log\"\nnode antigravity/misc/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n\nRun a fresh interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-interactive.XXXXXX)\ntmux new-session -d -s agy-trace \"cd $PWD && CODEIUM_VMODULE='*=5' agy --add-dir \\\"$PWD\\\" --dangerously-skip-permissions --log-file \\\"$trace_dir/agy.log\\\"\"\ntmux send-keys -t agy-trace 'Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK' Enter\nAGY_CAPTURE_MODE=interactive node antigravity/misc/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n`,
+    );
+  }
 
   console.log(
     JSON.stringify(

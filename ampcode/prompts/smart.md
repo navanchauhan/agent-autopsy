@@ -137,6 +137,7 @@ After loading a skill, follow only the workflow steps relevant to the current re
 Loaded skills appear as `<loaded_skill name="...">` in the conversation.
 
 <available_skills>
+<harnessVariable>
   <skill>
     <name>agent-slack</name>
     <description>Slack automation CLI for AI agents. Use when:
@@ -155,7 +156,7 @@ Loaded skills appear as `<loaded_skill name="...">` in the conversation.
 - Viewing all unread messages (inbox/unreads view)
 Triggers: "slack message", "slack thread", "slack URL", "slack link", "read slack", "reply on slack", "search slack", "channel history", "recent messages", "channel messages", "latest messages", "mark as read", "mark read", "slack later", "saved for later", "save for later", "slack unreads", "slack inbox", "unread slack"
 </description>
-    <location>file://<harnessVariable>/Users/navanchauhan/.agents/skills/agent-slack/SKILL.md</harnessVariable></location>
+    <location>file:///Users/navanchauhan/.agents/skills/agent-slack/SKILL.md</location>
   </skill>
   <skill>
     <name>building-plugins</name>
@@ -175,12 +176,12 @@ Triggers: "slack message", "slack thread", "slack URL", "slack link", "read slac
   <skill>
     <name>image-taste-frontend</name>
     <description>Elite frontend image-direction skill for generating premium, artistic, implementation-friendly website design references. Uses combinatorial variation to avoid repetitive AI aesthetics, enforces cinematic hero minimalism, strong hierarchy, generous spacing, image-led composition, and anti-slop visual discipline. For visual frontend tasks, this skill must first generate the design image(s) itself, deeply analyze them, then implement the frontend to match them as closely as possible.</description>
-    <location>file://<harnessVariable>/Users/navanchauhan/.agents/skills/image-taste-frontend/SKILL.md</harnessVariable></location>
+    <location>file:///Users/navanchauhan/.agents/skills/image-taste-frontend/SKILL.md</location>
   </skill>
   <skill>
     <name>imagegen-frontend-mobile</name>
     <description>Elite mobile app image-generation skill for creating premium, app-native screen concepts and flows. Designed for iOS, Android, and cross-platform mobile products. Prioritizes clean hierarchy, comfortably readable text, strong multi-screen consistency, controlled color palettes, non-generic creative direction, textured surfaces, image-led composition, tasteful custom iconography, and clean phone mockup framing. By default, screens should be shown inside a subtle premium iPhone or similar phone mockup with a visible frame, while the main focus stays on the app content itself. This skill generates images only. It does not write code.</description>
-    <location>file://<harnessVariable>/Users/navanchauhan/.agents/skills/imagegen-frontend-mobile/SKILL.md</harnessVariable></location>
+    <location>file:///Users/navanchauhan/.agents/skills/imagegen-frontend-mobile/SKILL.md</location>
   </skill>
   <skill>
     <name>setup-tmux</name>
@@ -190,28 +191,29 @@ Triggers: "slack message", "slack thread", "slack URL", "slack link", "read slac
   <skill>
     <name>swift-concurrency-pro</name>
     <description>Reviews Swift code for concurrency correctness, modern API usage, and common async/await pitfalls. Use when reading, writing, or reviewing Swift concurrency code.</description>
-    <location>file://<harnessVariable>/Users/navanchauhan/.agents/skills/swift-concurrency-pro/SKILL.md</harnessVariable></location>
+    <location>file:///Users/navanchauhan/.agents/skills/swift-concurrency-pro/SKILL.md</location>
   </skill>
   <skill>
     <name>swift-testing-pro</name>
     <description>Writes, reviews, and improves Swift Testing code using modern APIs and best practices. Use when reading, writing, or reviewing projects that use Swift Testing.</description>
-    <location>file://<harnessVariable>/Users/navanchauhan/.agents/skills/swift-testing-pro/SKILL.md</harnessVariable></location>
+    <location>file:///Users/navanchauhan/.agents/skills/swift-testing-pro/SKILL.md</location>
   </skill>
   <skill>
     <name>swiftdata-pro</name>
     <description>Writes, reviews, and improves SwiftData code using modern APIs and best practices. Use when reading, writing, or reviewing projects that use SwiftData.</description>
-    <location>file://<harnessVariable>/Users/navanchauhan/.agents/skills/swiftdata-pro/SKILL.md</harnessVariable></location>
+    <location>file:///Users/navanchauhan/.agents/skills/swiftdata-pro/SKILL.md</location>
   </skill>
   <skill>
     <name>swiftui-expert-skill</name>
     <description>Write, review, or improve SwiftUI code following best practices for state management, view composition, performance, macOS-specific APIs, and iOS 26+ Liquid Glass adoption. Use when building new SwiftUI features, refactoring existing views, reviewing code quality, or adopting modern SwiftUI patterns. Also triggers whenever an Xcode Instruments `.trace` file is referenced (to analyse it) or the user asks to **record** a new trace — attach to a running app, launch one fresh, or capture a manually-stopped session with the bundled `record_trace.py`. A target SwiftUI source file is optional; if provided it grounds recommendations in specific lines, but a trace alone is enough to diagnose hangs, hitches, CPU hotspots, and high-severity SwiftUI updates.</description>
-    <location>file://<harnessVariable>/Users/navanchauhan/.agents/skills/swiftui-expert-skill/SKILL.md</harnessVariable></location>
+    <location>file:///Users/navanchauhan/.agents/skills/swiftui-expert-skill/SKILL.md</location>
   </skill>
   <skill>
     <name>swiftui-pro</name>
     <description>Comprehensively reviews SwiftUI code for best practices on modern APIs, maintainability, and performance. Use when reading, writing, or reviewing SwiftUI projects.</description>
-    <location>file://<harnessVariable>/Users/navanchauhan/.agents/skills/swiftui-pro/SKILL.md</harnessVariable></location>
+    <location>file:///Users/navanchauhan/.agents/skills/swiftui-pro/SKILL.md</location>
   </skill>
+</harnessVariable>
 </available_skills>
 
 You MUST answer concisely with fewer than 4 lines of text (not including tool use or code generation), unless the user asks for more detail.

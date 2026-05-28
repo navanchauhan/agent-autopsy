@@ -6,7 +6,7 @@ const path = require("path");
 const DEFAULT_OUT_DIR = path.resolve(process.cwd(), "ampcode");
 
 function usage() {
-  console.error("Usage: node ampcode/scripts/extract-amp-inspect.cjs <inspect-json-dir> [out-dir]");
+  console.error("Usage: node ampcode/misc/scripts/extract-amp-inspect.cjs <inspect-json-dir> [out-dir]");
   process.exit(2);
 }
 
@@ -16,6 +16,17 @@ function safeFileName(name) {
 
 function harnessVariable(value) {
   return `<harnessVariable>${value}</harnessVariable>`;
+}
+
+function harnessBlock(value) {
+  return `<harnessVariable>\n${value}\n</harnessVariable>`;
+}
+
+function replaceOutsideHarness(text, regexp, replacer) {
+  return text
+    .split(/(<harnessVariable>[\s\S]*?<\/harnessVariable>)/g)
+    .map((part) => (part.startsWith("<harnessVariable>") ? part : part.replace(regexp, replacer)))
+    .join("");
 }
 
 function removeGeneratedFiles(dir, extension) {
@@ -36,7 +47,15 @@ function markLineValue(text, label) {
 }
 
 function markHarnessVariables(text) {
-  let out = text.replace(/\/Users\/navanchauhan\/[^\s<>"')\]]+/g, (value) =>
+  let out = text.replace(
+    /(<available_skills>\n)([\s\S]*?)(\n<\/available_skills>)/g,
+    (_, prefix, skills, suffix) => `${prefix}${harnessBlock(skills.trimEnd())}${suffix}`,
+  );
+  out = out.replace(
+    /(### Available skills\n)([\s\S]*?)(\n### How to use skills)/g,
+    (_, prefix, skills, suffix) => `${prefix}${harnessBlock(skills.trimEnd())}${suffix}`,
+  );
+  out = replaceOutsideHarness(out, /\/Users\/navanchauhan\/[^\s<>"')\]]+/g, (value) =>
     harnessVariable(value),
   );
 
@@ -75,7 +94,7 @@ function updateVersion(outDir, records) {
   const versionPath = path.join(outDir, "VERSION");
   const modeNames = records.map((record) => record.agentMode).sort();
   const promptLines = [
-    "inspect_script = ampcode/scripts/extract-amp-inspect.cjs",
+    "inspect_script = ampcode/misc/scripts/extract-amp-inspect.cjs",
     "inspect_capture = patched local copy of the installed Amp binary with only the `tools list --inspect` permission gate disabled; no patched binary is stored",
     `prompt_modes = ${modeNames.join(", ")}`,
     `prompts = ${records.length}`,
@@ -102,7 +121,7 @@ function updateVersion(outDir, records) {
 function writeReadme(outDir) {
   fs.writeFileSync(
     path.join(outDir, "README.md"),
-    `# Amp Code\n\nAmp is Sourcegraph's coding agent. These artifacts were extracted from the installed \`amp\` binary and live CLI behavior.\n\n- \`prompts/\` contains exact \`tools list --inspect --json\` system prompts grouped by Amp agent mode. Run-specific values are marked with \`<harnessVariable>example</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Amp tool. The nested \`schema\` is the exact \`amp tools show --json\` tool definition for the listed mode(s).\n- \`VERSION\` records the Amp version, binary checksums, capture commands, prompt modes, and tool counts.\n\nNotes:\n- Amp's normal interactive tmux path uses a server actor and does not expose the final model request locally. The checked-in prompt files come from Amp's own local inspect implementation, using a throwaway patched copy of the installed binary to bypass the inspect permission gate. The patched binary is not stored.\n- The interactive tmux capture verified smart mode returned \`AMP_INTERACTIVE_TRACE_OK\`, advertised 37 executor tools to the actor, and reported 16 inference tools for smart mode.\n`,
+    `# Amp Code\n\nAmp is Sourcegraph's coding agent. These artifacts were extracted from the installed \`amp\` binary and live CLI behavior.\n\n- \`prompts/\` contains exact \`tools list --inspect --json\` system prompts grouped by Amp agent mode. Run-specific values are marked with \`<harnessVariable>example</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Amp tool. The nested \`schema\` is the exact \`amp tools show --json\` tool definition for the listed mode(s).\n- \`misc/\` contains support scripts and capture side artifacts.\n- \`VERSION\` records the Amp version, binary checksums, capture commands, prompt modes, and tool counts.\n\nNotes:\n- Amp's normal interactive tmux path uses a server actor and does not expose the final model request locally. The checked-in prompt files come from Amp's own local inspect implementation, using a throwaway patched copy of the installed binary to bypass the inspect permission gate. The patched binary is not stored.\n- The interactive tmux capture verified smart mode returned \`AMP_INTERACTIVE_TRACE_OK\`, advertised 37 executor tools to the actor, and reported 16 inference tools for smart mode.\n`,
   );
 }
 

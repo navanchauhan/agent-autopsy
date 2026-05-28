@@ -1,62 +1,132 @@
 {
   "name": "ask_permission",
-  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
-  "models": [
-    "gemini-3.5-flash-low"
-  ],
-  "request_kinds": [
-    "agent"
-  ],
-  "trace_lines": [
-    4086
-  ],
-  "schema": {
-    "functionDeclarations": [
-      {
-        "name": "ask_permission",
-        "description": "Use this tool to ask for permission after a failure due to insufficient permissions, specifically when you need additional permissions for file reads or writes after a terminal command or file operation encounters a permission error.\nCRITICAL: Request the narrowest scope that covers your planned operations without requiring repeated asks. For example, prefer a subdirectory over a whole project. Never request wildcard (`*`) or root-level permissions.\nIMPORTANT: Do NOT use this tool to request persistent exceptions for commands that make network requests, run arbitrary code, or download unverified files (e.g., curl, wget, pip, npm). For such operations, invoke the run_command tool directly so the user can explicitly review and approve the individual process execution.\nValid actions, their target formats, and matching behaviors are:\n- `mcp`:\n  - Target Format: serverName/toolName, serverName/*, or *\n  - Matching: Matches by exact server name. server/* covers all tools on that server.\n- `custom`:\n  - Target Format: Custom action name\n  - Matching: Matches the exact action name.\n- `read_file`:\n  - Target Format: Absolute path to file or directory\n  - Matching: Matches the file or everything under the directory. Paths must be literal and absolute.\n- `write_file`:\n  - Target Format: Absolute path to file or directory\n  - Matching: Same as read_file. Also implicitly covers read_file for the same path.\n- `read_url`:\n  - Target Format: Domain name or *\n  - Matching: Matches the domain and all subdomains. Does not match URL paths.\n- `execute_url`:\n  - Target Format: Domain name or *\n  - Matching: Matches the domain and all subdomains. Does not match URL paths.\n- `command`:\n  - Target Format: Command prefix or *\n  - Matching: Matches commands by prefix. e.g., 'git' matches 'git add', 'git commit', etc.\n- `unsandboxed`:\n  - Target Format: Command prefix or *\n  - Matching: Matches commands by prefix. e.g., 'git' matches 'git add', 'git commit', etc. This action runs outside the terminal sandbox.\n\nCommand Matching Details:\n- Commands are split into whitespace separated tokens (words).\n- Each token in the granted target is matched as a full word (internally treated as an anchored regular expression: `^(?:pattern)$`).\n- The system checks if the granted tokens form a prefix of the requested command tokens.\n- Example: `git` matches `git add` but NOT `github`.\n- Example: `git commit` matches `git commit -m \"msg\"` but NOT `git commit-next`.\n\nNote: `read_file` and `write_file` apply to both files and directories (providing recursive access).\n\nExamples of how to map required permissions to tool arguments:\n- To allow any `git` command: Action=`command`, Target=`git`\n- To allow `blaze build`: Action=`command`, Target=`blaze build`\n- To read anything in a directory: Action=`read_file`, Target=`/path/to/directory`\n- To read a specific file: Action=`read_file`, Target=`/path/to/file`\n- To edit files in a directory: Action=`write_file`, Target=`/path/to/directory`\n- To edit a specific file: Action=`write_file`, Target=`/path/to/file`\n- To fetch any Google page: Action=`read_url`, Target=`google.com`\n- For all tools on an MCP server: Action=`mcp`, Target=`server_name/*`\n",
-        "parameters": {
-          "type": "OBJECT",
-          "properties": {
-            "Action": {
-              "type": "STRING",
-              "description": "The action to perform.",
-              "enum": [
-                "mcp",
-                "custom",
-                "read_file",
-                "write_file",
-                "read_url",
-                "execute_url",
-                "command",
-                "unsandboxed"
+  "note": "This function declaration had different exact request.tools[] payloads across capture modes. Each variant schema is the exact wrapper sent for that capture mode.",
+  "variants": [
+    {
+      "capture_modes": [
+        "non-interactive"
+      ],
+      "models": [
+        "gemini-3.5-flash-low"
+      ],
+      "request_kinds": [
+        "agent"
+      ],
+      "trace_lines": [
+        4086
+      ],
+      "schema": {
+        "functionDeclarations": [
+          {
+            "name": "ask_permission",
+            "description": "Use this tool to ask for permission after a failure due to insufficient permissions, specifically when you need additional permissions for file reads or writes after a terminal command or file operation encounters a permission error.\nCRITICAL: Request the narrowest scope that covers your planned operations without requiring repeated asks. For example, prefer a subdirectory over a whole project. Never request wildcard (`*`) or root-level permissions.\nIMPORTANT: Do NOT use this tool to request persistent exceptions for commands that make network requests, run arbitrary code, or download unverified files (e.g., curl, wget, pip, npm). For such operations, invoke the run_command tool directly so the user can explicitly review and approve the individual process execution.\nValid actions, their target formats, and matching behaviors are:\n- `mcp`:\n  - Target Format: serverName/toolName, serverName/*, or *\n  - Matching: Matches by exact server name. server/* covers all tools on that server.\n- `custom`:\n  - Target Format: Custom action name\n  - Matching: Matches the exact action name.\n- `read_file`:\n  - Target Format: Absolute path to file or directory\n  - Matching: Matches the file or everything under the directory. Paths must be literal and absolute.\n- `write_file`:\n  - Target Format: Absolute path to file or directory\n  - Matching: Same as read_file. Also implicitly covers read_file for the same path.\n- `read_url`:\n  - Target Format: Domain name or *\n  - Matching: Matches the domain and all subdomains. Does not match URL paths.\n- `execute_url`:\n  - Target Format: Domain name or *\n  - Matching: Matches the domain and all subdomains. Does not match URL paths.\n- `command`:\n  - Target Format: Command prefix or *\n  - Matching: Matches commands by prefix. e.g., 'git' matches 'git add', 'git commit', etc.\n- `unsandboxed`:\n  - Target Format: Command prefix or *\n  - Matching: Matches commands by prefix. e.g., 'git' matches 'git add', 'git commit', etc. This action runs outside the terminal sandbox.\n\nCommand Matching Details:\n- Commands are split into whitespace separated tokens (words).\n- Each token in the granted target is matched as a full word (internally treated as an anchored regular expression: `^(?:pattern)$`).\n- The system checks if the granted tokens form a prefix of the requested command tokens.\n- Example: `git` matches `git add` but NOT `github`.\n- Example: `git commit` matches `git commit -m \"msg\"` but NOT `git commit-next`.\n\nNote: `read_file` and `write_file` apply to both files and directories (providing recursive access).\n\nExamples of how to map required permissions to tool arguments:\n- To allow any `git` command: Action=`command`, Target=`git`\n- To allow `blaze build`: Action=`command`, Target=`blaze build`\n- To read anything in a directory: Action=`read_file`, Target=`/path/to/directory`\n- To read a specific file: Action=`read_file`, Target=`/path/to/file`\n- To edit files in a directory: Action=`write_file`, Target=`/path/to/directory`\n- To edit a specific file: Action=`write_file`, Target=`/path/to/file`\n- To fetch any Google page: Action=`read_url`, Target=`google.com`\n- For all tools on an MCP server: Action=`mcp`, Target=`server_name/*`\n",
+            "parameters": {
+              "type": "OBJECT",
+              "properties": {
+                "Action": {
+                  "type": "STRING",
+                  "description": "The action to perform.",
+                  "enum": [
+                    "mcp",
+                    "custom",
+                    "read_file",
+                    "write_file",
+                    "read_url",
+                    "execute_url",
+                    "command",
+                    "unsandboxed"
+                  ]
+                },
+                "Reason": {
+                  "type": "STRING",
+                  "description": "The reason why permission is needed"
+                },
+                "Target": {
+                  "type": "STRING",
+                  "description": "The target of the action (e.g., the command string, file path)"
+                },
+                "toolAction": {
+                  "type": "STRING",
+                  "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+                },
+                "toolSummary": {
+                  "type": "STRING",
+                  "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+                }
+              },
+              "required": [
+                "Action",
+                "Target",
+                "toolSummary",
+                "toolAction"
               ]
-            },
-            "Reason": {
-              "type": "STRING",
-              "description": "The reason why permission is needed"
-            },
-            "Target": {
-              "type": "STRING",
-              "description": "The target of the action (e.g., the command string, file path)"
-            },
-            "toolAction": {
-              "type": "STRING",
-              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
-            },
-            "toolSummary": {
-              "type": "STRING",
-              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
             }
-          },
-          "required": [
-            "Action",
-            "Target",
-            "toolSummary",
-            "toolAction"
-          ]
-        }
+          }
+        ]
       }
-    ]
-  }
+    },
+    {
+      "capture_modes": [
+        "interactive"
+      ],
+      "models": [
+        "gemini-3.5-flash-low"
+      ],
+      "request_kinds": [
+        "agent"
+      ],
+      "trace_lines": [
+        4720
+      ],
+      "schema": {
+        "functionDeclarations": [
+          {
+            "name": "ask_permission",
+            "description": "Use this tool to ask for permission after a failure due to insufficient permissions, specifically when you need additional permissions for file reads or writes after a terminal command or file operation encounters a permission error.\nCRITICAL: Request the narrowest scope that covers your planned operations without requiring repeated asks. For example, prefer a subdirectory over a whole project. Never request wildcard (`*`) or root-level permissions.\nIMPORTANT: Do NOT use this tool to request persistent exceptions for commands that make network requests, run arbitrary code, or download unverified files (e.g., curl, wget, pip, npm). For such operations, invoke the run_command tool directly so the user can explicitly review and approve the individual process execution.\nValid actions, their target formats, and matching behaviors are:\n- `read_file`:\n  - Target Format: Absolute path to file or directory\n  - Matching: Matches the file or everything under the directory. Paths must be literal and absolute.\n- `write_file`:\n  - Target Format: Absolute path to file or directory\n  - Matching: Same as read_file. Also implicitly covers read_file for the same path.\n- `read_url`:\n  - Target Format: Domain name or *\n  - Matching: Matches the domain and all subdomains. Does not match URL paths.\n- `execute_url`:\n  - Target Format: Domain name or *\n  - Matching: Matches the domain and all subdomains. Does not match URL paths.\n- `command`:\n  - Target Format: Command prefix or *\n  - Matching: Matches commands by prefix. e.g., 'git' matches 'git add', 'git commit', etc.\n- `unsandboxed`:\n  - Target Format: Command prefix or *\n  - Matching: Matches commands by prefix. e.g., 'git' matches 'git add', 'git commit', etc. This action runs outside the terminal sandbox.\n- `mcp`:\n  - Target Format: serverName/toolName, serverName/*, or *\n  - Matching: Matches by exact server name. server/* covers all tools on that server.\n- `custom`:\n  - Target Format: Custom action name\n  - Matching: Matches the exact action name.\n\nCommand Matching Details:\n- Commands are split into whitespace separated tokens (words).\n- Each token in the granted target is matched as a full word (internally treated as an anchored regular expression: `^(?:pattern)$`).\n- The system checks if the granted tokens form a prefix of the requested command tokens.\n- Example: `git` matches `git add` but NOT `github`.\n- Example: `git commit` matches `git commit -m \"msg\"` but NOT `git commit-next`.\n\nNote: `read_file` and `write_file` apply to both files and directories (providing recursive access).\n\nExamples of how to map required permissions to tool arguments:\n- To allow any `git` command: Action=`command`, Target=`git`\n- To allow `blaze build`: Action=`command`, Target=`blaze build`\n- To read anything in a directory: Action=`read_file`, Target=`/path/to/directory`\n- To read a specific file: Action=`read_file`, Target=`/path/to/file`\n- To edit files in a directory: Action=`write_file`, Target=`/path/to/directory`\n- To edit a specific file: Action=`write_file`, Target=`/path/to/file`\n- To fetch any Google page: Action=`read_url`, Target=`google.com`\n- For all tools on an MCP server: Action=`mcp`, Target=`server_name/*`\n",
+            "parameters": {
+              "type": "OBJECT",
+              "properties": {
+                "Action": {
+                  "type": "STRING",
+                  "description": "The action to perform.",
+                  "enum": [
+                    "read_file",
+                    "write_file",
+                    "read_url",
+                    "execute_url",
+                    "command",
+                    "unsandboxed",
+                    "mcp",
+                    "custom"
+                  ]
+                },
+                "Reason": {
+                  "type": "STRING",
+                  "description": "The reason why permission is needed"
+                },
+                "Target": {
+                  "type": "STRING",
+                  "description": "The target of the action (e.g., the command string, file path)"
+                },
+                "toolAction": {
+                  "type": "STRING",
+                  "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+                },
+                "toolSummary": {
+                  "type": "STRING",
+                  "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+                }
+              },
+              "required": [
+                "Action",
+                "Target",
+                "toolSummary",
+                "toolAction"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
 }

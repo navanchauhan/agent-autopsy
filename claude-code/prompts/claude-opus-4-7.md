@@ -1,3 +1,5 @@
+x-anthropic-billing-header: <harnessVariable>cc_version=2.1.148.9d3; cc_entrypoint=sdk-cli; cch=00000;</harnessVariable>
+
 You are a Claude agent, built on Anthropic's Claude Agent SDK.
 
 

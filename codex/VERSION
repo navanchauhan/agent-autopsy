@@ -7,3 +7,5 @@ generated_at = 2026-05-22T01:41:37.055392+00:00
 reference_path = references/codex
 prompts = 13
 tools = 20
+misc = 4
+misc_files = goal-budget-limit.md, goal-completion-tool-reminder.md, goal-continuation.md, goal-objective-updated.md

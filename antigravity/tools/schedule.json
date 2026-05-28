@@ -1,6 +1,6 @@
 {
   "name": "schedule",
-  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
+  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request. The same schema was observed in each listed capture mode.",
   "models": [
     "gemini-3.5-flash-low"
   ],
@@ -8,7 +8,8 @@
     "agent"
   ],
   "trace_lines": [
-    4086
+    4086,
+    4720
   ],
   "schema": {
     "functionDeclarations": [
@@ -50,5 +51,9 @@
         }
       }
     ]
-  }
+  },
+  "capture_modes": [
+    "non-interactive",
+    "interactive"
+  ]
 }

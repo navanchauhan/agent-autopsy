@@ -12,14 +12,17 @@ manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigra
 manifest_tarball_sha512 = 9e177599230ed22605879b8e96f4ba9b8d8bab98586fedae14dae4536bf75529c7e0c7a6dee4134c913927c8b02fbb212e6fc81bcf982d06d6850663eb3fbfe0
 generated_at = 2026-05-28T00:52:07.524Z
 auth_source = local Antigravity Google OAuth/keyring
-trace_script = antigravity/scripts/extract-antigravity-log.cjs
+trace_script = antigravity/misc/scripts/extract-antigravity-log.cjs
 trace_source = local CODEIUM_VMODULE verbose agy.log (not stored)
-capture = CODEIUM_VMODULE='*=5' agy --add-dir "$PWD" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file <trace>/agy.log
+non_interactive_capture = CODEIUM_VMODULE='*=5' agy --add-dir "$PWD" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file <trace>/agy.log
+interactive_capture = tmux new-session with `CODEIUM_VMODULE='*=5' agy --add-dir "$PWD" --dangerously-skip-permissions --log-file <trace>/agy.log`, then send `Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK`
+capture_modes = non-interactive, interactive
 endpoint = https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse
 selected_model_label = Gemini 3.5 Flash (Medium)
 response_model_versions = gemini-3-flash-a
 prompt_models = gemini-3.5-flash-low
-prompts = 1
+prompt_files = gemini-3.5-flash-low-interactive.md, gemini-3.5-flash-low.md
+prompts = 2
 tools = 19
 tool_names = ask_permission, ask_question, define_subagent, generate_image, grep_search, invoke_subagent, list_dir, list_permissions, manage_subagents, manage_task, multi_replace_file_content, read_url_content, replace_file_content, run_command, schedule, search_web, send_message, view_file, write_to_file
-tool_notes = Antigravity sends Gemini function declarations inside request.tools[]; each tool file stores the exact request.tools[] wrapper observed for that function in the agent request.
+tool_notes = Antigravity sends Gemini function declarations inside request.tools[]; each tool file stores the exact request.tools[] wrapper observed for that function in the agent request. ask_permission differs between capture modes and is stored with variants[].
