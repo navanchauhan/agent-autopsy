@@ -14,12 +14,72 @@ function safeFileName(name) {
   return name.replace(/[^A-Za-z0-9_.-]+/g, "_");
 }
 
-function harnessVariable(value) {
-  return `<harnessVariable>${value}</harnessVariable>`;
+function harnessScalar(name, example) {
+  return `<harnessVariable>{{${name}=${example}}}</harnessVariable>`;
 }
 
-function harnessBlock(value) {
-  return `<harnessVariable>\n${value}\n</harnessVariable>`;
+const AVAILABLE_SKILLS_MARKDOWN_HARNESS = `<harnessVariable>
+{{#each availableSkills}}
+- {{name}}: {{description}} (file: {{location}})
+{{/each}}
+
+Example:
+- example-skill: Example user-installed skill description. (file: file:///Users/example/.agents/skills/example-skill/SKILL.md)
+</harnessVariable>`;
+
+const AVAILABLE_SKILLS_XML_HARNESS = `<harnessVariable>
+{{#each availableSkills}}
+  <skill>
+    <name>{{name}}</name>
+    <description>{{description}}</description>
+    <location>{{location}}</location>
+  </skill>
+{{/each}}
+
+Example:
+  <skill>
+    <name>example-skill</name>
+    <description>Example user-installed skill description.</description>
+    <location>file:///Users/example/.agents/skills/example-skill/SKILL.md</location>
+  </skill>
+</harnessVariable>`;
+
+const DIRECTORY_LISTING_HARNESS = `<harnessVariable>
+{{#each workspaceTopLevelEntries}}
+{{absolutePath}}
+{{/each}}
+
+Example:
+/Users/example/Developer/example-repo/src/
+/Users/example/Developer/example-repo/package.json
+</harnessVariable>`;
+
+const LINE_VARIABLE_NAMES = {
+  "Today's date": "currentDate",
+  "Working directory": "currentWorkingDirectory",
+  "Workspace root": "workspaceRoot",
+  "Operating system": "operatingSystem",
+  Repository: "repositoryUrl",
+  "Amp Thread URL": "ampThreadUrl",
+};
+
+function sanitizeExample(value) {
+  return value
+    .replace(/https:\/\/github\.com\/[^/\s]+\/[^/\s<>"')\]]+/g, "https://github.com/example-org/example-repo")
+    .replace(/https:\/\/ampcode\.com\/threads\/T-[0-9a-f-]+/gi, "https://ampcode.com/threads/T-00000000-0000-4000-8000-000000000000")
+    .replace(/\/Users\/[^/]+\/Developer\/[^/\s<>"')\]]+/g, "/Users/example/Developer/example-repo")
+    .replace(/\/Users\/[^/]+\/\.agents\/skills/g, "/Users/example/.agents/skills")
+    .replace(/\/Users\/[^/]+\//g, "/Users/example/");
+}
+
+function harnessScalarForValue(value, fallbackName = "runtimeValue") {
+  const example = sanitizeExample(value);
+  let name = fallbackName;
+  if (/^https:\/\/github\.com\//.test(example)) name = "repositoryUrl";
+  else if (/^https:\/\/ampcode\.com\/threads\//.test(example)) name = "ampThreadUrl";
+  else if (/^(?:file:\/\/)?\/Users\/example\/\.agents\/skills/.test(example)) name = "skillLocation";
+  else if (/^\/Users\/example\//.test(example)) name = "absolutePath";
+  return harnessScalar(name, example);
 }
 
 function replaceOutsideHarness(text, regexp, replacer) {
@@ -42,21 +102,27 @@ function markLineValue(text, label) {
   const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return text.replace(new RegExp(`^(${escaped}: )([^\\n]+)$`, "gm"), (_, prefix, value) => {
     if (value.includes("<harnessVariable>")) return `${prefix}${value}`;
-    return `${prefix}${harnessVariable(value)}`;
+    let example = sanitizeExample(value);
+    if (label === "Today's date") example = "Mon Jan 2 2026";
+    return `${prefix}${harnessScalar(LINE_VARIABLE_NAMES[label], example)}`;
   });
 }
 
 function markHarnessVariables(text) {
   let out = text.replace(
     /(<available_skills>\n)([\s\S]*?)(\n<\/available_skills>)/g,
-    (_, prefix, skills, suffix) => `${prefix}${harnessBlock(skills.trimEnd())}${suffix}`,
+    (_, prefix, _skills, suffix) => `${prefix}${AVAILABLE_SKILLS_XML_HARNESS}${suffix}`,
   );
   out = out.replace(
     /(### Available skills\n)([\s\S]*?)(\n### How to use skills)/g,
-    (_, prefix, skills, suffix) => `${prefix}${harnessBlock(skills.trimEnd())}${suffix}`,
+    (_, prefix, _skills, suffix) => `${prefix}${AVAILABLE_SKILLS_MARKDOWN_HARNESS}${suffix}`,
   );
-  out = replaceOutsideHarness(out, /\/Users\/navanchauhan\/[^\s<>"')\]]+/g, (value) =>
-    harnessVariable(value),
+  out = out.replace(
+    /(## Directory listing\nList of files \(top-level only\) in the user's workspace:\n)([\s\S]*?)(\n\n## Skills)/g,
+    (_, prefix, _listing, suffix) => `${prefix}${DIRECTORY_LISTING_HARNESS}${suffix}`,
+  );
+  out = replaceOutsideHarness(out, /\/Users\/[^/]+\/[^\s<>"')\]]+/g, (value) =>
+    harnessScalarForValue(value, "absolutePath"),
   );
 
   for (const label of [
@@ -121,7 +187,7 @@ function updateVersion(outDir, records) {
 function writeReadme(outDir) {
   fs.writeFileSync(
     path.join(outDir, "README.md"),
-    `# Amp Code\n\nAmp is Sourcegraph's coding agent. These artifacts were extracted from the installed \`amp\` binary and live CLI behavior.\n\n- \`prompts/\` contains exact \`tools list --inspect --json\` system prompts grouped by Amp agent mode. Run-specific values are marked with \`<harnessVariable>example</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Amp tool. The nested \`schema\` is the exact \`amp tools show --json\` tool definition for the listed mode(s).\n- \`misc/\` contains support scripts and capture side artifacts.\n- \`VERSION\` records the Amp version, binary checksums, capture commands, prompt modes, and tool counts.\n\nNotes:\n- Amp's normal interactive tmux path uses a server actor and does not expose the final model request locally. The checked-in prompt files come from Amp's own local inspect implementation, using a throwaway patched copy of the installed binary to bypass the inspect permission gate. The patched binary is not stored.\n- The interactive tmux capture verified smart mode returned \`AMP_INTERACTIVE_TRACE_OK\`, advertised 37 executor tools to the actor, and reported 16 inference tools for smart mode.\n`,
+    `# Amp Code\n\nAmp is Sourcegraph's coding agent. These artifacts were extracted from the installed \`amp\` binary and live CLI behavior.\n\n- \`prompts/\` contains exact \`tools list --inspect --json\` system prompts grouped by Amp agent mode. Run-specific scalar values are marked with \`<harnessVariable>{{name=example}}</harnessVariable>\`; repeated runtime sections use \`{{#each collectionName}}...{{/each}}\` blocks inside \`<harnessVariable>...</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Amp tool. The nested \`schema\` is the exact \`amp tools show --json\` tool definition for the listed mode(s).\n- \`misc/\` contains support scripts and capture side artifacts.\n- \`VERSION\` records the Amp version, binary checksums, capture commands, prompt modes, and tool counts.\n\nNotes:\n- Amp's normal interactive tmux path uses a server actor and does not expose the final model request locally. The checked-in prompt files come from Amp's own local inspect implementation, using a throwaway patched copy of the installed binary to bypass the inspect permission gate. The patched binary is not stored.\n- The interactive tmux capture verified smart mode returned \`AMP_INTERACTIVE_TRACE_OK\`, advertised 37 executor tools to the actor, and reported 16 inference tools for smart mode.\n`,
   );
 }
 

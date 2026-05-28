@@ -7,7 +7,7 @@ const path = require("path");
 
 const DEFAULT_OUT_DIR = path.resolve(process.cwd(), "ampcode");
 const DEFAULT_MODES = ["smart", "deep", "large", "rush"];
-const AMP = process.env.AMP_BIN || "/Users/navanchauhan/.local/bin/amp";
+const AMP = process.env.AMP_BIN || "amp";
 
 function execFile(command, args) {
   return childProcess.execFileSync(command, args, {
@@ -35,6 +35,13 @@ function shaFile(filePath, algorithm) {
   } catch {
     return "unknown";
   }
+}
+
+function displayPath(filePath) {
+  const home = process.env.HOME;
+  return home && filePath.startsWith(home)
+    ? filePath.replace(home, "/Users/example")
+    : filePath;
 }
 
 function safeFileName(name) {
@@ -146,8 +153,8 @@ function main() {
     "distribution = native Bun binary",
     `version = ${version}`,
     "platform = darwin-arm64",
-    `launcher_path = ${AMP}`,
-    `binary_path = ${binaryPath}`,
+    `launcher_path = ${displayPath(AMP)}`,
+    `binary_path = ${displayPath(binaryPath)}`,
     `sha256 = ${shaFile(binaryPath, "sha256")}`,
     `sha512 = ${shaFile(binaryPath, "sha512")}`,
     `generated_at = ${new Date().toISOString()}`,

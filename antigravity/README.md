@@ -2,7 +2,7 @@
 
 Antigravity CLI is Google's coding agent. These artifacts were extracted from the installed `agy` binary by enabling verbose `CODEIUM_VMODULE='*=5'` logging and parsing the real `Cortex API Request` payload sent to `streamGenerateContent`.
 
-- `prompts/` contains raw captured prompt text grouped by model. Run-specific values are marked with `<harnessVariable>example</harnessVariable>`.
+- `prompts/` contains raw captured prompt text grouped by model. Run-specific scalar values are marked with `<harnessVariable>{{name=example}}</harnessVariable>`; repeated runtime sections use `{{#each collectionName}}...{{/each}}` blocks inside `<harnessVariable>...</harnessVariable>`.
 - `tools/` contains one JSON file per observed Gemini function declaration. The nested `schema` is the exact `request.tools[]` wrapper sent for that function. Files use `variants[]` when payloads differ by capture mode.
 - `misc/` contains support scripts and capture side artifacts.
 - `VERSION` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.

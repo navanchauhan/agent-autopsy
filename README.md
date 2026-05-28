@@ -4,7 +4,7 @@ Collection of prompts and tool schemas for coding agents.
 
 Each coding-agent directory follows the same shape:
 
-- `prompts/`: captured prompt files, with run-specific values marked as `<harnessVariable>example</harnessVariable>`.
+- `prompts/`: captured prompt files, with run-specific scalar values marked as `<harnessVariable>{{name=example}}</harnessVariable>` and repeated runtime sections marked with `{{#each collectionName}}...{{/each}}` inside `<harnessVariable>...</harnessVariable>`.
 - `tools/`: one JSON file per observed tool. Each `schema` entry is the exact tool payload sent to the model; files use `variants[]` when payloads differ by model or capture mode.
 - `misc/`: steering messages, feature-specific runtime messages, and extraction scripts.
 - `README.md`: capture notes and refresh commands.

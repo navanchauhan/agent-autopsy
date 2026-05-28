@@ -83,30 +83,29 @@ AGENTS.md guidance files are delivered dynamically in the conversation context a
 
 Here is useful information about the environment you are running in:
 
-Today's date: <harnessVariable>Wed May 27 2026</harnessVariable>
+Today's date: <harnessVariable>{{currentDate=Mon Jan 2 2026}}</harnessVariable>
 
-Working directory: <harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy</harnessVariable>
+Working directory: <harnessVariable>{{currentWorkingDirectory=/Users/example/Developer/example-repo}}</harnessVariable>
 
-Workspace root: <harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy</harnessVariable>
+Workspace root: <harnessVariable>{{workspaceRoot=/Users/example/Developer/example-repo}}</harnessVariable>
 
-Operating system: <harnessVariable>darwin (25.5.0) on arm64</harnessVariable>
+Operating system: <harnessVariable>{{operatingSystem=darwin (25.5.0) on arm64}}</harnessVariable>
 
-Repository: <harnessVariable>https://github.com/navanchauhan/agent-autopsy</harnessVariable>
+Repository: <harnessVariable>{{repositoryUrl=https://github.com/example-org/example-repo}}</harnessVariable>
 
-Amp Thread URL: <harnessVariable>https://ampcode.com/threads/T-019e6c29-e693-7274-a63a-237f52a0a415</harnessVariable>
+Amp Thread URL: <harnessVariable>{{ampThreadUrl=https://ampcode.com/threads/T-00000000-0000-4000-8000-000000000000}}</harnessVariable>
 
 ## Directory listing
 List of files (top-level only) in the user's workspace:
-<harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy/.antigravitycli/</harnessVariable>
-<harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy/.git/</harnessVariable>
-<harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy/ampcode/</harnessVariable>
-<harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy/antigravity/</harnessVariable>
-<harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy/claude-code/</harnessVariable>
-<harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy/codex/</harnessVariable>
-<harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy/references/</harnessVariable>
-<harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy/scripts/</harnessVariable>
-<harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy/README.md</harnessVariable>
+<harnessVariable>
+{{#each workspaceTopLevelEntries}}
+{{absolutePath}}
+{{/each}}
 
+Example:
+/Users/example/Developer/example-repo/src/
+/Users/example/Developer/example-repo/package.json
+</harnessVariable>
 
 ## Skills
 In your workspace you have skills the user created. A **skill** is a guide for proven techniques, patterns, or tools. If a skill exists for a task, you must do it. The following skills provide specialized instructions for specific tasks.
@@ -117,80 +116,19 @@ Loaded skills appear as `<loaded_skill name="...">` in the conversation.
 
 <available_skills>
 <harnessVariable>
+{{#each availableSkills}}
   <skill>
-    <name>agent-slack</name>
-    <description>Slack automation CLI for AI agents. Use when:
-- Reading a Slack message or thread (given a URL or channel+ts)
-- Browsing recent channel messages / channel history
-- Downloading Slack attachments (snippets, images, files) to local paths
-- Searching Slack messages or files
-- Sending, editing, or deleting a message; adding/removing reactions
-- Listing channels/conversations; creating channels and inviting users
-- Fetching a Slack canvas as markdown
-- Looking up Slack users
-- Marking channels/DMs as read
-- Opening DM or group DM channels
-- Discovering and running Slack workflows
-- Managing saved-for-later messages (Later tab)
-- Viewing all unread messages (inbox/unreads view)
-Triggers: "slack message", "slack thread", "slack URL", "slack link", "read slack", "reply on slack", "search slack", "channel history", "recent messages", "channel messages", "latest messages", "mark as read", "mark read", "slack later", "saved for later", "save for later", "slack unreads", "slack inbox", "unread slack"
-</description>
-    <location>file:///Users/navanchauhan/.agents/skills/agent-slack/SKILL.md</location>
+    <name>{{name}}</name>
+    <description>{{description}}</description>
+    <location>{{location}}</location>
   </skill>
+{{/each}}
+
+Example:
   <skill>
-    <name>building-plugins</name>
-    <description>Use when asked about Amp plugins, or tasked to build an Amp plugin for the user.</description>
-    <location>builtin:///skills/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>building-skills</name>
-    <description>Use when creating any skill/agent skill/amp skill. Load FIRST—before researching existing skills or writing SKILL.md. Provides required structure, naming conventions, and frontmatter format.</description>
-    <location>builtin:///skills/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>code-review</name>
-    <description>Perform a formal code review. Use ONLY when the user explicitly requests the code-review skill/tool. Do NOT use when "review" appears in other contexts like "review changes for context", "review what happened", or "review commits to find a bug" — those are requests to read/understand code, not to perform a formal code review.</description>
-    <location>builtin:///skills/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>image-taste-frontend</name>
-    <description>Elite frontend image-direction skill for generating premium, artistic, implementation-friendly website design references. Uses combinatorial variation to avoid repetitive AI aesthetics, enforces cinematic hero minimalism, strong hierarchy, generous spacing, image-led composition, and anti-slop visual discipline. For visual frontend tasks, this skill must first generate the design image(s) itself, deeply analyze them, then implement the frontend to match them as closely as possible.</description>
-    <location>file:///Users/navanchauhan/.agents/skills/image-taste-frontend/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>imagegen-frontend-mobile</name>
-    <description>Elite mobile app image-generation skill for creating premium, app-native screen concepts and flows. Designed for iOS, Android, and cross-platform mobile products. Prioritizes clean hierarchy, comfortably readable text, strong multi-screen consistency, controlled color palettes, non-generic creative direction, textured surfaces, image-led composition, tasteful custom iconography, and clean phone mockup framing. By default, screens should be shown inside a subtle premium iPhone or similar phone mockup with a visible frame, while the main focus stays on the app content itself. This skill generates images only. It does not write code.</description>
-    <location>file:///Users/navanchauhan/.agents/skills/imagegen-frontend-mobile/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>setup-tmux</name>
-    <description>Configure tmux for optimal Amp CLI compatibility. Use when setting up tmux, troubleshooting tmux issues (images, clipboard, Shift+Enter), or asked to check/fix tmux configuration.</description>
-    <location>builtin:///skills/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>swift-concurrency-pro</name>
-    <description>Reviews Swift code for concurrency correctness, modern API usage, and common async/await pitfalls. Use when reading, writing, or reviewing Swift concurrency code.</description>
-    <location>file:///Users/navanchauhan/.agents/skills/swift-concurrency-pro/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>swift-testing-pro</name>
-    <description>Writes, reviews, and improves Swift Testing code using modern APIs and best practices. Use when reading, writing, or reviewing projects that use Swift Testing.</description>
-    <location>file:///Users/navanchauhan/.agents/skills/swift-testing-pro/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>swiftdata-pro</name>
-    <description>Writes, reviews, and improves SwiftData code using modern APIs and best practices. Use when reading, writing, or reviewing projects that use SwiftData.</description>
-    <location>file:///Users/navanchauhan/.agents/skills/swiftdata-pro/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>swiftui-expert-skill</name>
-    <description>Write, review, or improve SwiftUI code following best practices for state management, view composition, performance, macOS-specific APIs, and iOS 26+ Liquid Glass adoption. Use when building new SwiftUI features, refactoring existing views, reviewing code quality, or adopting modern SwiftUI patterns. Also triggers whenever an Xcode Instruments `.trace` file is referenced (to analyse it) or the user asks to **record** a new trace — attach to a running app, launch one fresh, or capture a manually-stopped session with the bundled `record_trace.py`. A target SwiftUI source file is optional; if provided it grounds recommendations in specific lines, but a trace alone is enough to diagnose hangs, hitches, CPU hotspots, and high-severity SwiftUI updates.</description>
-    <location>file:///Users/navanchauhan/.agents/skills/swiftui-expert-skill/SKILL.md</location>
-  </skill>
-  <skill>
-    <name>swiftui-pro</name>
-    <description>Comprehensively reviews SwiftUI code for best practices on modern APIs, maintainability, and performance. Use when reading, writing, or reviewing SwiftUI projects.</description>
-    <location>file:///Users/navanchauhan/.agents/skills/swiftui-pro/SKILL.md</location>
+    <name>example-skill</name>
+    <description>Example user-installed skill description.</description>
+    <location>file:///Users/example/.agents/skills/example-skill/SKILL.md</location>
   </skill>
 </harnessVariable>
 </available_skills>

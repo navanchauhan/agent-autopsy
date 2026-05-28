@@ -1,4 +1,4 @@
-x-anthropic-billing-header: <harnessVariable>cc_version=2.1.148.325; cc_entrypoint=cli; cch=00000;</harnessVariable>
+x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.148.325; cc_entrypoint=cli; cch=00000;}}</harnessVariable>
 
 You are Claude Code, Anthropic's official CLI for Claude.
 
@@ -78,7 +78,7 @@ In code: default to writing no comments. Never write multi-paragraph docstrings 
 
 # auto memory
 
-You have a persistent, file-based memory system at `<harnessVariable>/Users/navanchauhan/.claude/projects/-Users-navanchauhan-Developer-GitHub-Repos-agent-autopsy/memory/`.</harnessVariable> This directory already exists — write to it directly with the Write tool (do not run mkdir or check for its existence).
+You have a persistent, file-based memory system at `<harnessVariable>{{claudeProjectMemoryDirectory=/Users/example/.claude/projects/-Users-example-Developer-example-repo/memory/}}</harnessVariable>`. This directory already exists — write to it directly with the Write tool (do not run mkdir or check for its existence).
 
 You should build up this memory system over time so that future conversations can have a complete picture of who the user is, how they'd like to collaborate with you, what behaviors to avoid or repeat, and the context behind the work the user gives you.
 
@@ -212,13 +212,13 @@ Memory is one of several persistence mechanisms available to you as you assist t
 
 # Environment
 You have been invoked in the following environment: 
- - Primary working directory: <harnessVariable>/Users/navanchauhan/Developer/GitHub-Repos/agent-autopsy</harnessVariable>
- - Is a git repository: <harnessVariable>true</harnessVariable>
- - Platform: <harnessVariable>darwin</harnessVariable>
- - Shell: <harnessVariable>zsh</harnessVariable>
- - OS Version: <harnessVariable>Darwin 25.5.0</harnessVariable>
- - You are powered by the model named <harnessVariable>Sonnet 4.6</harnessVariable>. The exact model ID is <harnessVariable>claude-sonnet-4-6</harnessVariable>.
- - Assistant knowledge cutoff is <harnessVariable>August 2025</harnessVariable>.
+ - Primary working directory: <harnessVariable>{{primaryWorkingDirectory=/Users/example/Developer/example-repo}}</harnessVariable>
+ - Is a git repository: <harnessVariable>{{isGitRepository=true}}</harnessVariable>
+ - Platform: <harnessVariable>{{platform=darwin}}</harnessVariable>
+ - Shell: <harnessVariable>{{shell=zsh}}</harnessVariable>
+ - OS Version: <harnessVariable>{{osVersion=Darwin 25.5.0}}</harnessVariable>
+ - You are powered by the model named <harnessVariable>{{modelDisplayName=Sonnet 4.6}}</harnessVariable>. The exact model ID is <harnessVariable>{{modelId=claude-sonnet-4-6}}</harnessVariable>.
+ - Assistant knowledge cutoff is <harnessVariable>{{knowledgeCutoff=August 2025}}</harnessVariable>.
  - The most recent Claude model family is Claude 4.X. Model IDs — Opus 4.7: 'claude-opus-4-7', Sonnet 4.6: 'claude-sonnet-4-6', Haiku 4.5: 'claude-haiku-4-5-20251001'. When building AI applications, default to the latest and most capable Claude models.
  - Claude Code is available as a CLI in the terminal, desktop app (Mac/Windows), web app (claude.ai/code), and IDE extensions (VS Code, JetBrains).
  - Fast mode for Claude Code uses Claude Opus with faster output (it does not downgrade to a smaller model). It can be toggled with /fast and is available on Opus 4.6 and Opus 4.7.
@@ -228,22 +228,30 @@ When the conversation grows long, some or all of the current context is summariz
 
 gitStatus: This is the git status at the start of the conversation. Note that this status is a snapshot in time, and will not update during the conversation.
 
-Current branch: <harnessVariable>master</harnessVariable>
+Current branch: <harnessVariable>{{currentBranch=feature/example-branch}}</harnessVariable>
 
-Main branch (you will usually use this for PRs): <harnessVariable>master</harnessVariable>
+Main branch (you will usually use this for PRs): <harnessVariable>{{mainBranch=default-branch}}</harnessVariable>
 
-Git user: <harnessVariable>Navan Chauhan</harnessVariable>
+Git user: <harnessVariable>{{gitUser=Example User}}</harnessVariable>
 
 Status:
 <harnessVariable>
-M antigravity/misc/scripts/extract-antigravity-log.cjs
-?? ampcode/
-?? claude-code/misc/scripts/extract-claude-trace.cjs
+{{#each gitStatusEntries}}
+{{status}} {{path}}
+{{/each}}
+
+Example:
+M src/example.ts
+?? docs/example.md
 </harnessVariable>
 
 Recent commits:
 <harnessVariable>
-78bc416 Normalize Claude Code and Antigravity prompts
-e118592 initial batches
-fe93382 initial commit
+{{#each recentCommits}}
+{{shortSha}} {{subject}}
+{{/each}}
+
+Example:
+abc1234 Add example feature
+def5678 Initial commit
 </harnessVariable>

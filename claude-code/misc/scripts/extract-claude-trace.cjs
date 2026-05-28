@@ -36,6 +36,13 @@ function sha256File(filePath) {
   }
 }
 
+function displayPath(filePath) {
+  const home = process.env.HOME;
+  return home && filePath.startsWith(home)
+    ? filePath.replace(home, "/Users/example")
+    : filePath;
+}
+
 function writeJson(filePath, value) {
   fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`);
 }
@@ -128,12 +135,8 @@ function mergeInteractiveTool(toolPath, name, interactiveVariants) {
   });
 }
 
-function harnessVariable(value) {
-  return `<harnessVariable>${value}</harnessVariable>`;
-}
-
-function harnessBlock(value) {
-  return `<harnessVariable>\n${value}\n</harnessVariable>`;
+function harnessScalar(name, example) {
+  return `<harnessVariable>{{${name}=${example}}}</harnessVariable>`;
 }
 
 function replaceAllLiteral(text, search, replacement) {
@@ -144,46 +147,89 @@ function firstMatch(text, regexp) {
   return text.match(regexp)?.[1] || "";
 }
 
-function wrapIfNeeded(value) {
-  return value.includes("<harnessVariable>") ? value : harnessVariable(value);
+function scalarIfNeeded(name, value) {
+  return value.includes("<harnessVariable>") ? value : harnessScalar(name, value);
 }
+
+function sanitizeExample(value) {
+  return value
+    .replace(/\/Users\/[^/]+\/\.claude\/projects\/[^/\s<>"')\]]+\/memory\/?/g, "/Users/example/.claude/projects/-Users-example-Developer-example-repo/memory/")
+    .replace(/\/Users\/[^/]+\/Developer\/[^/\s<>"')\]]+/g, "/Users/example/Developer/example-repo")
+    .replace(/\/Users\/[^/]+\/\.local\/share\/claude\/versions\/[^/\s<>"')\]]+/g, "/Users/example/.local/share/claude/versions/2.1.148")
+    .replace(/\/Users\/[^/]+\//g, "/Users/example/")
+    .replace(/\bcch=[^;]+;/g, "cch=00000;");
+}
+
+function harnessScalarForValue(value, fallbackName = "runtimeValue") {
+  const example = sanitizeExample(value);
+  let name = fallbackName;
+  if (/\bcc_version=[^;\n]+; cc_entrypoint=[^;\n]+; cch=[^;\n]+;/.test(example)) {
+    name = "anthropicBillingHeader";
+  } else if (/\/\.claude\/projects\/.*\/memory\/?$/.test(example)) {
+    name = "claudeProjectMemoryDirectory";
+  } else if (/\/\.local\/share\/claude\/versions\//.test(example)) {
+    name = "claudeBinaryPath";
+  } else if (/^\/Users\/example\/Developer\/example-repo$/.test(example)) {
+    name = fallbackName === "runtimeValue" ? "primaryWorkingDirectory" : fallbackName;
+  } else if (/^\/Users\/example\//.test(example)) {
+    name = "absolutePath";
+  } else if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(example)) {
+    name = "sessionId";
+  }
+  return harnessScalar(name, example);
+}
+
+const LINE_VARIABLE_NAMES = {
+  " - Is a git repository": "isGitRepository",
+  " - Platform": "platform",
+  " - Shell": "shell",
+  " - OS Version": "osVersion",
+  "Current branch": "currentBranch",
+  "Main branch (you will usually use this for PRs)": "mainBranch",
+  "Git user": "gitUser",
+};
 
 function markLineValue(text, label) {
   const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return text.replace(new RegExp(`^(${escaped}: )([^\\n]+)$`, "gm"), (_, prefix, value) => {
-    return `${prefix}${wrapIfNeeded(value)}`;
+    let example = sanitizeExample(value);
+    if (label === "Current branch") example = "feature/example-branch";
+    if (label === "Main branch (you will usually use this for PRs)") example = "default-branch";
+    if (label === "Git user") example = "Example User";
+    if (label.includes("date")) example = "2026-01-02";
+    return `${prefix}${scalarIfNeeded(LINE_VARIABLE_NAMES[label] || "runtimeValue", example)}`;
   });
 }
 
 function markHarnessVariables(text) {
   let out = text;
-  const literalExamples = [];
-  const addLiteralExample = (value) => {
-    if (value && !literalExamples.includes(value)) literalExamples.push(value);
+  const literalExamples = new Map();
+  const addLiteralExample = (value, name) => {
+    if (value && !literalExamples.has(value)) literalExamples.set(value, name);
   };
 
-  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?(?:Primary )?Working directory: (.+)$/m));
-  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Primary working directory: (.+)$/m));
-  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?OS Version: (.+)$/m));
-  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Today's date: (.+)$/m));
-  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Current date: (.+)$/m));
-  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Claude Code version: (.+)$/m));
-  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Model: (.+)$/m));
-  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Session ID: (.+)$/m));
-  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Memory directory: (.+)$/m));
+  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?(?:Primary )?Working directory: (.+)$/m), "primaryWorkingDirectory");
+  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Primary working directory: (.+)$/m), "primaryWorkingDirectory");
+  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?OS Version: (.+)$/m), "osVersion");
+  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Today's date: (.+)$/m), "currentDate");
+  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Current date: (.+)$/m), "currentDate");
+  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Claude Code version: (.+)$/m), "claudeCodeVersion");
+  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Model: (.+)$/m), "modelId");
+  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Session ID: (.+)$/m), "sessionId");
+  addLiteralExample(firstMatch(text, /^(?:\s*-\s*)?Memory directory: (.+)$/m), "claudeProjectMemoryDirectory");
 
-  for (const match of text.matchAll(/\/Users\/navanchauhan\/[^\s<>"')\]]+/g)) {
-    addLiteralExample(match[0]);
+  for (const match of text.matchAll(/\/Users\/[^/]+\/[^\s<>"')\]]+/g)) {
+    addLiteralExample(match[0], "absolutePath");
   }
   for (const match of text.matchAll(/\bcc_version=[^;\n]+; cc_entrypoint=[^;\n]+; cch=[^;\n]+;/g)) {
-    addLiteralExample(match[0]);
+    addLiteralExample(match[0], "anthropicBillingHeader");
   }
   for (const match of text.matchAll(/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi)) {
-    addLiteralExample(match[0]);
+    addLiteralExample(match[0], "sessionId");
   }
 
-  for (const value of literalExamples.sort((a, b) => b.length - a.length)) {
-    out = replaceAllLiteral(out, value, harnessVariable(value));
+  for (const [value, name] of [...literalExamples.entries()].sort((a, b) => b[0].length - a[0].length)) {
+    out = replaceAllLiteral(out, value, harnessScalarForValue(value, name));
   }
 
   for (const label of [
@@ -200,19 +246,21 @@ function markHarnessVariables(text) {
   out = out.replace(
     /( - You are powered by the model named )(.+?)(\. The exact model ID is )(.+?)(\.)/g,
     (_, prefix, modelName, middle, modelId, suffix) =>
-      `${prefix}${wrapIfNeeded(modelName)}${middle}${wrapIfNeeded(modelId)}${suffix}`,
+      `${prefix}${scalarIfNeeded("modelDisplayName", modelName)}${middle}${scalarIfNeeded("modelId", modelId)}${suffix}`,
   );
   out = out.replace(
     /( - Assistant knowledge cutoff is )([^.]+)(\.)/g,
-    (_, prefix, cutoff, suffix) => `${prefix}${wrapIfNeeded(cutoff)}${suffix}`,
+    (_, prefix, cutoff, suffix) => `${prefix}${scalarIfNeeded("knowledgeCutoff", cutoff)}${suffix}`,
   );
   out = out.replace(
     /(Status:\n)([\s\S]*?)(\n\nRecent commits:)/g,
-    (_, prefix, status, suffix) => `${prefix}${harnessBlock(status.trimEnd())}${suffix}`,
+    (_, prefix, _status, suffix) =>
+      `${prefix}<harnessVariable>\n{{#each gitStatusEntries}}\n{{status}} {{path}}\n{{/each}}\n\nExample:\nM src/example.ts\n?? docs/example.md\n</harnessVariable>${suffix}`,
   );
   out = out.replace(
     /(Recent commits:\n)([\s\S]*?)$/g,
-    (_, prefix, commits) => `${prefix}${harnessBlock(commits.trimEnd())}`,
+    (_, prefix, _commits) =>
+      `${prefix}<harnessVariable>\n{{#each recentCommits}}\n{{shortSha}} {{subject}}\n{{/each}}\n\nExample:\nabc1234 Add example feature\ndef5678 Initial commit\n</harnessVariable>`,
   );
 
   return out;
@@ -265,28 +313,54 @@ function messageText(body) {
     .join("\n\n");
 }
 
+const DEFERRED_TOOLS_STEERING_HARNESS = `<harnessVariable>
+<system-reminder>
+The following deferred tools are now available via ToolSearch. Their schemas are NOT loaded — calling them directly will fail with InputValidationError. Use ToolSearch with query "select:<name>[,<name>...]" to load tool schemas before calling them:
+{{#each deferredTools}}
+{{name}}
+{{/each}}
+
+Example:
+Read
+Edit
+</system-reminder>
+</harnessVariable>`;
+
+const AVAILABLE_SKILLS_STEERING_HARNESS = `<harnessVariable>
+<system-reminder>
+The following skills are available for use with the Skill tool:
+
+{{#each availableSkills}}
+- {{name}}: {{description}}
+{{/each}}
+
+Example:
+- example-skill: Example user-installed skill description.
+</system-reminder>
+</harnessVariable>`;
+
 function markSteeringVariables(text) {
   let out = markHarnessVariables(text);
 
   out = out.replace(
     /<system-reminder>\nThe following deferred tools are now available[\s\S]*?<\/system-reminder>/g,
-    (value) => harnessBlock(value),
+    () => DEFERRED_TOOLS_STEERING_HARNESS,
   );
   out = out.replace(
     /<system-reminder>\nThe following skills are available[\s\S]*?<\/system-reminder>/g,
-    (value) => harnessBlock(value),
+    () => AVAILABLE_SKILLS_STEERING_HARNESS,
   );
   out = out.replace(
     /The user's email address is ([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})\./g,
-    `The user's email address is ${harnessVariable("user@example.com")}.`,
+    `The user's email address is ${harnessScalar("userEmail", "user@example.com")}.`,
   );
   out = out.replace(
     /Today's date is (\d{4}-\d{2}-\d{2})\./g,
-    (_, value) => `Today's date is ${harnessVariable(value)}.`,
+    () => `Today's date is ${harnessScalar("currentDate", "2026-01-02")}.`,
   );
   out = out.replace(
     /^(Reply exactly: .+)$/gm,
-    (_, value) => harnessVariable(value),
+    (_, value) => harnessScalar("userRequest", value),
   );
 
   return out;
@@ -401,7 +475,14 @@ function main() {
     userAgents
       .map((userAgent) => userAgent.match(/claude-cli\/([0-9.]+)/)?.[1])
       .find(Boolean) || installedVersion.replace(/\s+\(Claude Code\)$/, "");
-  const capturedBinaryPath = `/Users/navanchauhan/.local/share/claude/versions/${capturedVersion}`;
+  const capturedBinaryPath = path.join(
+    process.env.HOME || "",
+    ".local",
+    "share",
+    "claude",
+    "versions",
+    capturedVersion,
+  );
   const binaryPath = fs.existsSync(capturedBinaryPath) ? capturedBinaryPath : claudePath;
   const modelNames = [...byModel.keys()].sort();
   const toolNames = [...toolGroups.keys()].sort();
@@ -415,7 +496,7 @@ function main() {
     `version = ${capturedVersion}`,
     `installed_version_at_extract = ${installedVersion}`,
     "platform = darwin-arm64",
-    `binary_path = ${binaryPath}`,
+    `binary_path = ${displayPath(binaryPath)}`,
     `sha256 = ${sha256File(binaryPath)}`,
     `capture_user_agent = ${userAgents.join(" | ")}`,
     `generated_at = ${new Date().toISOString()}`,

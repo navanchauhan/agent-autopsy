@@ -75,6 +75,13 @@ function sha512File(filePath) {
   }
 }
 
+function displayPath(filePath) {
+  const home = process.env.HOME;
+  return home && filePath.startsWith(home)
+    ? filePath.replace(home, "/Users/example")
+    : filePath;
+}
+
 function writeJson(filePath, value) {
   fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`);
 }
@@ -105,8 +112,8 @@ function mergeList(target, key, values) {
   target[key] = [...new Set([...(target[key] || []), ...(values || [])].filter(Boolean))];
 }
 
-function harnessVariable(value) {
-  return `<harnessVariable>${value}</harnessVariable>`;
+function harnessScalar(name, example) {
+  return `<harnessVariable>{{${name}=${example}}}</harnessVariable>`;
 }
 
 function replaceAllLiteral(text, search, replacement) {
@@ -117,11 +124,33 @@ function firstMatch(text, regexp) {
   return text.match(regexp)?.[1] || "";
 }
 
+function sanitizeExample(value) {
+  return value
+    .replace(/\/Users\/[^/]+\/Developer\/[^/\s<>"')\]]+/g, "/Users/example/Developer/example-repo")
+    .replace(/\/Users\/[^/]+\/\.gemini\/antigravity-cli/g, "/Users/example/.gemini/antigravity-cli")
+    .replace(/\/Users\/[^/]+\//g, "/Users/example/")
+    .replace(/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi, "00000000-0000-4000-8000-000000000000")
+    .replace(/\b20\d{2}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[-+]\d{2}:\d{2})\b/g, "2026-01-02T15:04:05-07:00")
+    .replace(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/, "example-org/example-repo");
+}
+
+function harnessScalarForValue(value, fallbackName = "runtimeValue") {
+  const example = sanitizeExample(value);
+  let name = fallbackName;
+  if (example === "example-org/example-repo") name = "corpusName";
+  else if (/^\/Users\/example\/Developer\/example-repo/.test(example)) name = "workspaceUri";
+  else if (/^\/Users\/example\/\.gemini\/antigravity-cli$/.test(example)) name = "antigravityAppDataDirectory";
+  else if (/^\/Users\/example\//.test(example)) name = "absolutePath";
+  else if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(example)) name = "conversationId";
+  else if (/^20\d{2}-\d{2}-\d{2}T/.test(example)) name = "currentLocalTime";
+  return harnessScalar(name, example);
+}
+
 function markHarnessVariables(text) {
   let out = text;
-  const literalExamples = [];
-  const addLiteralExample = (value) => {
-    if (value && !literalExamples.includes(value)) literalExamples.push(value);
+  const literalExamples = new Map();
+  const addLiteralExample = (value, name) => {
+    if (value && !literalExamples.has(value)) literalExamples.set(value, name);
   };
 
   const appDataDir = firstMatch(text, /^App Data Directory: (.+)$/m);
@@ -142,47 +171,51 @@ function markHarnessVariables(text) {
     /^The user changed setting `Model Selection` from (.+) to (.+)\. No need/m,
   );
 
-  addLiteralExample(appDataDir);
-  addLiteralExample(conversationId);
-  addLiteralExample(userRequest);
-  addLiteralExample(localTime);
+  addLiteralExample(appDataDir, "antigravityAppDataDirectory");
+  addLiteralExample(conversationId, "conversationId");
+  addLiteralExample(userRequest, "userRequest");
+  addLiteralExample(localTime, "currentLocalTime");
 
   for (const match of text.matchAll(/^(.+) -> (.+)$/gm)) {
     if (match[1].startsWith("/")) {
-      addLiteralExample(match[1]);
-      addLiteralExample(match[2]);
+      addLiteralExample(match[1], "workspaceUri");
+      addLiteralExample(match[2], "corpusName");
     }
   }
 
-  for (const value of literalExamples.sort((a, b) => b.length - a.length)) {
-    out = replaceAllLiteral(out, value, harnessVariable(value));
+  for (const [value, name] of [...literalExamples.entries()].sort((a, b) => b[0].length - a[0].length)) {
+    out = replaceAllLiteral(out, value, harnessScalarForValue(value, name));
   }
 
   if (osVersion) {
     out = out.replace(
       /The USER's OS version is [^.]+\./g,
-      `The USER's OS version is ${harnessVariable(osVersion)}.`,
+      `The USER's OS version is ${harnessScalar("userOsVersion", sanitizeExample(osVersion))}.`,
     );
   }
   if (activeWorkspaceCount) {
     out = out.replace(
       /The user has \d+ active workspaces/g,
-      `The user has ${harnessVariable(activeWorkspaceCount)} active workspaces`,
+      `The user has ${harnessScalar("activeWorkspaceCount", activeWorkspaceCount)} active workspaces`,
     );
   }
   if (modelSettingChange) {
     out = replaceAllLiteral(
       out,
       `from ${modelSettingChange[1]} to ${modelSettingChange[2]}`,
-      `from ${harnessVariable(modelSettingChange[1])} to ${harnessVariable(modelSettingChange[2])}`,
+      `from ${harnessScalarForValue(modelSettingChange[1], "previousModelSelection")} to ${harnessScalarForValue(modelSettingChange[2], "newModelSelection")}`,
     );
   }
 
   if (appDataDir) {
-    out = replaceAllLiteral(out, "<appDataDir>", harnessVariable(appDataDir));
+    out = replaceAllLiteral(out, "<appDataDir>", harnessScalarForValue(appDataDir, "antigravityAppDataDirectory"));
   }
   if (conversationId) {
-    out = replaceAllLiteral(out, "<conversation-id>", harnessVariable(conversationId));
+    out = replaceAllLiteral(
+      out,
+      "<conversation-id>",
+      harnessScalarForValue(conversationId, "conversationId"),
+    );
   }
 
   return out;
@@ -420,7 +453,7 @@ function main() {
     "distribution = native Go binary",
     `version = ${version}`,
     "platform = darwin-arm64",
-    `binary_path = ${agyPath}`,
+    `binary_path = ${displayPath(agyPath)}`,
     `sha256 = ${sha256File(agyPath)}`,
     `sha512 = ${sha512File(agyPath)}`,
     `installer_url = https://antigravity.google/cli/install.sh`,
@@ -451,7 +484,7 @@ function main() {
 
     fs.writeFileSync(
       path.join(outDir, "README.md"),
-      `# Antigravity CLI\n\nAntigravity CLI is Google's coding agent. These artifacts were extracted from the installed \`agy\` binary by enabling verbose \`CODEIUM_VMODULE='*=5'\` logging and parsing the real \`Cortex API Request\` payload sent to \`streamGenerateContent\`.\n\n- \`prompts/\` contains raw captured prompt text grouped by model. Run-specific values are marked with \`<harnessVariable>example</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Gemini function declaration. The nested \`schema\` is the exact \`request.tools[]\` wrapper sent for that function. Files may contain \`variants[]\` when capture modes differ.\n- \`misc/\` contains support scripts and capture side artifacts.\n- \`VERSION\` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.\n\nRun a fresh non-interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)\nCODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file \"$trace_dir/agy.log\"\nnode antigravity/misc/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n\nRun a fresh interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-interactive.XXXXXX)\ntmux new-session -d -s agy-trace \"cd $PWD && CODEIUM_VMODULE='*=5' agy --add-dir \\\"$PWD\\\" --dangerously-skip-permissions --log-file \\\"$trace_dir/agy.log\\\"\"\ntmux send-keys -t agy-trace 'Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK' Enter\nAGY_CAPTURE_MODE=interactive node antigravity/misc/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n`,
+      `# Antigravity CLI\n\nAntigravity CLI is Google's coding agent. These artifacts were extracted from the installed \`agy\` binary by enabling verbose \`CODEIUM_VMODULE='*=5'\` logging and parsing the real \`Cortex API Request\` payload sent to \`streamGenerateContent\`.\n\n- \`prompts/\` contains raw captured prompt text grouped by model. Run-specific scalar values are marked with \`<harnessVariable>{{name=example}}</harnessVariable>\`; repeated runtime sections use \`{{#each collectionName}}...{{/each}}\` blocks inside \`<harnessVariable>...</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Gemini function declaration. The nested \`schema\` is the exact \`request.tools[]\` wrapper sent for that function. Files may contain \`variants[]\` when capture modes differ.\n- \`misc/\` contains support scripts and capture side artifacts.\n- \`VERSION\` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.\n\nRun a fresh non-interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)\nCODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file \"$trace_dir/agy.log\"\nnode antigravity/misc/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n\nRun a fresh interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-interactive.XXXXXX)\ntmux new-session -d -s agy-trace \"cd $PWD && CODEIUM_VMODULE='*=5' agy --add-dir \\\"$PWD\\\" --dangerously-skip-permissions --log-file \\\"$trace_dir/agy.log\\\"\"\ntmux send-keys -t agy-trace 'Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK' Enter\nAGY_CAPTURE_MODE=interactive node antigravity/misc/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n`,
     );
   }
 
