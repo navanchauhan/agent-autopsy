@@ -12,7 +12,7 @@
       },
       "token_budget": {
         "type": "integer",
-        "description": "Optional positive token budget for the new active goal."
+        "description": "Positive token budget for the new goal. Omit unless explicitly requested."
       }
     },
     "required": [

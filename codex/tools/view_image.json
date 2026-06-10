@@ -1,14 +1,14 @@
 {
   "type": "function",
   "name": "view_image",
-  "description": "View a local image from the filesystem (only use if given a full filepath by the user, and the image isn't already attached to the thread context within <image ...> tags).",
+  "description": "View a local image file from the filesystem when visual inspection is needed. Use this for images already available on disk.",
   "strict": false,
   "parameters": {
     "type": "object",
     "properties": {
       "detail": {
         "type": "string",
-        "description": "Optional detail override. Supported values are `high` and `original`; omit this field for default high resized behavior. Use `original` to preserve the file's original resolution instead of resizing to fit. This is important when high-fidelity image perception or precise localization is needed, especially for CUA agents.",
+        "description": "Image detail level. Defaults to `high`; use `original` to preserve exact resolution.",
         "enum": [
           "high",
           "original"
@@ -16,7 +16,7 @@
       },
       "path": {
         "type": "string",
-        "description": "Local filesystem path to an image file"
+        "description": "Local filesystem path to an image file."
       }
     },
     "required": [

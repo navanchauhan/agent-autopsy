@@ -1,4 +1,8 @@
 {
   "type": "web_search",
-  "external_web_access": true
+  "external_web_access": false,
+  "search_content_types": [
+    "text",
+    "image"
+  ]
 }

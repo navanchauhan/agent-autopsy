@@ -7,7 +7,7 @@
     "properties": {
       "limit": {
         "type": "number",
-        "description": "Maximum number of tools to return (defaults to 8)."
+        "description": "Maximum number of tools to return. Defaults to 8."
       },
       "query": {
         "type": "string",

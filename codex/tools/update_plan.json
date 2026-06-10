@@ -7,7 +7,8 @@
     "type": "object",
     "properties": {
       "explanation": {
-        "type": "string"
+        "type": "string",
+        "description": "Optional explanation for this plan update."
       },
       "plan": {
         "type": "array",
@@ -17,10 +18,16 @@
           "properties": {
             "status": {
               "type": "string",
-              "description": "One of: pending, in_progress, completed"
+              "description": "Step status.",
+              "enum": [
+                "pending",
+                "in_progress",
+                "completed"
+              ]
             },
             "step": {
-              "type": "string"
+              "type": "string",
+              "description": "Task step text."
             }
           },
           "required": [

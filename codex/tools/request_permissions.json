@@ -1,27 +1,33 @@
 {
   "type": "function",
   "name": "request_permissions",
-  "description": "Request additional filesystem or network permissions from the user and wait for the client to grant a subset of the requested permission profile. Granted permissions apply automatically to later shell-like commands in the current turn, or for the rest of the session if the client approves them at session scope.",
+  "description": "Request additional filesystem or network permissions from the user and wait for the client to grant a subset of the requested permission profile. Use environment_id to target a specific attached environment; omit it to use the primary environment. Relative filesystem paths resolve against the selected environment cwd. Granted permissions apply automatically to later shell-like commands in the current turn, or for the rest of the session if the client approves them at session scope.",
   "strict": false,
   "parameters": {
     "type": "object",
     "properties": {
+      "environment_id": {
+        "type": "string",
+        "description": "Environment id from <environment_context>. Omit to use the primary environment."
+      },
       "permissions": {
         "type": "object",
+        "description": "Filesystem or network access request.",
         "properties": {
           "file_system": {
             "type": "object",
+            "description": "Filesystem access request.",
             "properties": {
               "read": {
                 "type": "array",
-                "description": "Absolute paths to grant read access to.",
+                "description": "Absolute paths to grant read access; omit when none are needed.",
                 "items": {
                   "type": "string"
                 }
               },
               "write": {
                 "type": "array",
-                "description": "Absolute paths to grant write access to.",
+                "description": "Absolute paths to grant write access; omit when none are needed.",
                 "items": {
                   "type": "string"
                 }
@@ -31,10 +37,11 @@
           },
           "network": {
             "type": "object",
+            "description": "Network access request.",
             "properties": {
               "enabled": {
                 "type": "boolean",
-                "description": "Set to true to request network access."
+                "description": "True requests network access; false or omitted requests none."
               }
             },
             "additionalProperties": false

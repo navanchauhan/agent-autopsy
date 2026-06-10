@@ -58,9 +58,11 @@
     },
     {
       "models": [
+        "claude-fable-5",
         "claude-opus-4-7"
       ],
       "runs": [
+        "interactive",
         "opus"
       ],
       "request_kind": "agent",
@@ -100,7 +102,11 @@
         "eager_input_streaming": true
       },
       "capture_modes": [
+        "interactive",
         "non-interactive"
+      ],
+      "trace_files": [
+        "2026-06-09T22-07-03-596Z-4576ff3d-2fee-426f-99aa-64b3894b8471.json"
       ]
     }
   ]

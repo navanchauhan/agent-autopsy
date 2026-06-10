@@ -126,7 +126,7 @@ function firstMatch(text, regexp) {
 
 function sanitizeExample(value) {
   return value
-    .replace(/\/Users\/[^/]+\/Developer\/[^/\s<>"')\]]+/g, "/Users/example/Developer/example-repo")
+    .replace(/\/Users\/[^/\s<>"')\]]+\/Developer\/[^\s<>"')\]]+/g, "/Users/example/Developer/example-repo")
     .replace(/\/Users\/[^/]+\/\.gemini\/antigravity-cli/g, "/Users/example/.gemini/antigravity-cli")
     .replace(/\/Users\/[^/]+\//g, "/Users/example/")
     .replace(/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi, "00000000-0000-4000-8000-000000000000")
