@@ -5,12 +5,16 @@
     {
       "models": [
         "claude-haiku-4-5-20251001",
-        "claude-sonnet-4-6"
+        "claude-sonnet-4-6",
+        "claude-sonnet-5",
+        "claude-opus-4-7"
       ],
       "runs": [
         "haiku",
+        "interactive",
+        "opus-4-7",
         "sonnet",
-        "interactive"
+        "sonnet-4-6"
       ],
       "request_kind": "agent",
       "schema": {
@@ -53,15 +57,18 @@
         "interactive"
       ],
       "trace_files": [
-        "2026-05-28T01-13-42-521Z-a9cf939a-dafb-44c2-8c9d-d7f28a9d40b9.json"
+        "2026-05-28T01-13-42-521Z-a9cf939a-dafb-44c2-8c9d-d7f28a9d40b9.json",
+        "2026-07-05T14-39-29-014Z-c1b4e30d-96ad-400d-87dd-727910d9e423.json"
       ]
     },
     {
       "models": [
         "claude-fable-5",
-        "claude-opus-4-7"
+        "claude-opus-4-7",
+        "claude-opus-4-8"
       ],
       "runs": [
+        "fable",
         "interactive",
         "opus"
       ],
@@ -102,8 +109,8 @@
         "eager_input_streaming": true
       },
       "capture_modes": [
-        "interactive",
-        "non-interactive"
+        "non-interactive",
+        "interactive"
       ],
       "trace_files": [
         "2026-06-09T22-07-03-596Z-4576ff3d-2fee-426f-99aa-64b3894b8471.json"
