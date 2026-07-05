@@ -8,8 +8,8 @@
     "agent"
   ],
   "trace_lines": [
-    8431,
-    4709
+    11077,
+    20010
   ],
   "schema": {
     "functionDeclarations": [
@@ -19,20 +19,24 @@
         "parameters": {
           "type": "OBJECT",
           "properties": {
+            "AspectRatio": {
+              "type": "STRING",
+              "description": "Optional aspect ratio for the generated image. Supported values: '1:1', '2:3', '3:2', '3:4', '4:3', '9:16', '16:9'. Default is '1:1'."
+            },
             "ImageName": {
               "type": "STRING",
               "description": "Name of the generated image to save. Should be all lowercase with underscores, describing what the image contains. Maximum 3 words. Example: 'login_page_mockup'"
             },
             "ImagePaths": {
               "type": "ARRAY",
-              "description": "Optional absolute paths to the images to use in generation. You can pass in images here if you would like to edit or combine images. You can pass in artifact images and any images in the file system. Note: you cannot pass in more than 3 images.",
+              "description": "Optional absolute paths to the images to use in generation. You can pass in images here if you would like to edit, combine, or use as references. You can pass in artifact images and any images in the file system. Note: you cannot pass in more than 3 images.",
               "items": {
                 "type": "STRING"
               }
             },
             "Prompt": {
               "type": "STRING",
-              "description": "The text prompt to generate an image for."
+              "description": "The text prompt to generate an image for or the edit instructions."
             },
             "toolAction": {
               "type": "STRING",

@@ -8,8 +8,8 @@
     "agent"
   ],
   "trace_lines": [
-    8431,
-    4709
+    11077,
+    20010
   ],
   "schema": {
     "functionDeclarations": [
@@ -21,7 +21,7 @@
           "properties": {
             "AllowMultiple": {
               "type": "BOOLEAN",
-              "description": "If true, multiple occurrences of 'targetContent' will be replaced by 'replacementContent' if they are found. Otherwise if multiple occurences are found, an error will be returned."
+              "description": "If true, multiple occurrences of 'targetContent' will be replaced by 'replacementContent' if they are found. Otherwise if multiple occurrences are found, an error will be returned."
             },
             "Description": {
               "type": "STRING",
