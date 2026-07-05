@@ -1,34 +1,70 @@
 {
-  "type": "function",
   "name": "request_plugin_install",
-  "description": "# Request plugin/connector install\n\nUse this tool only after `list_available_plugins_to_install` returns a plugin or connector that exactly matches the user's explicit request.\n\nDo not use it for adjacent capabilities, broad recommendations, or tools that merely seem useful. Pass the returned `tool_type` through directly, and pass the returned `id` as `tool_id`.\n\nIMPORTANT: DO NOT call this tool in parallel with other tools.",
-  "strict": false,
-  "parameters": {
-    "type": "object",
-    "properties": {
-      "action_type": {
-        "type": "string",
-        "description": "Suggested action for the tool. Use \"install\"."
-      },
-      "suggest_reason": {
-        "type": "string",
-        "description": "Concise one-line user-facing reason why this plugin or connector can help with the current request."
-      },
-      "tool_id": {
-        "type": "string",
-        "description": "Connector or plugin id to suggest."
-      },
-      "tool_type": {
-        "type": "string",
-        "description": "Type of discoverable tool to suggest. Use \"connector\" or \"plugin\"."
+  "note": "The tool schema depends on the ToolSuggestPresentation used to build it. ListTool is the legacy shape paired with list_available_plugins_to_install; RecommendationContext is a simplified shape used when suggesting from a <recommended_plugins> list.",
+  "variants": [
+    {
+      "presentation": "ListTool",
+      "schema": {
+        "type": "function",
+        "name": "request_plugin_install",
+        "description": "# Request plugin/connector install\n\nUse this tool only after `list_available_plugins_to_install` returns a plugin or connector that exactly matches the user's explicit request.\n\nDo not use it for adjacent capabilities, broad recommendations, or tools that merely seem useful. Pass the returned `tool_type` through directly, and pass the returned `id` as `tool_id`.\n\nIMPORTANT: DO NOT call this tool in parallel with other tools.",
+        "strict": false,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "action_type": {
+              "type": "string",
+              "description": "Suggested action for the tool. Use \"install\"."
+            },
+            "suggest_reason": {
+              "type": "string",
+              "description": "Concise one-line user-facing reason why this plugin or connector can help with the current request."
+            },
+            "tool_id": {
+              "type": "string",
+              "description": "Connector or plugin id to suggest."
+            },
+            "tool_type": {
+              "type": "string",
+              "description": "Type of discoverable tool to suggest. Use \"connector\" or \"plugin\"."
+            }
+          },
+          "required": [
+            "tool_type",
+            "action_type",
+            "tool_id",
+            "suggest_reason"
+          ],
+          "additionalProperties": false
+        }
       }
     },
-    "required": [
-      "tool_type",
-      "action_type",
-      "tool_id",
-      "suggest_reason"
-    ],
-    "additionalProperties": false
-  }
+    {
+      "presentation": "RecommendationContext",
+      "schema": {
+        "type": "function",
+        "name": "request_plugin_install",
+        "description": "# Suggest a recommended plugin installation\n\nSuggest installing a plugin from the `<recommended_plugins>` list when it would help with the user's current request. Briefly explain why in `suggest_reason`.",
+        "strict": false,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "plugin_id": {
+              "type": "string",
+              "description": "Plugin id from the `<recommended_plugins>` list."
+            },
+            "suggest_reason": {
+              "type": "string",
+              "description": "Concise one-line user-facing reason why this plugin can help with the current request."
+            }
+          },
+          "required": [
+            "plugin_id",
+            "suggest_reason"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
 }

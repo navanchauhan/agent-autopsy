@@ -1,0 +1,11 @@
+{
+  "type": "function",
+  "name": "new_context",
+  "description": "Start a new context window. Does not clear, reset, or otherwise affect environment state.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  }
+}

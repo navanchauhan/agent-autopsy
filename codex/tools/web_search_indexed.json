@@ -1,0 +1,9 @@
+{
+  "type": "web_search",
+  "external_web_access": true,
+  "index_gated_web_access": true,
+  "search_content_types": [
+    "text",
+    "image"
+  ]
+}

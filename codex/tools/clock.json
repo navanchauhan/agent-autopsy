@@ -1,0 +1,38 @@
+{
+  "type": "namespace",
+  "name": "clock",
+  "note": "curr_time is present whenever Feature::CurrentTimeReminder is enabled. sleep is only appended to the same coalesced 'clock' namespace when config.current_time_reminder.sleep_tool is also set.",
+  "description": "Tools for reading and waiting on time.",
+  "tools": [
+    {
+      "type": "function",
+      "name": "curr_time",
+      "description": "Return the current time in UTC.",
+      "strict": false,
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "type": "function",
+      "name": "sleep",
+      "description": "Pause execution for a specified duration. The sleep ends early when new input arrives for the active turn. Returns the elapsed wall-clock time.",
+      "strict": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "duration_ms": {
+            "type": "number",
+            "description": "How long to sleep in milliseconds. Must be between 1 and 43200000."
+          }
+        },
+        "required": [
+          "duration_ms"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "function",
+  "name": "wait_for_environment",
+  "description": "Wait for a starting environment to become available before continuing.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "environment_id": {
+        "type": "string",
+        "description": "The id of an environment currently marked as starting."
+      }
+    },
+    "required": [
+      "environment_id"
+    ],
+    "additionalProperties": false
+  }
+}

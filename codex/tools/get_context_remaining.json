@@ -1,0 +1,11 @@
+{
+  "type": "function",
+  "name": "get_context_remaining",
+  "description": "Get the remaining tokens in the current context window.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  }
+}
