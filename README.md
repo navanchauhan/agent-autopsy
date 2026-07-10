@@ -15,4 +15,5 @@ Agents:
 - `codex/`: prompts, tool schemas, and goal-feature steering from the Codex source tree.
 - `claude-code/`: Claude Code non-interactive and tmux interactive captures in the shared layout.
 - `antigravity/`: Antigravity CLI non-interactive and tmux interactive captures in the shared layout.
-- `ampcode/`: Amp prompts and mode-specific tool schemas.
+- `ampcode/`: Amp prompts and mode-specific tool schemas. **Unsupported/frozen** — both known capture paths (local `--inspect` gate bypass and network mitm) are exhausted as of version 0.0.1783542413-gb55c7a; see `ampcode/README.md`.
+- `grok/`: xAI Grok CLI non-interactive and tmux interactive captures, taken via a local mitmproxy network capture of the real `/v1/responses` request payload.

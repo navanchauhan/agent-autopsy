@@ -1,0 +1,32 @@
+{
+  "name": "shell_command_status",
+  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
+  "modes": [
+    "deep",
+    "large",
+    "rush",
+    "smart"
+  ],
+  "schema": {
+    "name": "shell_command_status",
+    "description": "Waits for and gets new output from a background process started by shell_command.\n- Use this tool after shell_command returned `running: true` and a `pid`.\n- Pass the PID returned by shell_command. This follows the existing process; it does not start or restart the command.\n- It returns output produced since the last shell_command/shell_command_status read for that process, plus whether it is still running.\n- `timeout_ms` controls how long to wait for new output or process completion. The default is 10000 milliseconds (10 seconds); valid values are 0 through 60000 milliseconds. While waiting, this tool streams new process output as progress.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "pid": {
+          "type": "number",
+          "description": "PID returned by shell_command."
+        },
+        "timeout_ms": {
+          "type": "number",
+          "description": "Milliseconds to wait for process completion while streaming new output as progress, from 0 to 60000. Defaults to 10000."
+        }
+      },
+      "required": [
+        "pid"
+      ],
+      "additionalProperties": false
+    },
+    "source": "builtin"
+  }
+}

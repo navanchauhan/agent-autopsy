@@ -9,7 +9,7 @@
   ],
   "schema": {
     "name": "read_web_page",
-    "description": "Read the contents of a web page at a given URL.\n\nWhen only the url parameter is set, it returns the contents of the webpage converted to Markdown.\n\nWhen an objective is provided, it returns excerpts relevant to that objective.\n\nIf the user asks for the latest or recent contents, pass `forceRefetch: true` to ensure the latest content is fetched.\n\nDo NOT use for access to localhost or any other local or non-Internet-accessible URLs; use `curl` via the Bash instead.\n\n# Examples\n\nSummarize recent changes for a library. Force refresh because freshness is important.\n```json\n{\"url\":\"https://example.com/changelog\",\"objective\":\"Summarize the API changes in this software library.\",\"forceRefetch\":true}\n```\n\nExtract all text content from a web page\n```json\n{\"url\":\"https://example.com/docs/getting-started\"}\n```\n",
+    "description": "Read the contents of a web page at a given URL.\n\nWhen only the url parameter is set, it returns the contents of the webpage converted to Markdown.\n\nWhen an objective is provided, it returns excerpts relevant to that objective. Excerpts are selected by relevance to the objective, not by reasoning: they work well for lookups and summaries, but for verification, error-finding, cross-checking numbers or tables, or auditing a document they can silently omit the passages you need. For those tasks, set `fullContent: true` (or omit `objective`) to read the whole page.\n\nIf the user asks for the latest or recent contents, or the page contains time-sensitive data (scores, prices, leaderboards), pass `forceRefetch: true` to ensure the latest content is fetched.\n\nDo NOT use for access to localhost or any other local or non-Internet-accessible URLs; use `curl` via shell_command instead.\n\n# Examples\n\nSummarize recent changes for a library. Force refresh because freshness is important.\n```json\n{\"url\":\"https://example.com/changelog\",\"objective\":\"I am upgrading from v2 to v3 of this library. Summarize the breaking API changes and migration steps.\",\"searchQueries\":[\"breaking changes\",\"migration guide\"],\"forceRefetch\":true}\n```\n\nVerify numbers in a paper. Full content because excerpts could omit the passages being cross-checked.\n```json\n{\"url\":\"https://example.com/papers/benchmark-study\",\"objective\":\"Cross-check the reported accuracy scores between the abstract and the tables.\",\"fullContent\":true}\n```\n\nExtract all text content from a web page\n```json\n{\"url\":\"https://example.com/docs/getting-started\"}\n```\n",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -19,7 +19,18 @@
         },
         "objective": {
           "type": "string",
-          "description": "A natural-language description of the research goal. If set, only relevant excerpts will be returned. If not set, the full content of the web page will be returned. "
+          "description": "A self-contained, natural-language description of what you are looking for, including the broader task context — not just keywords (e.g. \"I am verifying benchmark scores reported in this paper; find the stated accuracy numbers for each model\" rather than \"accuracy numbers\"). If set, only relevant excerpts will be returned unless fullContent is also set. If not set, the full content of the web page will be returned."
+        },
+        "searchQueries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional 2-3 short keyword queries (3-6 words each) to emphasize specific terms when selecting excerpts. Use together with objective when the objective alone may be ambiguous."
+        },
+        "fullContent": {
+          "type": "boolean",
+          "description": "Return the full page content as Markdown even when an objective is set. Use for verification, cross-checking, or auditing tasks where relevance-ranked excerpts could omit important passages."
         },
         "forceRefetch": {
           "type": "boolean",
