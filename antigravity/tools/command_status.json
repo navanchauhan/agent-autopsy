@@ -1,5 +1,5 @@
 {
-  "name": "manage_task",
+  "name": "command_status",
   "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request. The same schema was observed in each listed capture mode.",
   "models": [
     "gemini-3-flash-agent"
@@ -14,28 +14,22 @@
   "schema": {
     "functionDeclarations": [
       {
-        "name": "manage_task",
-        "description": "Manage background tasks. Use this tool to list running tasks or interact with tasks that were sent to the background.\n\nActions:\n- 'list': List all currently running background tasks\n- 'kill': Cancel the task's execution\n- 'status': Check the task's current status and log file location\n- 'send_input': Send input to a running task\n\nWhen mentioning tasks to the user, avoid using full task IDs and start timestamps; keep them human-readable.",
+        "name": "command_status",
+        "description": "Get the status of a previously executed terminal command by its ID. Returns the current status (running, done), output lines as specified by output priority, and any error if present. Do not try to check the status of any IDs other than Background command IDs.",
         "parameters": {
           "type": "OBJECT",
           "properties": {
-            "Action": {
+            "CommandId": {
               "type": "STRING",
-              "description": "The action to perform: 'list' (list all running tasks), 'kill' (cancel the task), 'status' (check the task status and log URI), 'send_input' (send input to a running task).",
-              "enum": [
-                "list",
-                "kill",
-                "status",
-                "send_input"
-              ]
+              "description": "ID of the command to get status for"
             },
-            "Input": {
-              "type": "STRING",
-              "description": "The input to send to the task. Required when Action is 'send_input'."
+            "OutputCharacterCount": {
+              "type": "INTEGER",
+              "description": "Number of characters to view. Make this as small as possible to avoid excessive memory usage."
             },
-            "TaskId": {
-              "type": "STRING",
-              "description": "The task ID to manage. Required when Action is 'kill', 'status', or 'send_input'."
+            "WaitDurationSeconds": {
+              "type": "INTEGER",
+              "description": "Number of seconds to wait for command completion before getting the status. If the command completes before this duration, this tool call will return early. Set to 0 to get the status of the command immediately. If you are only interested in waiting for command completion, set to the max value, 300."
             },
             "toolAction": {
               "type": "STRING",
@@ -47,7 +41,8 @@
             }
           },
           "required": [
-            "Action",
+            "CommandId",
+            "WaitDurationSeconds",
             "toolSummary",
             "toolAction"
           ]
