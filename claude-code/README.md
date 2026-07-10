@@ -11,6 +11,10 @@ Run a fresh non-interactive capture with the root extraction flow, then run a fr
 
 ```sh
 trace_dir=$(mktemp -d /tmp/claude-trace.XXXXXX)
-CLAUDE_TRACE_DIR="$trace_dir" BUN_OPTIONS=--preload=claude-code/misc/scripts/trace-claude-messages.cjs claude --dangerously-skip-permissions --strict-mcp-config --tools default
+CLAUDE_TRACE_DIR="$trace_dir" BUN_OPTIONS=--preload=./claude-code/misc/scripts/trace-claude-messages.cjs claude --dangerously-skip-permissions --strict-mcp-config --tools default
 node claude-code/misc/scripts/extract-claude-trace.cjs "$trace_dir"
 ```
+
+Notes:
+- `extract-claude-trace.cjs` only handles the **interactive** trace dir: it always writes `prompts/<model>-interactive.md` and tags merged tool variants `capture_modes: ["interactive"]`, and it deletes any existing `*-interactive.md`/`*-interactive-steering.md` files at the start of every run (so re-running it is safe/idempotent for interactive output, but it must not be pointed at a non-interactive trace dir — it will mislabel the output). There is currently no checked-in script for the **non-interactive** (`-p`) capture; that side of the refresh (writing `prompts/<model>.md` with no suffix and merging `tools/*.json` with `capture_modes: ["non-interactive"]`) has so far been done by hand each round, re-deriving the same harness-variable redaction and schema-based variant de-duplication logic from `extract-claude-trace.cjs`. A `--mode non-interactive` flag (or a sibling script) would remove this manual step; see `VERSION`'s `capture_fixes` field for the 2.1.206 round's notes on this gap.
+- For each of the 6 `prompt_models`, run: `BUN_OPTIONS=--preload=./claude-code/misc/scripts/trace-claude-messages.cjs claude -p "Reply exactly: TRACE_FETCH_<model>" --model <model> --output-format json --no-session-persistence --exclude-dynamic-system-prompt-sections --strict-mcp-config --tools default` (the default trace dir is `artifacts/trace/messages` under the repo root when `CLAUDE_TRACE_DIR` is unset — this is the "root extraction flow").

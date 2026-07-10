@@ -1,4 +1,4 @@
-x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.201.a2e; cc_entrypoint=sdk-cli; cch=00000;}}</harnessVariable>
+x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.206.930; cc_entrypoint=sdk-cli; cch=00000;}}</harnessVariable>
 
 You are a Claude agent, built on Anthropic's Claude Agent SDK.
 

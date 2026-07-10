@@ -42,19 +42,40 @@ function redactHeaders(headers) {
 }
 
 globalThis.fetch = async function tracedFetch(input, init = {}) {
-  const request = new Request(input, init);
-  if (shouldCapture(request.url)) {
-    const requestClone = request.clone();
-    const body = await readBody(requestClone);
+  // IMPORTANT: do not rebuild the request via `new Request(input, init)` and forward
+  // that to the real fetch. The WHATWG Request constructor only keeps standard
+  // RequestInit fields and silently drops non-standard ones (e.g. the `tls: { ca }`
+  // custom CA bundle the Claude Code binary attaches to its own fetch calls), which
+  // breaks SSL verification. Instead, capture logging info from `input`/`init`
+  // directly and forward the original `input`/`init` untouched.
+  const url =
+    typeof input === "string" || input instanceof URL ? String(input) : input?.url;
+
+  if (url && shouldCapture(url)) {
+    const method = init.method || (typeof input === "object" && input?.method) || "GET";
+    const headersSource = init.headers || (typeof input === "object" && input?.headers) || {};
+    let body = "";
+    if (typeof init.body === "string") {
+      body = init.body;
+    } else if (init.body && typeof init.body.text === "function") {
+      body = await readBody(init.body);
+    } else if (typeof input === "object" && input?.body) {
+      try {
+        body = await readBody(input.clone());
+      } catch {
+        body = "";
+      }
+    }
+
     const record = {
       id: randomUUID(),
       ts: new Date().toISOString(),
       pid: process.pid,
       hostname: os.hostname(),
       request: {
-        method: request.method,
-        url: request.url,
-        headers: redactHeaders(request.headers),
+        method,
+        url,
+        headers: redactHeaders(headersSource),
         body,
       },
     };
@@ -64,5 +85,5 @@ globalThis.fetch = async function tracedFetch(input, init = {}) {
     );
   }
 
-  return originalFetch(request);
+  return originalFetch(input, init);
 };
