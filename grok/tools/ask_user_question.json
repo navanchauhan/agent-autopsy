@@ -1,0 +1,74 @@
+{
+  "name": "ask_user_question",
+  "schema": {
+    "type": "function",
+    "name": "ask_user_question",
+    "parameters": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AskUserQuestionInput",
+      "description": "Input for the `AskUserQuestion` tool.",
+      "type": "object",
+      "properties": {
+        "questions": {
+          "description": "Array of questions to ask the user. Each question has its own set of options.",
+          "type": "array",
+          "items": {
+            "description": "A single question with its options.",
+            "type": "object",
+            "properties": {
+              "question": {
+                "description": "The complete question to ask the user. Should be clear, specific, and end with a question mark.",
+                "type": "string"
+              },
+              "options": {
+                "description": "Array of options for the user to choose from",
+                "type": "array",
+                "items": {
+                  "description": "A single option within a question.",
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "description": "The display text for this option that the user will see and select. Should be concise (1-5 words) and clearly describe the choice.",
+                      "type": "string"
+                    },
+                    "description": {
+                      "description": "Explanation of what this option means or what will happen if chosen. Useful for providing context about trade-offs or implications.",
+                      "type": "string"
+                    },
+                    "preview": {
+                      "description": "Optional preview content rendered when this option is focused. Use for mockups, code snippets, or visual comparisons that help users compare options. Only supported for single-select questions.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "description"
+                  ]
+                }
+              },
+              "multi_select": {
+                "description": "If true, the user can select multiple options. Default is false (single select).",
+                "type": [
+                  "boolean",
+                  "null"
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "question",
+              "options"
+            ]
+          }
+        }
+      },
+      "required": [
+        "questions"
+      ]
+    },
+    "description": "Ask the user a question and present options.\n\nUsage notes:\n- Users will always be able to select \"Other\" to provide custom text input\n- If you recommend a specific option, make that the first option in the list and add \"(Recommended)\" at the end of the label"
+  }
+}

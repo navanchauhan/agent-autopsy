@@ -1,0 +1,21 @@
+{
+  "name": "session_title",
+  "schema": {
+    "type": "function",
+    "name": "session_title",
+    "parameters": {
+      "type": "object",
+      "required": [
+        "session_title"
+      ],
+      "properties": {
+        "session_title": {
+          "type": "string",
+          "description": "Final session title, just 5-10 word descriptive title for the session. Super info dense, no filler."
+        }
+      },
+      "additionalProperties": false
+    },
+    "description": "Generate the session_title which we use for the user_message"
+  }
+}

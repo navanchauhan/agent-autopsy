@@ -1,0 +1,28 @@
+{
+  "name": "Read",
+  "schema": {
+    "type": "function",
+    "name": "Read",
+    "parameters": {
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "description": "The absolute path of the file to read.",
+          "type": "string"
+        },
+        "offset": {
+          "description": "The line number to start reading from. Positive values are 1-indexed from the start of the file. Negative values count backwards from the end (e.g. -1 is the last line). Only provide if the file is too large to read at once.",
+          "type": "integer"
+        },
+        "limit": {
+          "description": "The number of lines to read. Only provide if the file is too large to read at once.",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "description": "Reads a file from the local filesystem. This tool can also read image files when called with the appropriate path. Formats supported: jpeg/jpg, png, gif, webp."
+  }
+}

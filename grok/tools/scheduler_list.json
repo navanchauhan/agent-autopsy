@@ -1,0 +1,15 @@
+{
+  "name": "scheduler_list",
+  "schema": {
+    "type": "function",
+    "name": "scheduler_list",
+    "parameters": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SchedulerListInput",
+      "type": "object",
+      "properties": {},
+      "required": []
+    },
+    "description": "List all active scheduled tasks with their IDs, prompts, intervals, and next fire times."
+  }
+}

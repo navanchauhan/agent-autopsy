@@ -1,0 +1,27 @@
+{
+  "name": "image_gen",
+  "schema": {
+    "type": "function",
+    "name": "image_gen",
+    "parameters": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ImageGenInput",
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "description": "Text description of the image to generate.",
+          "type": "string"
+        },
+        "aspect_ratio": {
+          "description": "Aspect ratio of the generated image, decide it based on the user's request. Defaults to 'auto'. 1:1 for square (icons, profiles), 16:9 for wide (landscapes, cinematic), 9:16 for tall (phone wallpapers, stories), 3:2 for horizontal photos, 2:3 for vertical (portraits, posters).",
+          "type": "string",
+          "default": "auto"
+        }
+      },
+      "required": [
+        "prompt"
+      ]
+    },
+    "description": "Generate a new image from a text description using Imagine; returns the saved image's absolute path. When telling the user where it was saved, refer to it by its short session-relative path (e.g. `images/1.jpg`) rather than the absolute path, so it renders as a clickable link that opens the image. To produce multiple images, emit multiple tool calls with distinct prompts."
+  }
+}

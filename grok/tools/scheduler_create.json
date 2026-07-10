@@ -1,0 +1,45 @@
+{
+  "name": "scheduler_create",
+  "schema": {
+    "type": "function",
+    "name": "scheduler_create",
+    "parameters": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SchedulerCreateInput",
+      "type": "object",
+      "properties": {
+        "interval": {
+          "description": "Interval between executions, e.g. \"5m\", \"2h\", \"1d\"",
+          "type": "string"
+        },
+        "prompt": {
+          "description": "The prompt text to execute on each scheduled fire",
+          "type": "string"
+        },
+        "recurring": {
+          "description": "Whether the task repeats (true) or fires once (false). Default: true",
+          "type": "boolean",
+          "default": true
+        },
+        "durable": {
+          "description": "Whether the task persists across sessions. Default: false",
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null
+        },
+        "fire_immediately": {
+          "description": "Whether to fire immediately on creation (true) or wait for the first interval (false). Default: false",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "interval",
+        "prompt"
+      ]
+    },
+    "description": "Create a scheduled task that runs a prompt on a recurring interval.\n\nSet fire_immediately: true to also fire once on creation; by default the first run waits for the interval.\n\nUsage notes:\n- Interval format: \"5m\" (minutes), \"2h\" (hours), \"1d\" (days), \"60s\" (seconds, min 60)\n- Maximum 50 scheduled tasks at once\n- Recurring tasks auto-expire after 7 days"
+  }
+}

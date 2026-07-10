@@ -1,0 +1,74 @@
+{
+  "name": "grep",
+  "schema": {
+    "type": "function",
+    "name": "grep",
+    "parameters": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "GrepSearchInput",
+      "type": "object",
+      "properties": {
+        "pattern": {
+          "description": "The regular expression pattern to search for in file contents (rg --regexp)",
+          "type": "string"
+        },
+        "path": {
+          "description": "File or directory to search in (rg pattern -- PATH). Defaults to workspace path.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "glob": {
+          "description": "Glob pattern (rg --glob GLOB -- PATH) to filter files (e.g. \"*.js\", \"*.{ts,tsx}\").",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "-B": {
+          "description": "Number of lines to show before each match (rg -B).",
+          "type": "integer"
+        },
+        "-A": {
+          "description": "Number of lines to show after each match (rg -A).",
+          "type": "integer"
+        },
+        "-C": {
+          "description": "Number of lines to show before and after each match (rg -C).",
+          "type": "integer"
+        },
+        "-i": {
+          "description": "Case insensitive search (rg -i). Defaults to false.",
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null
+        },
+        "type": {
+          "description": "File type to search (rg --type). Common types: js, py, rust, go, java, etc. More efficient than glob for standard file types.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "head_limit": {
+          "description": "Limit output to first N lines/entries, equivalent to \"| head -N\". Defaults to 200 lines or 500 entries.",
+          "type": "integer"
+        },
+        "multiline": {
+          "description": "Enable multiline mode where . matches newlines and patterns can span lines (rg -U --multiline-dotall). Default: false.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "pattern"
+      ]
+    },
+    "description": "A powerful search tool built on ripgrep\n\nUsage:\n- Supports full regex syntax, e.g. `log.*Error`, `function\\s+\\w+`. Ensure you escape special chars to get exact matches, e.g. `functionCall\\(`\n- Broad glob patterns (e.g. '--glob *') bypass .gitignore, which this tool otherwise respects\n- The pattern field is a raw regex string: do NOT wrap it in quotes or add trailing quote characters unnecessarily\n- Only use 'type' (or 'glob' for file types) when certain of the file type needed. Note: import paths may not match source file types (.js vs .ts)\n- Pattern syntax: Uses ripgrep (not grep) - literal braces need escaping (e.g. use interface\\{\\} to find interface{} in Go code)\n- Results are capped for responsiveness; truncated results show \"at least\" counts.\n- Output follows ripgrep format: '-' for context lines, ':' for match lines, and all lines grouped by file."
+  }
+}

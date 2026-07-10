@@ -1,0 +1,26 @@
+{
+  "name": "AwaitShell",
+  "schema": {
+    "type": "function",
+    "name": "AwaitShell",
+    "parameters": {
+      "required": [],
+      "properties": {
+        "shell_id": {
+          "description": "Optional shell id to poll. If omitted, this tool sleeps for the full block_until_ms duration and then returns.",
+          "type": "string"
+        },
+        "block_until_ms": {
+          "description": "Max sleep time to block before returning (in milliseconds). Defaults to 30000ms. Set to 0 for non-blocking status check.",
+          "type": "number"
+        },
+        "pattern": {
+          "description": "Block until the regex matches stdout/stderr stream (or task completes). Matches anywhere in the shell output, not just new output. Will not match terminal file headers or footers, e.g. exit_code. Accepts JavaScript regex patterns (compiled with the multiline `m` flag).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": "Poll a background shell."
+  }
+}

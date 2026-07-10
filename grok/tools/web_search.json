@@ -1,0 +1,6 @@
+{
+  "name": "web_search",
+  "schema": {
+    "type": "web_search"
+  }
+}

@@ -1,0 +1,30 @@
+source = xai/grok-cli
+distribution = native Rust/Mach-O binary
+version = 0.2.93
+revision = f00f96316d4b
+channel = stable
+platform = darwin-arm64
+binary_path = /Users/example/.grok/bin/grok
+sha256 = 2a97ba675bd992aa9b981e2e83776460d94f469b510c0b8efe28b50d236d767c
+generated_at = 2026-07-10T14:55:58.000Z
+auth_source = local Grok OAuth cached token (~/.grok/auth.json; never read/logged)
+endpoint = https://cli-chat-proxy.grok.com/v1/responses (xAI Responses-API-shaped, SSE streamed)
+capture_method = network capture via local mitmproxy (grok respects HTTPS_PROXY and does not pin the TLS cert when SSL_CERT_FILE trusts the interceptor); `grok trace`/`--debug-file` were tried first and ruled out (see README)
+capture_script = grok/misc/scripts/mitm-capture-grok.py
+extract_script = grok/misc/scripts/extract-grok-capture.cjs
+non_interactive_capture = mitmdump -s grok/misc/scripts/mitm-capture-grok.py --set grok_capture_out=<capture.jsonl>, then HTTPS_PROXY=http://127.0.0.1:8899 SSL_CERT_FILE=$HOME/.mitmproxy/mitmproxy-ca-cert.pem grok -p "Reply exactly: GROK_TRACE_OK" --output-format json (and again with --model grok-composer-2.5-fast)
+interactive_capture = same mitmdump/proxy env vars, tmux session running `grok --always-approve`, prompt `Reply exactly: GROK_INTERACTIVE_TRACE_OK` sent via tmux send-keys
+capture_modes = non-interactive, interactive
+prompt_models = grok-4.5, grok-composer-2.5-fast, grok-build (session-title)
+prompt_files = grok-4.5-interactive.md, grok-4.5.md, grok-composer-2.5-fast.md, grok-session-title.md
+prompts = 4
+misc_files = grok-4.5-interactive-steering.md, grok-4.5-steering.md, grok-composer-2.5-fast-steering.md
+misc = 3
+scripts = mitm-capture-grok.py, extract-grok-capture.cjs
+tools = 47
+grok_4_5_tools = run_terminal_command, read_file, search_replace, list_dir, grep, kill_command_or_subagent, todo_write, get_command_or_subagent_output, spawn_subagent, scheduler_create, scheduler_delete, scheduler_list, monitor, search_tool, use_tool, update_goal, enter_plan_mode, exit_plan_mode, ask_user_question, web_fetch, image_gen, image_edit, image_to_video, reference_to_video, write, web_search, x_search
+grok_4_5_interactive_tools = identical 27 tools to grok-4.5 non-interactive; only the system prompt framing and an added <user_guide> section differ
+grok_composer_2_5_fast_tools = Shell, Grep, Delete, WebSearch, WebFetch, TodoWrite, StrReplace, Write, Read, Glob, Task, SwitchMode, AskQuestion, AwaitShell, CallMcpTool, ListMcpResources, FetchMcpResource, GenerateImage, EditNotebook, update_goal
+grok_session_title_tools = session_title
+tool_notes = update_goal is the only tool name shared across the grok-4.5 and grok-composer-2.5-fast tool sets, and its exact JSON Schema differs (nullable-typed properties on grok-4.5 vs plain-typed on Composer), so tools/update_goal.json carries a variants[] array keyed by run kind. grep/Grep and write/Write collide only by case between grok-4.5 and grok-composer-2.5-fast; the Composer-model file is suffixed tools/Grep-grok-composer-2.5-fast.json / tools/Write-grok-composer-2.5-fast.json so both survive on case-insensitive filesystems. web_search and x_search are xAI backend built-in tools (`{"type":"web_search"}`/`{"type":"x_search"}`), not function-call schemas.
+refresh_0_2_91_to_0_2_93 = All 47 tools/*.json are byte-identical to the 0.2.91 capture — no tool added, removed, or renamed, and no schema (including the update_goal variants[]) changed. prompts/grok-composer-2.5-fast.md and prompts/grok-session-title.md are unchanged. prompts/grok-4.5.md and prompts/grok-4.5-interactive.md both changed in exactly one place: the <output_efficiency> block was rewritten from a "keep output brief and direct, skip filler, lead with the answer" directive (with a bulleted list of what to focus text output on) to a "write like an excellent technical blog post, complete sentences, good grammar, proportional to task complexity" directive — a real shift in the requested communication style, not just wording. misc/grok-composer-2.5-fast-steering.md gained one new bundled skill entry, <agent_skill fullPath=".../.grok/bundled/skills/resume-claude/SKILL.md"> ("Resume or continue work from a recent Claude Code session..."), placed alongside the other three bundled skills (execute-plan, pr-babysit, review); this is a genuine new first-party bundled skill in 0.2.93, not local noise (the other bundled-skills dirs already existed in the 0.2.91 capture). misc/grok-4.5-steering.md is unchanged. One capture artifact was deliberately NOT folded in: the interactive tmux session's misc/grok-4.5-interactive-steering.md capture included a fresh, un-genericized `<system-reminder>MCP server connected: tasks (6 tools)...</system-reminder>` block that this machine's `grok mcp list` shows as unconfigured; tracing it back, both that "tasks" MCP fingerprint and the machine's already-baked-in `~/.agents/skills/*` entries in the Composer steering file trace to a locally cloned `github.com/anthropics/claude-plugins-official.git` marketplace cache and a shared `~/.agents/skills` directory unique to this capture machine, not to a clean/default grok install — so grok-4.5-interactive-steering.md was left untouched rather than baking in machine-specific state.

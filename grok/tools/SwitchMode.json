@@ -1,0 +1,24 @@
+{
+  "name": "SwitchMode",
+  "schema": {
+    "type": "function",
+    "name": "SwitchMode",
+    "parameters": {
+      "required": [
+        "target_mode_id"
+      ],
+      "properties": {
+        "target_mode_id": {
+          "description": "The mode to switch to. Allowed values: 'plan', 'agent'.",
+          "type": "string"
+        },
+        "explanation": {
+          "description": "Optional explanation for why the mode switch is requested. This helps the user understand why you're switching modes.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": "Switch the interaction mode to better match the current task. Each mode is optimized for a specific type of work.\n\n## When to Switch Modes\n\nSwitch modes proactively when:\n1. **Task type changes** - User shifts from asking questions to requesting implementation, or vice versa\n2. **Complexity emerges** - What seemed simple reveals architectural decisions or multiple approaches\n3. **Debugging needed** - An error, bug, or unexpected behavior requires investigation\n4. **Planning needed** - The task is large, ambiguous, or has significant trade-offs to discuss\n5. **You're stuck** - Multiple attempts without progress suggest a different approach is needed\n\n## When NOT to Switch\n\nDo NOT switch modes for:\n- Simple, clear tasks that can be completed quickly in current mode\n- Mid-implementation when you're making good progress\n- Minor clarifying questions (just ask them)\n- Tasks where the current mode is working well\n\n## Available Modes\n\n### Agent Mode [switchable]\nDefault implementation mode with full access to all tools for making changes.\n\n**Switch to Agent when:**\n- You have a clear understanding of what to implement\n- Planning/debugging is complete and you're ready to code\n- The task is straightforward with an obvious implementation\n- You've gathered enough context and are ready to execute\n\n**Examples:**\n- After planning: \"I've designed the approach, ready to implement\" → Switch to Agent\n- After debugging: \"Found the bug, it's a null check issue\" → Switch to Agent\n- Simple task: User asks to \"Add a comment to this function\" → Stay in Agent (no switch needed)\n\n### Plan Mode [switchable]\nRead-only collaborative mode for designing implementation approaches before coding.\n\n**Switch to Plan when:**\n- The task has multiple valid approaches with significant trade-offs\n- Architectural decisions are needed (e.g., \"Add caching\" - Redis vs in-memory vs file-based)\n- The task touches many files or systems (large refactors, migrations)\n- Requirements are unclear and you need to explore before understanding scope\n- You would otherwise ask multiple clarifying questions\n\n**Examples:**\n- User: \"Add user authentication\" → Switch to Plan (session vs JWT, storage, middleware decisions)\n- User: \"Refactor the database layer\" → Switch to Plan (large scope, architectural impact)\n- User: \"Make the app faster\" → Switch to Plan (need to profile, multiple optimization strategies)\n\n### Debug Mode (cannot switch to this mode)\nSystematic troubleshooting mode for investigating bugs, failures, and unexpected behavior with runtime evidence.\n\n### Ask Mode (cannot switch to this mode)\nRead-only mode for exploring code and answering questions without making changes.\n\n## Important Notes\n\n- **Be proactive**: Don't wait for the user to ask you to switch modes\n- **Explain briefly**: When switching, briefly explain why in your `explanation` parameter\n- **Don't over-switch**: If the current mode is working, stay in it\n- **User approval required**: Mode switches require user consent"
+  }
+}

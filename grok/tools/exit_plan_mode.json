@@ -1,0 +1,16 @@
+{
+  "name": "exit_plan_mode",
+  "schema": {
+    "type": "function",
+    "name": "exit_plan_mode",
+    "parameters": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ExitPlanModeInput",
+      "description": "Input for the `ExitPlanMode` tool.\n\nEmpty object — the plan is read from the plan file on disk, NOT passed as\na parameter. This ensures the user sees exactly what was written to disk,\npreventing divergence between the model's in-context plan and the actual\nfile content.",
+      "type": "object",
+      "properties": {},
+      "required": []
+    },
+    "description": "Exit plan mode and present your plan for user approval.\n\nUse this after you have finished writing your plan to the plan file in plan mode.\nYou should have already written your plan to the plan file specified in the plan mode system message."
+  }
+}

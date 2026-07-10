@@ -1,0 +1,45 @@
+{
+  "name": "EditNotebook",
+  "schema": {
+    "type": "function",
+    "name": "EditNotebook",
+    "parameters": {
+      "required": [
+        "target_notebook",
+        "cell_idx",
+        "is_new_cell",
+        "cell_language",
+        "old_string",
+        "new_string"
+      ],
+      "properties": {
+        "target_notebook": {
+          "description": "The path to the notebook file you want to edit. You can use either a relative path in the workspace or an absolute path. If an absolute path is provided, it will be preserved as is.",
+          "type": "string"
+        },
+        "cell_idx": {
+          "description": "The index of the cell to edit (0-based)",
+          "type": "number"
+        },
+        "is_new_cell": {
+          "description": "If true, a new cell will be created at the specified cell index. If false, the cell at the specified cell index will be edited.",
+          "type": "boolean"
+        },
+        "cell_language": {
+          "description": "The language of the cell to edit. Should be STRICTLY one of these: 'python', 'markdown', 'javascript', 'typescript', 'r', 'sql', 'shell', 'raw' or 'other'.",
+          "type": "string"
+        },
+        "old_string": {
+          "description": "The text to replace (must be unique within the cell, and must match the cell contents exactly, including all whitespace and indentation).",
+          "type": "string"
+        },
+        "new_string": {
+          "description": "The edited text to replace the old_string or the content for the new cell.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": "Use this tool to edit a Jupyter notebook cell.\nCell indices are 0-based. 'old_string' and 'new_string' should be a valid cell content, i.e. WITHOUT any JSON syntax that notebook files use under the hood. If you need to create a new notebook, just set 'is_new_cell' to true and cell_idx to 0."
+  }
+}

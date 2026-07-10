@@ -1,0 +1,16 @@
+{
+  "name": "enter_plan_mode",
+  "schema": {
+    "type": "function",
+    "name": "enter_plan_mode",
+    "parameters": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "EnterPlanModeInput",
+      "description": "Input for the `EnterPlanMode` tool.\n\nEmpty object — no parameters. The decision to enter plan mode is a binary\ngate. All configuration (workflow variant, explore agent count, etc.) comes\nfrom feature flags and environment variables, not from the tool call.",
+      "type": "object",
+      "properties": {},
+      "required": []
+    },
+    "description": "Use this tool when a task has genuine ambiguity about the right approach and getting user input before coding would prevent significant rework. It transitions you into a read-only plan mode where you explore the codebase and design an implementation approach for user approval."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Task",
+  "schema": {
+    "type": "function",
+    "name": "Task",
+    "parameters": {
+      "required": [
+        "description",
+        "prompt"
+      ],
+      "properties": {
+        "description": {
+          "description": "A short, user-friendly title for the subagent. This appears in the UI as the subagent's name. Make it concrete and distinct, consider recent titles to avoid reuse. For resumed subagents which you are prompting to work on a separate task, give an updated description based on the latest work the subagent is performing. (Do not rename if the subagent is continuing work on the same high-level task.)",
+          "type": "string"
+        },
+        "prompt": {
+          "description": "The task for the agent to perform",
+          "type": "string"
+        },
+        "model": {
+          "description": "Optional model slug for this agent. If provided, it must resolve to one of the available model slugs. If omitted, the subagent uses the same model as the parent agent. Do not pass if resume field is set (prior model will be used). Only choose an explicit model when the user directly requests it.",
+          "type": "string"
+        },
+        "resume": {
+          "description": "Optional agent ID to resume from. If provided, the agent will continue from the previous execution transcript.",
+          "type": "string"
+        },
+        "readonly": {
+          "description": "If true, the subagent will run in readonly mode (\"Ask mode\") with restricted write operations and no MCP or internet access.",
+          "type": "boolean"
+        },
+        "subagent_type": {
+          "description": "Subagent type to use for this task. Must be one of: generalPurpose, cursor-guide, best-of-n-runner, code-reviewer.",
+          "type": "string",
+          "enum": [
+            "generalPurpose",
+            "cursor-guide",
+            "best-of-n-runner",
+            "code-reviewer"
+          ]
+        },
+        "file_attachments": {
+          "description": "Optional array of file paths to images or videos to pass to video-review subagents. Files are read and attached to the subagent's context. Use to forward relevant media (e.g. images sent by user) to subagents.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "object"
+    },
+    "description": "Launch a new agent to handle complex, multi-step tasks autonomously.\n\nThe Task tool launches specialized subagents (subprocesses) that autonomously handle complex tasks. Each subagent_type has specific capabilities and tools available to it.\n\nWhen using the Task tool, you must specify a subagent_type parameter to select which agent type to use.\n\nWhen NOT to use the Task tool:\n- Simple, single or few-step tasks that can be performed by a single agent (using parallel or sequential tool calls) -- just call the tools directly instead.\n- For example:\n  - If you want to read a specific file path, use the Read or Glob tool instead of the Task tool, to find the match more quickly\n  - If you are searching for code within a specific file or set of 2-3 files, use the Read tool instead of the Task tool, to find the match more quickly\n  - If you are searching for a specific class definition like \"class Foo\", use the Glob tool instead, to find the match more quickly\n\nUsage notes:\n- Always include a short description (3-5 words) summarizing what the agent will do\n- Launch multiple agents concurrently whenever possible, to maximize performance; to do that, use a single message with multiple tool uses.\n- When the agent is done, it will return a single message back to you. Specify exactly what information the agent should return back in its final response to you. The result returned by the agent is not visible to the user. To show the user the result, you should send a text message back to the user with a concise summary of the result.\n- Agents can be resumed using the `resume` parameter by passing the agent ID from a previous invocation. When resumed, the agent continues with its full previous context preserved. When NOT resuming, each invocation starts fresh and you should provide a detailed task description with all necessary context.\n- When using the Task tool, the subagent invocation does not have access to the user's message or prior assistant steps. Therefore, you should provide a highly detailed task description with all necessary context for the agent to perform its task autonomously.\n- The subagent's outputs should generally be trusted\n- Clearly tell the subagent which tasks you want it to perform, since it is not aware of the user's intent or your prior assistant steps (tool calls, thinking, or messages).\n- If the subagent description mentions that it should be used proactively, then you should try your best to use it without the user having to ask for it first. Use your judgement.\n- If the user specifies that they want you to run subagents \"in parallel\", you MUST send a single message with multiple Task tool use content blocks. For example, if you need to launch both a code-reviewer subagent and a test-runner subagent in parallel, send a single message with both tool calls.\n- Avoid delegating the full query to the Task tool and returning the result. In these cases, you should address the query using the other tools available to you.\n\nAvailable subagent_types and a quick description of what they do:\n- generalPurpose: General-purpose agent for researching complex questions, searching for code, and executing multi-step tasks. Use when searching for a keyword or file and not confident you'll find the match quickly.\n- cursor-guide: Read Cursor product documentation to answer questions about how Cursor Desktop, IDE, CLI, Cloud Agents, Bugbot, and other features work. Use when the user asks 'In Cursor, how do I...?' or similar questions about Cursor products.\n- best-of-n-runner: Run a task in an isolated git worktree. Each best-of-n-runner gets its own branch and working directory. Use for best-of-N parallel attempts or isolated experiments.\n- code-reviewer: Use this agent when a major project step has been completed and needs to be reviewed against the original plan and coding standards. Examples: <example>Context: The user is creating a code-review agent that should be called after a logical chunk of code is written. user: \"I've finished implementing the user authentication system as outlined in step 3 of our plan\" assistant: \"Great work! Now let me use the code-reviewer agent to review the implementation against our plan and coding standards\" <commentary>Since a major project step has been completed, use the code-reviewer agent to validate the work against the plan and identify any issues.</commentary></example> <example>Context: User has completed a significant feature implementation. user: \"The API endpoints for the task management system are now complete - that covers step 2 from our architecture document\" assistant: \"Excellent! Let me have the code-reviewer agent examine this implementation to ensure it aligns with our plan and follows best practices\" <commentary>A numbered step from the planning document has been completed, so the code-reviewer agent should review the work.</commentary></example>\n\n\nIf the user explicitly asks for the model of a subagent/task, you may ONLY use model slugs from this list:\n- composer-2.5-fast\n\nIf the user isn't asking for a specific version, prefer the latest version of the model family. As an example, if the user just says \"gpt\" or \"codex\", use the latest available version of GPT or Codex.\n\nIMPORTANT: If the user requests a model that is NOT in the list above, do NOT substitute a different model or guess. Instead, skip launching the subagent with that model and tell the user which model was unavailable and which models are available.\n\nWhen speaking to the USER about which model you selected for a subagent, do NOT use the kebab-case model names unless the user requested the model using that format. Ue the same naming scheme the user used to discuss the model when they requested it."
+  }
+}

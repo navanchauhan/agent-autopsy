@@ -1,0 +1,24 @@
+{
+  "name": "Glob",
+  "schema": {
+    "type": "function",
+    "name": "Glob",
+    "parameters": {
+      "required": [
+        "glob_pattern"
+      ],
+      "properties": {
+        "target_directory": {
+          "description": "Absolute path to directory to search for files in. If not provided, defaults to Cursor workspace root.",
+          "type": "string"
+        },
+        "glob_pattern": {
+          "description": "The glob pattern to match files against.\nPatterns not starting with \"**/\" are automatically prepended with \"**/\" to enable recursive searching.\n\nExamples:\n\t- \"*.js\" (becomes \"**/*.js\") - find all .js files\n\t- \"**/node_modules/**\" - find all node_modules directories\n\t- \"**/test/**/test_*.ts\" - find all test_*.ts files in any test directory",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": "\nTool to search for files matching a glob pattern\n\n- Works fast with codebases of any size\n- Returns matching file paths sorted by modification time\n- Use this tool when you need to find files by name patterns\n- You have the capability to call multiple tools in a single response. It is always better to speculatively perform multiple searches that are potentially useful as a batch.\n"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "CallMcpTool",
+  "schema": {
+    "type": "function",
+    "name": "CallMcpTool",
+    "parameters": {
+      "required": [
+        "server",
+        "toolName"
+      ],
+      "properties": {
+        "server": {
+          "description": "Identifier of the MCP server hosting the tool.",
+          "type": "string"
+        },
+        "toolName": {
+          "description": "Name of the MCP tool to invoke.",
+          "type": "string"
+        },
+        "arguments": {
+          "description": "Arguments to pass to the MCP tool, as described in the tool descriptor.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "description": "Call an MCP tool by server identifier and tool name with arbitrary JSON arguments. IMPORTANT: Always read the tool's schema/descriptor BEFORE calling to ensure correct parameters.\n\nExample:\n{\n  \"server\": \"my-mcp-server\",\n  \"toolName\": \"search\",\n  \"arguments\": { \"query\": \"example\", \"limit\": 10 }\n}"
+  }
+}
