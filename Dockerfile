@@ -48,11 +48,6 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
 # per-user pipx) so it works the same regardless of which user ends up running it.
 RUN python3 -m pip install --break-system-packages mitmproxy
 
-# Codex CLI (OpenAI) — official npm package, same as this repo's own dev-machine
-# install. Global npm installs land under /usr/local, which is world-executable
-# by default, so this stays reachable after we switch users below.
-RUN npm install -g @openai/codex
-
 # --- Non-root user for actually running the CLIs -----------------------------
 #
 # Claude Code and Grok both refuse to honor --dangerously-skip-permissions /
@@ -69,6 +64,18 @@ RUN useradd -m -s /bin/bash runner
 
 USER runner
 WORKDIR /home/runner
+
+# npm's default global prefix is a root-owned system directory. Codex's own
+# `codex update` re-runs `npm install -g @openai/codex`, which would otherwise
+# fail with EACCES for a non-root user (confirmed by hitting exactly this in
+# this pipeline's second live dry run) — so give `runner` its own writable
+# global prefix before installing Codex into it.
+RUN mkdir -p /home/runner/.npm-global \
+    && npm config set prefix /home/runner/.npm-global
+ENV PATH="/home/runner/.npm-global/bin:${PATH}"
+
+# Codex CLI (OpenAI) — official npm package, same as this repo's own dev-machine install.
+RUN npm install -g @openai/codex
 
 # Claude Code — official native installer (curl -fsSL https://claude.ai/install.sh),
 # confirmed against Anthropic's own docs at code.claude.com/docs/en/setup.

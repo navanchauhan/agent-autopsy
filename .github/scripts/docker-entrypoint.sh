@@ -7,10 +7,10 @@
 # non-root container user without having to guess or match the host's uid.
 #
 # `runner`'s HOME and PATH (including the CLIs installed under
-# /home/runner/.local/bin and /home/runner/.grok/bin during the image build)
-# are set explicitly since gosu, unlike su/sudo, deliberately does NOT reset
-# the environment — so anything not set here would otherwise leak root's
-# environment into the runner-owned process.
+# /home/runner/.local/bin, /home/runner/.grok/bin, and /home/runner/.npm-global/bin
+# during the image build) are set explicitly since gosu, unlike su/sudo,
+# deliberately does NOT reset the environment — so anything not set here would
+# otherwise leak root's environment into the runner-owned process.
 
 set -euo pipefail
 
@@ -19,6 +19,6 @@ if [ -d /workspace ]; then
 fi
 
 export HOME=/home/runner
-export PATH="/home/runner/.local/bin:/home/runner/.grok/bin:${PATH}"
+export PATH="/home/runner/.local/bin:/home/runner/.grok/bin:/home/runner/.npm-global/bin:${PATH}"
 
 exec gosu runner env HOME="$HOME" PATH="$PATH" "$@"
