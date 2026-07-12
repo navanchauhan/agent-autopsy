@@ -12,20 +12,18 @@
 
 FROM debian:bookworm-slim
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    HOME=/root \
-    PATH="/root/.local/bin:/root/.grok/bin:/root/.local/share/claude/bin:${PATH}"
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
         git \
         gnupg \
+        gosu \
         jq \
         python3 \
         python3-pip \
         python3-venv \
-        pipx \
         tmux \
         unzip \
         xz-utils \
@@ -46,27 +44,48 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
     && apt-get update && apt-get install -y --no-install-recommends gh \
     && rm -rf /var/lib/apt/lists/*
 
-# mitmproxy (grok/misc/scripts/mitm-capture-grok.py) — installed via pipx since Debian's
-# system Python is externally-managed (PEP 668) and this must not touch apt's own python deps.
-RUN pipx install mitmproxy \
-    && pipx ensurepath
+# mitmproxy (grok/misc/scripts/mitm-capture-grok.py) — installed system-wide (not
+# per-user pipx) so it works the same regardless of which user ends up running it.
+RUN python3 -m pip install --break-system-packages mitmproxy
 
-# --- Coding-agent CLIs -------------------------------------------------------
-
-# Codex CLI (OpenAI) — official npm package, same as this repo's own dev-machine install.
+# Codex CLI (OpenAI) — official npm package, same as this repo's own dev-machine
+# install. Global npm installs land under /usr/local, which is world-executable
+# by default, so this stays reachable after we switch users below.
 RUN npm install -g @openai/codex
 
-# Claude Code (Anthropic) — official native installer (curl -fsSL https://claude.ai/install.sh),
+# --- Non-root user for actually running the CLIs -----------------------------
+#
+# Claude Code and Grok both refuse to honor --dangerously-skip-permissions /
+# interactive-auth flags when running as root (a real safety check, not a bug —
+# confirmed by hitting it during this pipeline's first live dry run). So the
+# capture pipeline itself runs as this user, not root.
+#
+# The container's own default user stays root (see ENTRYPOINT below): the
+# entrypoint chowns the bind-mounted /workspace to this user (regardless of
+# whatever uid actually owns those files on the mounting host — root can always
+# chown) and then drops privileges via `gosu` to run the actual pipeline. This
+# avoids having to guess or match any particular host uid.
+RUN useradd -m -s /bin/bash runner
+
+USER runner
+WORKDIR /home/runner
+
+# Claude Code — official native installer (curl -fsSL https://claude.ai/install.sh),
 # confirmed against Anthropic's own docs at code.claude.com/docs/en/setup.
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
-# Antigravity CLI (Google) — official installer, already documented in this repo's own
+# Antigravity CLI — official installer, already documented in this repo's own
 # antigravity/VERSION (installer_url).
 RUN curl -fsSL https://antigravity.google/cli/install.sh | bash
 
-# Grok CLI (xAI) — official installer, confirmed against xAI's own docs.x.ai/build/overview.
+# Grok CLI — official installer, confirmed against xAI's own docs.x.ai/build/overview.
 RUN curl -fsSL https://x.ai/cli/install.sh | bash
 
+USER root
 WORKDIR /workspace
 
+COPY .github/scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["/bin/bash"]
