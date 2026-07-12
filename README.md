@@ -17,3 +17,7 @@ Agents:
 - `antigravity/`: Antigravity CLI non-interactive and tmux interactive captures in the shared layout.
 - `ampcode/`: Amp prompts and mode-specific tool schemas. **Unsupported/frozen** — both known capture paths (local `--inspect` gate bypass and network mitm) are exhausted as of version 0.0.1783542413-gb55c7a; see `ampcode/README.md`.
 - `grok/`: xAI Grok CLI non-interactive and tmux interactive captures, taken via a local mitmproxy network capture of the real `/v1/responses` request payload.
+
+## Automated refresh
+
+`.github/workflows/daily-refresh.yml` runs daily and checks whether Claude Code, Codex, Antigravity, or Grok shipped a new version since the last capture. When one has, it re-runs that tool's documented `README.md` "Refresh commands" (both non-interactive and interactive-tmux capture), hands the diffing/rewrite work to `codex exec` acting as an orchestrator that spawns one subagent per changed tool, and — only if something actually changed — commits, tags `YYYY.MM.DD`, and cuts a GitHub release. A no-op day produces no commit, no tag, no release. `Dockerfile` at the repo root builds the container this runs in; `.github/scripts/` holds the individual pipeline steps. ampcode is intentionally excluded (see its own README for why).

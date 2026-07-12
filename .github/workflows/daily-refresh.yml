@@ -1,0 +1,66 @@
+name: Daily capture refresh
+
+on:
+  workflow_dispatch: {}
+  # Enable once a manual workflow_dispatch dry run has passed end-to-end.
+  # schedule:
+  #   - cron: "17 6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Build refresh image
+        run: docker build -t agent-autopsy-refresh .
+
+      - name: Run daily refresh pipeline
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          CODEX_CHATGPT_AUTH_JSON: ${{ secrets.CODEX_CHATGPT_AUTH_JSON }}
+          GROK_AUTH_JSON: ${{ secrets.GROK_AUTH_JSON }}
+          ANTIGRAVITY_GEMINI_CREDS: ${{ secrets.ANTIGRAVITY_GEMINI_CREDS }}
+          REPO_SECRETS_PAT: ${{ secrets.REPO_SECRETS_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          docker run --rm \
+            -v "$PWD":/workspace \
+            -w /workspace \
+            -e CLAUDE_CODE_OAUTH_TOKEN \
+            -e CODEX_CHATGPT_AUTH_JSON \
+            -e GROK_AUTH_JSON \
+            -e ANTIGRAVITY_GEMINI_CREDS \
+            -e REPO_SECRETS_PAT \
+            -e GITHUB_TOKEN \
+            -e GITHUB_REPOSITORY \
+            agent-autopsy-refresh \
+            bash -euo pipefail -c '
+              git config --global --add safe.directory /workspace
+              gh auth setup-git
+              bash .github/scripts/seed-credentials.sh
+              bash .github/scripts/check-versions.sh
+              bash .github/scripts/run-codex-refresh.sh
+              bash .github/scripts/commit-and-release.sh
+              bash .github/scripts/rotate-secrets.sh
+            '
+
+      - name: Upload run scratch state
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: daily-refresh-scratch
+          path: .capture-scratch/
+          retention-days: 14
+          if-no-files-found: ignore

@@ -1,0 +1,12 @@
+# Credential/session files that must never be committed. Capture scripts read these
+# from each tool's real config location; none of them belong in this repo.
+auth.json
+oauth_creds.json
+*.pem
+*credentials*.json
+.env
+.env.*
+
+# Scratch space used by the daily-refresh pipeline and local capture runs.
+.capture-scratch/
+*.capture.jsonl
