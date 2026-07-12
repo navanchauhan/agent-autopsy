@@ -14,7 +14,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Cheap pre-check: installs the four CLIs directly on the bare runner (no
+  # Docker build, no secrets) and asks each one's own `update` command whether
+  # it's current. Only if at least one tool actually moved does the expensive
+  # `refresh` job (Docker build + full capture pipeline) get to run at all.
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.check.outputs.has_changes }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install CLIs
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          npm install -g @openai/codex
+          curl -fsSL https://antigravity.google/cli/install.sh | bash
+          curl -fsSL https://x.ai/cli/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.grok/bin" >> "$GITHUB_PATH"
+
+      - name: Check versions
+        id: check
+        run: bash .github/scripts/check-versions.sh
+
   refresh:
+    needs: check
+    if: needs.check.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
