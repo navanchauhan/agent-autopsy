@@ -13,10 +13,13 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Cheap pre-check: installs the four CLIs directly on the bare runner (no
-  # Docker build, no secrets) and asks each one's own `update` command whether
-  # it's current. Only if at least one tool actually moved does the expensive
-  # `refresh` job (Docker build + full capture pipeline) get to run at all.
+  # Cheap pre-check: installs claude-code/antigravity/grok directly on the bare
+  # runner (no Docker build, no secrets) and asks each one's own `update`
+  # command whether it's current; codex is checked separately via
+  # `git ls-remote` against its upstream source (see check-versions.sh — codex
+  # has no live capture, so its own CLI version isn't the relevant signal).
+  # Only if at least one tool actually moved does the expensive `refresh` job
+  # (Docker build + full capture pipeline) get to run at all.
   check:
     runs-on: ubuntu-latest
     outputs:
@@ -26,9 +29,12 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install CLIs
+        # Codex is intentionally not installed here: it's captured from OpenAI's
+        # own open-source tree (see codex/README.md), not from the installed
+        # CLI's behavior, so check-versions.sh checks its source revision via
+        # `git ls-remote` instead of an installed binary's version string.
         run: |
           curl -fsSL https://claude.ai/install.sh | bash
-          npm install -g @openai/codex
           curl -fsSL https://antigravity.google/cli/install.sh | bash
           curl -fsSL https://x.ai/cli/install.sh | bash
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
@@ -77,6 +83,7 @@ jobs:
               gh auth setup-git
               bash .github/scripts/seed-credentials.sh
               bash .github/scripts/check-versions.sh
+              bash .github/scripts/sync-codex-reference.sh
               bash .github/scripts/run-codex-refresh.sh
               bash .github/scripts/commit-and-release.sh
               bash .github/scripts/rotate-secrets.sh

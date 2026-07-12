@@ -18,10 +18,20 @@ Prefer multiple sub-agents to parallelize this work; once they're running, your
 job is to coordinate them, not to do their work yourself. For each entry in the
 changed-tools list, spawn one subagent and give it:
 
-- The tool's directory (`<dir>/`) and its `README.md`, which documents the exact
-  "Refresh commands" for that tool (non-interactive `--print`/`-p` capture, and
-  a tmux-driven interactive capture — most tools document both; run **both**,
-  not just one, exactly as written there).
+- The tool's directory (`<dir>/`) and its `README.md`, which documents the
+  exact "Refresh commands" for that tool. Different tools use genuinely
+  different methods — do not assume one applies to all of them:
+  - claude-code, antigravity, and grok are captured live: their README
+    documents both a non-interactive `--print`/`-p` capture and a
+    tmux-driven interactive capture. Run **both**, not just one.
+  - codex has NO live capture at all — it's open source, so its README
+    documents pulling/updating a local clone of the upstream source tree
+    (`references/codex`, already synced fresh by
+    `.github/scripts/sync-codex-reference.sh` before you were invoked) and
+    re-reading the relevant files directly from it. Do not attempt to run
+    `codex` with any capture flag or via tmux/mitmproxy for this — that
+    would be pointless network traffic against a tool that has no such
+    live-capture step in the first place.
 - Its `VERSION` file, showing the old recorded version/capture state and the
   existing conventions for what fields to update.
 - Instructions to:

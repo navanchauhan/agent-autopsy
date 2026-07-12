@@ -48,11 +48,37 @@ check_tool() {
   fi
 }
 
+check_codex_source() {
+  # Codex is captured from OpenAI's own open-source tree (see codex/README.md),
+  # not from the installed npm CLI's own behavior — so "is there something new
+  # to capture" means "did codex-rs/openai/codex's default branch move past the
+  # revision we last captured," not "did the npm package version string change."
+  # (The npm package version can lag behind — or occasionally sit ahead of —
+  # actual source content changes, so it's the wrong signal here.) This needs
+  # no local clone and no codex CLI install at all, just one `git ls-remote`.
+  local recorded_revision
+  recorded_revision="$(current_version_field "$repo_root/codex/VERSION" "revision")"
+
+  echo "== codex (source) ==" >&2
+  local latest_revision
+  latest_revision="$(git ls-remote https://github.com/openai/codex.git HEAD 2>/dev/null | cut -f1)"
+
+  if [ -z "$latest_revision" ]; then
+    echo "::warning::Could not reach github.com/openai/codex.git; skipping version check for codex" >&2
+    return
+  fi
+
+  echo "codex: recorded_revision=$recorded_revision latest_revision=$latest_revision" >&2
+
+  if [ "$latest_revision" != "$recorded_revision" ]; then
+    entries+=("{\"tool\":\"codex\",\"dir\":\"codex\",\"old_version\":\"$recorded_revision\",\"new_version\":\"$latest_revision\"}")
+  fi
+}
+
 check_tool "claude-code" "claude-code" "version" \
   "claude update" "claude --version" '[0-9]+\.[0-9]+\.[0-9]+'
 
-check_tool "codex" "codex" "codex_cli_package_version" \
-  "codex update" "codex --version" '[0-9]+\.[0-9]+\.[0-9]+'
+check_codex_source
 
 check_tool "antigravity" "antigravity" "version" \
   "agy update" "agy --version" '[0-9]+\.[0-9]+\.[0-9]+'
