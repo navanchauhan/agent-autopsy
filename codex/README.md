@@ -17,3 +17,5 @@ git -C references/codex pull
 ```
 
 Then re-extract `prompts/`, `tools/`, and `misc/` by reading the updated `references/codex` tree directly (grep for each currently-checked-in file's distinctive strings to relocate it, since paths can move between revisions — see `codex/VERSION`'s notes field for the pattern), diff against what's committed here, and update only what actually changed. `references/codex` itself is gitignored (a full foreign git history, not part of this repo) and is re-synced fresh by `.github/scripts/sync-codex-reference.sh` on every automated run — see the root `README.md`'s "Automated refresh" section.
+
+Current capture revision: `c888e8e75a9f0e90ce7d5517f8b9540832cbbf76` (2026-07-12). Re-extraction from this revision produced no real prompt, tool-schema, or runtime-steering changes; the model catalog's removal of `supports_reasoning_summaries` is capability metadata, while the approval refactor and safety-buffering wording changes are internal/UI behavior outside the captured model-visible surface. See `VERSION` for the source-level verification notes.

@@ -1,9 +1,9 @@
 source = openai/codex
-revision = 6138909d6ec58b2fbe635ef973e02caecad5a5aa
-describe = codex-zsh-v0.1.0-238-g6138909d6e
+revision = c888e8e75a9f0e90ce7d5517f8b9540832cbbf76
+describe = codex-zsh-v0.1.0-273-gc888e8e75a
 codex_cli_package_version = 0.144.1
 codex_rs_workspace_version = 0.0.0
-generated_at = 2026-07-10T15:01:35.000Z
+generated_at = 2026-07-12T19:18:37.000Z
 reference_path = references/codex
 prompt_files = codex-auto-review.md, default.md, gpt-5-codex.md, gpt-5.1-codex-max.md, gpt-5.1.md, gpt-5.2-codex.md, gpt-5.2.md, gpt-5.4-mini.md, gpt-5.4.md, gpt-5.5.md, gpt-5.6-luna.md, gpt-5.6-sol.md, gpt-5.6-terra.md, prompt-with-apply-patch-instructions.md, review.md
 prompts = 15
@@ -11,6 +11,12 @@ tool_files = apply_patch.json, clock.json, create_goal.json, exec_command.json, 
 tools = 25
 misc = 20
 misc_files = agents-orchestrator.md, apply-patch-tool-instructions.md, collab-experimental-prompt.md, compact-prompt.md, compact-summary-prefix.md, goal-budget-limit.md, goal-continuation.md, goal-objective-updated.md, permissions-approval-policy-never.md, permissions-approval-policy-on-request-rule-request-permission.md, permissions-approval-policy-on-request.md, permissions-approval-policy-unless-trusted.md, permissions-sandbox-mode-danger-full-access.md, permissions-sandbox-mode-read-only.md, permissions-sandbox-mode-workspace-write.md, realtime-backend-prompt.md, realtime-end.md, realtime-start.md, review-exit-interrupted.xml, review-exit-success.xml
+
+Notes (2026-07-12 refresh, previous revision 6138909d6e -> c888e8e75a, 35 commits):
+- No captured prompt, tool-schema, or `misc/` content changed in this range. A scratch re-extraction of all eight model templates in `codex-rs/models-manager/models.json` found byte-identical prompt text; the only apparent difference was a missing final newline in Sol's JSON string, which is serialization/EOF churn rather than prompt wording and was intentionally ignored. Distinctive-string relocation plus source-range diffs likewise found no changes to the defining text for the remaining checked-in prompts and runtime steering or to any checked-in Responses API tool schema.
+- `codex-rs/models-manager/models.json` removed `supports_reasoning_summaries: true` from all eight current model records. This is model-capability metadata rather than prompt or tool-schema content: the client now respects server-provided reasoning-summary support instead of the checked-in catalog flag, so no capture artifact changes are warranted.
+- The approval path was substantially refactored (`core/src/tools/approvals.rs`, guardian review/session code, and the apply-patch/shell/unified-exec runtimes), including preserving environment IDs and `PathUri` values for cross-environment review. These changes affect internal approval routing and payload plumbing, not the model-visible `request_permissions`, shell, unified-exec, or apply-patch tool declarations; their captured schemas remain unchanged.
+- Other activity in the range (thread-history pagination, MCP OAuth refresh locking, plugin scheduled-task metadata, response-item ID validation, memory-consolidation sandbox roots, IDE context sockets, and TUI composer/diff/safety-buffering copy) is internal protocol, storage, transport, or UI behavior outside this repository's prompt/tool-schema capture scope. The previously flagged uncaptured Guardian policy template also remained byte-identical.
 
 Notes (2026-07-10 refresh, previous revision ba5dd1fd3a -> 6138909d6e, 64 commits):
 - `codex-rs/models-manager/models.json` rotated the model roster: `gpt-5.3-codex` was dropped entirely (no more `model_messages.instructions_template`; it survives only as a legacy fallback slug in test fixtures and a cyber-safety error string) and a new GPT-5.6 family was added — `gpt-5.6-sol` (frontier, `default_reasoning_level: low`, priority 1), `gpt-5.6-terra` (balanced, priority 2), `gpt-5.6-luna` (fast/affordable, priority 3). All three carry new `tool_mode: "code_mode_only"` and `multi_agent_version: "v2"` fields not present on any prior model, meaning these models are steered entirely through the dynamic `code_mode` freeform tool rather than being handed the individual function tools directly — that per-session tool listing isn't a fixed schema and isn't captured under `tools/`. Sol's prompt text differs slightly from Terra/Luna (which are byte-identical to each other); all three bake their personality section in directly rather than using the `{{ personality }}` template-variable indirection still used by gpt-5.4/gpt-5.4-mini/gpt-5.5/codex-auto-review (confirmed byte-identical to the prior capture, including the `personality_pragmatic`/`personality_friendly` variable text).
