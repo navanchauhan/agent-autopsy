@@ -18,7 +18,7 @@
           "type": "string"
         },
         "model": {
-          "description": "Optional model slug for this agent. If provided, it must resolve to one of the available model slugs. If omitted, the subagent uses the same model as the parent agent. Do not pass if resume field is set (prior model will be used). Only choose an explicit model when the user directly requests it.",
+          "description": "Optional model slug for this agent. If omitted, the subagent uses the same model as the parent agent. Unknown or unavailable slugs fall back to the parent/inherited model (with a warning). Ignored when resume is set (prior/source model is always used). Only choose an explicit model when the user directly requests it.",
           "type": "string"
         },
         "resume": {

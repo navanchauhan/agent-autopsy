@@ -67,6 +67,13 @@
             "string",
             "null"
           ]
+        },
+        "model": {
+          "description": "Override the model for this subagent. If not set, inherits the parent model (or role/agent pins). Prefer only when the user or task clearly needs a different model. Ignored when resume_from is set; the resumed child always uses the source model.",
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "required": [

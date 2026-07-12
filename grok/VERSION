@@ -1,12 +1,12 @@
 source = xai/grok-cli
 distribution = native Rust/Mach-O binary
-version = 0.2.93
-revision = f00f96316d4b
+version = 0.2.99
+revision = b1b49ccb71
 channel = stable
-platform = darwin-arm64
-binary_path = /Users/example/.grok/bin/grok
-sha256 = 2a97ba675bd992aa9b981e2e83776460d94f469b510c0b8efe28b50d236d767c
-generated_at = 2026-07-10T14:55:58.000Z
+platform = linux-x86_64
+binary_path = /home/example/.grok/bin/grok
+sha256 = 9fccba400d3808ec34a991892096b34c6f5846b2b118d355001601fd5428445c
+generated_at = 2026-07-12T22:56:16.000Z
 auth_source = local Grok OAuth cached token (~/.grok/auth.json; never read/logged)
 endpoint = https://cli-chat-proxy.grok.com/v1/responses (xAI Responses-API-shaped, SSE streamed)
 capture_method = network capture via local mitmproxy (grok respects HTTPS_PROXY and does not pin the TLS cert when SSL_CERT_FILE trusts the interceptor); `grok trace`/`--debug-file` were tried first and ruled out (see README)
@@ -28,3 +28,4 @@ grok_composer_2_5_fast_tools = Shell, Grep, Delete, WebSearch, WebFetch, TodoWri
 grok_session_title_tools = session_title
 tool_notes = update_goal is the only tool name shared across the grok-4.5 and grok-composer-2.5-fast tool sets, and its exact JSON Schema differs (nullable-typed properties on grok-4.5 vs plain-typed on Composer), so tools/update_goal.json carries a variants[] array keyed by run kind. grep/Grep and write/Write collide only by case between grok-4.5 and grok-composer-2.5-fast; the Composer-model file is suffixed tools/Grep-grok-composer-2.5-fast.json / tools/Write-grok-composer-2.5-fast.json so both survive on case-insensitive filesystems. web_search and x_search are xAI backend built-in tools (`{"type":"web_search"}`/`{"type":"x_search"}`), not function-call schemas.
 refresh_0_2_91_to_0_2_93 = All 47 tools/*.json are byte-identical to the 0.2.91 capture — no tool added, removed, or renamed, and no schema (including the update_goal variants[]) changed. prompts/grok-composer-2.5-fast.md and prompts/grok-session-title.md are unchanged. prompts/grok-4.5.md and prompts/grok-4.5-interactive.md both changed in exactly one place: the <output_efficiency> block was rewritten from a "keep output brief and direct, skip filler, lead with the answer" directive (with a bulleted list of what to focus text output on) to a "write like an excellent technical blog post, complete sentences, good grammar, proportional to task complexity" directive — a real shift in the requested communication style, not just wording. misc/grok-composer-2.5-fast-steering.md gained one new bundled skill entry, <agent_skill fullPath=".../.grok/bundled/skills/resume-claude/SKILL.md"> ("Resume or continue work from a recent Claude Code session..."), placed alongside the other three bundled skills (execute-plan, pr-babysit, review); this is a genuine new first-party bundled skill in 0.2.93, not local noise (the other bundled-skills dirs already existed in the 0.2.91 capture). misc/grok-4.5-steering.md is unchanged. One capture artifact was deliberately NOT folded in: the interactive tmux session's misc/grok-4.5-interactive-steering.md capture included a fresh, un-genericized `<system-reminder>MCP server connected: tasks (6 tools)...</system-reminder>` block that this machine's `grok mcp list` shows as unconfigured; tracing it back, both that "tasks" MCP fingerprint and the machine's already-baked-in `~/.agents/skills/*` entries in the Composer steering file trace to a locally cloned `github.com/anthropics/claude-plugins-official.git` marketplace cache and a shared `~/.agents/skills` directory unique to this capture machine, not to a clean/default grok install — so grok-4.5-interactive-steering.md was left untouched rather than baking in machine-specific state.
+refresh_0_2_93_to_0_2_99 = All four prompts remain byte-identical, and the tool inventory remains 47 with no additions, removals, or renames. Three tool definitions changed: grok-4.5's spawn_subagent gained an optional nullable model override (inherited by default and ignored on resume); Composer's Task model description now documents fallback to the inherited model for unknown/unavailable slugs and that resumed tasks retain their source model; and read_file no longer claims that lines longer than 2,000 characters are truncated. misc/grok-composer-2.5-fast-steering.md gained two new first-party bundled skills: build-with-ai, which steers AI feature integration toward SpaceXAI, and design, which runs a design-doc author/reviewer loop. Linux OS/shell values, differences in locally installed skills, and the interactive capture machine's tasks MCP reminder were treated as host-specific capture noise and deliberately not folded in.

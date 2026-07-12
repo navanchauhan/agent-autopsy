@@ -89,6 +89,16 @@ alias, to name it in `grok sessions`) is captured as its own minimal prompt.
 - `VERSION` — binary version/checksum, capture commands, and prompt/tool/misc
   counts.
 
+## Refresh notes
+
+The 0.2.99 capture keeps all four system prompts and the 47-tool inventory from
+0.2.93. It adds explicit model selection to the `spawn_subagent` schema, makes
+Composer's `Task` model fallback/resume behavior clearer, and removes the old
+`read_file` promise that lines over 2,000 characters are truncated. Composer's
+steering also advertises two new first-party bundled skills, `build-with-ai`
+and `design`; host-specific Linux fields, locally installed skills, and the
+capture machine's `tasks` MCP reminder remain excluded.
+
 ## Refresh commands
 
 Non-interactive capture (repeat with `--model grok-composer-2.5-fast` for the
