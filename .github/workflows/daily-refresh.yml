@@ -2,9 +2,8 @@ name: Daily capture refresh
 
 on:
   workflow_dispatch: {}
-  # Enable once a manual workflow_dispatch dry run has passed end-to-end.
-  # schedule:
-  #   - cron: "17 6 * * *"
+  schedule:
+    - cron: "17 6 * * *"
 
 permissions:
   contents: write
