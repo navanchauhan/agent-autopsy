@@ -1,6 +1,5 @@
 {
   "name": "Skill",
-  "note": "This tool had different exact payloads across traced model requests and capture modes. Each schema entry below is an exact Claude /v1/messages tools[] object sent to the listed model(s)/capture mode(s).",
   "variants": [
     {
       "runs": [
@@ -56,16 +55,6 @@
       "capture_modes": [
         "non-interactive",
         "interactive"
-      ],
-      "trace_files": [
-        "2026-07-05T14-39-29-014Z-c1b4e30d-96ad-400d-87dd-727910d9e423.json",
-        "2026-07-10T14-50-23-403Z-dedd6532-0cf9-4a0f-96b0-5f6c8dc8a792.json",
-        "2026-07-10T14-50-30-665Z-4c39b28b-d0da-4848-9d29-382965431845.json",
-        "2026-07-10T14-50-37-778Z-1589af7a-75fb-4252-b077-d85aa5e0c83d.json",
-        "2026-07-10T14-50-40-466Z-0976add6-2eb2-4570-92d6-3e25c1361b3d.json",
-        "2026-07-10T14-50-42-963Z-2093b700-0574-4cc8-80e2-55f7215f1777.json",
-        "2026-07-10T14-50-49-011Z-780b03e3-6717-4286-8f2f-3691a5e7bbc1.json",
-        "2026-07-10T14-57-53-479Z-dfbb76b6-80e6-4325-8af5-f3129170729e.json"
       ],
       "schema": {
         "name": "Skill",

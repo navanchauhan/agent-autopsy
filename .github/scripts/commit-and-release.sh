@@ -11,9 +11,11 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+script_dir="$repo_root/.github/scripts"
 scratch_dir="${CAPTURE_SCRATCH_DIR:-$repo_root/.capture-scratch}"
 changed_file="${CHANGED_TOOLS_FILE:-$scratch_dir/changed-tools.json}"
 summary_file="${CODEX_SUMMARY_FILE:-$scratch_dir/codex-summary.md}"
+review_file="${CODEX_REVIEW_FILE:-$scratch_dir/review-result.json}"
 
 cd "$repo_root"
 git config user.name "github-actions[bot]"
@@ -33,11 +35,15 @@ body_for_tool() {
 release_notes=""
 commit_count=0
 
-tool_count="$(jq 'length' "$changed_file" 2>/dev/null || echo 0)"
-for i in $(seq 0 $((tool_count - 1))); do
-  tool="$(jq -r ".[$i].tool" "$changed_file")"
-  dir="$(jq -r ".[$i].dir" "$changed_file")"
-  new_version="$(jq -r ".[$i].new_version" "$changed_file")"
+if ! node "$script_dir/validate-review.cjs" "$changed_file" "$review_file"; then
+  echo "Independent review did not approve this refresh; refusing to publish." >&2
+  exit 1
+fi
+
+while IFS= read -r entry; do
+  tool="$(jq -r '.tool' <<<"$entry")"
+  dir="$(jq -r '.dir' <<<"$entry")"
+  new_version="$(jq -r '.new_version' <<<"$entry")"
 
   if git status --porcelain -- "$dir" | grep -q .; then
     git add "$dir"
@@ -50,7 +56,7 @@ for i in $(seq 0 $((tool_count - 1))); do
   else
     echo "$tool: version changed ($new_version) but no content diff — skipping commit"
   fi
-done
+done < <(jq -c '.[]' "$changed_file")
 
 if [ "$commit_count" -eq 0 ]; then
   echo "No commits made today — skipping tag/release."
@@ -68,8 +74,7 @@ done
 git tag -a "$tag" -m "Automated capture refresh $today"
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
-git push origin "$branch"
-git push origin "$tag"
+git push --atomic origin "$branch" "$tag"
 
 gh release create "$tag" \
   --repo "${GITHUB_REPOSITORY:?GITHUB_REPOSITORY must be set}" \

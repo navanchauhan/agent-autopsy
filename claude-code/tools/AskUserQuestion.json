@@ -1,6 +1,5 @@
 {
   "name": "AskUserQuestion",
-  "note": "This tool had different exact payloads across traced model requests and capture modes. Each schema entry below is an exact Claude /v1/messages tools[] object sent to the listed model(s)/capture mode(s).",
   "variants": [
     {
       "models": [
@@ -271,9 +270,6 @@
       "capture_modes": [
         "interactive"
       ],
-      "trace_files": [
-        "2026-05-28T01-13-42-521Z-a9cf939a-dafb-44c2-8c9d-d7f28a9d40b9.json"
-      ],
       "schema": {
         "name": "AskUserQuestion",
         "description": "Use this tool when you need to ask the user questions during execution. This allows you to:\n1. Gather user preferences or requirements\n2. Clarify ambiguous instructions\n3. Get decisions on implementation choices as you work\n4. Offer choices to the user about what direction to take.\n\nUsage notes:\n- Users will always be able to select \"Other\" to provide custom text input\n- Use multiSelect: true to allow multiple answers to be selected for a question\n- If you recommend a specific option, make that the first option in the list and add \"(Recommended)\" at the end of the label\n\nPlan mode note: In plan mode, use this tool to clarify requirements or choose between approaches BEFORE finalizing your plan. Do NOT use this tool to ask \"Is my plan ready?\" or \"Should I proceed?\" - use ExitPlanMode for plan approval. IMPORTANT: Do not reference \"the plan\" in your questions (e.g., \"Do you have feedback about the plan?\", \"Does the plan look good?\") because the user cannot see the plan in the UI until you call ExitPlanMode. If you need plan approval, use ExitPlanMode instead.\n\nPreview feature:\nUse the optional `preview` field on options when presenting concrete artifacts that users need to visually compare:\n- ASCII mockups of UI layouts or components\n- Code snippets showing different implementations\n- Diagram variations\n- Configuration examples\n\nPreview content is rendered as markdown in a monospace box. Multi-line text with newlines is supported. When any option has a preview, the UI switches to a side-by-side layout with a vertical option list on the left and preview on the right. Do not use previews for simple preference questions where labels and descriptions suffice. Note: previews are only supported for single-select questions (not multiSelect).\n",
@@ -402,9 +398,6 @@
       "capture_modes": [
         "interactive"
       ],
-      "trace_files": [
-        "2026-06-09T22-07-03-596Z-4576ff3d-2fee-426f-99aa-64b3894b8471.json"
-      ],
       "schema": {
         "name": "AskUserQuestion",
         "description": "Use this tool only when you are blocked on a decision that is genuinely the user's to make: one you cannot resolve from the request, the code, or sensible defaults.\n\nUsage notes:\n- Users will always be able to select \"Other\" to provide custom text input\n- Use multiSelect: true to allow multiple answers to be selected for a question\n- If you recommend a specific option, make that the first option in the list and add \"(Recommended)\" at the end of the label\n\nPlan mode note: To switch into plan mode, use EnterPlanMode (not this tool). Once in plan mode, use this tool to clarify requirements or choose between approaches BEFORE finalizing your plan. Do NOT use this tool to ask \"Is my plan ready?\", \"Should I proceed?\", or otherwise reference \"the plan\" in questions — the user cannot see the plan until you call ExitPlanMode for approval.\n\nReserve this for decisions where the user's answer changes what you do next — not for choices with a conventional default or facts you can verify in the codebase yourself. In those cases pick the obvious option, mention it in your response, and proceed.\n",
@@ -532,15 +525,6 @@
       "request_kind": "agent",
       "capture_modes": [
         "interactive"
-      ],
-      "trace_files": [
-        "2026-07-05T14-39-29-014Z-c1b4e30d-96ad-400d-87dd-727910d9e423.json",
-        "2026-07-08T20-51-43-202Z-8f35f71f-ebd5-4fdf-985e-678b691bd54e.json",
-        "2026-07-08T20-51-54-916Z-9c546d63-bcf4-445e-a4a7-09f83cdf13d5.json",
-        "2026-07-08T20-52-01-627Z-b222c82f-b44a-425d-a7c0-7ba3a3ab9993.json",
-        "2026-07-08T20-52-04-196Z-8685908a-cd03-4e84-82c0-98b77eafe2a8.json",
-        "2026-07-08T20-55-26-395Z-7d05ed23-64da-4df6-978a-33ca3e11a149.json",
-        "2026-07-10T14-57-53-479Z-dfbb76b6-80e6-4325-8af5-f3129170729e.json"
       ],
       "schema": {
         "name": "AskUserQuestion",

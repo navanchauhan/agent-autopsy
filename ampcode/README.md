@@ -1,17 +1,29 @@
 # Amp Code
 
-**Status: unsupported / frozen.** Both known local-capture avenues (the `--inspect` permission-gate bypass and network-level mitm of the thread-actor WebSocket) are exhausted as of version 0.0.1783542413-gb55c7a — see the Notes below for why. The contents of this directory are no longer refreshed on the normal capture cadence used for the other agents in this repo; `prompts/*.md` in particular are known-stale (last verified against version 0.0.1779927513-g17febb). Only `tools/` (derived from the still-working `amp tools show --json`) reflects the current binary. Future refreshes should not re-attempt either exhausted avenue without a materially different capture idea (a reintroduced local inspect/debug command, or a thread-actor protocol change that puts the prompt back on the wire).
+> **Status: frozen.** Tool schemas reflect Amp `0.0.1783542413-gb55c7a`; prompt files were last verified with `0.0.1779927513-g17febb` and should be treated as stale.
 
-Amp is Sourcegraph's coding agent. These artifacts were extracted from the installed `amp` binary and live CLI behavior.
+## Source method
 
-- `prompts/` contains exact `tools list --inspect --json` system prompts grouped by Amp agent mode. Run-specific scalar values are marked with `<harnessVariable>{{name=example}}</harnessVariable>`; repeated runtime sections use `{{#each collectionName}}...{{/each}}` blocks inside `<harnessVariable>...</harnessVariable>`.
-- `tools/` contains one JSON file per observed Amp tool. The nested `schema` is the exact `amp tools show --json` tool definition for the listed mode(s).
-- `misc/` contains support scripts and capture side artifacts.
-- `VERSION` records the Amp version, binary checksums, capture commands, prompt modes, and tool counts.
+`tools/` comes from `amp tools list --json` and `amp tools show <name> --json` across smart, deep, large, and rush modes. The checked-in prompts came from the former local `tools list --inspect --json` path, using a temporary patched binary that bypassed only its client-side permission gate. No patched binary or raw trace is stored.
 
-Notes:
-- Amp's normal interactive tmux path uses a server actor and does not expose the final model request locally. The checked-in prompt files come from Amp's own local inspect implementation, using a throwaway patched copy of the installed binary to bypass the inspect permission gate. The patched binary is not stored.
-- The interactive tmux capture verified smart mode returned `AMP_INTERACTIVE_TRACE_OK`, advertised 37 executor tools to the actor, and reported 16 inference tools for smart mode. **As of version 0.0.1783542413-gb55c7a (2026-07-08) this changed to 14 executor tools and 17 inference tools for smart mode** — Amp shipped a large tool-surface refactor between the two captures (see below).
-- **Prompt capture is currently broken (2026-07-08 capture round).** `amp tools list --inspect --json` used to be gated by a client-side permission check that a throwaway patched binary could bypass. In version 0.0.1783542413-gb55c7a, `--inspect` was removed from the CLI's option parser entirely (`amp tools list --inspect` now fails with `unknown option '--inspect'`, not a permission error), and binary string analysis found no remaining code path that assembles `agentMode`/`systemPrompt`/`tools` into a single record. There is nothing left to patch back in without reimplementing application logic, so `prompts/*.md` were left untouched this round and should be treated as **stale** (last verified against version 0.0.1779927513-g17febb). A second attempt via `amp threads raw <id> --json` (which can export raw actor thread data) was also tried as an alternative path to a real system prompt, but that command is restricted server-side (`403 You do not have permission to access this resource`) regardless of local binary state, so it cannot substitute either.
-- **Network-level (mitmproxy) capture was also tried this round and ruled out for recovering the system prompt.** `amp` (a Bun binary) does respect standard proxy env vars and does not pin TLS certs: running `HTTPS_PROXY=http://127.0.0.1:<port> SSL_CERT_FILE=~/.mitmproxy/mitmproxy-ca-cert.pem NODE_EXTRA_CA_CERTS=~/.mitmproxy/mitmproxy-ca-cert.pem amp -x "..."` through a local `mitmdump` worked cleanly (no TLS errors, no proxy bypass; both env var styles were set together and traffic flowed). But the decrypted traffic shows *why* the interactive trace's own note is correct: `amp` first does plain JSON POSTs to `ampcode.com/api/thread-actors` to create a server-side "thread actor" (request body is just `{"executorType":"local-client","agentMode":"smart"}` — no prompt, no tools), then opens one long-lived authenticated WebSocket to `ampcode.com/actors/gateway/threadActor/websocket/...` and speaks a JSON-RPC protocol over it for the rest of the session. Inspecting that RPC stream end-to-end: the client sends `executor_environment_snapshot`, `executor_skill_snapshot`, `executor_guidance_snapshot`, `client_append_user_msg`, and (importantly) `executor_tools_register` with the full name/description/JSON-schema for each locally-executed tool (apply_patch, create_file, edit_file, find_thread, read_mcp_resource, read_web_page, shell_command, shell_command_status, skill, web_search — the same 10 tools already in `tools/` from `amp tools show --json`, so this is redundant, not new, information). The server later replies with an `inference_tools` message that is just a bare array of tool *names* actually handed to the model that turn (17 names for smart mode, matching `interactive_smart_inference_tools` below) — including several tools with no client-visible schema at all (`archive_current_thread`, `finder`, `librarian`, `oracle`, `painter`, `read_thread`, `Task`, `view_media`), confirming the server adds its own built-in tools to the model-facing set without ever describing their schemas to the local process. Crucially, **no message in this RPC stream is or contains a system prompt** — the actor assembles the system prompt and calls the underlying model (`usage.model` in the final `message_added` event showed `claude-opus-4-8` for this test) entirely server-side, from those snapshots/registrations as inputs, and that assembly/call never crosses the wire back to the local client. This confirms the existing note above ("does not expose the final model request locally") at the network layer, not just for the interactive tmux path but for `-x`/execute mode too. Given neither the removed `--inspect` local gate nor network capture can recover the real system prompt, both avenues are considered exhausted for this Amp version; future refreshes should not re-attempt either without a materially different capture idea (e.g. if Amp ever reintroduces a local inspect/debug command, or if the thread-actor protocol changes to include the prompt).
-- Amp 0.0.1783542413-gb55c7a removed several built-in tools present in 0.0.1779927513-g17febb (`Bash`, `Read`, `Task`, `chart`, `finder`, `librarian`, `oracle`, `painter`, `read_thread`, `view_media`) and added `shell_command_status`. `tools/` reflects only the 10 tools now observed across smart/deep/large/rush.
+## Refresh tool schemas
+
+Capture into scratch space, then compare `tools/` and the stable fields in `VERSION` before updating this directory:
+
+```sh
+amp --version
+repo_root=$PWD
+scratch_root=${CAPTURE_SCRATCH_DIR:-$repo_root/.capture-scratch}
+out_dir="$scratch_root/ampcode/candidate"
+mkdir -p "$out_dir"
+node ampcode/misc/scripts/extract-amp-tools.cjs "$out_dir"
+diff -ru ampcode/tools "$out_dir/tools" || true
+```
+
+Schema text must remain exact. Use the recorded `modes` or `variants[]` metadata to preserve real mode differences; do not retain temporary trace paths or credentials.
+
+## Active limitation
+
+Amp removed the `--inspect` option, leaving no local code path that emits the assembled system prompt. Network capture also cannot recover it: the client sends environment snapshots and local tool registrations to a server-side thread actor, while the actor assembles the prompt and calls the model without returning that request to the client.
+
+Do not regenerate `prompts/` from inferred server state. Revisit prompt capture only if Amp restores a local inspection API or exposes the model-facing request in its protocol.

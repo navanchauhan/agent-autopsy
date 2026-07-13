@@ -3,7 +3,9 @@
 const fs = require("fs");
 const path = require("path");
 
-const DEFAULT_OUT_DIR = path.resolve(process.cwd(), "ampcode");
+const DEFAULT_OUT_DIR = process.env.CAPTURE_SCRATCH_DIR
+  ? path.resolve(process.env.CAPTURE_SCRATCH_DIR, "ampcode", "candidate")
+  : path.resolve(process.cwd(), "ampcode");
 
 function usage() {
   console.error("Usage: node ampcode/misc/scripts/extract-amp-inspect.cjs <inspect-json-dir> [out-dir]");
@@ -184,26 +186,19 @@ function updateVersion(outDir, records) {
   fs.writeFileSync(versionPath, `${[...filtered, ...promptLines].join("\n")}\n`);
 }
 
-function writeReadme(outDir) {
-  fs.writeFileSync(
-    path.join(outDir, "README.md"),
-    `# Amp Code\n\nAmp is Sourcegraph's coding agent. These artifacts were extracted from the installed \`amp\` binary and live CLI behavior.\n\n- \`prompts/\` contains exact \`tools list --inspect --json\` system prompts grouped by Amp agent mode. Run-specific scalar values are marked with \`<harnessVariable>{{name=example}}</harnessVariable>\`; repeated runtime sections use \`{{#each collectionName}}...{{/each}}\` blocks inside \`<harnessVariable>...</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Amp tool. The nested \`schema\` is the exact \`amp tools show --json\` tool definition for the listed mode(s).\n- \`misc/\` contains support scripts and capture side artifacts.\n- \`VERSION\` records the Amp version, binary checksums, capture commands, prompt modes, and tool counts.\n\nNotes:\n- Amp's normal interactive tmux path uses a server actor and does not expose the final model request locally. The checked-in prompt files come from Amp's own local inspect implementation, using a throwaway patched copy of the installed binary to bypass the inspect permission gate. The patched binary is not stored.\n- The interactive tmux capture verified smart mode returned \`AMP_INTERACTIVE_TRACE_OK\`, advertised 37 executor tools to the actor, and reported 16 inference tools for smart mode.\n`,
-  );
-}
-
 function main() {
   const inspectDir = process.argv[2] ? path.resolve(process.argv[2]) : "";
   if (!inspectDir) usage();
 
   const outDir = process.argv[3] ? path.resolve(process.argv[3]) : DEFAULT_OUT_DIR;
-  const promptsDir = path.join(outDir, "prompts");
-  fs.mkdirSync(promptsDir, { recursive: true });
-  removeGeneratedFiles(promptsDir, ".md");
-
   const records = readInspectRecords(inspectDir);
   if (records.length === 0) {
     throw new Error(`No Amp inspect JSON records found in ${inspectDir}`);
   }
+
+  const promptsDir = path.join(outDir, "prompts");
+  fs.mkdirSync(promptsDir, { recursive: true });
+  removeGeneratedFiles(promptsDir, ".md");
 
   for (const record of records) {
     fs.writeFileSync(
@@ -212,7 +207,6 @@ function main() {
     );
   }
 
-  writeReadme(outDir);
   updateVersion(outDir, records);
 }
 

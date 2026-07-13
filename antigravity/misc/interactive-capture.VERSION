@@ -1,26 +1,12 @@
 source = antigravity.google/cli
-distribution = native Go binary
 version = 1.1.1
+capture_mode = interactive
 platform = darwin-arm64
 binary_path = /Users/example/.local/bin/agy
 sha256 = f3b54437e56d81bb5c47715ed9bfb9a924c584f37524e87790e562399e23d7e0
-sha512 = 75d11321e807d65261d9af03130b1d8a5d6b79f8af0264a711fb95f0b4a293011c6512006da327ddb4defffbe4834bef1a95b55f69ad54e12e976c8750f14d02
-installer_url = https://antigravity.google/cli/install.sh
-manifest_url = https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/darwin_arm64.json
-manifest_version = 1.1.1
-manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.1-6269367663591424/darwin-arm/cli_mac_arm64.tar.gz
-manifest_tarball_sha512 = 2993c4b43d2703cf796848e1a02b71e2e0588387d8dc2424435207eedbbc2097251ca0ba321b99d364358f7e6e98df1ac1757c1f5edaca8d53abaa26123e7f49
 generated_at = 2026-07-10T14:51:58.947Z
-auth_source = local Antigravity Google OAuth/keyring
-trace_script = antigravity/misc/scripts/extract-antigravity-log.cjs
-trace_source = local CODEIUM_VMODULE verbose agy.log (not stored)
-capture_mode = interactive
-capture = tmux new-session with `CODEIUM_VMODULE='*=5' agy --add-dir "$PWD" --dangerously-skip-permissions --log-file <trace>/agy.log`, then send `Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK`
+capture_script = antigravity/misc/scripts/extract-antigravity-log.cjs
 endpoint = https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse
-selected_model_label = Gemini 3.5 Flash (High)
-response_model_versions = gemini-3-flash-a, gemini-3.1-flash-lite
 prompt_models = gemini-3-flash-agent
 prompts = 1
 tools = 20
-tool_names = ask_permission, ask_question, command_status, define_subagent, generate_image, grep_search, invoke_subagent, list_dir, list_permissions, manage_subagents, manage_task, multi_replace_file_content, read_url_content, replace_file_content, run_command, schedule, search_web, send_message, view_file, write_to_file
-tool_notes = Antigravity sends Gemini function declarations inside request.tools[]; each tool file stores the exact request.tools[] wrapper observed for that function in the agent request. This is a routine refresh of the interactive tmux capture flow against 1.1.1 (previous successful interactive capture was against 1.0.16, committed in 7dbf059; a 1.1.0 interactive capture was also taken locally but never committed). Tool schemas from this interactive run are byte-identical in content to the non-interactive 1.1.1 run in ../VERSION (only trace_lines differ, as expected since interactive/non-interactive traces land on different log line numbers) -- no interactive-only tool variants were observed this round. The interactive prompt capture (prompts/gemini-3-flash-agent-interactive.md) shows the same "Google DeepMind" -> "Google Deepmind" recasing noted in ../VERSION, and is otherwise unchanged from the prior interactive capture.

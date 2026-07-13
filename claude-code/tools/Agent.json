@@ -1,6 +1,5 @@
 {
   "name": "Agent",
-  "note": "This tool had different exact payloads across traced model requests. Each schema entry below is an exact Claude /v1/messages tools[] object sent to the listed model(s) in non-interactive capture mode.",
   "variants": [
     {
       "models": [
@@ -14,10 +13,6 @@
       "request_kind": "agent",
       "capture_modes": [
         "non-interactive"
-      ],
-      "trace_files": [
-        "2026-07-12T19-32-05-322Z-3f758545-37e0-4815-8e1e-71f7d673a523.json",
-        "2026-07-12T19-32-14-637Z-5cea3d11-e154-4c1b-aba1-30e3b6359c01.json"
       ],
       "schema": {
         "name": "Agent",
@@ -86,12 +81,6 @@
       "request_kind": "agent",
       "capture_modes": [
         "non-interactive"
-      ],
-      "trace_files": [
-        "2026-07-12T19-32-10-230Z-dcc600c6-14fb-46a7-af0b-30aefb4f1c49.json",
-        "2026-07-12T19-32-12-768Z-e21d77f7-25fc-4d8e-9c48-149cc3be1f25.json",
-        "2026-07-12T19-32-17-267Z-2751dbba-8e1c-46e4-bc58-da1753eda403.json",
-        "2026-07-12T19-32-19-163Z-39f56297-a975-4365-8b5a-767d5f68a048.json"
       ],
       "schema": {
         "name": "Agent",

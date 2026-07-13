@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
-# Runs each tool's own self-update, reads its true-latest version, and compares
-# against what's recorded in <tool>/VERSION. Writes a JSON summary of what changed
-# to $CHANGED_TOOLS_FILE (default: .capture-scratch/changed-tools.json) so the
-# codex-cli orchestration step knows which tools actually need a refresh.
-#
-# This never touches repo content itself — it only decides what needs work.
+# Compares freshly installed CLI/source versions with <tool>/VERSION and writes
+# the changed-tool list used by the refresh job.
 
 set -euo pipefail
 
@@ -21,17 +17,12 @@ current_version_field() {
 entries=()
 
 check_tool() {
-  local name="$1" dir="$2" field="$3" update_cmd="$4" version_cmd="$5" version_regex="$6"
+  local name="$1" dir="$2" field="$3" version_cmd="$4" version_regex="$5"
 
   local recorded_version
   recorded_version="$(current_version_field "$repo_root/$dir/VERSION" "$field" || true)"
 
   echo "== $name ==" >&2
-  if ! eval "$update_cmd" >&2; then
-    echo "::warning::$name update command failed; skipping version check for $name" >&2
-    return
-  fi
-
   local raw_version installed_version
   raw_version="$(eval "$version_cmd" 2>&1 || true)"
   installed_version="$(echo "$raw_version" | grep -oE "$version_regex" | head -n1 || true)"
@@ -76,15 +67,15 @@ check_codex_source() {
 }
 
 check_tool "claude-code" "claude-code" "version" \
-  "claude update" "claude --version" '[0-9]+\.[0-9]+\.[0-9]+'
+  "claude --version" '[0-9]+\.[0-9]+\.[0-9]+'
 
 check_codex_source
 
 check_tool "antigravity" "antigravity" "version" \
-  "agy update" "agy --version" '[0-9]+\.[0-9]+\.[0-9]+'
+  "agy --version" '[0-9]+\.[0-9]+\.[0-9]+'
 
 check_tool "grok" "grok" "version" \
-  "grok update" "grok --version" '[0-9]+\.[0-9]+\.[0-9]+'
+  "grok --version" '[0-9]+\.[0-9]+\.[0-9]+'
 
 {
   printf '['
@@ -104,5 +95,6 @@ if [ "${GITHUB_OUTPUT:-}" != "" ]; then
   else
     echo "has_changes=true" >> "$GITHUB_OUTPUT"
   fi
+  echo "changed_tools=$(tr -d '\n' < "$changed_file")" >> "$GITHUB_OUTPUT"
   echo "changed_tools_file=$changed_file" >> "$GITHUB_OUTPUT"
 fi

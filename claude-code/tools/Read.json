@@ -1,6 +1,5 @@
 {
   "name": "Read",
-  "note": "This tool had different exact payloads across traced model requests and capture modes. Each schema entry below is an exact Claude /v1/messages tools[] object sent to the listed model(s)/capture mode(s).",
   "variants": [
     {
       "models": [
@@ -55,24 +54,6 @@
       "capture_modes": [
         "non-interactive",
         "interactive"
-      ],
-      "trace_files": [
-        "2026-05-28T01-13-42-521Z-a9cf939a-dafb-44c2-8c9d-d7f28a9d40b9.json",
-        "2026-07-05T14-39-29-014Z-c1b4e30d-96ad-400d-87dd-727910d9e423.json",
-        "2026-07-08T20-50-13-856Z-d014ea67-77fd-4599-a328-99416bd1a082.json",
-        "2026-07-08T20-50-23-915Z-a47be05c-9d9a-4035-b865-c0c813426b2a.json",
-        "2026-07-08T20-50-40-388Z-d9384aba-79ee-46ce-acec-b9e0ecb23bb4.json",
-        "2026-07-08T20-50-49-265Z-7eb8f9a3-a706-4bb7-aadb-aa08a2f27576.json",
-        "2026-07-08T20-51-43-202Z-8f35f71f-ebd5-4fdf-985e-678b691bd54e.json",
-        "2026-07-08T20-51-54-916Z-9c546d63-bcf4-445e-a4a7-09f83cdf13d5.json",
-        "2026-07-08T20-52-01-627Z-b222c82f-b44a-425d-a7c0-7ba3a3ab9993.json",
-        "2026-07-08T20-52-04-196Z-8685908a-cd03-4e84-82c0-98b77eafe2a8.json",
-        "2026-07-08T20-55-26-395Z-7d05ed23-64da-4df6-978a-33ca3e11a149.json",
-        "2026-07-10T14-50-23-403Z-dedd6532-0cf9-4a0f-96b0-5f6c8dc8a792.json",
-        "2026-07-10T14-50-37-778Z-1589af7a-75fb-4252-b077-d85aa5e0c83d.json",
-        "2026-07-10T14-50-40-466Z-0976add6-2eb2-4570-92d6-3e25c1361b3d.json",
-        "2026-07-10T14-50-49-011Z-780b03e3-6717-4286-8f2f-3691a5e7bbc1.json",
-        "2026-07-10T14-57-53-479Z-dfbb76b6-80e6-4325-8af5-f3129170729e.json"
       ]
     },
     {
@@ -124,13 +105,6 @@
       "capture_modes": [
         "non-interactive",
         "interactive"
-      ],
-      "trace_files": [
-        "2026-06-09T22-07-03-596Z-4576ff3d-2fee-426f-99aa-64b3894b8471.json",
-        "2026-07-08T20-50-01-290Z-401a28d7-4712-422d-90fa-937b63ff6192.json",
-        "2026-07-08T20-50-31-841Z-76acb294-8b5f-4f14-88fb-0a6731409b24.json",
-        "2026-07-10T14-50-30-665Z-4c39b28b-d0da-4848-9d29-382965431845.json",
-        "2026-07-10T14-50-42-963Z-2093b700-0574-4cc8-80e2-55f7215f1777.json"
       ]
     }
   ]

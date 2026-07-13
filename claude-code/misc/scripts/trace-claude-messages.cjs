@@ -5,7 +5,9 @@ const { randomUUID } = require("crypto");
 
 const outDir =
   process.env.CLAUDE_TRACE_DIR ||
-  path.join(process.cwd(), "artifacts", "trace", "messages");
+  (process.env.CAPTURE_SCRATCH_DIR
+    ? path.join(process.env.CAPTURE_SCRATCH_DIR, "claude-code", "raw", "messages")
+    : path.join(process.cwd(), "artifacts", "trace", "messages"));
 fs.mkdirSync(outDir, { recursive: true });
 
 const originalFetch = globalThis.fetch?.bind(globalThis);

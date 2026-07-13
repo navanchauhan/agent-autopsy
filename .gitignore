@@ -10,6 +10,9 @@ oauth_creds.json
 # Scratch space used by the daily-refresh pipeline and local capture runs.
 .capture-scratch/
 *.capture.jsonl
+artifacts/trace/
+grok-capture.jsonl
+capture.jsonl
 
 # Codex's own upstream source clone (see codex/README.md and
 # sync-codex-reference.sh) — a full foreign git history, deliberately never

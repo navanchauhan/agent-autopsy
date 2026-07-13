@@ -1,6 +1,5 @@
 {
   "name": "Artifact",
-  "note": "This tool was observed in an interactive Claude /v1/messages request. Each schema entry below is an exact tools[] object.",
   "variants": [
     {
       "models": [
@@ -12,9 +11,6 @@
       "request_kind": "agent",
       "capture_modes": [
         "interactive"
-      ],
-      "trace_files": [
-        "2026-07-10T14-57-53-479Z-dfbb76b6-80e6-4325-8af5-f3129170729e.json"
       ],
       "schema": {
         "name": "Artifact",

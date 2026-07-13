@@ -13,26 +13,21 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Cheap pre-check: installs claude-code/antigravity/grok directly on the bare
-  # runner (no Docker build, no secrets) and asks each one's own `update`
-  # command whether it's current; codex is checked separately via
-  # `git ls-remote` against its upstream source (see check-versions.sh — codex
-  # has no live capture, so its own CLI version isn't the relevant signal).
-  # Only if at least one tool actually moved does the expensive `refresh` job
-  # (Docker build + full capture pipeline) get to run at all.
+  # Install current CLIs on the bare runner and avoid the container refresh when
+  # every recorded version is already current.
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     outputs:
       has_changes: ${{ steps.check.outputs.has_changes }}
+      changed_tools: ${{ steps.check.outputs.changed_tools }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
 
       - name: Install CLIs
-        # Codex is intentionally not installed here: it's captured from OpenAI's
-        # own open-source tree (see codex/README.md), not from the installed
-        # CLI's behavior, so check-versions.sh checks its source revision via
-        # `git ls-remote` instead of an installed binary's version string.
+        # Codex is source-extracted, so its upstream revision is checked without
+        # installing its CLI in this job.
         run: |
           curl -fsSL https://claude.ai/install.sh | bash
           curl -fsSL https://antigravity.google/cli/install.sh | bash
@@ -48,6 +43,7 @@ jobs:
     needs: check
     if: needs.check.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -56,6 +52,15 @@ jobs:
 
       - name: Build refresh image
         run: docker build -t agent-autopsy-refresh .
+
+      - name: Restore changed-tool state
+        env:
+          CHANGED_TOOLS_JSON: ${{ needs.check.outputs.changed_tools }}
+        run: |
+          mkdir -p .capture-scratch
+          printf '%s\n' "$CHANGED_TOOLS_JSON" \
+            | jq -e -c 'if type == "array" then . else error("changed-tools output is not an array") end' \
+            > .capture-scratch/changed-tools.json
 
       - name: Run daily refresh pipeline
         env:
@@ -66,6 +71,10 @@ jobs:
           REPO_SECRETS_PAT: ${{ secrets.REPO_SECRETS_PAT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          CODEX_REFRESH_MODEL: gpt-5.6-sol
+          CODEX_REFRESH_REASONING_EFFORT: ultra
+          CODEX_REVIEW_MODEL: gpt-5.6-sol
+          CODEX_REVIEW_REASONING_EFFORT: xhigh
         run: |
           docker run --rm \
             -v "$PWD":/workspace \
@@ -77,12 +86,15 @@ jobs:
             -e REPO_SECRETS_PAT \
             -e GITHUB_TOKEN \
             -e GITHUB_REPOSITORY \
+            -e CODEX_REFRESH_MODEL \
+            -e CODEX_REFRESH_REASONING_EFFORT \
+            -e CODEX_REVIEW_MODEL \
+            -e CODEX_REVIEW_REASONING_EFFORT \
             agent-autopsy-refresh \
             bash -euo pipefail -c '
               git config --global --add safe.directory /workspace
               gh auth setup-git
               bash .github/scripts/seed-credentials.sh
-              bash .github/scripts/check-versions.sh
               bash .github/scripts/sync-codex-reference.sh
               bash .github/scripts/run-codex-refresh.sh
               bash .github/scripts/commit-and-release.sh

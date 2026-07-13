@@ -6,7 +6,9 @@ const { randomUUID } = require("crypto");
 const outDir =
   process.env.AMP_TRACE_DIR ||
   process.env.TRACE_DIR ||
-  path.join(process.cwd(), "artifacts", "trace", "amp");
+  (process.env.CAPTURE_SCRATCH_DIR
+    ? path.join(process.env.CAPTURE_SCRATCH_DIR, "ampcode", "raw")
+    : path.join(process.cwd(), "artifacts", "trace", "amp"));
 fs.mkdirSync(outDir, { recursive: true });
 
 let sequence = 0;

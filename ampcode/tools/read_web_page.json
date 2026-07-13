@@ -1,6 +1,5 @@
 {
   "name": "read_web_page",
-  "note": "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
   "modes": [
     "deep",
     "large",

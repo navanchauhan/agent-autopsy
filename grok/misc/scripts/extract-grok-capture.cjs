@@ -1,32 +1,6 @@
 #!/usr/bin/env node
 
-// Turns a redacted JSONL capture produced by mitm-capture-grok.py (one JSON
-// object per captured cli-chat-proxy.grok.com/grok.com HTTP request/response)
-// into this repo's prompts/ + tools/ + misc/ file layout.
-//
-// Usage:
-//   node grok/misc/scripts/extract-grok-capture.cjs <capture.jsonl> [out-dir=grok]
-//
-// The capture file is expected to contain lines like:
-//   {"method":"POST","url":"https://cli-chat-proxy.grok.com/v1/responses",
-//    "request_headers": {...,"authorization":"***"}, "request_body": "<json string>",
-//    "response_status":200, "response_headers": {...}, "response_body": "<sse text>"}
-//
-// Each POST /v1/responses request_body is xAI's Responses-API-shaped payload:
-//   { model, input: [{type:"message", role, content}, ...], tools: [...], ... }
-// This script groups those payloads by "run kind" (model + interactive vs
-// non-interactive vs session-title, detected from the system message text),
-// then for each run kind:
-//   - writes the `system` role message to prompts/<run-kind>.md
-//   - writes the remaining (non-system) input messages, templated with
-//     <harnessVariable>{{name=example}}</harnessVariable> placeholders, to
-//     misc/<run-kind>-steering.md (skipped for run kinds with no extra
-//     messages, e.g. session-title)
-//   - merges every observed tools[] entry (across all run kinds) into
-//     tools/<name>.json, using a name derived from `name` (function tools) or
-//     `type` (built-in tools like web_search/x_search); tools whose schema
-//     differs across run kinds get a `variants[]` array instead of a single
-//     `schema`.
+// Extracts prompts, steering, and exact tool variants from a redacted Grok capture.
 
 const fs = require("fs");
 const path = require("path");
@@ -39,7 +13,10 @@ function usage() {
 }
 
 const captureFile = process.argv[2];
-const outDir = path.resolve(process.argv[3] || "grok");
+const defaultOutDir = process.env.CAPTURE_SCRATCH_DIR
+  ? path.resolve(process.env.CAPTURE_SCRATCH_DIR, "grok", "candidate")
+  : "grok";
+const outDir = path.resolve(process.argv[3] || defaultOutDir);
 if (!captureFile) usage();
 
 const HOME = process.env.HOME || "";
@@ -55,6 +32,13 @@ function readJsonl(filePath) {
 
 function sameJson(a, b) {
   return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function removeMatchingFiles(dir, predicate) {
+  if (!fs.existsSync(dir)) return;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isFile() && predicate(entry.name)) fs.rmSync(path.join(dir, entry.name));
+  }
 }
 
 // --- Templating helpers -----------------------------------------------
@@ -141,6 +125,9 @@ const records = readJsonl(captureFile);
 const responsesRecords = records.filter(
   (r) => typeof r.url === "string" && r.url.endsWith("/v1/responses") && r.request_body,
 );
+if (responsesRecords.length === 0) {
+  throw new Error(`No captured /v1/responses request bodies found in ${captureFile}`);
+}
 
 function classify(body) {
   const model = body.model;
@@ -174,9 +161,11 @@ for (const record of responsesRecords) {
   const runKind = classify(body);
   if (!byRunKind.has(runKind)) byRunKind.set(runKind, []);
   const list = byRunKind.get(runKind);
-  // Dedupe by ignoring the final user_query content (which is run-specific).
   const cwdMatch = JSON.stringify(body.input).match(/Workspace Path: (.*?)\\n/);
   list.push({ body, cwd: cwdMatch ? cwdMatch[1] : null });
+}
+if (byRunKind.size === 0) {
+  throw new Error(`No valid /v1/responses request bodies found in ${captureFile}`);
 }
 
 console.log("Run kinds found:", [...byRunKind.keys()].map((k) => `${k} (${byRunKind.get(k).length})`).join(", "));
@@ -185,6 +174,8 @@ console.log("Run kinds found:", [...byRunKind.keys()].map((k) => `${k} (${byRunK
 
 fs.mkdirSync(path.join(outDir, "prompts"), { recursive: true });
 fs.mkdirSync(path.join(outDir, "misc"), { recursive: true });
+removeMatchingFiles(path.join(outDir, "prompts"), (name) => name.endsWith(".md"));
+removeMatchingFiles(path.join(outDir, "misc"), (name) => name.endsWith("-steering.md"));
 
 function extractRunInfo(body) {
   const infoStr = JSON.stringify(body.input);
@@ -233,21 +224,23 @@ for (const [runKind, entries] of byRunKind) {
 // --- Write tools/ ---------------------------------------------------------
 
 fs.mkdirSync(path.join(outDir, "tools"), { recursive: true });
+removeMatchingFiles(path.join(outDir, "tools"), (name) => name.endsWith(".json"));
 
 // name -> [{ runKinds: Set, schema }]
 const toolVariants = new Map();
 for (const [runKind, entries] of byRunKind) {
-  const { body } = entries[entries.length - 1];
-  for (const tool of body.tools || []) {
-    const name = tool.name || tool.type;
-    if (!name) continue;
-    if (!toolVariants.has(name)) toolVariants.set(name, []);
-    const variants = toolVariants.get(name);
-    const existing = variants.find((v) => sameJson(v.schema, tool));
-    if (existing) {
-      existing.runKinds.add(runKind);
-    } else {
-      variants.push({ runKinds: new Set([runKind]), schema: tool });
+  for (const { body } of entries) {
+    for (const tool of body.tools || []) {
+      const name = tool.name || tool.type;
+      if (!name) continue;
+      if (!toolVariants.has(name)) toolVariants.set(name, []);
+      const variants = toolVariants.get(name);
+      const existing = variants.find((v) => sameJson(v.schema, tool));
+      if (existing) {
+        existing.runKinds.add(runKind);
+      } else {
+        variants.push({ runKinds: new Set([runKind]), schema: tool });
+      }
     }
   }
 }
@@ -282,8 +275,6 @@ for (const [name, variants] of toolVariants) {
       `${JSON.stringify(
         {
           name,
-          note:
-            "This tool had a different exact payload depending on which grok run kind (model/mode) sent it. Each schema entry below is the exact request.tools[] object observed for the listed run kind(s).",
           variants: variants.map((v) => ({
             run_kinds: [...v.runKinds].sort(),
             schema: v.schema,

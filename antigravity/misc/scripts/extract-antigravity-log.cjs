@@ -6,7 +6,9 @@ const fs = require("fs");
 const path = require("path");
 
 const MARKER = "Cortex API Request: ";
-const DEFAULT_OUT_DIR = path.resolve(process.cwd(), "antigravity");
+const DEFAULT_OUT_DIR = process.env.CAPTURE_SCRATCH_DIR
+  ? path.resolve(process.env.CAPTURE_SCRATCH_DIR, "antigravity", "candidate")
+  : path.resolve(process.cwd(), "antigravity");
 const PRINT_TRACE_COMMAND =
   "CODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file <trace>/agy.log";
 const INTERACTIVE_TRACE_COMMAND =
@@ -264,14 +266,12 @@ function groupTools(records) {
         variants.set(signature, {
           models: new Set(),
           request_kinds: new Set(),
-          trace_lines: new Set(),
           schema: tool,
         });
       }
       const variant = variants.get(signature);
       variant.models.add(model);
       variant.request_kinds.add(requestKind);
-      variant.trace_lines.add(record.line);
     }
   }
 
@@ -283,15 +283,12 @@ function mergeInteractiveTool(toolPath, name, interactiveVariants) {
     capture_modes: ["interactive"],
     models: variant.models,
     request_kinds: variant.request_kinds,
-    trace_lines: variant.trace_lines,
     schema: variant.schema,
   }));
 
   if (!fs.existsSync(toolPath)) {
     writeJson(toolPath, {
       name,
-      note:
-        "This function declaration was observed in an interactive Antigravity agent request. Each variant schema is the exact request.tools[] wrapper.",
       variants: incoming,
     });
     return;
@@ -305,7 +302,6 @@ function mergeInteractiveTool(toolPath, name, interactiveVariants) {
         mergeList(match, "capture_modes", next.capture_modes);
         mergeList(match, "models", next.models);
         mergeList(match, "request_kinds", next.request_kinds);
-        mergeList(match, "trace_lines", next.trace_lines);
       } else {
         existing.variants.push(next);
       }
@@ -315,26 +311,21 @@ function mergeInteractiveTool(toolPath, name, interactiveVariants) {
   }
 
   if (existing.schema && incoming.length === 1 && sameJson(existing.schema, incoming[0].schema)) {
-    existing.note =
-      "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request. The same schema was observed in each listed capture mode.";
+    delete existing.note;
     mergeList(existing, "capture_modes", ["non-interactive", "interactive"]);
     mergeList(existing, "models", incoming[0].models);
     mergeList(existing, "request_kinds", incoming[0].request_kinds);
-    mergeList(existing, "trace_lines", incoming[0].trace_lines);
     writeJson(toolPath, existing);
     return;
   }
 
   writeJson(toolPath, {
     name: existing.name || name,
-    note:
-      "This function declaration had different exact request.tools[] payloads across capture modes. Each variant schema is the exact wrapper sent for that capture mode.",
     variants: [
       {
         capture_modes: ["non-interactive"],
         models: existing.models || [],
         request_kinds: existing.request_kinds || [],
-        trace_lines: existing.trace_lines || [],
         schema: existing.schema || existing,
       },
       ...incoming,
@@ -349,6 +340,12 @@ function main() {
   const logText = fs.readFileSync(logPath, "utf8");
   const captureMode = process.env.AGY_CAPTURE_MODE === "interactive" ? "interactive" : "non-interactive";
   const outDir = process.argv[3] ? path.resolve(process.argv[3]) : DEFAULT_OUT_DIR;
+  const requests = readJsonRequests(logPath);
+  const agentRecords = requests.filter((record) => record.payload.requestType === "agent");
+  if (agentRecords.length === 0) {
+    throw new Error(`No agent Cortex API requests found in ${logPath}`);
+  }
+
   const promptsDir = path.join(outDir, "prompts");
   const toolsDir = path.join(outDir, "tools");
   const miscDir = path.join(outDir, "misc");
@@ -360,12 +357,6 @@ function main() {
   } else {
     removeGeneratedFiles(promptsDir, ".md");
     removeGeneratedFiles(toolsDir, ".json");
-  }
-
-  const requests = readJsonRequests(logPath);
-  const agentRecords = requests.filter((record) => record.payload.requestType === "agent");
-  if (agentRecords.length === 0) {
-    throw new Error(`No agent Cortex API requests found in ${logPath}`);
   }
 
   const byModel = new Map();
@@ -392,7 +383,6 @@ function main() {
     const variants = [...variantsMap.values()].map((variant) => ({
       models: [...variant.models].sort(),
       request_kinds: [...variant.request_kinds].sort(),
-      trace_lines: [...variant.trace_lines].sort((a, b) => a - b),
       schema: variant.schema,
     }));
 
@@ -400,17 +390,12 @@ function main() {
       variants.length === 1
         ? {
             name,
-            note:
-              "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request.",
             models: variants[0].models,
             request_kinds: variants[0].request_kinds,
-            trace_lines: variants[0].trace_lines,
             schema: variants[0].schema,
           }
         : {
             name,
-            note:
-              "This tool had different exact request.tools[] payloads across traced Antigravity agent requests. Each variant schema is exact.",
             variants,
           };
 
@@ -427,15 +412,18 @@ function main() {
   const generatedAt = new Date().toISOString();
   const toolNames = [...toolGroups.keys()].sort();
   const modelNames = [...byModel.keys()].sort();
+  const platform = `${process.platform}-${process.arch}`;
+  const manifestPlatform =
+    platform === "darwin-arm64"
+      ? "darwin_arm64"
+      : platform === "linux-x64"
+        ? "linux_x86_64"
+        : null;
   const manifestUrl =
-    "https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/darwin_arm64.json";
-  const manifest =
-    fetchJsonOrNull(manifestUrl) || {
-      version: "1.0.2",
-      url: "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.2-6109799369277440/darwin-arm/cli_mac_arm64.tar.gz",
-      sha512:
-        "9e177599230ed22605879b8e96f4ba9b8d8bab98586fedae14dae4536bf75529c7e0c7a6dee4134c913927c8b02fbb212e6fc81bcf982d06d6850663eb3fbfe0",
-    };
+    manifestPlatform === null
+      ? "unknown"
+      : `https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/${manifestPlatform}.json`;
+  const manifest = manifestUrl === "unknown" ? null : fetchJsonOrNull(manifestUrl);
   const selectedModelLabel =
     logText.match(/display_name:"([^"]+)"/)?.[1] ||
     logText.match(/label="([^"]+)"/)?.[1] ||
@@ -452,15 +440,15 @@ function main() {
     "source = antigravity.google/cli",
     "distribution = native Go binary",
     `version = ${version}`,
-    "platform = darwin-arm64",
+    `platform = ${platform}`,
     `binary_path = ${displayPath(agyPath)}`,
     `sha256 = ${sha256File(agyPath)}`,
     `sha512 = ${sha512File(agyPath)}`,
     `installer_url = https://antigravity.google/cli/install.sh`,
     `manifest_url = ${manifestUrl}`,
-    `manifest_version = ${manifest.version || "unknown"}`,
-    `manifest_tarball_url = ${manifest.url || "unknown"}`,
-    `manifest_tarball_sha512 = ${manifest.sha512 || "unknown"}`,
+    `manifest_version = ${manifest?.version || "unknown"}`,
+    `manifest_tarball_url = ${manifest?.url || "unknown"}`,
+    `manifest_tarball_sha512 = ${manifest?.sha512 || "unknown"}`,
     `generated_at = ${generatedAt}`,
     "auth_source = local Antigravity Google OAuth/keyring",
     "trace_script = antigravity/misc/scripts/extract-antigravity-log.cjs",
@@ -473,19 +461,12 @@ function main() {
     `prompt_models = ${modelNames.join(", ")}`,
     `prompts = ${modelNames.length}`,
     `tools = ${toolNames.length}`,
-    `tool_names = ${toolNames.join(", ")}`,
-    "tool_notes = Antigravity sends Gemini function declarations inside request.tools[]; each tool file stores the exact request.tools[] wrapper observed for that function in the agent request.",
     "",
   ];
   if (captureMode === "interactive") {
     fs.writeFileSync(path.join(miscDir, "interactive-capture.VERSION"), versionLines.join("\n"));
   } else {
     fs.writeFileSync(path.join(outDir, "VERSION"), versionLines.join("\n"));
-
-    fs.writeFileSync(
-      path.join(outDir, "README.md"),
-      `# Antigravity CLI\n\nAntigravity CLI is Google's coding agent. These artifacts were extracted from the installed \`agy\` binary by enabling verbose \`CODEIUM_VMODULE='*=5'\` logging and parsing the real \`Cortex API Request\` payload sent to \`streamGenerateContent\`.\n\n- \`prompts/\` contains raw captured prompt text grouped by model. Run-specific scalar values are marked with \`<harnessVariable>{{name=example}}</harnessVariable>\`; repeated runtime sections use \`{{#each collectionName}}...{{/each}}\` blocks inside \`<harnessVariable>...</harnessVariable>\`.\n- \`tools/\` contains one JSON file per observed Gemini function declaration. The nested \`schema\` is the exact \`request.tools[]\` wrapper sent for that function. Files may contain \`variants[]\` when capture modes differ.\n- \`misc/\` contains support scripts and capture side artifacts.\n- \`VERSION\` records the Antigravity CLI version, install manifest, binary checksums, capture command, and model/tool counts.\n\nRun a fresh non-interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-trace.XXXXXX)\nCODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file \"$trace_dir/agy.log\"\nnode antigravity/misc/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n\nRun a fresh interactive capture with:\n\n\`\`\`sh\ntrace_dir=$(mktemp -d /tmp/agy-interactive.XXXXXX)\ntmux new-session -d -s agy-trace \"cd $PWD && CODEIUM_VMODULE='*=5' agy --add-dir \\\"$PWD\\\" --dangerously-skip-permissions --log-file \\\"$trace_dir/agy.log\\\"\"\ntmux send-keys -t agy-trace 'Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK' Enter\nAGY_CAPTURE_MODE=interactive node antigravity/misc/scripts/extract-antigravity-log.cjs \"$trace_dir/agy.log\"\n\`\`\`\n`,
-    );
   }
 
   console.log(

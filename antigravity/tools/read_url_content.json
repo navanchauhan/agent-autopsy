@@ -1,15 +1,10 @@
 {
   "name": "read_url_content",
-  "note": "The schema field is the exact request.tools[] entry sent for this function declaration in the traced Antigravity agent request. The same schema was observed in each listed capture mode.",
   "models": [
     "gemini-3-flash-agent"
   ],
   "request_kinds": [
     "agent"
-  ],
-  "trace_lines": [
-    17357,
-    22582
   ],
   "schema": {
     "functionDeclarations": [

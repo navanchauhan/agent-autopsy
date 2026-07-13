@@ -32,6 +32,7 @@ rotate_tar() {
   local secret_name="$1"; shift
   local files=("$@")
   local existing=()
+  local basenames=()
   for f in "${files[@]}"; do
     [ -f "$f" ] && existing+=("$f")
   done
@@ -43,7 +44,10 @@ rotate_tar() {
     echo "::warning::REPO_SECRETS_PAT is not set. $secret_name may have refreshed during this run but cannot be persisted — manually update it before the next scheduled run, or it may go stale/expire."
     return
   fi
-  tar -cf - -C "$(dirname "${existing[0]}")" $(for f in "${existing[@]}"; do basename "$f"; done) \
+  for f in "${existing[@]}"; do
+    basenames+=("$(basename "$f")")
+  done
+  tar -cf - -C "$(dirname "${existing[0]}")" "${basenames[@]}" \
     | base64 | GH_TOKEN="$REPO_SECRETS_PAT" gh secret set "$secret_name" --repo "$repo"
   echo "Rotated $secret_name from (${existing[*]})"
 }

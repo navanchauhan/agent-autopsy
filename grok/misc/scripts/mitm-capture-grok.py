@@ -30,6 +30,7 @@ Secrets handling:
 """
 
 import json
+import os
 
 from mitmproxy import ctx, http
 
@@ -49,13 +50,18 @@ class GrokCapture:
         loader.add_option(
             name="grok_capture_out",
             typespec=str,
-            default="grok-capture.jsonl",
+            default=os.path.join(
+                os.environ.get("CAPTURE_SCRATCH_DIR", "."),
+                "grok",
+                "raw",
+                "capture.jsonl",
+            ),
             help="Path to append redacted request/response JSON lines to.",
         )
 
     def response(self, flow: http.HTTPFlow) -> None:
         host = flow.request.pretty_host
-        if host not in CAPTURE_HOSTS:
+        if host not in CAPTURE_HOSTS or not flow.request.path.startswith("/v1/responses"):
             return
 
         record = {
@@ -64,11 +70,12 @@ class GrokCapture:
             "request_headers": redact_headers(flow.request.headers),
             "request_body": flow.request.get_text(strict=False) if flow.request.raw_content else None,
             "response_status": flow.response.status_code if flow.response else None,
-            "response_headers": dict(flow.response.headers) if flow.response else None,
+            "response_headers": redact_headers(flow.response.headers) if flow.response else None,
             "response_body": flow.response.get_text(strict=False) if flow.response and flow.response.raw_content else None,
         }
 
         out_path = ctx.options.grok_capture_out
+        os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
         with open(out_path, "a") as f:
             f.write(json.dumps(record) + "\n")
         ctx.log.info(f"grok-capture: wrote {flow.request.method} {flow.request.pretty_url} -> {out_path}")

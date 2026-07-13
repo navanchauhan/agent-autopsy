@@ -5,7 +5,9 @@ const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 
-const DEFAULT_OUT_DIR = path.resolve(process.cwd(), "claude-code");
+const DEFAULT_OUT_DIR = process.env.CAPTURE_SCRATCH_DIR
+  ? path.resolve(process.env.CAPTURE_SCRATCH_DIR, "claude-code", "candidate")
+  : path.resolve(process.cwd(), "claude-code");
 
 function usage() {
   console.error(
@@ -79,15 +81,12 @@ function mergeInteractiveTool(toolPath, name, interactiveVariants) {
     runs: ["interactive"],
     request_kind: "agent",
     capture_modes: ["interactive"],
-    trace_files: variant.trace_files,
     schema: variant.schema,
   }));
 
   if (!fs.existsSync(toolPath)) {
     writeJson(toolPath, {
       name,
-      note:
-        "This tool was observed in an interactive Claude /v1/messages request. Each schema entry below is an exact tools[] object.",
       variants: incoming,
     });
     return;
@@ -95,8 +94,7 @@ function mergeInteractiveTool(toolPath, name, interactiveVariants) {
 
   const existing = JSON.parse(fs.readFileSync(toolPath, "utf8"));
   if (Array.isArray(existing.variants)) {
-    existing.note =
-      "This tool had different exact payloads across traced model requests and capture modes. Each schema entry below is an exact Claude /v1/messages tools[] object sent to the listed model(s)/capture mode(s).";
+    delete existing.note;
     for (const variant of existing.variants) {
       if (!variant.capture_modes) variant.capture_modes = ["non-interactive"];
     }
@@ -105,7 +103,6 @@ function mergeInteractiveTool(toolPath, name, interactiveVariants) {
       if (match) {
         mergeList(match, "capture_modes", next.capture_modes);
         mergeList(match, "models", next.models);
-        mergeList(match, "trace_files", next.trace_files);
         mergeList(match, "runs", next.runs);
       } else {
         existing.variants.push(next);
@@ -121,8 +118,6 @@ function mergeInteractiveTool(toolPath, name, interactiveVariants) {
 
   writeJson(toolPath, {
     name: existing.name || name,
-    note:
-      "This tool had different exact payloads across traced capture modes. Each schema entry below is an exact Claude /v1/messages tools[] object sent to the listed capture mode.",
     variants: [
       {
         runs: ["non-interactive"],
@@ -401,13 +396,11 @@ function groupTools(records) {
       if (!variants.has(signature)) {
         variants.set(signature, {
           models: new Set(),
-          trace_files: new Set(),
           schema: tool,
         });
       }
       const variant = variants.get(signature);
       variant.models.add(model);
-      variant.trace_files.add(record.file);
     }
   }
   return groups;
@@ -418,6 +411,11 @@ function main() {
   if (!traceDir) usage();
 
   const outDir = process.argv[3] ? path.resolve(process.argv[3]) : DEFAULT_OUT_DIR;
+  const records = readRecords(traceDir).filter((record) => systemText(record.body));
+  if (records.length === 0) {
+    throw new Error(`No Claude /v1/messages records with system prompts found in ${traceDir}`);
+  }
+
   const promptsDir = path.join(outDir, "prompts");
   const toolsDir = path.join(outDir, "tools");
   const miscDir = path.join(outDir, "misc");
@@ -426,11 +424,6 @@ function main() {
   fs.mkdirSync(miscDir, { recursive: true });
   removeMatchingFiles(promptsDir, (name) => name.endsWith("-interactive.md"));
   removeMatchingFiles(miscDir, (name) => name.endsWith("-interactive-steering.md"));
-
-  const records = readRecords(traceDir).filter((record) => systemText(record.body));
-  if (records.length === 0) {
-    throw new Error(`No Claude /v1/messages records with system prompts found in ${traceDir}`);
-  }
 
   const agentRecords = records.filter((record) => (record.body.tools || []).length > 0);
   const promptRecords = agentRecords.length > 0 ? agentRecords : records;
@@ -459,7 +452,6 @@ function main() {
   for (const [name, variantsMap] of [...toolGroups.entries()].sort()) {
     const variants = [...variantsMap.values()].map((variant) => ({
       models: [...variant.models].sort(),
-      trace_files: [...variant.trace_files].sort(),
       schema: variant.schema,
     }));
     mergeInteractiveTool(path.join(toolsDir, `${safeFileName(name)}.json`), name, variants);
@@ -490,15 +482,12 @@ function main() {
   const modelNames = [...byModel.keys()].sort();
   const toolNames = [...toolGroups.keys()].sort();
   const promptFiles = fs.readdirSync(promptsDir).filter((entry) => entry.endsWith(".md")).sort();
-  const miscFiles = fs.existsSync(miscDir)
-    ? fs.readdirSync(miscDir).filter((entry) => entry.endsWith(".md")).sort()
-    : [];
   const versionLines = [
     "source = anthropic-ai/claude-code",
     "distribution = native Bun binary",
     `version = ${capturedVersion}`,
     `installed_version_at_extract = ${installedVersion}`,
-    "platform = darwin-arm64",
+    `platform = ${process.platform}-${process.arch}`,
     `binary_path = ${displayPath(binaryPath)}`,
     `sha256 = ${sha256File(binaryPath)}`,
     `capture_user_agent = ${userAgents.join(" | ")}`,
@@ -510,10 +499,7 @@ function main() {
     "capture = tmux interactive session with `BUN_OPTIONS=--preload=claude-code/misc/scripts/trace-claude-messages.cjs claude --dangerously-skip-permissions --strict-mcp-config --tools default` and prompt `Reply exactly: CLAUDE_INTERACTIVE_TRACE_OK`",
     `prompt_models = ${modelNames.join(", ")}`,
     `prompts = ${promptFiles.length}`,
-    `prompt_files = ${promptFiles.join(", ")}`,
-    `misc_files = ${miscFiles.join(", ")}`,
     `tools = ${toolNames.length}`,
-    `tool_names = ${toolNames.join(", ")}`,
   ];
   fs.writeFileSync(path.join(miscDir, "interactive-capture.VERSION"), `${versionLines.join("\n")}\n`);
 }

@@ -1,6 +1,5 @@
 {
   "name": "update_goal",
-  "note": "This tool had a different exact payload depending on which grok run kind (model/mode) sent it. Each schema entry below is the exact request.tools[] object observed for the listed run kind(s).",
   "variants": [
     {
       "run_kinds": [

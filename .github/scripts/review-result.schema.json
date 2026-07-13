@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Capture refresh review result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision",
+    "publish_safe",
+    "summary",
+    "issues",
+    "tool_results"
+  ],
+  "properties": {
+    "decision": {
+      "type": "string",
+      "enum": [
+        "approve",
+        "reject",
+        "retry_capture"
+      ]
+    },
+    "publish_safe": {
+      "type": "boolean"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/issue"
+      }
+    },
+    "tool_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/toolResult"
+      }
+    }
+  },
+  "$defs": {
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "severity",
+        "code",
+        "path",
+        "message"
+      ],
+      "properties": {
+        "severity": {
+          "type": "string",
+          "enum": [
+            "error",
+            "warning"
+          ]
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "path": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 800
+        }
+      }
+    },
+    "toolResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "outcome",
+        "capture_complete",
+        "changes_supported_by_evidence",
+        "inventory_consistent",
+        "provenance_noise_excluded",
+        "secret_safe",
+        "issues"
+      ],
+      "properties": {
+        "tool": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "approve",
+            "reject",
+            "retry_capture"
+          ]
+        },
+        "capture_complete": {
+          "type": "boolean"
+        },
+        "changes_supported_by_evidence": {
+          "type": "boolean"
+        },
+        "inventory_consistent": {
+          "type": "boolean"
+        },
+        "provenance_noise_excluded": {
+          "type": "boolean"
+        },
+        "secret_safe": {
+          "type": "boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/issue"
+          }
+        }
+      }
+    }
+  }
+}

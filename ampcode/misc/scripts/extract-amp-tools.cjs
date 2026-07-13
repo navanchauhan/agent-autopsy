@@ -5,7 +5,9 @@ const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 
-const DEFAULT_OUT_DIR = path.resolve(process.cwd(), "ampcode");
+const DEFAULT_OUT_DIR = process.env.CAPTURE_SCRATCH_DIR
+  ? path.resolve(process.env.CAPTURE_SCRATCH_DIR, "ampcode", "candidate")
+  : path.resolve(process.cwd(), "ampcode");
 const DEFAULT_MODES = ["smart", "deep", "large", "rush"];
 const AMP = process.env.AMP_BIN || "amp";
 
@@ -86,16 +88,13 @@ function main() {
 
   const toolsDir = path.join(outDir, "tools");
   fs.mkdirSync(toolsDir, { recursive: true });
-  removeGeneratedFiles(toolsDir, ".json");
 
   const failures = [];
   const groups = new Map();
-  const modeToolNames = {};
 
   for (const mode of modes) {
     try {
       const listed = listTools(mode);
-      modeToolNames[mode] = listed.map((tool) => tool.name).sort();
 
       for (const tool of listed) {
         const schema = showTool(mode, tool.name);
@@ -115,6 +114,11 @@ function main() {
     }
   }
 
+  if (failures.length > 0) {
+    throw new Error(`Amp tool capture failed: ${failures.join(" | ")}`);
+  }
+  removeGeneratedFiles(toolsDir, ".json");
+
   for (const [name, variantsMap] of [...groups.entries()].sort()) {
     const variants = [...variantsMap.values()].map((variant) => ({
       modes: [...variant.modes].sort(),
@@ -122,19 +126,8 @@ function main() {
     }));
     const value =
       variants.length === 1
-        ? {
-            name,
-            note:
-              "The schema field is the exact Amp CLI `tools show --json` definition observed for the listed mode(s).",
-            modes: variants[0].modes,
-            schema: variants[0].schema,
-          }
-        : {
-            name,
-            note:
-              "This Amp tool had different `tools show --json` definitions across modes. Each nested schema is exact for the listed mode(s).",
-            variants,
-          };
+        ? { name, modes: variants[0].modes, schema: variants[0].schema }
+        : { name, variants };
     writeJson(path.join(toolsDir, `${safeFileName(name)}.json`), value);
   }
 
@@ -152,7 +145,7 @@ function main() {
     "source = ampcode/amp",
     "distribution = native Bun binary",
     `version = ${version}`,
-    "platform = darwin-arm64",
+    `platform = ${process.platform}-${process.arch}`,
     `launcher_path = ${displayPath(AMP)}`,
     `binary_path = ${displayPath(binaryPath)}`,
     `sha256 = ${shaFile(binaryPath, "sha256")}`,
@@ -163,17 +156,9 @@ function main() {
     "tool_script = ampcode/misc/scripts/extract-amp-tools.cjs",
     "capture = tmux interactive session with `BUN_OPTIONS=--preload=ampcode/misc/scripts/trace-amp-runtime.cjs amp --dangerously-allow-all --no-ide --no-notifications` plus `amp tools show --json` for each mode",
     `modes = ${modes.join(", ")}`,
-    `prompt_models = ${promptCount ? "see ampcode/prompts" : "unknown"}`,
     `prompts = ${promptCount}`,
     `tools = ${toolNames.length}`,
-    `tool_names = ${toolNames.join(", ")}`,
   ];
-  if (failures.length > 0) {
-    versionLines.push(`tool_capture_failures = ${failures.join(" | ")}`);
-  }
-  for (const mode of Object.keys(modeToolNames).sort()) {
-    versionLines.push(`mode_${mode}_tools = ${modeToolNames[mode].join(", ")}`);
-  }
 
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, "VERSION"), `${versionLines.join("\n")}\n`);
