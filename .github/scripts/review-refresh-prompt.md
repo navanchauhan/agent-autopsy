@@ -1,11 +1,18 @@
 Review the candidate capture refresh in this repository. Work read-only: do not
 edit files, run capture commands, use credentials, commit, tag, push, or publish.
+Do not use a browser, GitHub/MCP applications, web search, or external services.
 
 Inputs are available at:
 
 - changed tools: `$CHANGED_TOOLS_FILE`
 - primary-agent summary: `$CODEX_SUMMARY_FILE`
 - redacted capture evidence: `$CAPTURE_SCRATCH_DIR`
+
+Start by reading the changed-tools manifest and primary-agent summary from those
+environment-variable paths. The paths refer to the current live workspace; do
+not report evidence unavailable until you have attempted to read them. Inspect
+only the listed tool directories and their corresponding evidence. Return one
+tool result for every listed tool; do not return a partial result.
 - referenced upstream source trees already present in the workspace
 - candidate changes: the Git diff from `$REFRESH_BASE_REF` (or `HEAD` when unset)
 
