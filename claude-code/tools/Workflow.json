@@ -16,11 +16,13 @@
         "opus",
         "opus-4-7",
         "sonnet",
-        "sonnet-4-6"
+        "sonnet-4-6",
+        "interactive"
       ],
       "request_kind": "agent",
       "capture_modes": [
-        "non-interactive"
+        "non-interactive",
+        "interactive"
       ],
       "schema": {
         "name": "Workflow",

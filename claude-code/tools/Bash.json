@@ -241,11 +241,13 @@
         "claude-sonnet-5"
       ],
       "runs": [
-        "sonnet"
+        "sonnet",
+        "interactive"
       ],
       "request_kind": "agent",
       "capture_modes": [
-        "non-interactive"
+        "non-interactive",
+        "interactive"
       ],
       "schema": {
         "name": "Bash",

@@ -56,7 +56,6 @@ In the interactive session, send `Reply exactly: CLAUDE_INTERACTIVE_TRACE_OK`, w
 ## Active limitations
 
 - `extract-claude-trace.cjs` is interactive-only and labels its output accordingly; never point it at a non-interactive trace.
-- Interactive artifacts currently reflect Claude Code `2.1.206`, while the non-interactive capture is `2.1.207`. The session-title prompt is older still (`2.1.204`). Do not infer newer interactive content from headless requests.
 - `DesignSync` and `SendMessage` have been named by deferred-tool metadata, but their schemas have not been captured.
 - Steering blocks can include locally configured agents, skills, Git state, and other host context. Retain representative product-owned structure and normalize or exclude machine-specific entries.
 
