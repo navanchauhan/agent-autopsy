@@ -72,9 +72,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           CODEX_REFRESH_MODEL: gpt-5.6-sol
-          CODEX_REFRESH_REASONING_EFFORT: ultra
+          CODEX_REFRESH_REASONING_EFFORT: high
           CODEX_REVIEW_MODEL: gpt-5.6-sol
-          CODEX_REVIEW_REASONING_EFFORT: xhigh
+          CODEX_REVIEW_REASONING_EFFORT: high
+          CODEX_AUTHOR_TIMEOUT: 25m
+          CODEX_REVIEW_TIMEOUT: 12m
         run: |
           docker run --rm \
             -v "$PWD":/workspace \
@@ -90,6 +92,8 @@ jobs:
             -e CODEX_REFRESH_REASONING_EFFORT \
             -e CODEX_REVIEW_MODEL \
             -e CODEX_REVIEW_REASONING_EFFORT \
+            -e CODEX_AUTHOR_TIMEOUT \
+            -e CODEX_REVIEW_TIMEOUT \
             agent-autopsy-refresh \
             bash -euo pipefail -c '
               git config --global --add safe.directory /workspace

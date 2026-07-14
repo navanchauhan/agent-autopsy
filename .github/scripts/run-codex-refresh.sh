@@ -12,9 +12,11 @@ summary_file="${CODEX_SUMMARY_FILE:-$scratch_dir/codex-summary.md}"
 validation_file="${CODEX_VALIDATION_FILE:-$scratch_dir/validation.txt}"
 review_file="${CODEX_REVIEW_FILE:-$scratch_dir/review-result.json}"
 author_model="${CODEX_REFRESH_MODEL:-gpt-5.6-sol}"
-author_effort="${CODEX_REFRESH_REASONING_EFFORT:-ultra}"
+author_effort="${CODEX_REFRESH_REASONING_EFFORT:-high}"
 review_model="${CODEX_REVIEW_MODEL:-gpt-5.6-sol}"
-review_effort="${CODEX_REVIEW_REASONING_EFFORT:-xhigh}"
+review_effort="${CODEX_REVIEW_REASONING_EFFORT:-high}"
+author_timeout="${CODEX_AUTHOR_TIMEOUT:-25m}"
+review_timeout="${CODEX_REVIEW_TIMEOUT:-12m}"
 
 mkdir -p "$scratch_dir"
 
@@ -34,7 +36,7 @@ export CODEX_REVIEW_FILE="$review_file"
 
 run_author() {
   local prompt_file="$1"
-  codex exec \
+  timeout --foreground --signal=TERM --kill-after=30s "$author_timeout" codex exec \
     --model "$author_model" \
     -c "model_reasoning_effort=\"$author_effort\"" \
     -c 'model_verbosity="low"' \
@@ -58,7 +60,7 @@ validate_candidate() {
 
 run_reviewer() {
   rm -f "$review_file"
-  codex exec \
+  timeout --foreground --signal=TERM --kill-after=30s "$review_timeout" codex exec \
     --model "$review_model" \
     -c "model_reasoning_effort=\"$review_effort\"" \
     -c 'model_verbosity="low"' \
