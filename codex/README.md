@@ -15,9 +15,10 @@ git -C references/codex rev-parse HEAD
 
 Compare the new revision with the `revision` in `codex/VERSION`, then inspect the source definitions behind the existing `prompts/`, `tools/`, and `misc/` artifacts. Preserve exact model-facing text and schema structure. Replace only runtime values with harness variables, and keep configuration-dependent schema differences as variants.
 
-## Scope and active gaps
+## Scope
 
 - GPT-5.6 models use `code_mode_only`; their per-session code-mode tool listing is assembled dynamically and is not represented as a fixed file under `tools/`.
-- The Guardian action-risk policy prompt at `codex-rs/core/src/guardian/policy_template.md` is security-relevant but is not yet included in this archive.
+- `misc/guardian-policy.md` records the assembled default Guardian policy; managed tenant policy text can replace its `Policy Configuration` section at runtime.
+- The two fixed multi-agent mode messages are archived; custom mode passes configuration-provided text through unchanged and has no fixed prompt artifact.
 
 The source revision and current model-mode metadata belong in `VERSION`; release history belongs in Git.

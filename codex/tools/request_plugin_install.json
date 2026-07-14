@@ -44,14 +44,14 @@
       "schema": {
         "type": "function",
         "name": "request_plugin_install",
-        "description": "# Suggest a recommended plugin installation\n\nSuggest installing a plugin from the `<recommended_plugins>` list when it would help with the user's current request. Briefly explain why in `suggest_reason`.",
+        "description": "# Suggest a recommended plugin installation\n\nUse this tool only when all of the following are true:\n- The user explicitly asks to use a specific plugin that is not already available in the current context or active `tools` list.\n- Tool search has already been exhausted and did not find or make the requested tool callable.\n- The plugin is listed in `<recommended_plugins>`.\n\nDo not use it for adjacent capabilities, broad recommendations, or plugins that merely seem useful. Briefly explain why the plugin can help with the current request in `suggest_reason`.\n\nIMPORTANT: DO NOT call this tool in parallel with other tools.",
         "strict": false,
         "parameters": {
           "type": "object",
           "properties": {
             "plugin_id": {
               "type": "string",
-              "description": "Plugin id from the `<recommended_plugins>` list."
+              "description": "The parenthesized plugin ID from the `<recommended_plugins>` list."
             },
             "suggest_reason": {
               "type": "string",

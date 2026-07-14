@@ -1,14 +1,12 @@
 source = openai/codex
-revision = c888e8e75a9f0e90ce7d5517f8b9540832cbbf76
-describe = codex-zsh-v0.1.0-273-gc888e8e75a
+revision = f90e7deea6a715bbd153044af6f475eefa749177
+describe = f90e7de
 codex_cli_package_version = 0.144.1
-generated_at = 2026-07-12T19:18:37.000Z
 reference_path = references/codex
 capture_mode = direct source extraction
 prompts = 15
 tools = 25
-misc = 20
+misc = 24
 gpt_5_6_tool_modes = sol: code_mode_only; terra: code_mode_only; luna: code_mode_only
 gpt_5_6_multi_agent_versions = sol: v2; terra: v2; luna: v1
 scope_limit = dynamic per-session code-mode tool listings are not stored as fixed tool schemas
-active_gap = Guardian policy prompt at codex-rs/core/src/guardian/policy_template.md is not captured
