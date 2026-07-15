@@ -1,7 +1,7 @@
 {
   "name": "write_to_file",
   "models": [
-    "gemini-3-flash-agent"
+    "gemini-3.5-flash-low"
   ],
   "request_kinds": [
     "agent"

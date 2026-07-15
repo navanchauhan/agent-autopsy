@@ -130,6 +130,8 @@ function sanitizeExample(value) {
   return value
     .replace(/\/Users\/[^/\s<>"')\]]+\/Developer\/[^\s<>"')\]]+/g, "/Users/example/Developer/example-repo")
     .replace(/\/Users\/[^/]+\/\.gemini\/antigravity-cli/g, "/Users/example/.gemini/antigravity-cli")
+    .replace(/\/home\/[^/]+\/\.gemini\/antigravity-cli/g, "/Users/example/.gemini/antigravity-cli")
+    .replace(/^\/workspace$/, "/Users/example/Developer/example-repo")
     .replace(/\/Users\/[^/]+\//g, "/Users/example/")
     .replace(/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi, "00000000-0000-4000-8000-000000000000")
     .replace(/\b20\d{2}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[-+]\d{2}:\d{2})\b/g, "2026-01-02T15:04:05-07:00")
@@ -251,7 +253,15 @@ function groupTools(records) {
     const model = record.payload.model;
     const requestKind = record.payload.requestType;
     for (const tool of record.payload.request.tools || []) {
-      const declarations = tool.functionDeclarations || [];
+      const normalizedTool = JSON.parse(JSON.stringify(tool));
+      for (const declaration of normalizedTool.functionDeclarations || []) {
+        declaration.description = declaration.description?.replace(
+          /Operating System: ([^.]+)\. Shell: ([^.]+)\./,
+          (_, os, shell) =>
+            `Operating System: ${harnessScalar("userOsVersion", sanitizeExample(os))}. Shell: ${harnessScalar("userShell", sanitizeExample(shell))}.`,
+        );
+      }
+      const declarations = normalizedTool.functionDeclarations || [];
       if (declarations.length !== 1) {
         throw new Error(
           `Expected exactly one functionDeclaration per tool wrapper on line ${record.line}`,
@@ -261,12 +271,12 @@ function groupTools(records) {
       const name = declarations[0].name;
       if (!groups.has(name)) groups.set(name, new Map());
       const variants = groups.get(name);
-      const signature = JSON.stringify(tool);
+      const signature = JSON.stringify(normalizedTool);
       if (!variants.has(signature)) {
         variants.set(signature, {
           models: new Set(),
           request_kinds: new Set(),
-          schema: tool,
+          schema: normalizedTool,
         });
       }
       const variant = variants.get(signature);
@@ -417,17 +427,13 @@ function main() {
     platform === "darwin-arm64"
       ? "darwin_arm64"
       : platform === "linux-x64"
-        ? "linux_x86_64"
+        ? "linux_amd64"
         : null;
   const manifestUrl =
     manifestPlatform === null
       ? "unknown"
       : `https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/${manifestPlatform}.json`;
   const manifest = manifestUrl === "unknown" ? null : fetchJsonOrNull(manifestUrl);
-  const selectedModelLabel =
-    logText.match(/display_name:"([^"]+)"/)?.[1] ||
-    logText.match(/label="([^"]+)"/)?.[1] ||
-    "unknown";
   const endpoint =
     logText.match(/URL: (https:\/\/[^\s]+streamGenerateContent[^\s]*)/)?.[1] ||
     "unknown";
@@ -456,7 +462,6 @@ function main() {
     `capture_mode = ${captureMode}`,
     `capture = ${captureCommand}`,
     `endpoint = ${endpoint}`,
-    `selected_model_label = ${selectedModelLabel}`,
     `response_model_versions = ${responseModelVersions.join(", ") || "unknown"}`,
     `prompt_models = ${modelNames.join(", ")}`,
     `prompts = ${modelNames.length}`,
