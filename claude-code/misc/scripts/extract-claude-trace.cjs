@@ -148,11 +148,15 @@ function scalarIfNeeded(name, value) {
 
 function sanitizeExample(value) {
   return value
+    .replace(/\/home\/[^/]+\/\.claude\/projects\/[^/\s<>"')\]]+\/memory\/?/g, "/Users/example/.claude/projects/-Users-example-Developer-example-repo/memory/")
+    .replace(/\/home\/[^/]+\/\.local\/share\/claude\/versions\/[^/\s<>"')\]]+/g, "/Users/example/.local/share/claude/versions/2.1.148")
+    .replace(/\/tmp\/claude-\d+\/[^/\s<>"')\]]+\/[0-9a-f-]{36}\/scratchpad/g, "/private/tmp/claude-501/-Users-example-Developer-example-repo/d7ebc0ce-22a2-4774-9fc2-8a69f496828b/scratchpad")
     .replace(/\/Users\/[^/]+\/\.claude\/projects\/[^/\s<>"')\]]+\/memory\/?/g, "/Users/example/.claude/projects/-Users-example-Developer-example-repo/memory/")
     .replace(/\/Users\/[^/]+\/Developer\/[^/\s<>"')\]]+/g, "/Users/example/Developer/example-repo")
     .replace(/\/Users\/[^/]+\/\.local\/share\/claude\/versions\/[^/\s<>"')\]]+/g, "/Users/example/.local/share/claude/versions/2.1.148")
     .replace(/\/private\/tmp\/claude-\d+\/-Users-[^/]+\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/scratchpad/g, "/private/tmp/claude-501/-Users-example-Developer-example-repo/d7ebc0ce-22a2-4774-9fc2-8a69f496828b/scratchpad")
     .replace(/\/Users\/[^/]+\//g, "/Users/example/")
+    .replace(/^\/workspace$/, "/Users/example/Developer/example-repo")
     .replace(/\bcch=[^;]+;/g, "cch=00000;")
     .replace(/\bcc_prev_req=[^;\n]+;/g, "cc_prev_req=req_000000000000000000000000;");
 }
@@ -218,6 +222,12 @@ function markHarnessVariables(text) {
 
   for (const match of text.matchAll(/\/Users\/[^/]+\/[^\s<>"')\]]+/g)) {
     addLiteralExample(match[0], "absolutePath");
+  }
+  for (const match of text.matchAll(/\/home\/[^/]+\/\.claude\/projects\/[^/\s<>"')\]]+\/memory\/?/g)) {
+    addLiteralExample(match[0], "claudeProjectMemoryDirectory");
+  }
+  for (const match of text.matchAll(/\/tmp\/claude-\d+\/[^/\s<>"')\]]+\/[0-9a-f-]{36}\/scratchpad/g)) {
+    addLiteralExample(match[0], "scratchpadDirectory");
   }
   for (const match of text.matchAll(/\bcc_version=[^;\n]+; cc_entrypoint=[^;\n]+; cch=[^;\n]+;(?: cc_prev_req=[^;\n]+;)?/g)) {
     addLiteralExample(match[0], "anthropicBillingHeader");
