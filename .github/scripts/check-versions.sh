@@ -74,8 +74,22 @@ check_codex_source
 check_tool "antigravity" "antigravity" "version" \
   "agy --version" '[0-9]+\.[0-9]+\.[0-9]+'
 
-check_tool "grok" "grok" "version" \
-  "grok --version" '[0-9]+\.[0-9]+\.[0-9]+'
+check_grok_source() {
+  local recorded_revision latest_revision
+  recorded_revision="$(current_version_field "$repo_root/grok/VERSION" "revision")"
+  echo "== grok (source) ==" >&2
+  latest_revision="$(git ls-remote https://github.com/xai-org/grok-build.git HEAD 2>/dev/null | cut -f1)"
+  if [ -z "$latest_revision" ]; then
+    echo "::warning::Could not reach github.com/xai-org/grok-build.git; skipping version check for grok" >&2
+    return
+  fi
+  echo "grok: recorded_revision=$recorded_revision latest_revision=$latest_revision" >&2
+  if [ "$latest_revision" != "$recorded_revision" ]; then
+    entries+=("{\"tool\":\"grok\",\"dir\":\"grok\",\"old_version\":\"$recorded_revision\",\"new_version\":\"$latest_revision\"}")
+  fi
+}
+
+check_grok_source
 
 {
   printf '['

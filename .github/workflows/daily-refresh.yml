@@ -100,6 +100,10 @@ jobs:
               gh auth setup-git
               bash .github/scripts/seed-credentials.sh
               bash .github/scripts/sync-codex-reference.sh
+              if jq -e "any(.[]; .tool == \"grok\")" .capture-scratch/changed-tools.json >/dev/null; then
+                rm -rf references/grok-build
+                git clone --quiet --depth 1 https://github.com/xai-org/grok-build.git references/grok-build
+              fi
               bash .github/scripts/run-codex-refresh.sh
               bash .github/scripts/commit-and-release.sh
               bash .github/scripts/rotate-secrets.sh

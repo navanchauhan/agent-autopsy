@@ -1,7 +1,7 @@
-source = xai/grok-cli
+source = xai-org/grok-build
 distribution = native Rust binary
 version = 0.2.99
-revision = b1b49ccb71
+revision = b189869b7755d2b482969acf6c92da3ecfeffd36
 channel = stable
 platform = linux-x86_64
 binary_path = /home/example/.grok/bin/grok

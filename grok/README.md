@@ -2,7 +2,7 @@
 
 ## Capture method
 
-Grok is a native Rust CLI whose model-facing requests are not available in its local session export. Tool schemas are therefore captured from the real SSE request to `https://cli-chat-proxy.grok.com/v1/responses` through mitmproxy.
+Grok Build is open source at `xai-org/grok-build`. Inspect that source first for bundled prompt and tool construction; use the real SSE request to `https://cli-chat-proxy.grok.com/v1/responses` only for server-provided request content and runtime verification.
 
 `mitm-capture-grok.py` records requests to a scratch JSONL file and redacts authentication-shaped request and response headers. `extract-grok-capture.cjs` groups requests by model and mode, writes system prompts and steering, and preserves exact `tools[]` entries or variants.
 

@@ -14,6 +14,10 @@ CLI, available capture helpers, raw captures, and authoritative source when
 available. Capture methods differ, so choose the investigation path that best
 fits each tool.
 
+For Grok, inspect `references/grok-build` before live capture. Its source is
+authoritative for bundled prompt and tool construction; use capture only to
+verify server-provided request material.
+
 Extraction scripts may generate candidates in `$CAPTURE_SCRATCH_DIR`, but they
 are not authoritative. Inspect the raw model request or source before accepting
 their output. Keep raw captures and candidate output under
