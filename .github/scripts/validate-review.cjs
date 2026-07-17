@@ -90,7 +90,7 @@ function main() {
       if (result.capture_complete !== false) {
         errors.push(`${tool.tool}: retry_capture requires capture_complete=false`);
       }
-      for (const field of ["inventory_consistent", "provenance_noise_excluded", "secret_safe"]) {
+      for (const field of ["provenance_noise_excluded", "secret_safe"]) {
         if (result[field] !== true) errors.push(`${tool.tool}: ${field} must be true for a safe retry`);
       }
       if (hasChanges(tool.dir)) {

@@ -42,6 +42,9 @@ decision is `approve`. Under an overall approval, use warning severity for an
 unchanged tool's retry blocker; error severity means the candidate is not
 publishable.
 
+For an unchanged `retry_capture` result, `inventory_consistent` describes the
+captured current inventory and may be false when that capture is unavailable.
+
 Return only JSON matching `.github/scripts/review-result.schema.json`. Include
 exactly one `tool_results` item per changed-tool entry, in the same order. Keep
 the summary and issues concise and cite repository-relative evidence paths.
