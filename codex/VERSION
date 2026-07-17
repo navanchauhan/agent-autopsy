@@ -1,12 +1,13 @@
 source = openai/codex
-revision = cbc83d961e8132bfff4d340ab8342d181b79e95e
-describe = cbc83d9
+revision = 315195492c80fdade38e917c18f9584efd599304
+describe = 3151954
 codex_cli_package_version = 0.144.5
 reference_path = references/codex
 capture_mode = direct source extraction
 prompts = 15
 tools = 25
-misc = 24
+misc = 25
 gpt_5_6_tool_modes = sol: code_mode_only; terra: code_mode_only; luna: code_mode_only
 gpt_5_6_multi_agent_versions = sol: v2; terra: v2; luna: v1
 scope_limit = dynamic per-session code-mode tool listings are not stored as fixed tool schemas
+environment_instructions = enabled with environment context and deferred executor support

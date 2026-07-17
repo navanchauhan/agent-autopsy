@@ -1,14 +1,14 @@
 {
   "type": "function",
   "name": "wait_for_environment",
-  "description": "Wait for a starting environment to become available before continuing.",
+  "description": "Wait for a selected execution environment marked as `starting` to become available. Use this when the current task needs that environment's files, commands, or installed capabilities. Do not wait if the task can be completed using tools already available, such as connectors. Waiting may take several minutes and blocks other tool calls. If startup fails, continue without that environment.",
   "strict": false,
   "parameters": {
     "type": "object",
     "properties": {
       "environment_id": {
         "type": "string",
-        "description": "The id of an environment currently marked as starting."
+        "description": "The exact environment ID marked as `starting` in `<environment_context>`."
       }
     },
     "required": [
