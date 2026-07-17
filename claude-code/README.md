@@ -23,11 +23,18 @@ models=(
   claude-sonnet-4-6
   claude-sonnet-5
 )
+deferred_query='select:CronCreate,CronDelete,CronList,DesignSync,EnterWorktree,ExitWorktree,Monitor,NotebookEdit,PushNotification,RemoteTrigger,SendMessage,TaskCreate,TaskGet,TaskList,TaskOutput,TaskStop,TaskUpdate,WebFetch,WebSearch'
 
 for model in "${models[@]}"; do
   CLAUDE_TRACE_DIR="$trace_dir" \
   BUN_OPTIONS="--preload=$repo_root/claude-code/misc/scripts/trace-claude-messages.cjs" \
   claude -p "Reply exactly: TRACE_FETCH_${model}" \
+    --model "$model" --output-format json --no-session-persistence \
+    --exclude-dynamic-system-prompt-sections --strict-mcp-config --tools default
+
+  CLAUDE_TRACE_DIR="$trace_dir" \
+  BUN_OPTIONS="--preload=$repo_root/claude-code/misc/scripts/trace-claude-messages.cjs" \
+  claude -p "Use ToolSearch once with query \"$deferred_query\" and max_results 25, then reply exactly: DEFERRED_TRACE_OK_${model}" \
     --model "$model" --output-format json --no-session-persistence \
     --exclude-dynamic-system-prompt-sections --strict-mcp-config --tools default
 done
@@ -53,10 +60,11 @@ node claude-code/misc/scripts/extract-claude-trace.cjs "$trace_dir" "$out_dir"
 
 In the interactive session, send `Reply exactly: CLAUDE_INTERACTIVE_TRACE_OK`, wait for the response, and exit before extraction. Merge the scratch interactive output with the existing non-interactive archive; do not replace the directory wholesale.
 
+Then repeat the interactive capture with `Use ToolSearch once with query "select:CronCreate,CronDelete,CronList,DesignSync,EndConversation,EnterPlanMode,EnterWorktree,ExitPlanMode,ExitWorktree,Monitor,NotebookEdit,PushNotification,RemoteTrigger,SendMessage,TaskCreate,TaskGet,TaskList,TaskOutput,TaskStop,TaskUpdate,WebFetch,WebSearch" and max_results 30, then reply exactly: CLAUDE_INTERACTIVE_DEFERRED_TRACE_OK` so interactive-only and mode-specific deferred schemas are present in the raw request before extraction.
+
 ## Active limitations
 
 - `extract-claude-trace.cjs` is interactive-only and labels its output accordingly; never point it at a non-interactive trace.
-- `DesignSync` and `SendMessage` have been named by deferred-tool metadata, but their schemas have not been captured.
 - Steering blocks can include locally configured agents, skills, Git state, and other host context. Retain representative product-owned structure and normalize or exclude machine-specific entries.
 
 Never commit trace records or token-bearing headers.

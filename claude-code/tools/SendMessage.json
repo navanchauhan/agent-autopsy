@@ -1,0 +1,30 @@
+{
+  "name": "SendMessage",
+  "description": "# SendMessage\n\nSend a message to another agent.\n\n```json\n{\"to\": \"researcher\", \"summary\": \"assign task 1\", \"message\": \"start on task #1\"}\n```\n\n| `to` | |\n|---|---|\n| `\"researcher\"` | Teammate by name |\n| `\"main\"` | The main conversation (background subagents only) |\n\nYour plain text output is NOT visible to other agents — to communicate, you MUST call this tool. Messages from teammates are delivered automatically; you don't check an inbox. Refer to agents by name — names keep working after an agent completes (a send resumes it from its transcript). Use the raw `agentId` (format `a...-...`) from its spawn result only when the agent has no name, or when a newer agent took the name (latest wins). When relaying, don't quote the original — it's already rendered to the user.",
+  "input_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "to": {
+        "description": "Recipient: teammate name",
+        "type": "string"
+      },
+      "summary": {
+        "description": "A 5-10 word summary shown as a preview in the UI (required when message is a string)",
+        "type": "string",
+        "maxLength": 200
+      },
+      "message": {
+        "description": "Plain text message content",
+        "type": "string"
+      }
+    },
+    "required": [
+      "to",
+      "message"
+    ],
+    "additionalProperties": false
+  },
+  "eager_input_streaming": true,
+  "defer_loading": true
+}

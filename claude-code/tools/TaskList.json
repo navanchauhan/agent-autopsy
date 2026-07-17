@@ -7,5 +7,6 @@
     "properties": {},
     "additionalProperties": false
   },
-  "eager_input_streaming": true
+  "eager_input_streaming": true,
+  "defer_loading": true
 }

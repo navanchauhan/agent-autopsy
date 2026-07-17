@@ -71,7 +71,7 @@
               "type": "string"
             },
             "force": {
-              "description": "Overwrite without a conflict check. Use only after a 409 when you have reconciled with the other session's version and intend to replace it. Omit (or false) to send baseVersion so a concurrent write 409s instead of being silently clobbered.",
+              "description": "Overwrite without a conflict check. Use only after a 409 when you have reconciled with the other session's version and intend to replace it. The tracked baseVersion is always sent; with force:true the server treats it as informational and overwrites. Omit (or false) so a concurrent write 409s instead of being silently clobbered.",
               "type": "boolean"
             },
             "capabilities": {

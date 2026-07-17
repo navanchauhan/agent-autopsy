@@ -6,7 +6,7 @@
     "type": "object",
     "properties": {
       "allowedPrompts": {
-        "description": "Prompt-based permissions needed to implement the plan. These describe categories of actions rather than specific commands.",
+        "description": "Deprecated: no longer used.",
         "type": "array",
         "items": {
           "type": "object",
@@ -33,5 +33,6 @@
     },
     "additionalProperties": {}
   },
-  "eager_input_streaming": true
+  "eager_input_streaming": true,
+  "defer_loading": true
 }

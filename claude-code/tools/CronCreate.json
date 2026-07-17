@@ -18,7 +18,7 @@
         "type": "boolean"
       },
       "durable": {
-        "description": "true = persist to .claude/scheduled_tasks.json and survive restarts. false (default) = in-memory only, dies when this Claude session ends. Use true only when the user asks the task to survive across sessions.",
+        "description": "Has no effect — durable persistence is not available. All jobs are session-only (in-memory, gone when this Claude session ends).",
         "type": "boolean"
       }
     },
@@ -28,5 +28,6 @@
     ],
     "additionalProperties": false
   },
-  "eager_input_streaming": true
+  "eager_input_streaming": true,
+  "defer_loading": true
 }
