@@ -1,13 +1,13 @@
 source = antigravity.google/cli
 distribution = native Go binary
-version = 1.1.3
+version = 1.1.4
 platform = linux-x64
-sha256 = 86a2383cce3db5d1d724a497eda25ae3e9889cfb1a45a27d98e7ae855d195693
+sha256 = 91cca6de52be2b5e8fe33175fd309554992ef89cf374a851fba1fe2573fdcbe1
 installer_url = https://antigravity.google/cli/install.sh
 manifest_url = https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json
-manifest_version = 1.1.3
-manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.3-5723946948100096/linux-x64/cli_linux_x64.tar.gz
-manifest_tarball_sha512 = f84f04fa50c7b3b257c6d091b3f66425e07bf7aa556fe2f9db5899aa5420511d0eadf72dfeb25816ad92213b06e5039b7d33e8025cfc2f1b3d77fb33f2d161be
+manifest_version = 1.1.4
+manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.4-6277569641840640/linux-x64/cli_linux_x64.tar.gz
+manifest_tarball_sha512 = a088a1f231d8565b6673cecd8656fc3504e49c89e9c6b8c4116937b5fe7069c8dcfba78bbb2bc5c0ff8e87ba64fe21b63db7001e3a5794504927dad9e89da973
 capture_modes = non-interactive, interactive
 capture_script = antigravity/misc/scripts/extract-antigravity-log.cjs
 endpoint = https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse

@@ -10,7 +10,7 @@
     "functionDeclarations": [
       {
         "name": "invoke_subagent",
-        "description": "Invokes one or more subagents by name with a single tool call. Each subagent runs in the background with its own prompt and reports back when done.\n\nSpecify the Subagents array with one or more entries. Each entry defines a subagent to launch.\n\nCommunicate with subagents using the send_message tool. Examples of when to do this:\n* To check on the status of a subagent.\n* To send a running subagent further instructions.\n* To send an idle subagent new instructions.\n\nGuidelines:\n* Each invoked subagent will be uniquely identified by its conversationID.\n* Multiple subagents with the same type name can be invoked, with each subagent receiving a unique conversationID.\n* If a task is a natural continuation of an existing subagent's work, send a message to that subagent with the task rather than invoking a new subagent to conserve resources.",
+        "description": "Invokes one or more subagents by name with a single tool call. Each subagent runs in the background with its own prompt and reports back when done.\n\nSpecify the Subagents array with one or more entries. Each entry defines a subagent to launch.\n\nCommunicate with subagents using the send_message tool. Examples of when to do this:\n* To check on the status of a subagent.\n* To send a running subagent further instructions.\n* To send an idle subagent new instructions.\n\nGuidelines:\n* Each invoked subagent will be uniquely identified by its conversationID.\n* Multiple subagents with the same type name can be invoked, with each subagent receiving a unique conversationID.\n* If a task is a natural continuation of an existing subagent's work, send a message to that subagent with the task rather than invoking a new subagent to conserve resources.\n* When selecting the Model argument, default to 'inherit' unless the user explicitly requests a different model.",
         "parameters": {
           "type": "OBJECT",
           "properties": {
@@ -20,6 +20,16 @@
               "items": {
                 "type": "OBJECT",
                 "properties": {
+                  "Model": {
+                    "type": "STRING",
+                    "description": "Model to use for the subagent. 'inherit' (default) uses the calling agent's model. 'flash_lite' uses a very light model. 'flash' uses a smaller, faster model suited for simple tasks like research lookups, file reading, or quick searches. 'pro' uses a larger, more capable model suited for complex tasks requiring deep reasoning, large refactors, or multi-step planning.",
+                    "enum": [
+                      "inherit",
+                      "flash_lite",
+                      "flash",
+                      "pro"
+                    ]
+                  },
                   "Prompt": {
                     "type": "STRING",
                     "description": "A clear, actionable task description for the subagent. Be specific about what the subagent should do and what information it should return."
