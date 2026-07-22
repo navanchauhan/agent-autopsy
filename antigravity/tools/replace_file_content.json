@@ -1,7 +1,7 @@
 {
   "name": "replace_file_content",
   "models": [
-    "gemini-3.5-flash-low"
+    "gemini-3.6-flash-high"
   ],
   "request_kinds": [
     "agent"

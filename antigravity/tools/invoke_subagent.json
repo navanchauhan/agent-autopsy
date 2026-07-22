@@ -1,7 +1,7 @@
 {
   "name": "invoke_subagent",
   "models": [
-    "gemini-3.5-flash-low"
+    "gemini-3.6-flash-high"
   ],
   "request_kinds": [
     "agent"

@@ -1,10 +1,10 @@
 source = antigravity.google/cli
-version = 1.1.4
+version = 1.1.5
 capture_mode = interactive
 platform = linux-x64
-sha256 = 91cca6de52be2b5e8fe33175fd309554992ef89cf374a851fba1fe2573fdcbe1
+sha256 = e8f0c3e0bac2815e311d45f26b90c3ec149edecab4736f616990abcc09ed0baf
 capture_script = antigravity/misc/scripts/extract-antigravity-log.cjs
 endpoint = https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse
-prompt_models = gemini-3.5-flash-low
+prompt_models = gemini-3.6-flash-high
 prompts = 1
 tools = 19
