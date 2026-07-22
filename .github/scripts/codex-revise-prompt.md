@@ -16,6 +16,11 @@ If a problem cannot be resolved with trustworthy evidence, revert the unsupporte
 candidate edits for that tool and report it blocked. Do not fabricate prompts,
 schemas, versions, or validation evidence. Do not run publishing commands.
 
+For Claude Code deferred tools, the placeholder declaration alone is incomplete
+evidence. Attempt to trigger and inspect the expanded model-facing request. If
+that expansion is unavailable, revert the entire Claude Code candidate directory
+to the baseline, preserve its last successful version, and report `retry_capture`.
+
 Return the same canonical Markdown format as the original refresh: exactly one
 `## <tool>` section per changed-tools entry, in input order, with two to four
 sentences covering result, version/source, material changes, and evidence or the

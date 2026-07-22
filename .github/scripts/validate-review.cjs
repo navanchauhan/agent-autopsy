@@ -41,13 +41,8 @@ function main() {
   const errors = [];
 
   if (!Array.isArray(changed)) errors.push("changed tools must be an array");
-  if (review.decision !== "approve" || review.publish_safe !== true) {
-    errors.push("review must approve publication");
-  }
   if (!Array.isArray(review.issues)) {
     errors.push("review issues must be an array");
-  } else if (review.issues.some((issue) => issue?.severity === "error")) {
-    errors.push("an approved review cannot contain top-level error issues");
   }
 
   const expected = Array.isArray(changed) ? changed : [];
@@ -57,7 +52,21 @@ function main() {
     errors.push(`expected ${expected.length} tool result(s), found ${results.length}`);
   }
 
+  const publicationApproval = review.decision === "approve" && review.publish_safe === true;
+  const safeNoopReview = review.decision === "retry_capture" && review.publish_safe === false;
+  if (!publicationApproval && !safeNoopReview) {
+    errors.push("review must approve publication or declare a safe retry");
+  }
+  if (
+    publicationApproval &&
+    Array.isArray(review.issues) &&
+    review.issues.some((issue) => issue?.severity === "error")
+  ) {
+    errors.push("an approved review cannot contain top-level error issues");
+  }
+
   let approvedCount = 0;
+  let retryCount = 0;
   const count = Math.max(expected.length, results.length);
   for (let index = 0; index < count; index += 1) {
     const tool = expected[index];
@@ -87,6 +96,7 @@ function main() {
         if (result[field] !== true) errors.push(`${tool.tool}: ${field} must be true when approved`);
       }
     } else if (result.outcome === "retry_capture") {
+      retryCount += 1;
       if (result.capture_complete !== false) {
         errors.push(`${tool.tool}: retry_capture requires capture_complete=false`);
       }
@@ -101,8 +111,11 @@ function main() {
     }
   }
 
-  if (expected.length > 0 && approvedCount === 0) {
+  if (publicationApproval && expected.length > 0 && approvedCount === 0) {
     errors.push("at least one changed tool must be approved for publication");
+  }
+  if (safeNoopReview && retryCount !== expected.length) {
+    errors.push("a safe retry requires every changed tool to remain an unchanged retry_capture");
   }
   if (errors.length > 0) {
     console.error(`Review validation failed with ${errors.length} error(s):`);

@@ -25,6 +25,9 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
+      - name: Test review validation
+        run: node .github/scripts/test-validate-review.cjs
+
       - name: Install CLIs
         # Codex is source-extracted, so its upstream revision is checked without
         # installing its CLI in this job.

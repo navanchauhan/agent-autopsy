@@ -18,6 +18,14 @@ For Grok, inspect `references/grok-build` before live capture. Its source is
 authoritative for bundled prompt and tool construction; use capture only to
 verify server-provided request material.
 
+For Claude Code, inspect deferred-tool declarations and their expanded requests
+as separate evidence. A `DeferredToolPlaceholder` declaration does not establish
+the schema of the deferred tool: trigger each advertised deferred tool and retain
+the expanded model-facing request under `$CAPTURE_SCRATCH_DIR/claude-code/`.
+If a required deferred tool cannot be expanded, revert all candidate changes for
+Claude Code, leave its last successful version intact, and report the capture as
+blocked for a later retry.
+
 Extraction scripts may generate candidates in `$CAPTURE_SCRATCH_DIR`, but they
 are not authoritative. Inspect the raw model request or source before accepting
 their output. Keep raw captures and candidate output under
