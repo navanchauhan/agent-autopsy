@@ -4,11 +4,13 @@
     {
       "models": [
         "claude-fable-5",
-        "claude-opus-4-8"
+        "claude-opus-4-8",
+        "claude-opus-5"
       ],
       "runs": [
         "fable",
-        "opus"
+        "opus",
+        "opus-5"
       ],
       "request_kind": "agent",
       "capture_modes": [
