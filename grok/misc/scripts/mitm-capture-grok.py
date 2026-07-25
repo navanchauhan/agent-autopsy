@@ -1,15 +1,15 @@
 """
 mitmproxy addon that captures the grok CLI's real model-facing HTTP requests
-(cli-chat-proxy.grok.com and grok.com) to a redacted JSONL file, one line per
+(cli-chat-proxy.grok.com, grok.com, and api.x.ai) to a redacted JSONL file, one line per
 HTTP request/response pair.
 
-grok (~/.grok/bin/grok) is a native Mach-O Rust binary, not a Bun/Node process,
+grok (~/.grok/bin/grok) is a native Rust binary, not a Bun/Node process,
 so the claude-code-style `BUN_OPTIONS=--preload` fetch-patching trick does not
 apply. Instead this captures at the network layer: grok's HTTP client respects
 the standard HTTPS_PROXY/https_proxy env vars and (when SSL_CERT_FILE points at
 mitmproxy's CA) accepts mitmproxy's TLS interception, so a local mitmdump
-instance can see the exact JSON body sent to https://cli-chat-proxy.grok.com/v1/responses
-(xAI's "Responses"-style API), including the full `tools[]` array of JSON
+instance can see the exact JSON body sent to the OAuth proxy or public xAI
+`/v1/responses` endpoint, including the full `tools[]` array of JSON
 schemas and the `input[]` array containing the system/user messages.
 
 Usage:
@@ -34,7 +34,7 @@ import os
 
 from mitmproxy import ctx, http
 
-CAPTURE_HOSTS = ("cli-chat-proxy.grok.com", "grok.com")
+CAPTURE_HOSTS = ("cli-chat-proxy.grok.com", "grok.com", "api.x.ai")
 REDACT_HEADERS = {"authorization", "x-api-key", "cookie", "set-cookie", "x-xai-token-auth"}
 
 

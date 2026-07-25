@@ -2,11 +2,11 @@
 
 ## Capture method
 
-Grok Build is open source at `xai-org/grok-build`. Inspect that source first for bundled prompt and tool construction; use the real SSE request to `https://cli-chat-proxy.grok.com/v1/responses` only for server-provided request content and runtime verification.
+Grok Build is open source at `xai-org/grok-build`. Inspect that source first for bundled prompt and tool construction; use a real SSE request to `/v1/responses` only for server-provided request content and runtime verification. OAuth sessions use `cli-chat-proxy.grok.com`, while API-key sessions use `api.x.ai`.
 
 `mitm-capture-grok.py` records requests to a scratch JSONL file and redacts authentication-shaped request and response headers. `extract-grok-capture.cjs` groups requests by model and mode, writes system prompts and steering, and preserves exact `tools[]` entries or variants.
 
-The archive covers default Grok 4.5 in non-interactive and interactive modes, Composer 2.5 Fast, and the session-title request.
+The archive covers default Grok 4.5 in non-interactive and interactive modes plus the session-title request.
 
 ## Refresh
 
@@ -30,12 +30,6 @@ sleep 2
   HTTPS_PROXY=http://127.0.0.1:8899 https_proxy=http://127.0.0.1:8899 \
   SSL_CERT_FILE="$HOME/.mitmproxy/mitmproxy-ca-cert.pem" \
   grok -p 'Reply exactly: GROK_TRACE_OK' --output-format json )
-
-( cd "$work_dir" && \
-  HTTPS_PROXY=http://127.0.0.1:8899 https_proxy=http://127.0.0.1:8899 \
-  SSL_CERT_FILE="$HOME/.mitmproxy/mitmproxy-ca-cert.pem" \
-  grok -p 'Reply exactly: GROK_COMPOSER_TRACE_OK' \
-    --model grok-composer-2.5-fast --output-format json )
 
 tmux new-session -d -s grok-trace \
   "cd '$work_dir' && HTTPS_PROXY=http://127.0.0.1:8899 https_proxy=http://127.0.0.1:8899 SSL_CERT_FILE='$HOME/.mitmproxy/mitmproxy-ca-cert.pem' grok --always-approve"

@@ -39,12 +39,9 @@
           "type": "integer"
         },
         "-i": {
-          "description": "Case insensitive search (rg -i). Defaults to false.",
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "default": null
+          "description": "Case insensitive search (rg -i).",
+          "type": "boolean",
+          "default": false
         },
         "type": {
           "description": "File type to search (rg --type). Common types: js, py, rust, go, java, etc. More efficient than glob for standard file types.",
@@ -58,17 +55,15 @@
           "type": "integer"
         },
         "multiline": {
-          "description": "Enable multiline mode where . matches newlines and patterns can span lines (rg -U --multiline-dotall). Default: false.",
-          "type": [
-            "boolean",
-            "null"
-          ]
+          "description": "Enable multiline mode where . matches newlines and patterns can span lines (rg -U --multiline-dotall).",
+          "type": "boolean",
+          "default": false
         }
       },
       "required": [
         "pattern"
       ]
     },
-    "description": "A powerful search tool built on ripgrep\n\nUsage:\n- Supports full regex syntax, e.g. `log.*Error`, `function\\s+\\w+`. Ensure you escape special chars to get exact matches, e.g. `functionCall\\(`\n- Broad glob patterns (e.g. '--glob *') bypass .gitignore, which this tool otherwise respects\n- The pattern field is a raw regex string: do NOT wrap it in quotes or add trailing quote characters unnecessarily\n- Only use 'type' (or 'glob' for file types) when certain of the file type needed. Note: import paths may not match source file types (.js vs .ts)\n- Pattern syntax: Uses ripgrep (not grep) - literal braces need escaping (e.g. use interface\\{\\} to find interface{} in Go code)\n- Results are capped for responsiveness; truncated results show \"at least\" counts.\n- Output follows ripgrep format: '-' for context lines, ':' for match lines, and all lines grouped by file."
+    "description": "Search file contents with regular expressions (ripgrep).\n\n- Full regex syntax, so escape literal special characters: `functionCall\\(`, or `interface\\{\\}` to find interface{} in Go.\n- Pass pattern as a raw regex string — no surrounding quotes.\n- Respects .gitignore unless you pass a broad glob like '--glob *'.\n- Only filter by 'type' or 'glob' when you are sure of the file type; import paths may not match source file types (.js vs .ts).\n- Output is ripgrep-style: ':' marks match lines, '-' marks context lines, grouped by file. Large results are capped and report \"at least\" counts."
   }
 }

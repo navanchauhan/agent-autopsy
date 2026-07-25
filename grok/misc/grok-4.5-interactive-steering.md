@@ -6,6 +6,12 @@ Today's date: <harnessVariable>{{currentDate=2026-01-02}}</harnessVariable>
 Note: Prefer using relative paths over absolute paths as tool call args when possible.
 </user_info>
 
+<git_status>
+This is the git status at the start of the conversation. Note that this status is a snapshot in time, and will not update during the conversation.
+<harnessVariable>{{gitStatus=## main...origin/main
+ M example.txt}}</harnessVariable>
+</git_status>
+
 ---
 
 <system-reminder>

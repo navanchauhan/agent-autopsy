@@ -23,6 +23,6 @@
         "content"
       ]
     },
-    "description": "Writes a file to the local filesystem.\n\nUsage:\n- This tool will overwrite the existing file if there is one at the provided path.\n- Missing parent directories are created automatically.\n- If overwriting an existing file, you **MUST** read it first with the read_file tool."
+    "description": "Create or overwrite a file.\n\n- Writing to an existing path replaces the file — read it first with the read_file tool.\n- Parent directories are created for you."
   }
 }

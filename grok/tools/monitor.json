@@ -17,22 +17,19 @@
           "type": "string"
         },
         "timeout_ms": {
-          "description": "Kill the monitor after this deadline (ms). Default: 36000000 (10 hr).",
+          "description": "Kill the monitor after this deadline (ms). Default: 36000000 (10 hr). Max: 36000000 (10 hr).",
           "type": [
             "integer",
             "null"
           ],
           "format": "uint64",
           "minimum": 0,
-          "default": null
+          "default": 36000000
         },
         "persistent": {
           "description": "Run for the lifetime of the session (no timeout). Stop with kill_command_or_subagent.",
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "default": null
+          "type": "boolean",
+          "default": false
         }
       },
       "required": [

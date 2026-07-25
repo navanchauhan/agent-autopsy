@@ -11,6 +11,6 @@
       "properties": {},
       "required": []
     },
-    "description": "Exit plan mode and present your plan for user approval.\n\nUse this after you have finished writing your plan to the plan file in plan mode.\nYou should have already written your plan to the plan file specified in the plan mode system message."
+    "description": "Exit plan mode and present your plan to the user.\n\nUse this after you have finished writing your plan to the plan file in plan mode."
   }
 }

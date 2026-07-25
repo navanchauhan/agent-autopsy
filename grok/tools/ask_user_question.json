@@ -10,33 +10,33 @@
       "type": "object",
       "properties": {
         "questions": {
-          "description": "Array of questions to ask the user. Each question has its own set of options.",
+          "description": "The questions to ask, each with its own options.",
           "type": "array",
           "items": {
             "description": "A single question with its options.",
             "type": "object",
             "properties": {
               "question": {
-                "description": "The complete question to ask the user. Should be clear, specific, and end with a question mark.",
+                "description": "The question to ask, phrased as a full question.",
                 "type": "string"
               },
               "options": {
-                "description": "Array of options for the user to choose from",
+                "description": "The choices for this question.",
                 "type": "array",
                 "items": {
                   "description": "A single option within a question.",
                   "type": "object",
                   "properties": {
                     "label": {
-                      "description": "The display text for this option that the user will see and select. Should be concise (1-5 words) and clearly describe the choice.",
+                      "description": "Option text shown to the user. A few words at most.",
                       "type": "string"
                     },
                     "description": {
-                      "description": "Explanation of what this option means or what will happen if chosen. Useful for providing context about trade-offs or implications.",
+                      "description": "What picking this option means or implies.",
                       "type": "string"
                     },
                     "preview": {
-                      "description": "Optional preview content rendered when this option is focused. Use for mockups, code snippets, or visual comparisons that help users compare options. Only supported for single-select questions.",
+                      "description": "Optional content shown while the option is focused — mockups, code snippets, anything the user should compare. Single-select questions only.",
                       "type": [
                         "string",
                         "null"
@@ -50,7 +50,7 @@
                 }
               },
               "multi_select": {
-                "description": "If true, the user can select multiple options. Default is false (single select).",
+                "description": "Let the user pick more than one option (default false).",
                 "type": [
                   "boolean",
                   "null"
@@ -69,6 +69,6 @@
         "questions"
       ]
     },
-    "description": "Ask the user a question and present options.\n\nUsage notes:\n- Users will always be able to select \"Other\" to provide custom text input\n- If you recommend a specific option, make that the first option in the list and add \"(Recommended)\" at the end of the label"
+    "description": "Ask the user one or more multiple-choice questions.\n\n- Every question automatically gets an \"Other\" choice where the user can type their own answer.\n- Put your recommended option first and append \"(Recommended)\" to its label."
   }
 }
