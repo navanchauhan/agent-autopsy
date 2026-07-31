@@ -26,13 +26,27 @@ function readJsonRequests(logPath) {
   const requests = [];
   for (const [index, line] of lines.entries()) {
     const markerIndex = line.indexOf(MARKER);
-    if (markerIndex === -1) continue;
+    if (markerIndex !== -1) {
+      const payload = line.slice(markerIndex + MARKER.length);
+      requests.push({
+        line: index + 1,
+        payload: JSON.parse(payload),
+      });
+      continue;
+    }
 
-    const payload = line.slice(markerIndex + MARKER.length);
-    requests.push({
-      line: index + 1,
-      payload: JSON.parse(payload),
-    });
+    if (!line.trimStart().startsWith("{")) continue;
+    try {
+      const record = JSON.parse(line);
+      if (typeof record.request_body !== "string") continue;
+      requests.push({
+        line: index + 1,
+        payload: JSON.parse(record.request_body),
+        url: record.url,
+      });
+    } catch {
+      // Non-request verbose-log lines can begin with "{".
+    }
   }
   return requests;
 }
@@ -234,15 +248,19 @@ function requestText(req) {
   return out.join("\n\n");
 }
 
-function selectPromptRecord(records) {
+function selectPromptRecord(records, captureMode) {
+  const marker =
+    captureMode === "interactive"
+      ? "ANTIGRAVITY_INTERACTIVE_TRACE_OK"
+      : "ANTIGRAVITY_TRACE_OK";
   const traceRecords = records.filter((record) =>
-    /ANTIGRAVITY.*TRACE_OK/.test(requestText(record.payload.request)),
+    requestText(record.payload.request).includes(marker),
   );
   return traceRecords.at(-1) || records.at(-1);
 }
 
-function renderPrompt(model, records) {
-  const selected = selectPromptRecord(records);
+function renderPrompt(model, records, captureMode) {
+  const selected = selectPromptRecord(records, captureMode);
   return `${markHarnessVariables(requestText(selected.payload.request)).trimEnd()}\n`;
 }
 
@@ -384,7 +402,7 @@ function main() {
           ? `${safeFileName(model)}-interactive.md`
           : `${safeFileName(model)}.md`,
       ),
-      renderPrompt(model, records),
+      renderPrompt(model, records, captureMode),
     );
   }
 
@@ -435,6 +453,7 @@ function main() {
       : `https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/${manifestPlatform}.json`;
   const manifest = manifestUrl === "unknown" ? null : fetchJsonOrNull(manifestUrl);
   const endpoint =
+    requests.find((record) => record.url?.includes("streamGenerateContent"))?.url ||
     logText.match(/URL: (https:\/\/[^\s]+streamGenerateContent[^\s]*)/)?.[1] ||
     "unknown";
   const responseModelVersions = [

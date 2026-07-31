@@ -281,9 +281,9 @@ Use carousels when:
 ## Critical Rules
 - **Keep lines short**: Keep bullet points concise to avoid wrapped lines
 - **Use basenames for readability**: Use file basenames for the link text instead of the full path
-- **File Links**: Do not surround the link text with backticks, that will break the link formatting.
-    - **Correct**: [utils.py](file:///path/to/utils.py) or [foo](file:///path/to/file.py#L123)
-    - **Incorrect**: [`utils.py`](file:///path/to/utils.py) or [`function name`](file:///path/to/file.py#L123)
+- **File Links**: Format clickable file links with correct backtick placement:
+    - **Correct**: [utils.py](file:///path/to/utils.py), [`utils.py`](file:///path/to/utils.py), or [foo](file:///path/to/file.py#L123)
+    - **Incorrect**: `[utils.py](file:///path/to/utils.py)`, [utils.py](`file:///path/to/utils.py`), or `[foo](file:///path/to/file.py#L123)`
 
 # Scratch Scripts and Files
 

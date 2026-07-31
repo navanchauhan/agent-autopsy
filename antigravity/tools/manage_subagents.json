@@ -10,13 +10,13 @@
     "functionDeclarations": [
       {
         "name": "manage_subagents",
-        "description": "Manage existing subagents.\n\tActions:\n\t* 'list': List all active subagents and their conversation IDs.\n\t* 'kill': Terminate specific subagents and all their descendants.\n\t* 'kill_all': Terminate all subagents and all their descendants.\n\n\tWhen a subagent is killed, its branched workspaces will be deleted, but its logs and artifacts will be preserved.",
+        "description": "Manage existing subagents.\n\tActions:\n\t* 'list': List active direct subagents with their conversation IDs and live state. Each subagent is reported as a JSON object with this schema:\n\t{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"role\":{\"type\":\"string\",\"description\":\"The subagent's role, or its type name if no role was set.\"},\"type\":{\"type\":\"string\",\"description\":\"The subagent's type name.\"},\"conversationId\":{\"type\":\"string\",\"description\":\"The subagent's conversation ID, used to message or kill it.\"},\"transcript\":{\"type\":\"string\",\"description\":\"Absolute URI of the subagent's transcript log, if available.\"},\"state\":{\"type\":\"string\",\"enum\":[\"running\",\"idle\",\"waiting_for_input\",\"waiting_for_dependents\",\"waiting_for_message\",\"canceling\",\"errored\",\"unspecified\"],\"description\":\"The subagent's current lifecycle state.\"},\"stateDetail\":{\"type\":\"string\",\"description\":\"Context for State: the current tool call (name and summary) when running or waiting_for_input, or the failure message when errored.\"}},\"additionalProperties\":false,\"type\":\"object\"}\n\t* 'kill': Terminate specific subagents and all their descendants.\n\t* 'kill_all': Terminate all subagents and all their descendants.\n\n\tWhen a subagent is killed, its branched workspaces will be deleted, but its logs and artifacts will be preserved.",
         "parameters": {
           "type": "OBJECT",
           "properties": {
             "Action": {
               "type": "STRING",
-              "description": "The action to perform. Must be 'list' (list all active subagents), 'kill' (terminate specific subagents and all their descendants), or 'kill_all' (terminate all subagents and all their descendants).",
+              "description": "The action to perform. Must be 'list' (list active direct subagents with their live state), 'kill' (terminate specific subagents and all their descendants), or 'kill_all' (terminate all subagents and all their descendants).",
               "enum": [
                 "list",
                 "kill",
