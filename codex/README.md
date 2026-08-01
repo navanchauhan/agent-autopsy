@@ -19,6 +19,8 @@ Compare the new revision with the `revision` in `codex/VERSION`, then inspect th
 
 - GPT-5.6 models use `code_mode_only`; their per-session code-mode tool listing is assembled dynamically and is not represented as a fixed file under `tools/`.
 - `misc/guardian-policy.md` records the assembled default Guardian policy; managed tenant policy text can replace its `Policy Configuration` section at runtime.
+- Model-catalog `collaboration_modes.default` and `collaboration_modes.plan` messages can replace the corresponding configuration-provided collaboration instructions; absent catalog values fall back to configuration, while explicit empty values suppress the legacy text.
+- Realtime clients can replace the bundled entry and exit instructions per conversation through `realtime_start_instructions` and `realtime_end_instructions`.
 - The two fixed multi-agent mode messages are archived; custom mode passes configuration-provided text through unchanged and has no fixed prompt artifact.
 
 The source revision and current model-mode metadata belong in `VERSION`; release history belongs in Git.

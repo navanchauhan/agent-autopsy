@@ -1,6 +1,6 @@
 source = openai/codex
-revision = f0c30e528a54bdf0fa9a4d52ff74b34383434811
-describe = f0c30e5
+revision = ee0247f95a6fe2b094ba2253d82cae2a2b4c2dff
+describe = ee0247f
 codex_cli_package_version = 0.146.0
 reference_path = references/codex
 capture_mode = direct source extraction
@@ -14,3 +14,5 @@ code_mode_output_helpers = image, audio
 environment_instructions = enabled with environment context and deferred executor support
 multi_environment_context = multiple environment entries include primary="true" or primary="false"
 code_mode_inter_agent_messages = plaintext MESSAGE and NEW_TASK envelopes
+collaboration_mode_messages = model-catalog default and plan messages override configuration-provided instructions
+realtime_mode_messages = bundled defaults with per-conversation start and end instruction overrides
