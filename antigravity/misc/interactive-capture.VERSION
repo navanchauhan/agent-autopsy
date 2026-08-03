@@ -1,8 +1,8 @@
 source = antigravity.google/cli
-version = 1.1.9
+version = 1.1.10
 capture_mode = interactive
 platform = linux-x64
-sha256 = 2e44783f64b231bc1437e84bb1b93c99c48163cb818210f0d2d48295ec78d3ce
+sha256 = 4217db798fd514cedce4e315013daea471a1a67666ab91547b2ad0dbee167a71
 capture_script = antigravity/misc/scripts/extract-antigravity-log.cjs
 network_capture_script = antigravity/misc/scripts/mitm-capture-antigravity.py
 endpoint = https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse
