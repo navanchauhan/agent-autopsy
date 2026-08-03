@@ -1,7 +1,9 @@
 """
 mitmproxy addon that captures the grok CLI's real model-facing HTTP requests
 (cli-chat-proxy.grok.com, grok.com, and api.x.ai) to a redacted JSONL file, one line per
-HTTP request/response pair.
+HTTP request/response pair. Grok Build can select either the Responses API or
+Chat Completions per model/runtime configuration, so both inference endpoints
+are captured.
 
 grok (~/.grok/bin/grok) is a native Rust binary, not a Bun/Node process,
 so the claude-code-style `BUN_OPTIONS=--preload` fetch-patching trick does not
@@ -35,6 +37,7 @@ import os
 from mitmproxy import ctx, http
 
 CAPTURE_HOSTS = ("cli-chat-proxy.grok.com", "grok.com", "api.x.ai")
+CAPTURE_PATHS = ("/v1/responses", "/v1/chat/completions")
 REDACT_HEADERS = {"authorization", "x-api-key", "cookie", "set-cookie", "x-xai-token-auth"}
 
 
@@ -61,12 +64,14 @@ class GrokCapture:
 
     def response(self, flow: http.HTTPFlow) -> None:
         host = flow.request.pretty_host
-        if host not in CAPTURE_HOSTS or not flow.request.path.startswith("/v1/responses"):
+        path = flow.request.path.split("?", 1)[0]
+        if host not in CAPTURE_HOSTS or path not in CAPTURE_PATHS:
             return
 
         record = {
             "method": flow.request.method,
             "url": flow.request.pretty_url,
+            "endpoint": path,
             "request_headers": redact_headers(flow.request.headers),
             "request_body": flow.request.get_text(strict=False) if flow.request.raw_content else None,
             "response_status": flow.response.status_code if flow.response else None,

@@ -122,18 +122,57 @@ function templateSkillListing(text) {
 // --- Load + classify captures -------------------------------------------
 
 const records = readJsonl(captureFile);
-const responsesRecords = records.filter(
-  (r) => typeof r.url === "string" && r.url.endsWith("/v1/responses") && r.request_body,
+function recordEndpoint(record) {
+  if (typeof record.endpoint === "string") return record.endpoint;
+  if (typeof record.url !== "string") return null;
+  try {
+    return new URL(record.url).pathname;
+  } catch {
+    return null;
+  }
+}
+
+const inferenceRecords = records.filter(
+  (r) =>
+    ["/v1/responses", "/v1/chat/completions"].includes(recordEndpoint(r)) &&
+    r.request_body,
 );
-if (responsesRecords.length === 0) {
-  throw new Error(`No captured /v1/responses request bodies found in ${captureFile}`);
+if (inferenceRecords.length === 0) {
+  throw new Error(`No captured inference request bodies found in ${captureFile}`);
+}
+const requestOnlyRecords = inferenceRecords.filter(
+  (record) => !Number.isInteger(record.response_status),
+);
+if (requestOnlyRecords.length > 0) {
+  throw new Error(
+    `${requestOnlyRecords.length} inference record(s) lack response_status; ` +
+      "request-only evidence is not publishable",
+  );
+}
+
+function messageText(message) {
+  if (typeof message?.content === "string") return message.content;
+  if (Array.isArray(message?.content)) {
+    return message.content
+      .map((part) => (typeof part === "string" ? part : part?.text || ""))
+      .join("\n");
+  }
+  return "";
+}
+
+function requestMessages(body) {
+  return Array.isArray(body.input) ? body.input : Array.isArray(body.messages) ? body.messages : [];
+}
+
+function toolName(tool) {
+  return tool?.name || tool?.function?.name || tool?.type;
 }
 
 function classify(body) {
   const model = body.model;
-  const sysMsg = (body.input || []).find((m) => m.role === "system");
-  const sysText = sysMsg && typeof sysMsg.content === "string" ? sysMsg.content : "";
-  const toolNames = (body.tools || []).map((t) => t.name || t.type);
+  const sysMsg = requestMessages(body).find((m) => m.role === "system");
+  const sysText = messageText(sysMsg);
+  const toolNames = (body.tools || []).map(toolName);
 
   if (toolNames.length === 1 && toolNames[0] === "session_title") {
     return "grok-session-title";
@@ -151,7 +190,7 @@ function classify(body) {
 }
 
 const byRunKind = new Map();
-for (const record of responsesRecords) {
+for (const record of inferenceRecords) {
   let body;
   try {
     body = JSON.parse(record.request_body);
@@ -161,7 +200,7 @@ for (const record of responsesRecords) {
   const runKind = classify(body);
   if (!byRunKind.has(runKind)) byRunKind.set(runKind, []);
   const list = byRunKind.get(runKind);
-  const cwdMatch = JSON.stringify(body.input).match(/Workspace Path: (.*?)\\n/);
+  const cwdMatch = JSON.stringify(requestMessages(body)).match(/Workspace Path: (.*?)\\n/);
   list.push({ body, cwd: cwdMatch ? cwdMatch[1] : null });
 }
 if (byRunKind.size === 0) {
@@ -178,7 +217,7 @@ removeMatchingFiles(path.join(outDir, "prompts"), (name) => name.endsWith(".md")
 removeMatchingFiles(path.join(outDir, "misc"), (name) => name.endsWith("-steering.md"));
 
 function extractRunInfo(body) {
-  const infoStr = JSON.stringify(body.input);
+  const infoStr = JSON.stringify(requestMessages(body));
   const cwdMatch = infoStr.match(/Workspace Path: (.*?)\\n/);
   const dateMatch = infoStr.match(/Today's date: (\d{4}-\d{2}-\d{2})/);
   return {
@@ -190,12 +229,12 @@ function extractRunInfo(body) {
 for (const [runKind, entries] of byRunKind) {
   const { body } = entries[entries.length - 1];
   const info = extractRunInfo(body);
-  const messages = body.input || [];
+  const messages = requestMessages(body);
   const systemMsg = messages.find((m) => m.role === "system");
   const otherMsgs = messages.filter((m) => m.role !== "system");
 
   if (systemMsg) {
-    let systemText = genericizeHome(systemMsg.content);
+    let systemText = genericizeHome(messageText(systemMsg));
     systemText = templateCommonFields(systemText, info);
     fs.writeFileSync(path.join(outDir, "prompts", `${runKind}.md`), `${systemText}\n`);
   }
@@ -211,7 +250,7 @@ for (const [runKind, entries] of byRunKind) {
 
   if (otherMsgs.length > 0 && !isBareUserQuery) {
     let steering = otherMsgs
-      .map((m) => (typeof m.content === "string" ? m.content : JSON.stringify(m.content)))
+      .map((m) => messageText(m) || JSON.stringify(m.content))
       .join("\n\n---\n\n");
     steering = genericizeHome(steering);
     steering = templateCommonFields(steering, info);
@@ -231,7 +270,7 @@ const toolVariants = new Map();
 for (const [runKind, entries] of byRunKind) {
   for (const { body } of entries) {
     for (const tool of body.tools || []) {
-      const name = tool.name || tool.type;
+      const name = toolName(tool);
       if (!name) continue;
       if (!toolVariants.has(name)) toolVariants.set(name, []);
       const variants = toolVariants.get(name);

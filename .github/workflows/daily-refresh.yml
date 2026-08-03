@@ -26,7 +26,9 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Test review validation
-        run: node .github/scripts/test-validate-review.cjs
+        run: |
+          node .github/scripts/test-validate-review.cjs
+          node grok/misc/scripts/test-extract-grok-capture.cjs
 
       - name: Install CLIs
         # Codex is source-extracted, so its upstream revision is checked without

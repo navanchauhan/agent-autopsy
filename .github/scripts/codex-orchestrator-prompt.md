@@ -17,6 +17,12 @@ fits each tool.
 For Grok, inspect `references/grok-build` before live capture. Its source is
 authoritative for bundled prompt and tool construction; use capture only to
 verify server-provided request material.
+Use only the tracked Grok proxy and extractor, which cover both
+`/v1/responses` and `/v1/chat/completions`; do not invent a direct-request
+capture helper. Every accepted raw inference record must include a response
+status from the installed CLI. If any required mode or catalog-derived schema
+lacks authoritative evidence, revert all Grok candidate changes and preserve
+its last successful version so other tools can still be published.
 
 For Claude Code, inspect deferred-tool declarations and their expanded requests
 as separate evidence. A `DeferredToolPlaceholder` declaration does not establish

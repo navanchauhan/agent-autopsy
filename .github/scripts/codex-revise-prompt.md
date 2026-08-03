@@ -21,6 +21,13 @@ evidence. Attempt to trigger and inspect the expanded model-facing request. If
 that expansion is unavailable, revert the entire Claude Code candidate directory
 to the baseline, preserve its last successful version, and report `retry_capture`.
 
+For Grok, accept only response-backed records produced by the tracked proxy for
+`/v1/responses` or `/v1/chat/completions`. Request-only or ad-hoc direct captures
+cannot support publication. If Grok remains incomplete or ambiguous after the
+repair attempt, revert the entire `grok/` directory to the baseline, including
+untracked files, and report an unchanged `retry_capture`; do not strand approved
+updates for other tools behind a modified Grok candidate.
+
 Return the same canonical Markdown format as the original refresh: exactly one
 `## <tool>` section per changed-tools entry, in input order, with two to four
 sentences covering result, version/source, material changes, and evidence or the
