@@ -99,6 +99,17 @@ jobs:
             -e CODEX_REVIEW_TIMEOUT \
             agent-autopsy-refresh \
             bash -euo pipefail -c '
+              persist_rotated_credentials() {
+                pipeline_status=$?
+                set +e
+                bash .github/scripts/rotate-secrets.sh
+                rotation_status=$?
+                if [ "$pipeline_status" -ne 0 ]; then
+                  exit "$pipeline_status"
+                fi
+                exit "$rotation_status"
+              }
+              trap persist_rotated_credentials EXIT
               git config --global --add safe.directory /workspace
               gh auth setup-git
               bash .github/scripts/seed-credentials.sh
@@ -109,7 +120,6 @@ jobs:
               fi
               bash .github/scripts/run-codex-refresh.sh
               bash .github/scripts/commit-and-release.sh
-              bash .github/scripts/rotate-secrets.sh
             '
 
       - name: Upload run scratch state
