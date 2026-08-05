@@ -42,30 +42,19 @@ jobs:
         id: check
         run: bash .github/scripts/check-versions.sh
 
-  refresh:
+  auth-preflight:
     needs: check
     if: needs.check.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 20
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
       - name: Build refresh image
         run: docker build -t agent-autopsy-refresh .
 
-      - name: Restore changed-tool state
-        env:
-          CHANGED_TOOLS_JSON: ${{ needs.check.outputs.changed_tools }}
-        run: |
-          mkdir -p .capture-scratch
-          printf '%s\n' "$CHANGED_TOOLS_JSON" \
-            | jq -e -c 'if type == "array" then . else error("changed-tools output is not an array") end' \
-            > .capture-scratch/changed-tools.json
-
-      - name: Run daily refresh pipeline
+      - name: Refresh capture credentials
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           CODEX_CHATGPT_AUTH_JSON: ${{ secrets.CODEX_CHATGPT_AUTH_JSON }}
@@ -74,12 +63,6 @@ jobs:
           REPO_SECRETS_PAT: ${{ secrets.REPO_SECRETS_PAT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          CODEX_REFRESH_MODEL: gpt-5.6-sol
-          CODEX_REFRESH_REASONING_EFFORT: high
-          CODEX_REVIEW_MODEL: gpt-5.6-sol
-          CODEX_REVIEW_REASONING_EFFORT: high
-          CODEX_AUTHOR_TIMEOUT: 25m
-          CODEX_REVIEW_TIMEOUT: 12m
         run: |
           docker run --rm \
             -v "$PWD":/workspace \
@@ -91,38 +74,117 @@ jobs:
             -e REPO_SECRETS_PAT \
             -e GITHUB_TOKEN \
             -e GITHUB_REPOSITORY \
+            agent-autopsy-refresh \
+            bash -euo pipefail -c '
+              bash .github/scripts/seed-credentials.sh
+              grok -p "Reply exactly: GROK_AUTH_OK" --output-format json >/dev/null || echo "::warning::Grok authentication refresh failed; only Grok capture will be blocked."
+              bash .github/scripts/rotate-secrets.sh
+            '
+
+  refresh-tool:
+    needs: [check, auth-preflight]
+    if: needs.check.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.check.outputs.changed_tools) }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Build refresh image
+        run: docker build -t agent-autopsy-refresh .
+
+      - name: Refresh ${{ matrix.tool }}
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          CODEX_CHATGPT_AUTH_JSON: ${{ secrets.CODEX_CHATGPT_AUTH_JSON }}
+          GROK_AUTH_JSON: ${{ secrets.GROK_AUTH_JSON }}
+          ANTIGRAVITY_GEMINI_CREDS: ${{ secrets.ANTIGRAVITY_GEMINI_CREDS }}
+          CODEX_REFRESH_MODEL: gpt-5.6-luna
+          CODEX_REFRESH_REASONING_EFFORT: medium
+          CODEX_REVIEW_MODEL: gpt-5.6-luna
+          CODEX_REVIEW_REASONING_EFFORT: medium
+          CODEX_AUTHOR_TIMEOUT: 30m
+          CODEX_REVIEW_TIMEOUT: 10m
+          TOOL_JSON: ${{ toJSON(matrix) }}
+        run: |
+          mkdir -p .capture-scratch
+          printf '%s\n' "$TOOL_JSON" | jq -c '[.]' > .capture-scratch/changed-tools.json
+          docker run --rm \
+            -v "$PWD":/workspace \
+            -w /workspace \
+            -e CLAUDE_CODE_OAUTH_TOKEN \
+            -e CODEX_CHATGPT_AUTH_JSON \
+            -e GROK_AUTH_JSON \
+            -e ANTIGRAVITY_GEMINI_CREDS \
             -e CODEX_REFRESH_MODEL \
             -e CODEX_REFRESH_REASONING_EFFORT \
             -e CODEX_REVIEW_MODEL \
             -e CODEX_REVIEW_REASONING_EFFORT \
             -e CODEX_AUTHOR_TIMEOUT \
             -e CODEX_REVIEW_TIMEOUT \
+            -e CODEX_SUMMARY_FILE="/workspace/.capture-scratch/${{ matrix.tool }}/summary.md" \
+            -e CODEX_VALIDATION_FILE="/workspace/.capture-scratch/${{ matrix.tool }}/validation.txt" \
+            -e CODEX_REVIEW_FILE="/workspace/.capture-scratch/${{ matrix.tool }}/review.json" \
             agent-autopsy-refresh \
             bash -euo pipefail -c '
               git config --global --add safe.directory /workspace
-              gh auth setup-git
               bash .github/scripts/seed-credentials.sh
               bash .github/scripts/sync-codex-reference.sh
-              if jq -e "any(.[]; .tool == \"grok\")" .capture-scratch/changed-tools.json >/dev/null; then
+              if [ -f .capture-scratch/changed-tools.json ] && jq -e "any(.[]; .tool == \"grok\")" .capture-scratch/changed-tools.json >/dev/null; then
                 rm -rf references/grok-build
                 git clone --quiet --depth 1 https://github.com/xai-org/grok-build.git references/grok-build
               fi
-              set +e
               bash .github/scripts/run-codex-refresh.sh
-              refresh_status=$?
-              if [ "$refresh_status" -eq 0 ]; then
-                bash .github/scripts/commit-and-release.sh
-                refresh_status=$?
-              fi
-              bash .github/scripts/rotate-secrets.sh
-              exit "$refresh_status"
             '
+          sudo chown -R "$(id -u):$(id -g)" .
 
       - name: Upload run scratch state
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: daily-refresh-scratch
-          path: .capture-scratch/
+          name: refresh-${{ matrix.tool }}
+          path: |
+            ${{ matrix.dir }}/
+            .capture-scratch/${{ matrix.tool }}/
           retention-days: 14
           if-no-files-found: ignore
+
+  publish:
+    needs: [check, refresh-tool]
+    if: always() && needs.check.outputs.has_changes == 'true' && needs.refresh-tool.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Download approved refreshes
+        uses: actions/download-artifact@v5
+        with:
+          pattern: refresh-*
+          merge-multiple: true
+
+      - name: Publish approved refreshes
+        env:
+          CHANGED_TOOLS_JSON: ${{ needs.check.outputs.changed_tools }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p .capture-scratch
+          printf '%s\n' "$CHANGED_TOOLS_JSON" | jq -e -c 'if type == "array" then . else error("changed-tools output is not an array") end' > .capture-scratch/changed-tools.json
+          : > .capture-scratch/codex-summary.md
+          while IFS= read -r tool; do
+            cat ".capture-scratch/$tool/summary.md" >> .capture-scratch/codex-summary.md
+            printf '\n\n' >> .capture-scratch/codex-summary.md
+          done < <(jq -r '.[].tool' .capture-scratch/changed-tools.json)
+          jq -s '{decision: "approve", publish_safe: true, summary: "Independent per-tool reviews approved publication.", issues: ([.[].issues[]] | unique), tool_results: [.[].tool_results[]]}' .capture-scratch/*/review.json > .capture-scratch/review-result.json
+          gh auth setup-git
+          bash .github/scripts/commit-and-release.sh
