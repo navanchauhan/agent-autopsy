@@ -107,9 +107,15 @@ jobs:
                 rm -rf references/grok-build
                 git clone --quiet --depth 1 https://github.com/xai-org/grok-build.git references/grok-build
               fi
+              set +e
               bash .github/scripts/run-codex-refresh.sh
-              bash .github/scripts/commit-and-release.sh
+              refresh_status=$?
+              if [ "$refresh_status" -eq 0 ]; then
+                bash .github/scripts/commit-and-release.sh
+                refresh_status=$?
+              fi
               bash .github/scripts/rotate-secrets.sh
+              exit "$refresh_status"
             '
 
       - name: Upload run scratch state
