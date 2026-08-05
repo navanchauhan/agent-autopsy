@@ -47,6 +47,9 @@ jobs:
     if: needs.check.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      runnable_tools: ${{ steps.select.outputs.runnable_tools }}
+      has_runnable_tools: ${{ steps.select.outputs.has_runnable_tools }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -64,6 +67,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
+          mkdir -p .capture-scratch
           docker run --rm \
             -v "$PWD":/workspace \
             -w /workspace \
@@ -77,19 +81,39 @@ jobs:
             agent-autopsy-refresh \
             bash -euo pipefail -c '
               bash .github/scripts/seed-credentials.sh
-              grok -p "Reply exactly: GROK_AUTH_OK" --output-format json >/dev/null || echo "::warning::Grok authentication refresh failed; only Grok capture will be blocked."
+              if grok -p "Reply exactly: GROK_AUTH_OK" --output-format json >/dev/null; then
+                printf true > /workspace/.capture-scratch/grok-auth-ready
+              else
+                printf false > /workspace/.capture-scratch/grok-auth-ready
+                echo "::warning::Grok authentication refresh failed; Grok will be excluded from this run."
+              fi
               bash .github/scripts/rotate-secrets.sh
             '
 
+      - name: Select authenticated tools
+        id: select
+        env:
+          CHANGED_TOOLS_JSON: ${{ needs.check.outputs.changed_tools }}
+        run: |
+          grok_auth_ready="$(cat .capture-scratch/grok-auth-ready 2>/dev/null || printf false)"
+          runnable_tools="$(jq -ce --argjson grok_auth_ready "$grok_auth_ready" \
+            '[.[] | select(.tool != "grok" or $grok_auth_ready)]' <<< "$CHANGED_TOOLS_JSON")"
+          printf 'runnable_tools=%s\n' "$runnable_tools" >> "$GITHUB_OUTPUT"
+          if jq -e 'length > 0' <<< "$runnable_tools" >/dev/null; then
+            echo 'has_runnable_tools=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'has_runnable_tools=false' >> "$GITHUB_OUTPUT"
+          fi
+
   refresh-tool:
     needs: [check, auth-preflight]
-    if: needs.check.outputs.has_changes == 'true'
+    if: needs.auth-preflight.outputs.has_runnable_tools == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        include: ${{ fromJSON(needs.check.outputs.changed_tools) }}
+        include: ${{ fromJSON(needs.auth-preflight.outputs.runnable_tools) }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -142,7 +166,7 @@ jobs:
               fi
               bash .github/scripts/run-codex-refresh.sh
             '
-          sudo chown -R "$(id -u):$(id -g)" .
+          sudo chown -R "$(id -u):$(id -g)" "${{ matrix.dir }}" ".capture-scratch/${{ matrix.tool }}"
 
       - name: Upload run scratch state
         if: always()
@@ -156,8 +180,8 @@ jobs:
           if-no-files-found: ignore
 
   publish:
-    needs: [check, refresh-tool]
-    if: always() && needs.check.outputs.has_changes == 'true' && needs.refresh-tool.result == 'success'
+    needs: [check, auth-preflight, refresh-tool]
+    if: always() && needs.auth-preflight.outputs.has_runnable_tools == 'true' && needs.refresh-tool.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -174,7 +198,7 @@ jobs:
 
       - name: Publish approved refreshes
         env:
-          CHANGED_TOOLS_JSON: ${{ needs.check.outputs.changed_tools }}
+          CHANGED_TOOLS_JSON: ${{ needs.auth-preflight.outputs.runnable_tools }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
