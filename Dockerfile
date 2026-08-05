@@ -59,6 +59,8 @@ RUN curl -fsSL https://x.ai/cli/install.sh | bash
 USER root
 WORKDIR /workspace
 
+RUN ln -s /home/runner/.grok/bin/grok /usr/local/bin/grok
+
 COPY .github/scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
