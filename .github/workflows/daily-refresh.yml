@@ -170,7 +170,7 @@ jobs:
 
       - name: Upload run scratch state
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: refresh-${{ matrix.tool }}
           path: |
@@ -191,7 +191,7 @@ jobs:
           fetch-depth: 0
 
       - name: Download approved refreshes
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           pattern: refresh-*
           merge-multiple: true

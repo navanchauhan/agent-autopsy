@@ -44,18 +44,18 @@ while IFS= read -r entry; do
   tool="$(jq -r '.tool' <<<"$entry")"
   dir="$(jq -r '.dir' <<<"$entry")"
   new_version="$(jq -r '.new_version' <<<"$entry")"
+  body="$(body_for_tool "$tool")"
+  [ -z "$body" ] && body="Automated daily capture refresh to $new_version."
 
   if git status --porcelain -- "$dir" | grep -q .; then
     git add "$dir"
-    body="$(body_for_tool "$tool")"
-    [ -z "$body" ] && body="Automated daily capture refresh to $new_version."
     git commit -m "Update $tool captures to $new_version" -m "$body"
     commit_count=$((commit_count + 1))
-    release_notes+=$'\n\n'"## $tool"$'\n'"$body"
     echo "Committed $tool ($dir) -> $new_version"
   else
     echo "$tool: version changed ($new_version) but no content diff — skipping commit"
   fi
+  release_notes+=$'\n\n'"## $tool"$'\n'"$body"
 done < <(jq -c '.[]' "$changed_file")
 
 if [ "$commit_count" -eq 0 ]; then
