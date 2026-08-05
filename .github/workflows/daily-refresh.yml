@@ -113,7 +113,7 @@ jobs:
           CODEX_REVIEW_TIMEOUT: 10m
           TOOL_JSON: ${{ toJSON(matrix) }}
         run: |
-          mkdir -p .capture-scratch
+          mkdir -p .capture-scratch/${{ matrix.tool }}
           printf '%s\n' "$TOOL_JSON" | jq -c '[.]' > .capture-scratch/changed-tools.json
           docker run --rm \
             -v "$PWD":/workspace \
