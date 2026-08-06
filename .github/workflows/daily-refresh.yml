@@ -68,6 +68,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           mkdir -p .capture-scratch
+          set +e
           docker run --rm \
             -v "$PWD":/workspace \
             -w /workspace \
@@ -166,7 +167,9 @@ jobs:
               fi
               bash .github/scripts/run-codex-refresh.sh
             '
+          refresh_status=$?
           sudo chown -R "$(id -u):$(id -g)" "${{ matrix.dir }}" ".capture-scratch/${{ matrix.tool }}"
+          exit "$refresh_status"
 
       - name: Upload run scratch state
         if: always()

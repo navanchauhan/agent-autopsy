@@ -47,6 +47,10 @@ decision is `approve`. Under an overall approval, use warning severity for an
 unchanged tool's retry blocker; error severity means the candidate is not
 publishable.
 
+If every tool result is `retry_capture`, the overall decision must also be
+`retry_capture` with `publish_safe: false`; do not return an approval with no
+approved tool results.
+
 For an unchanged `retry_capture` result, `inventory_consistent` describes the
 captured current inventory and may be false when that capture is unavailable.
 
