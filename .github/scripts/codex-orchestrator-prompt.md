@@ -16,7 +16,9 @@ fits each tool.
 
 For Grok, inspect `references/grok-build` before live capture. Its source is
 authoritative for bundled prompt and tool construction; use capture only to
-verify server-provided request material.
+verify server-provided request material. Record `references/grok-build/SOURCE_REV`
+in `grok/VERSION`, never the checkout's mirror commit. Omit `sha256` unless a
+trusted released binary is actually available to hash; a capture cannot prove it.
 
 For Claude Code, inspect deferred-tool declarations and their expanded requests
 as separate evidence. A `DeferredToolPlaceholder` declaration does not establish

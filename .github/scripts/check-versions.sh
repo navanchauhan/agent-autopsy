@@ -75,15 +75,20 @@ check_tool "antigravity" "antigravity" "version" \
   "agy --version" '[0-9]+\.[0-9]+\.[0-9]+'
 
 check_grok_source() {
-  local recorded_revision latest_revision
+  local recorded_revision mirror_revision latest_revision
   recorded_revision="$(current_version_field "$repo_root/grok/VERSION" "revision")"
   echo "== grok (source) ==" >&2
-  latest_revision="$(git ls-remote https://github.com/xai-org/grok-build.git HEAD 2>/dev/null | cut -f1)"
-  if [ -z "$latest_revision" ]; then
+  mirror_revision="$(git ls-remote https://github.com/xai-org/grok-build.git HEAD 2>/dev/null | cut -f1)"
+  if [ -z "$mirror_revision" ]; then
     echo "::warning::Could not reach github.com/xai-org/grok-build.git; skipping version check for grok" >&2
     return
   fi
-  echo "grok: recorded_revision=$recorded_revision latest_revision=$latest_revision" >&2
+  latest_revision="$(curl -fsSL "https://raw.githubusercontent.com/xai-org/grok-build/$mirror_revision/SOURCE_REV" 2>/dev/null | tr -d '[:space:]')"
+  if ! [[ "$latest_revision" =~ ^[0-9a-f]{40}$ ]]; then
+    echo "::warning::Could not read a valid Grok SOURCE_REV from $mirror_revision; skipping version check for grok" >&2
+    return
+  fi
+  echo "grok: recorded_revision=$recorded_revision source_revision=$latest_revision mirror_revision=$mirror_revision" >&2
   if [ "$latest_revision" != "$recorded_revision" ]; then
     entries+=("{\"tool\":\"grok\",\"dir\":\"grok\",\"old_version\":\"$recorded_revision\",\"new_version\":\"$latest_revision\"}")
   fi

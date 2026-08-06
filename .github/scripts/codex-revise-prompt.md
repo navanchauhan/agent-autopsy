@@ -21,6 +21,10 @@ evidence. Attempt to trigger and inspect the expanded model-facing request. If
 that expansion is unavailable, revert the entire Claude Code candidate directory
 to the baseline, preserve its last successful version, and report `retry_capture`.
 
+For Grok, `references/grok-build/SOURCE_REV` is the authoritative revision for
+`grok/VERSION`; the checkout HEAD is only a mirror commit. Do not retain or add a
+`sha256` unless it is supported by an actual trusted binary artifact.
+
 Return the same canonical Markdown format as the original refresh: exactly one
 `## <tool>` section per changed-tools entry, in input order, with two to four
 sentences covering result, version/source, material changes, and evidence or the
