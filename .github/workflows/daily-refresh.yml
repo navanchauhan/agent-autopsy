@@ -33,7 +33,7 @@ jobs:
       capture_bucket: ${{ steps.check.outputs.capture_bucket }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: true
 
@@ -63,6 +63,52 @@ jobs:
         if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: bash .github/scripts/persist-automation-state.sh
 
+  credential-preflight:
+    needs: check
+    if: needs.check.outputs.has_changes == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Verify environment credential rotation access
+        env:
+          GH_TOKEN: ${{ secrets.REPO_SECRETS_PAT }}
+          CREDENTIAL_ENVIRONMENT: agent-autopsy-capture
+        run: |
+          set -euo pipefail
+          if [ -z "$GH_TOKEN" ]; then
+            echo 'REPO_SECRETS_PAT is required for environment credential rotation.' >&2
+            exit 1
+          fi
+
+          canary="AGENT_AUTOPSY_PREFLIGHT_${GITHUB_RUN_ID}_${GITHUB_RUN_ATTEMPT}"
+          canary_set=false
+          cleanup_canary() {
+            if [ "$canary_set" = true ]; then
+              gh secret delete "$canary" --env "$CREDENTIAL_ENVIRONMENT" \
+                --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || true
+            fi
+          }
+          trap cleanup_canary EXIT
+
+          # Arm cleanup before the write so an interrupted successful request
+          # cannot leave the run-scoped canary behind.
+          canary_set=true
+          if ! printf 'rotation-preflight:%s:%s' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" |
+              gh secret set "$canary" --env "$CREDENTIAL_ENVIRONMENT" \
+                --repo "$GITHUB_REPOSITORY" >/dev/null; then
+            echo '::error::REPO_SECRETS_PAT needs Environments: Read and write access, and agent-autopsy-capture must exist.' >&2
+            exit 1
+          fi
+          if ! gh secret delete "$canary" --env "$CREDENTIAL_ENVIRONMENT" \
+              --repo "$GITHUB_REPOSITORY" >/dev/null; then
+            echo '::error::The credential-rotation canary could not be deleted.' >&2
+            exit 1
+          fi
+          canary_set=false
+          trap - EXIT
+
   reconcile-release:
     needs: check
     if: always() && needs.check.result == 'success' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
@@ -72,7 +118,7 @@ jobs:
       contents: write
     steps:
       - name: Check out default branch and tags
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0
@@ -86,8 +132,8 @@ jobs:
         run: bash .github/scripts/reconcile-release.sh
 
   capture-tool:
-    needs: check
-    if: needs.check.outputs.has_changes == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    needs: [check, credential-preflight]
+    if: needs.check.outputs.has_changes == 'true' && needs.credential-preflight.result == 'success' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     environment:
       name: agent-autopsy-capture
@@ -100,7 +146,7 @@ jobs:
         include: ${{ fromJSON(needs.check.outputs.changed_tools) }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -125,7 +171,7 @@ jobs:
       - name: Restore durable validated capture for the exact plan
         if: inputs.force_capture != true && steps.recapture-state.outputs.state == 'clear'
         id: capture-positive-cache
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: capture-output/${{ matrix.tool }}
@@ -136,7 +182,7 @@ jobs:
       - name: Restore bounded capture retry cooldown
         if: inputs.force_capture != true && steps.recapture-state.outputs.force != 'true' && github.run_attempt == 1 && steps.capture-positive-cache.outputs.cache-matched-key == ''
         id: capture-retry-cache
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: capture-output/${{ matrix.tool }}
@@ -176,7 +222,7 @@ jobs:
       - name: Restore exact source cache
         if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && (matrix.tool == 'codex' || matrix.tool == 'grok')
         id: source-cache
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: ${{ matrix.tool == 'codex' && 'references/codex' || 'references/grok-build' }}
@@ -196,7 +242,7 @@ jobs:
 
       - name: Save verified exact source cache
         if: (matrix.tool == 'codex' || matrix.tool == 'grok') && steps.source-sync.outcome == 'success' && steps.source-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: ${{ matrix.tool == 'codex' && 'references/codex' || 'references/grok-build' }}
@@ -204,11 +250,11 @@ jobs:
 
       - name: Set up provider image builder
         if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && matrix.tool != 'codex'
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
 
       - name: Build isolated pinned provider image
         if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && matrix.tool != 'codex'
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           target: capture-${{ matrix.tool }}
@@ -335,7 +381,7 @@ jobs:
 
       - name: Cache this durable validated capture generation
         if: steps.trusted-verification.outcome == 'success' && steps.trusted-verification.outputs.status == 'captured' && (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true)
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: capture-output/${{ matrix.tool }}
@@ -343,7 +389,7 @@ jobs:
 
       - name: Cache this bounded safe retry generation
         if: steps.trusted-verification.outcome == 'success' && steps.trusted-verification.outputs.status == 'retry_capture' && (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true)
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: capture-output/${{ matrix.tool }}
@@ -382,8 +428,8 @@ jobs:
         run: exit 1
 
   codex-driver:
-    needs: [check, capture-tool]
-    if: always() && needs.check.result == 'success' && needs.check.outputs.has_changes == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    needs: [check, credential-preflight, capture-tool]
+    if: always() && needs.check.result == 'success' && needs.credential-preflight.result == 'success' && needs.check.outputs.has_changes == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     environment:
       name: agent-autopsy-capture
@@ -393,7 +439,7 @@ jobs:
       has_publishable: ${{ steps.result.outputs.has_publishable }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -455,7 +501,7 @@ jobs:
       - name: Restore Codex source
         if: steps.source-keys.outputs.codex_needed == 'true'
         id: codex-source-cache
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: references/codex
@@ -464,7 +510,7 @@ jobs:
       - name: Restore Grok source
         if: steps.source-keys.outputs.grok_needed == 'true'
         id: grok-source-cache
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: references/grok-build
@@ -517,7 +563,7 @@ jobs:
 
       - name: Save verified Codex source
         if: steps.source-sync.outputs.codex_ready == 'true' && steps.codex-source-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: references/codex
@@ -525,7 +571,7 @@ jobs:
 
       - name: Save verified Grok source
         if: steps.source-sync.outputs.grok_ready == 'true' && steps.grok-source-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: references/grok-build
@@ -546,7 +592,7 @@ jobs:
       - name: Restore newest approved Codex decision
         if: steps.source-sync.outputs.has_ready == 'true' && inputs.force_capture != true
         id: driver-positive-cache
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: driver-output
@@ -557,7 +603,7 @@ jobs:
       - name: Restore current retry cooldown
         if: steps.source-sync.outputs.has_ready == 'true' && inputs.force_capture != true && github.run_attempt == 1 && steps.driver-positive-cache.outputs.cache-matched-key == ''
         id: driver-retry-cache
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: driver-output
@@ -585,11 +631,11 @@ jobs:
 
       - name: Set up Codex driver image builder
         if: steps.source-sync.outputs.has_ready == 'true' && steps.driver-positive-cache.outputs.cache-matched-key == '' && steps.driver-retry-cache.outputs.cache-matched-key == ''
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
 
       - name: Build isolated pinned Codex driver
         if: steps.source-sync.outputs.has_ready == 'true' && steps.driver-positive-cache.outputs.cache-matched-key == '' && steps.driver-retry-cache.outputs.cache-matched-key == ''
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           target: driver
@@ -599,6 +645,36 @@ jobs:
             CODEX_CLI_VERSION=${{ needs.check.outputs.codex_driver_version }}
           cache-from: type=gha,scope=codex-driver-image
           cache-to: type=gha,mode=max,scope=codex-driver-image
+
+      - name: Enable unprivileged user namespaces for the Codex sandbox
+        if: steps.source-sync.outputs.has_ready == 'true' && steps.driver-positive-cache.outputs.cache-matched-key == '' && steps.driver-retry-cache.outputs.cache-matched-key == '' && runner.environment == 'github-hosted'
+        id: codex-userns
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Match the hosted-Linux setup used by the official Codex action:
+          # https://github.com/openai/codex-action/blob/dd78cb653811af44014baa08fe954e28d32c1bf9/action.yml#L277-L301
+          state_file="$RUNNER_TEMP/codex-userns-sysctls.tsv"
+          : >"$state_file"
+          chmod 0600 "$state_file"
+
+          current_userns="$(sysctl -n kernel.unprivileged_userns_clone 2>/dev/null || true)"
+          if [ -n "$current_userns" ]; then
+            [[ "$current_userns" =~ ^[01]$ ]] || { echo 'Unexpected unprivileged_userns_clone value.' >&2; exit 1; }
+            printf 'kernel.unprivileged_userns_clone\t%s\n' "$current_userns" >>"$state_file"
+            if [ "$current_userns" != 1 ]; then
+              sudo sysctl -w kernel.unprivileged_userns_clone=1
+            fi
+          fi
+
+          current_apparmor="$(sysctl -n kernel.apparmor_restrict_unprivileged_userns 2>/dev/null || true)"
+          if [ -n "$current_apparmor" ]; then
+            [[ "$current_apparmor" =~ ^[01]$ ]] || { echo 'Unexpected AppArmor user-namespace value.' >&2; exit 1; }
+            printf 'kernel.apparmor_restrict_unprivileged_userns\t%s\n' "$current_apparmor" >>"$state_file"
+            if [ "$current_apparmor" != 0 ]; then
+              sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+            fi
+          fi
 
       - name: Run one serial Codex normalization and independent review
         if: steps.source-sync.outputs.has_ready == 'true' && steps.driver-positive-cache.outputs.cache-matched-key == '' && steps.driver-retry-cache.outputs.cache-matched-key == ''
@@ -640,8 +716,16 @@ jobs:
             for dir in "${tool_dirs[@]}"; do
               tool_mounts+=( -v "$PWD/$dir:/workspace/$dir$suffix" )
             done
+            # CHOWN/SETUID/SETGID are used only by the fixed entrypoint to
+            # match the host UID; KILL lets docker-init forward cancellation
+            # after that UID change. The post-entrypoint assertion below
+            # requires every inheritable, permitted, effective, and ambient
+            # set to be 0.
             docker run --rm --init --pids-limit 512 --memory 6g --cpus 2 \
+              --cap-drop ALL \
+              --cap-add CHOWN --cap-add KILL --cap-add SETGID --cap-add SETUID \
               --security-opt seccomp=unconfined \
+              --security-opt apparmor=unconfined \
               --security-opt no-new-privileges \
               -v "$PWD":/workspace:ro \
               -v "$PWD/.capture-scratch":/workspace/.capture-scratch \
@@ -673,6 +757,14 @@ jobs:
               -e CODEX_REVIEW_FILE=/workspace/.capture-scratch/review-result.json \
               agent-autopsy-codex-driver:${{ github.run_id }}-${{ github.run_attempt }} \
               bash -euo pipefail -c '
+                [ "$(id -u)" -ne 0 ] || { echo "Codex driver must not run as root." >&2; exit 1; }
+                for capability_field in CapInh CapPrm CapEff CapAmb; do
+                  capability_value="$(sed -n "s/^${capability_field}:[[:space:]]*//p" /proc/self/status)"
+                  [ -n "$capability_value" ] && [ -z "${capability_value//0/}" ] || {
+                    echo "Codex driver unexpectedly retained $capability_field capabilities." >&2
+                    exit 1
+                  }
+                done
                 git config --global --add safe.directory /workspace
                 mkdir -p "$HOME/.codex"
                 install -m 0600 /credential-state/codex-auth.json "$HOME/.codex/auth.json"
@@ -725,6 +817,34 @@ jobs:
           done
           [ "$completed" = true ] || { echo 'Independent review did not approve a safe result.' >&2; exit 1; }
 
+      - name: Restore hosted-runner user-namespace policy
+        if: always() && steps.codex-userns.outcome != 'skipped'
+        shell: bash
+        run: |
+          set -euo pipefail
+          state_file="$RUNNER_TEMP/codex-userns-sysctls.tsv"
+          [ -f "$state_file" ] || { echo 'Codex user-namespace state file is missing.' >&2; exit 1; }
+          restore_failed=false
+          while IFS=$'\t' read -r key value; do
+            case "$key" in
+              kernel.unprivileged_userns_clone|kernel.apparmor_restrict_unprivileged_userns) ;;
+              *) echo "Unexpected sysctl key in restore state: $key" >&2; exit 1 ;;
+            esac
+            [[ "$value" =~ ^[01]$ ]] || { echo "Unexpected restore value for $key." >&2; exit 1; }
+            if ! sudo sysctl -w "$key=$value"; then
+              echo "::error::Failed to restore $key; continuing with the remaining settings." >&2
+              restore_failed=true
+              continue
+            fi
+            restored="$(sysctl -n "$key" 2>/dev/null || true)"
+            if [ "$restored" != "$value" ]; then
+              echo "::error::Restore verification failed for $key." >&2
+              restore_failed=true
+            fi
+          done <"$state_file"
+          [ "$restore_failed" = false ] || exit 1
+          rm -f "$state_file"
+
       - name: Persist refreshed Codex credentials outside the Codex container
         if: always() && steps.driver-run.outcome != 'skipped'
         id: codex-rotation
@@ -758,7 +878,7 @@ jobs:
 
       - name: Cache approved Codex decision
         if: steps.fresh-result.outputs.has_publishable == 'true'
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: driver-output
@@ -766,7 +886,7 @@ jobs:
 
       - name: Cache safe retry for the current cooldown
         if: steps.fresh-result.outputs.has_publishable == 'false'
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
           path: driver-output
@@ -830,15 +950,15 @@ jobs:
           if-no-files-found: error
 
   finalize-state:
-    needs: [check, capture-tool, codex-driver]
-    if: always() && needs.check.result == 'success' && needs.check.outputs.has_changes == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    needs: [check, credential-preflight, capture-tool, codex-driver]
+    if: always() && needs.check.result == 'success' && needs.credential-preflight.result == 'success' && needs.check.outputs.has_changes == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
     steps:
       - name: Check out durable state writer
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -891,7 +1011,7 @@ jobs:
       contents: write
     steps:
       - name: Check out default branch
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0

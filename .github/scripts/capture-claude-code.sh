@@ -36,33 +36,9 @@ else
   models=("${default_models[@]}")
 fi
 
-headless_deferred_tools=(
-  CronCreate CronDelete CronList DesignSync EnterWorktree ExitWorktree Monitor
-  NotebookEdit PushNotification RemoteTrigger SendMessage TaskCreate TaskGet
-  TaskList TaskOutput TaskStop TaskUpdate WebFetch WebSearch
-)
-interactive_deferred_tools=(
-  CronCreate CronDelete CronList DesignSync EndConversation EnterPlanMode
-  EnterWorktree ExitPlanMode ExitWorktree Monitor NotebookEdit PushNotification
-  RemoteTrigger SendMessage TaskCreate TaskGet TaskList TaskOutput TaskStop
-  TaskUpdate WebFetch WebSearch
-)
-
-join_by_comma() {
-  local IFS=,
-  printf '%s' "$*"
-}
-
-headless_deferred_csv="$(join_by_comma "${headless_deferred_tools[@]}")"
-interactive_deferred_csv="$(join_by_comma "${interactive_deferred_tools[@]}")"
-
-merge_deferred_csv() {
-  local baseline="$1" discovered="$2"
-  printf '%s\n%s\n' "$baseline" "$discovered" |
-    tr ',[:space:]' '\n' |
-    awk '/^[A-Z][A-Za-z0-9]{2,63}$/' |
-    LC_ALL=C sort -u |
-    paste -sd, -
+deferred_names_to_csv() {
+  local discovered="$1"
+  printf '%s\n' "$discovered" | paste -sd, -
 }
 
 die() {
@@ -81,7 +57,7 @@ require_positive_integer() {
   esac
 }
 
-for command_name in claude jq mktemp node timeout tmux; do
+for command_name in awk claude jq mktemp node paste timeout tmux; do
   require_command "$command_name"
 done
 require_positive_integer CLAUDE_HEADLESS_TIMEOUT_SECONDS "$headless_timeout"
@@ -238,8 +214,8 @@ capture_headless_model() {
       "$model" base "Reply exactly: $base_marker" "$base_marker"
   fi
   discovered="$(node "$discover_deferred_script" "$headless_trace_dir" "$base_marker")"
-  deferred_csv="$(merge_deferred_csv "$headless_deferred_csv" "$discovered")"
-  [ -n "$deferred_csv" ] || die "no headless deferred tools were discovered for $model"
+  deferred_csv="$(deferred_names_to_csv "$discovered")"
+  [ -n "$deferred_csv" ] || die "no headless deferred tools were advertised for $model"
   deferred_query="select:$deferred_csv"
   max_results="$(awk -F, '{ print NF }' <<<"$deferred_csv")"
   if ! trace_marker_available "$headless_trace_dir" "$deferred_marker" "$deferred_csv"; then
@@ -321,8 +297,8 @@ wait_for_trace_marker \
   die "interactive base capture is incomplete"
 
 interactive_discovered="$(node "$discover_deferred_script" "$interactive_trace_dir" "$interactive_base_marker")"
-interactive_deferred_csv="$(merge_deferred_csv "$interactive_deferred_csv" "$interactive_discovered")"
-[ -n "$interactive_deferred_csv" ] || die "no interactive deferred tools were discovered"
+interactive_deferred_csv="$(deferred_names_to_csv "$interactive_discovered")"
+[ -n "$interactive_deferred_csv" ] || die "no interactive deferred tools were advertised"
 interactive_deferred_query="select:$interactive_deferred_csv"
 interactive_deferred_max="$(awk -F, '{ print NF }' <<<"$interactive_deferred_csv")"
 
