@@ -1,7 +1,5 @@
 <system-reminder>
 As you answer the user's questions, you can use the following context:
-# userEmail
-The user's email address is <harnessVariable>{{userEmail=user@example.com}}</harnessVariable>.
 # currentDate
 Today's date is <harnessVariable>{{currentDate=2026-01-02}}</harnessVariable>.
 
