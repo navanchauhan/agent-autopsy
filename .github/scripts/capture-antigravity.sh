@@ -290,12 +290,11 @@ AGY_CAPTURE_BINARY="$agy_executable" AGY_CAPTURE_WORKSPACE="$capture_workspace" 
 start_proxy "$interactive_capture" "interactive"
 ca_file="$HOME/.mitmproxy/mitmproxy-ca-cert.pem"
 printf -v interactive_command \
-  'exec env HTTPS_PROXY=%q https_proxy=%q NO_PROXY=%q no_proxy=%q SSL_CERT_FILE=%q CODEIUM_VMODULE=%q %q --add-dir %q --dangerously-skip-permissions --log-file %q' \
-  "$proxy_url" "$proxy_url" '' '' "$ca_file" '*=5' "$agy_executable" "$capture_workspace" "$interactive_log"
+  'exec env HTTPS_PROXY=%q https_proxy=%q NO_PROXY=%q no_proxy=%q SSL_CERT_FILE=%q CODEIUM_VMODULE=%q %q --add-dir %q --dangerously-skip-permissions --log-file %q --prompt-interactive %q' \
+  "$proxy_url" "$proxy_url" '' '' "$ca_file" '*=5' "$agy_executable" "$capture_workspace" "$interactive_log" \
+  "Reply exactly: $interactive_marker"
 tmux new-session -d -s "$tmux_session" -c "$capture_workspace" "$interactive_command"
 wait_for_tmux_startup
-tmux send-keys -t "$tmux_session:0.0" -l -- "Reply exactly: $interactive_marker"
-tmux send-keys -t "$tmux_session:0.0" Enter
 wait_for_completed_marker \
   "$interactive_capture" "$interactive_marker" "interactive marker" "$tmux_session"
 

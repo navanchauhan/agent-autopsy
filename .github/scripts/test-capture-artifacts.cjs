@@ -104,6 +104,23 @@ function makeCase(label) {
 
 try {
   {
+    const antigravityWrapper = fs.readFileSync(
+      path.join(scripts, "capture-antigravity.sh"),
+      "utf8",
+    );
+    assert.match(
+      antigravityWrapper,
+      /--prompt-interactive %q[\s\S]+"Reply exactly: \$interactive_marker"/,
+      "Antigravity TUI capture must start through the CLI's initial-prompt interface",
+    );
+    assert.doesNotMatch(
+      antigravityWrapper,
+      /tmux send-keys[^\n]+interactive_marker/,
+      "Antigravity marker capture must not depend on post-startup terminal keystroke injection",
+    );
+  }
+
+  {
     const testCase = makeCase("newest");
     artifact(testCase.downloads, 1, { status: "retry_capture" });
     artifact(testCase.downloads, 2);
