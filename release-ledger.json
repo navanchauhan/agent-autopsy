@@ -4,11 +4,6 @@
     "codex": [
       {
         "tool": "codex",
-        "new_version": "0.146.1",
-        "new_revision": "79b4f03d35962b005b007a015113b38930711665"
-      },
-      {
-        "tool": "codex",
         "new_version": "0.147.0",
         "new_revision": "be6e8eac029b183056b7e4402879f15d2c85f61b"
       }
