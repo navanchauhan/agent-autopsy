@@ -30,6 +30,11 @@ For Claude Code, inspect deferred-tool declarations and their expanded requests
 as separate evidence. A `DeferredToolPlaceholder` declaration does not establish
 the schema of the deferred tool: trigger each advertised deferred tool and retain
 the expanded model-facing request under `$CAPTURE_SCRATCH_DIR/claude-code/`.
+The `interactive-preview/` directory is explicitly a non-authoritative extractor
+preview seeded from the last successful archive; its seed version and total file
+inventory are not claims about the captured release. Read
+`interactive-preview/preview-provenance.json`, take current version and inventory
+facts from the raw requests, and use the preview only as a normalization aid.
 If a required deferred tool cannot be expanded, revert all candidate changes for
 Claude Code, leave its last successful version intact, and report the capture as
 blocked for a later retry.

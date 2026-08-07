@@ -9,7 +9,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 scratch_root="${CAPTURE_SCRATCH_DIR:-$repo_root/.capture-scratch}"
 tool_scratch="$scratch_root/claude-code"
 raw_root="$tool_scratch/raw"
-candidate_dir="${CLAUDE_CANDIDATE_DIR:-$tool_scratch/candidate}"
+preview_dir="${CLAUDE_PREVIEW_DIR:-$tool_scratch/interactive-preview}"
 trace_script="$repo_root/claude-code/misc/scripts/trace-claude-messages.cjs"
 extract_script="$repo_root/claude-code/misc/scripts/extract-claude-trace.cjs"
 discover_deferred_script="$repo_root/claude-code/misc/scripts/discover-claude-deferred-tools.cjs"
@@ -363,18 +363,29 @@ done
 [ "${#pending_models[@]}" -eq 0 ] || die "headless Claude capture remained incomplete after $headless_attempts bounded attempt(s)"
 rm -f -- "$headless_output_dir"/*.complete
 
-case "$candidate_dir" in
+case "$preview_dir" in
   "$tool_scratch"/*) ;;
-  *) die "candidate directory must remain below $tool_scratch" ;;
+  *) die "interactive preview directory must remain below $tool_scratch" ;;
 esac
-if [ -e "$candidate_dir" ]; then
-  rm -rf -- "$candidate_dir"
+if [ -e "$preview_dir" ]; then
+  rm -rf -- "$preview_dir"
 fi
-mkdir -p "$candidate_dir"
-cp -a "$repo_root/claude-code/." "$candidate_dir/"
-node "$extract_script" "$interactive_trace_dir" "$candidate_dir"
+mkdir -p "$preview_dir"
+for archive_dir in prompts tools misc; do
+  cp -a "$repo_root/claude-code/$archive_dir" "$preview_dir/$archive_dir"
+done
+node "$extract_script" "$interactive_trace_dir" "$preview_dir"
+base_version="$(awk -F' = ' '$1 == "version" { print $2; exit }' "$repo_root/claude-code/VERSION")"
+captured_version="$(claude --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1)"
+jq -n \
+  --arg seed_version "$base_version" \
+  --arg captured_version "$captured_version" \
+  '{schema_version:1,artifact_kind:"interactive_extractor_preview",authoritative:false,
+    seed_version:$seed_version,captured_version:$captured_version,
+    scope:"last successful archive seeded with current interactive trace output; raw requests are authoritative"}' \
+  >"$preview_dir/preview-provenance.json"
 
 echo "Claude capture complete."
 echo "Headless evidence: $headless_trace_dir"
 echo "Interactive evidence: $interactive_trace_dir"
-echo "Interactive candidate: $candidate_dir"
+echo "Interactive extractor preview: $preview_dir"

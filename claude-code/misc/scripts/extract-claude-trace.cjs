@@ -491,7 +491,6 @@ function main() {
   const binaryPath = fs.existsSync(capturedBinaryPath) ? capturedBinaryPath : claudePath;
   const modelNames = [...byModel.keys()].sort();
   const toolNames = [...toolGroups.keys()].sort();
-  const promptFiles = fs.readdirSync(promptsDir).filter((entry) => entry.endsWith(".md")).sort();
   const versionLines = [
     "source = anthropic-ai/claude-code",
     "distribution = native Bun binary",
@@ -505,11 +504,11 @@ function main() {
     "auth_source = local Claude Code Anthropic auth/keychain; ANTHROPIC_API_KEY was unset",
     "trace_script = claude-code/misc/scripts/trace-claude-messages.cjs",
     "extract_script = claude-code/misc/scripts/extract-claude-trace.cjs",
-    "trace_source = local Bun preload /v1/messages trace (not stored)",
-    "capture = tmux interactive session with `BUN_OPTIONS=--preload=claude-code/misc/scripts/trace-claude-messages.cjs claude --dangerously-skip-permissions --strict-mcp-config --tools default` and prompt `Reply exactly: CLAUDE_INTERACTIVE_TRACE_OK`",
-    `prompt_models = ${modelNames.join(", ")}`,
-    `prompts = ${promptFiles.length}`,
-    `tools = ${toolNames.length}`,
+    "trace_source = local Bun preload /v1/messages trace retained as redacted capture evidence",
+    "capture = tmux interactive session with `BUN_OPTIONS=--preload=claude-code/misc/scripts/trace-claude-messages.cjs claude --permission-mode dontAsk --strict-mcp-config --tools default` and prompt `Reply exactly: CLAUDE_INTERACTIVE_TRACE_OK`",
+    `interactive_prompt_models = ${modelNames.join(", ")}`,
+    `interactive_prompt_artifacts = ${modelNames.length}`,
+    `interactive_tool_schemas = ${toolNames.length}`,
   ];
   fs.writeFileSync(path.join(miscDir, "interactive-capture.VERSION"), `${versionLines.join("\n")}\n`);
 }
