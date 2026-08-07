@@ -11,13 +11,13 @@
       "reason": null
     },
     "claude-code": {
-      "plan_hash": "33cc00f58750b4beb9ab3cc7edaebb6eba365f8933eac27b9948dd90516aa77c",
-      "state": "suppress_positive",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260807",
-      "last_reviewer_input_hash": null,
-      "reason": "capture_retry"
+      "plan_hash": "5434f7b5c710641a4832a9f3b8c8eb6c8ac0f6b05bddc20ee851c7b2b923e8c3",
+      "state": "force_once",
+      "request_after_run_id": "31215937384",
+      "request_after_run_attempt": 1,
+      "last_fresh_bucket": null,
+      "last_reviewer_input_hash": "f380abe22a53aa6c1ca3c55ed4afe476675668a2625f97be6759d9177f0a7f25",
+      "reason": "reviewer"
     },
     "grok": {
       "plan_hash": "0a793303c39819216abaa7cb0f0bc0a0526c7dd2a726fcfe7b29ce2b10554350",
