@@ -11,12 +11,6 @@
     "claude-code": [
       {
         "tool": "claude-code",
-        "new_version": "2.1.222",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.222/linux-x64/claude",
-        "artifact_sha256": "10caae8f22b915c26bfff0e013a4d45608c4f1ae287583626569156f447730e5"
-      },
-      {
-        "tool": "claude-code",
         "new_version": "2.1.223",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.223/linux-x64/claude",
         "artifact_sha256": "98226474f802e3094d6a86c5ade8883c16206d0fcb5c400b7401c800063e99d7"
