@@ -273,10 +273,11 @@ tmux_args=(
 interactive_base_marker="CLAUDE_INTERACTIVE_TRACE_OK"
 # Anthropic documents `claude "query"` as the supported way to start an
 # interactive REPL with an initial prompt. Shell-quote the fixed capture prompt
+# and place it before the variadic --tools option so it remains positional,
 # instead of relying on terminal keystrokes during startup.
 # shellcheck disable=SC2016
 printf -v interactive_command \
-  'claude --permission-mode dontAsk --strict-mcp-config --tools default %q; capture_status=$?; printf "%%s\n" "$capture_status" > "$CLAUDE_CAPTURE_EXIT_FILE"; exec sleep 86400' \
+  'claude %q --permission-mode dontAsk --strict-mcp-config --tools default; capture_status=$?; printf "%%s\n" "$capture_status" > "$CLAUDE_CAPTURE_EXIT_FILE"; exec sleep 86400' \
   "Reply exactly: $interactive_base_marker"
 tmux "${tmux_args[@]}" "$interactive_command"
 

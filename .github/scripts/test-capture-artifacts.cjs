@@ -127,8 +127,8 @@ try {
     );
     assert.match(
       claudeWrapper,
-      /interactive_base_marker="CLAUDE_INTERACTIVE_TRACE_OK"[\s\S]+printf -v interactive_command[\s\S]+--tools default %q[\s\S]+"Reply exactly: \$interactive_base_marker"/,
-      "Claude TUI capture must start through the documented initial-prompt interface",
+      /interactive_base_marker="CLAUDE_INTERACTIVE_TRACE_OK"[\s\S]+printf -v interactive_command[\s\S]+claude %q --permission-mode dontAsk --strict-mcp-config --tools default[\s\S]+"Reply exactly: \$interactive_base_marker"/,
+      "Claude TUI capture must put the documented positional initial prompt before the variadic --tools option",
     );
     assert.doesNotMatch(
       claudeWrapper,
