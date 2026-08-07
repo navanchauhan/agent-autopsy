@@ -1,7 +1,7 @@
 source = openai/codex
-revision = c38a60ded2ffbad510f8b512e2902f0128e998e8
-describe = c38a60d
-codex_cli_package_version = 0.146.0
+revision = 79b4f03d35962b005b007a015113b38930711665
+describe = 79b4f03
+codex_cli_package_version = 0.146.1
 reference_path = references/codex
 capture_mode = direct source extraction
 prompts = 15
@@ -12,7 +12,7 @@ gpt_5_6_multi_agent_versions = sol: v2; terra: v2; luna: v1
 scope_limit = dynamic per-session code-mode tool listings are not stored as fixed tool schemas
 code_mode_output_helpers = image, audio
 environment_instructions = enabled with environment context and deferred executor support
-multi_environment_context = multiple environment entries include primary="true" or primary="false"
-code_mode_inter_agent_messages = plaintext MESSAGE and NEW_TASK envelopes
+multi_environment_context = environment entries render without primary markers
+code_mode_inter_agent_messages = plaintext FINAL_ANSWER envelopes
 collaboration_mode_messages = model-catalog default and plan messages override configuration-provided instructions
 realtime_mode_messages = bundled defaults with per-conversation start and end instruction overrides
