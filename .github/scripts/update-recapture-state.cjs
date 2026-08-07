@@ -257,6 +257,19 @@ function artifactDirectories(rootArg, expression, label) {
   const root = path.resolve(rootArg);
   if (!fs.existsSync(root)) return [];
   requireArtifactDirectory(root, `${label} root`);
+  // download-artifact extracts a single pattern match directly into `path`,
+  // while multiple matches are placed in artifact-named subdirectories. Accept
+  // both layouts, but derive the synthetic directory name only from the signed
+  // workflow metadata so the normal identity and digest checks still apply.
+  if (fs.existsSync(path.join(root, metadataName))) {
+    const metadata = readJson(path.join(root, metadataName), `${label} artifact metadata`, 64 * 1024);
+    const name = label === "capture"
+      ? `capture-bundle-${metadata.tool}-attempt-${metadata.run_attempt}`
+      : `driver-output-attempt-${metadata.run_attempt}`;
+    const match = expression.exec(name);
+    if (!match) fail(`flattened ${label} artifact has an invalid identity`);
+    return [{ directory: root, name, match }];
+  }
   const directories = [];
   for (const name of fs.readdirSync(root).sort()) {
     const match = expression.exec(name);

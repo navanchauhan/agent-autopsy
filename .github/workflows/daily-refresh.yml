@@ -1029,12 +1029,18 @@ jobs:
       - name: Select newest reviewed driver attempt
         shell: bash
         run: |
-          latest="$(find "$RUNNER_TEMP/driver-downloads" -mindepth 1 -maxdepth 1 -type d \
-            -name 'driver-output-attempt-*' -printf '%f\n' | sort -V | tail -n1)"
-          [ -n "$latest" ] || { echo 'No reviewed driver attempt was downloaded.' >&2; exit 1; }
+          source_dir=''
+          if [ -f "$RUNNER_TEMP/driver-downloads/workflow-run.json" ]; then
+            source_dir="$RUNNER_TEMP/driver-downloads"
+          else
+            latest="$(find "$RUNNER_TEMP/driver-downloads" -mindepth 1 -maxdepth 1 -type d \
+              -name 'driver-output-attempt-*' -printf '%f\n' | sort -V | tail -n1)"
+            [ -n "$latest" ] || { echo 'No reviewed driver attempt was downloaded.' >&2; exit 1; }
+            source_dir="$RUNNER_TEMP/driver-downloads/$latest"
+          fi
           rm -rf -- driver-output
           mkdir -p driver-output
-          cp -a "$RUNNER_TEMP/driver-downloads/$latest/." driver-output/
+          cp -a "$source_dir/." driver-output/
           rm -f -- driver-output/workflow-run.json
 
       - name: Stage immutable publication gates

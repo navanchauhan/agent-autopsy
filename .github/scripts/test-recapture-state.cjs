@@ -668,6 +668,24 @@ try {
     assert.match(rejected.result.stderr, /does not partition every planned tool/);
   }
 
+  // download-artifact flattens a single pattern match into the requested root.
+  // The finalizer must accept that layout without weakening metadata or digest
+  // validation.
+  {
+    const testCase = makeCase("flattened-driver-download");
+    const plan = makePlan("codex", "1");
+    const drivers = path.join(testCase, "driver-downloads");
+    const nested = driverArtifact(drivers, { approved: ["codex"] });
+    for (const name of fs.readdirSync(nested)) {
+      fs.renameSync(path.join(nested, name), path.join(drivers, name));
+    }
+    fs.rmdirSync(nested);
+    const result = finalized(testCase, [plan], state({ codex: entry(plan.plan_hash) }), {
+      driverRoot: drivers,
+    });
+    assert.deepEqual(result.output.tools.codex, entry(plan.plan_hash));
+  }
+
   // Approval clears pending work but retains bounded history needed for future
   // same-bucket and same-input early stopping.
   {
