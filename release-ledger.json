@@ -2,14 +2,7 @@
   "schema_version": 1,
   "queues": {
     "codex": [],
-    "claude-code": [
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.224",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.224/linux-x64/claude",
-        "artifact_sha256": "a2b5add7dc4bcd8eaa029f4e8bdac4df7769b4073698db7989d206baf9419c2d"
-      }
-    ],
+    "claude-code": [],
     "grok": [
       {
         "tool": "grok",
