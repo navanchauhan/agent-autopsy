@@ -31,6 +31,29 @@ Run-specific values are replaced with `<harnessVariable>{{name=example}}</harnes
 
 ## Automated refresh
 
-`.github/workflows/daily-refresh.yml` installs the current Claude Code, Antigravity, and Grok CLIs to compare their versions, and checks Codex by upstream source revision. When a supported source changes, the refresh job runs the relevant documented capture flow in a container, compares semantic output, independently reviews the candidate against capture/source evidence, and publishes a commit and dated release only when the repository changes. Amp is excluded while its prompt capture remains unavailable.
+`.github/workflows/daily-refresh.yml` polls stable upstream releases hourly without making a model call. Every validated target is added to a durable per-tool FIFO in the `automation/release-state` branch, alongside recapture state. Only the exact head of each queue is emitted for capture, and that head remains pinned until the corresponding committed `VERSION` advances. A newer release therefore cannot displace an older unpublished release. The state branch is separate from the default branch so polling does not create user-facing archive commits.
 
-The canonical agent report stays Markdown, with one section per changed tool, and becomes the GitHub release notes. Reviewer JSON is an internal publication gate rather than the human-facing archive view.
+The four active providers run as an independent, fail-fast-disabled matrix with at most four workers. Each worker is bound to a canonical plan containing the exact release, source revision where available, artifact digest, and capture-contract hash. Codex is extracted from its matching `rust-v<version>` source tag; Claude uses a preloaded request tracer and tmux PTY harness; Grok and Antigravity use response-validated mitmproxy harnesses. A rerun can replay the newest eligible, digest-verified capture bundle from an earlier attempt of the same workflow run. Incomplete providers stop before normalization and remain queued, while complete providers can continue independently.
+
+After capture, one serial Codex author normalizes all ready evidence and a separate read-only Codex reviewer gates material changes. The driver uses the repository's last approved Codex CLI, not the newly observed Codex target, and runs in short-lived containers with credentials denied to model-generated shell commands. If the author produces no scoped diff, the workflow writes a deterministic retry result and stops before spending reviewer tokens. A successful publication applies the exact reviewed binary patch, creates one atomic commit and annotated tag, pushes them atomically, and creates release notes mechanically from version transitions and reviewed file changes. Model-authored prose is not used as permanent release metadata.
+
+Validated captures, exact Codex/Grok source checkouts, image build layers, and approved Codex decisions are cached by their exact inputs. The Codex decision identity includes the driver contract, model settings, per-tool baseline tree, release plan, and evidence. Rejected captures and safe no-op decisions early-stop within aligned cooldown buckets (daily by default); `workflow_dispatch` with `force_capture` bypasses the positive and retry caches. Credentials and raw unvalidated traces are never cached.
+
+Amp remains excluded while its prompt capture is unavailable.
+
+## Capture credentials
+
+Create a GitHub environment named `agent-autopsy-capture` without required reviewers before enabling the workflow. The provider and Codex-driver jobs use that environment with deployment creation disabled, so environment secrets are loaded when each job starts rather than when the workflow is queued. This is important for OAuth files refreshed by an earlier run.
+
+The capture jobs consume these secrets:
+
+- `CODEX_CHATGPT_AUTH_JSON`: base64 of an isolated Codex `auth.json`, used only by the serial driver.
+- `CLAUDE_CODE_OAUTH_TOKEN`: the long-lived setup token used by Claude print mode.
+- `CLAUDE_CODE_CREDENTIALS_JSON`: optional base64 of a real isolated `~/.claude/.credentials.json`, used and rotated for interactive mode.
+- `GROK_AUTH_JSON`: base64 of `~/.grok/auth.json`.
+- `ANTIGRAVITY_GEMINI_CREDS`: base64 tar containing only `antigravity-oauth-token` and `installation_id`.
+- `REPO_SECRETS_PAT`: a narrowly scoped token authorized to run `gh secret set ... --env agent-autopsy-capture` for this repository. It is available only to fixed host-side persistence steps and is never passed to a provider or Codex model process.
+
+For initial bootstrap, store the login values as repository secrets; if an environment secret of the same name is absent, the repository value remains available to the environment job. After a successful capture, a fixed host-side step validates the refreshed credential and writes the rotating copy into `agent-autopsy-capture`, where it takes precedence on later job starts. `REPO_SECRETS_PAT` must itself remain available to those jobs and have permission to update this repository's environment secrets. Rotation is never used as same-run job communication.
+
+Each isolated provider exports only its own refreshed login into a narrow runner-temp mount. The Codex ChatGPT login is decoded on the host, never placed in the model container environment, and mounted only for the parent CLI. Named Codex permission profiles deny model-generated commands access to both `auth.json` and the credential mount. Author and reviewer use separate containers, with a zero-token sandbox preflight before the first model call. A provider credential-persistence failure converts that provider to a retry; Codex-driver persistence failure blocks publication.

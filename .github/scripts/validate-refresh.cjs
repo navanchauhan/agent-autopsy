@@ -220,11 +220,24 @@ function isInsideAllowedDir(relativePath, allowedDirs) {
   return allowedDirs.some((dir) => relativePath === dir || relativePath.startsWith(`${dir}/`));
 }
 
+function isNormalizedArtifactPath(relativePath, owner) {
+  if (!relativePath.startsWith(`${owner}/`)) return false;
+  const local = relativePath.slice(owner.length + 1);
+  if (local === "VERSION") return true;
+  if (/^prompts\/[A-Za-z0-9][A-Za-z0-9._-]*\.md$/.test(local)) return true;
+  if (/^tools\/[A-Za-z0-9][A-Za-z0-9._-]*\.json$/.test(local)) return true;
+  return /^misc\/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:json|md|txt|xml|VERSION)$/.test(local);
+}
+
 function validateModificationScope(modifiedPaths, tools) {
   const allowedDirs = tools.map((entry) => entry.dir);
   for (const relativePath of modifiedPaths) {
     if (!isInsideAllowedDir(relativePath, allowedDirs)) {
       fail(`scope: ${relativePath} is modified but is outside changed tool directories`);
+    }
+    const owner = allowedDirs.find((dir) => relativePath.startsWith(`${dir}/`));
+    if (!owner || !isNormalizedArtifactPath(relativePath, owner)) {
+      fail(`scope: ${relativePath} is not an allowlisted normalized artifact path`);
     }
   }
 }
@@ -263,6 +276,9 @@ function validateCandidatePaths(paths) {
       continue;
     }
     if (stat.isSymbolicLink()) fail(`files: symbolic links are not allowed (${relativePath})`);
+    if (stat.isFile() && (stat.mode & 0o111) !== 0) {
+      fail(`files: executable candidate is not allowed (${relativePath})`);
+    }
     if (stat.isFile() && isRawCapturePath(relativePath)) {
       fail(`files: raw capture artifact is not allowed (${relativePath})`);
     }
@@ -295,8 +311,17 @@ function validateChangedFileContents(modifiedPaths) {
     if (!stat.isFile() || stat.isSymbolicLink()) continue;
 
     const buffer = fs.readFileSync(absolutePath);
-    if (buffer.includes(0)) continue;
-    const text = buffer.toString("utf8");
+    if (buffer.includes(0)) {
+      fail(`files: binary or NUL-bearing candidate is not allowed (${relativePath})`);
+      continue;
+    }
+    let text;
+    try {
+      text = new TextDecoder("utf-8", { fatal: true }).decode(buffer);
+    } catch (error) {
+      fail(`files: candidate is not valid UTF-8 (${relativePath}: ${error.message})`);
+      continue;
+    }
     for (const [label, pattern] of secretPatterns) {
       if (pattern.test(text)) fail(`secrets: possible ${label} in ${relativePath}`);
     }

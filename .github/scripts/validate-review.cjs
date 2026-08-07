@@ -30,6 +30,53 @@ function hasChanges(dir) {
   }).trim() !== "";
 }
 
+function versionFields(dir) {
+  const versionPath = path.join(repoRoot, dir, "VERSION");
+  try {
+    const fields = new Map();
+    for (const line of fs.readFileSync(versionPath, "utf8").split(/\r?\n/)) {
+      const match = line.match(/^([A-Za-z0-9_]+)\s*=\s*(.*)$/);
+      if (match && !fields.has(match[1])) fields.set(match[1], match[2]);
+    }
+    return fields;
+  } catch {
+    return new Map();
+  }
+}
+
+function validateArtifactMetadata(tool, fields, errors) {
+  if (Object.hasOwn(tool, "artifact_sha256")) {
+    if (typeof tool.artifact_sha256 !== "string" || !/^[0-9a-f]{64}$/.test(tool.artifact_sha256)) {
+      errors.push(`${tool.tool}: capture plan artifact_sha256 is invalid`);
+    } else if (fields.get("sha256") !== tool.artifact_sha256) {
+      errors.push(
+        `${tool.tool}: ${tool.dir}/VERSION sha256 must equal the pinned artifact SHA-256 ${tool.artifact_sha256}`,
+      );
+    }
+  }
+
+  if (tool.tool !== "antigravity") return;
+  if (typeof tool.artifact_url !== "string" || tool.artifact_url.length === 0) {
+    errors.push("antigravity: capture plan artifact_url is missing");
+  } else if (fields.get("manifest_tarball_url") !== tool.artifact_url) {
+    errors.push(
+      `antigravity: ${tool.dir}/VERSION manifest_tarball_url must equal the pinned artifact URL`,
+    );
+  }
+  if (typeof tool.artifact_sha512 !== "string" || !/^[0-9a-f]{128}$/.test(tool.artifact_sha512)) {
+    errors.push("antigravity: capture plan artifact_sha512 is invalid");
+  } else if (fields.get("manifest_tarball_sha512") !== tool.artifact_sha512) {
+    errors.push(
+      `antigravity: ${tool.dir}/VERSION manifest_tarball_sha512 must equal the pinned artifact SHA-512 ${tool.artifact_sha512}`,
+    );
+  }
+  if (fields.get("manifest_version") !== tool.new_version) {
+    errors.push(
+      `antigravity: ${tool.dir}/VERSION manifest_version must equal ${tool.new_version}`,
+    );
+  }
+}
+
 function main() {
   if (process.argv.includes("--help") || process.argv.includes("-h")) {
     console.log("Usage: node .github/scripts/validate-review.cjs [changed-tools.json] [review-result.json]");
@@ -80,12 +127,11 @@ function main() {
       errors.push(`${tool.tool}: issues must be an array`);
       continue;
     }
-    if (result.issues.some((issue) => issue?.severity === "error")) {
-      errors.push(`${tool.tool}: an approved review cannot contain error issues`);
-    }
-
     if (result.outcome === "approve") {
       approvedCount += 1;
+      if (result.issues.some((issue) => issue?.severity === "error")) {
+        errors.push(`${tool.tool}: an approved review cannot contain error issues`);
+      }
       for (const field of [
         "capture_complete",
         "changes_supported_by_evidence",
@@ -95,6 +141,20 @@ function main() {
       ]) {
         if (result[field] !== true) errors.push(`${tool.tool}: ${field} must be true when approved`);
       }
+      const fields = versionFields(tool.dir);
+      if (typeof tool.version_field === "string") {
+        if (fields.get(tool.version_field) !== tool.new_version) {
+          errors.push(
+            `${tool.tool}: ${tool.dir}/VERSION ${tool.version_field} must equal ${tool.new_version} when approved`,
+          );
+        }
+        if (typeof tool.new_revision === "string" && fields.get("revision") !== tool.new_revision) {
+          errors.push(
+            `${tool.tool}: ${tool.dir}/VERSION revision must equal ${tool.new_revision} when approved`,
+          );
+        }
+      }
+      validateArtifactMetadata(tool, fields, errors);
     } else if (result.outcome === "retry_capture") {
       retryCount += 1;
       if (result.capture_complete !== false) {

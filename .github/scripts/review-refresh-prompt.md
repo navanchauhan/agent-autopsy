@@ -6,15 +6,16 @@ Inputs are available at:
 
 - changed tools: `$CHANGED_TOOLS_FILE`
 - primary-agent summary: `$CODEX_SUMMARY_FILE`
+- compact evidence inventory: `$CAPTURE_SCRATCH_DIR/evidence-index.json`
 - redacted capture evidence: `$CAPTURE_SCRATCH_DIR`
+- referenced upstream source trees already present in the workspace
+- candidate changes: the Git diff from `$REFRESH_BASE_REF` (or `HEAD` when unset)
 
 Start by reading the changed-tools manifest and primary-agent summary from those
 environment-variable paths. The paths refer to the current live workspace; do
 not report evidence unavailable until you have attempted to read them. Inspect
 only the listed tool directories and their corresponding evidence. Return one
 tool result for every listed tool; do not return a partial result.
-- referenced upstream source trees already present in the workspace
-- candidate changes: the Git diff from `$REFRESH_BASE_REF` (or `HEAD` when unset)
 
 For Grok, inspect `/workspace/references/grok-build` when it exists. Its
 `SOURCE_REV` is authoritative for the revision recorded in `grok/VERSION`; the

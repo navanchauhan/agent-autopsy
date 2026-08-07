@@ -123,14 +123,47 @@ function templateSkillListing(text) {
 
 const records = readJsonl(captureFile);
 const responsesRecords = records.filter(
-  (r) => typeof r.url === "string" && r.url.endsWith("/v1/responses") && r.request_body,
+  (r) =>
+    typeof r.url === "string" &&
+    /\/v1\/responses(?:\?|$)/.test(r.url) &&
+    typeof r.request_body === "string",
 );
 if (responsesRecords.length === 0) {
   throw new Error(`No captured /v1/responses request bodies found in ${captureFile}`);
 }
 
-function classify(body) {
-  const model = body.model;
+function successfulResponse(record) {
+  return (
+    Number.isInteger(record.response_status) &&
+    record.response_status >= 200 &&
+    record.response_status < 300 &&
+    record.response_complete === true
+  );
+}
+
+function hasResponseMarker(record, marker) {
+  return (
+    record.capture_marker === marker &&
+    Array.isArray(record.response_markers) &&
+    record.response_markers.includes(marker)
+  );
+}
+
+function usableArtifactBody(body) {
+  const hasSystemPrompt =
+    Array.isArray(body.input) &&
+    body.input.some(
+      (message) =>
+        message.role === "system" &&
+        typeof message.content === "string" &&
+        message.content.trim(),
+    );
+  return hasSystemPrompt && Array.isArray(body.tools) && body.tools.length > 0;
+}
+
+function classify(body, record) {
+  const rawModel = typeof body.model === "string" ? body.model : "missing-model";
+  const model = rawModel.replace(/[^A-Za-z0-9_.-]+/g, "_");
   const sysMsg = (body.input || []).find((m) => m.role === "system");
   const sysText = sysMsg && typeof sysMsg.content === "string" ? sysMsg.content : "";
   const toolNames = (body.tools || []).map((t) => t.name || t.type);
@@ -138,19 +171,27 @@ function classify(body) {
   if (toolNames.length === 1 && toolNames[0] === "session_title") {
     return "grok-session-title";
   }
+  if (rawModel === "missing-model") return "unknown-missing-model";
+  if (record.capture_marker === "GROK_INTERACTIVE_TRACE_OK") {
+    return `${model}-interactive`;
+  }
+  if (record.capture_marker === "GROK_TRACE_OK") {
+    return model;
+  }
   if (model === "grok-composer-2.5-fast") {
-    return "grok-composer-2.5-fast";
+    return model;
   }
   if (sysText.includes("You are an interactive CLI tool")) {
-    return "grok-4.5-interactive";
+    return `${model}-interactive`;
   }
   if (sysText.includes("You are an autonomous agent")) {
-    return "grok-4.5";
+    return model;
   }
   return `unknown-${model}`;
 }
 
 const byRunKind = new Map();
+const allRunKinds = new Map();
 for (const record of responsesRecords) {
   let body;
   try {
@@ -158,14 +199,52 @@ for (const record of responsesRecords) {
   } catch {
     continue;
   }
-  const runKind = classify(body);
+  const runKind = classify(body, record);
+  if (!allRunKinds.has(runKind)) allRunKinds.set(runKind, []);
+  allRunKinds.get(runKind).push({ body, record });
+  if (!successfulResponse(record) || !usableArtifactBody(body)) continue;
   if (!byRunKind.has(runKind)) byRunKind.set(runKind, []);
   const list = byRunKind.get(runKind);
   const cwdMatch = JSON.stringify(body.input).match(/Workspace Path: (.*?)\\n/);
-  list.push({ body, cwd: cwdMatch ? cwdMatch[1] : null });
+  list.push({ body, cwd: cwdMatch ? cwdMatch[1] : null, record });
 }
 if (byRunKind.size === 0) {
-  throw new Error(`No valid /v1/responses request bodies found in ${captureFile}`);
+  const statuses = responsesRecords.map((record) => record.response_status ?? "none");
+  throw new Error(
+    `No completed successful /v1/responses captures found in ${captureFile}; statuses: ${statuses.join(", ")}`,
+  );
+}
+
+const unknownKinds = [...allRunKinds.keys()].filter((kind) => kind.startsWith("unknown-"));
+if (unknownKinds.length > 0) {
+  throw new Error(`Unclassified Grok capture kind(s): ${unknownKinds.join(", ")}`);
+}
+
+for (const marker of ["GROK_TRACE_OK", "GROK_INTERACTIVE_TRACE_OK"]) {
+  const completed = [...byRunKind.values()]
+    .flat()
+    .filter(({ record }) => hasResponseMarker(record, marker));
+  if (completed.length === 0) {
+    const observed = responsesRecords
+      .filter((record) => record.capture_marker === marker)
+      .map((record) => record.response_status ?? "none")
+      .join(", ");
+    throw new Error(
+      `Missing completed successful Grok response for ${marker}` +
+        (observed ? `; observed statuses: ${observed}` : ""),
+    );
+  }
+}
+
+const completedSessionTitles = byRunKind.get("grok-session-title") || [];
+if (completedSessionTitles.length === 0) {
+  const observed = (allRunKinds.get("grok-session-title") || [])
+    .map(({ record }) => record.response_status ?? "none")
+    .join(", ");
+  throw new Error(
+    "Missing completed successful grok-session-title response" +
+      (observed ? `; observed statuses: ${observed}` : ""),
+  );
 }
 
 console.log("Run kinds found:", [...byRunKind.keys()].map((k) => `${k} (${byRunKind.get(k).length})`).join(", "));

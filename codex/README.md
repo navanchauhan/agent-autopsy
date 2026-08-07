@@ -2,7 +2,9 @@
 
 ## Source method
 
-Codex is open source, so its artifacts are extracted directly from the upstream source tree. There is no binary tracing, proxying, or live model request in this capture flow.
+Codex is open source, so its artifacts are extracted directly from the upstream source tree. There is no binary tracing, proxying, or live model request in this capture flow. Automated refreshes enumerate stable `@openai/codex` package versions newer than the archive and queue each one only when its exact `rust-v<version>` release tag is available; arbitrary commits on upstream `HEAD` do not trigger releases.
+
+The Codex release being archived is separate from the Codex CLI that drives normalization. The provider worker treats the exact released source as evidence and spends no model tokens. The later serial author and read-only reviewer use the repository's last approved Codex CLI, so a newly released or broken package cannot break every provider's refresh.
 
 `references/codex` is an ignored working clone. Prompt and runtime-message paths can move between revisions, so locate current definitions by distinctive text and verify how the source assembles them before updating this archive.
 

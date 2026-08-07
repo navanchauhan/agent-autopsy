@@ -9,6 +9,7 @@ const MARKER = "Cortex API Request: ";
 const DEFAULT_OUT_DIR = process.env.CAPTURE_SCRATCH_DIR
   ? path.resolve(process.env.CAPTURE_SCRATCH_DIR, "antigravity", "candidate")
   : path.resolve(process.cwd(), "antigravity");
+const CAPTURE_WORKSPACE = process.env.AGY_CAPTURE_WORKSPACE || "";
 const PRINT_TRACE_COMMAND =
   "CODEIUM_VMODULE='*=5' agy --add-dir \"$PWD\" --print 'Reply exactly: ANTIGRAVITY_TRACE_OK' --print-timeout 90s --log-file <trace>/agy.log";
 const INTERACTIVE_TRACE_COMMAND =
@@ -43,6 +44,12 @@ function readJsonRequests(logPath) {
         line: index + 1,
         payload: JSON.parse(record.request_body),
         url: record.url,
+        capture_marker: record.capture_marker,
+        response_status: record.response_status,
+        response_complete: record.response_complete,
+        response_markers: record.response_markers,
+        response_error: record.response_error,
+        network_capture: true,
       });
     } catch {
       // Non-request verbose-log lines can begin with "{".
@@ -55,20 +62,96 @@ function safeFileName(name) {
   return name.replace(/[^A-Za-z0-9_.-]+/g, "_");
 }
 
-function execOrUnknown(command) {
+function resolveExecutable(command) {
+  const candidates = [];
+  if (path.isAbsolute(command) || command.includes("/") || command.includes("\\")) {
+    candidates.push(path.resolve(command));
+  } else {
+    const extensions =
+      process.platform === "win32"
+        ? ["", ...(process.env.PATHEXT || ".EXE;.CMD;.BAT;.COM").split(";")]
+        : [""];
+    for (const directory of (process.env.PATH || "").split(path.delimiter)) {
+      if (!directory) continue;
+      for (const extension of extensions) {
+        candidates.push(path.join(directory, `${command}${extension}`));
+      }
+    }
+  }
+  for (const candidate of candidates) {
+    try {
+      if (fs.statSync(candidate).isFile()) return fs.realpathSync(candidate);
+    } catch {
+      // Continue searching PATH.
+    }
+  }
+  return "unknown";
+}
+
+function execFileOrUnknown(command, args) {
+  if (command === "unknown") return "unknown";
   try {
-    return childProcess.execSync(command, { encoding: "utf8" }).trim();
+    return childProcess
+      .execFileSync(command, args, { encoding: "utf8", timeout: 10_000 })
+      .trim();
   } catch {
     return "unknown";
   }
 }
 
-function fetchJsonOrNull(url) {
+function readPinnedAntigravityPlan() {
+  const planPath =
+    process.env.CHANGED_TOOLS_FILE ||
+    path.join(
+      process.env.CAPTURE_SCRATCH_DIR || path.resolve(process.cwd(), ".capture-scratch"),
+      "changed-tools.json",
+    );
+
+  const resolved = path.resolve(planPath);
+  let stat;
   try {
-    return JSON.parse(childProcess.execFileSync("curl", ["-fsSL", url], { encoding: "utf8" }));
+    stat = fs.lstatSync(resolved);
   } catch {
-    return null;
+    throw new Error(
+      `Pinned Antigravity capture plan is unavailable at ${resolved}; run the release resolver first`,
+    );
   }
+  if (!stat.isFile() || stat.isSymbolicLink() || stat.size < 1 || stat.size > 1024 * 1024) {
+    throw new Error("CHANGED_TOOLS_FILE must be a nonempty regular JSON file no larger than 1 MiB");
+  }
+  const plan = JSON.parse(fs.readFileSync(resolved, "utf8"));
+  if (!Array.isArray(plan)) throw new Error("CHANGED_TOOLS_FILE must contain a capture-plan array");
+  const matches = plan.filter((entry) => entry?.tool === "antigravity");
+  if (matches.length !== 1) {
+    throw new Error("The capture plan must contain exactly one Antigravity entry");
+  }
+
+  const entry = matches[0];
+  if (
+    typeof entry.new_version !== "string" ||
+    !/^[0-9]+\.[0-9]+\.[0-9]+(?:[-.][A-Za-z0-9.]+)?$/.test(entry.new_version)
+  ) {
+    throw new Error("The Antigravity capture plan has an invalid target version");
+  }
+  if (typeof entry.artifact_url !== "string") {
+    throw new Error("The Antigravity capture plan is missing its artifact URL");
+  }
+  let artifactUrl;
+  try {
+    artifactUrl = new URL(entry.artifact_url);
+  } catch {
+    throw new Error("The Antigravity capture plan has an invalid artifact URL");
+  }
+  if (artifactUrl.protocol !== "https:") {
+    throw new Error("The Antigravity capture artifact URL must use HTTPS");
+  }
+  if (
+    typeof entry.artifact_sha512 !== "string" ||
+    !/^[0-9a-f]{128}$/.test(entry.artifact_sha512)
+  ) {
+    throw new Error("The Antigravity capture plan has an invalid artifact SHA-512");
+  }
+  return entry;
 }
 
 function sha256File(filePath) {
@@ -141,7 +224,15 @@ function firstMatch(text, regexp) {
 }
 
 function sanitizeExample(value) {
-  return value
+  let out = value;
+  if (CAPTURE_WORKSPACE) {
+    out = replaceAllLiteral(
+      out,
+      CAPTURE_WORKSPACE,
+      "/Users/example/Developer/example-repo",
+    );
+  }
+  return out
     .replace(/\/Users\/[^/\s<>"')\]]+\/Developer\/[^\s<>"')\]]+/g, "/Users/example/Developer/example-repo")
     .replace(/\/Users\/[^/]+\/\.gemini\/antigravity-cli/g, "/Users/example/.gemini/antigravity-cli")
     .replace(/\/home\/[^/]+\/\.gemini\/antigravity-cli/g, "/Users/example/.gemini/antigravity-cli")
@@ -166,6 +257,13 @@ function harnessScalarForValue(value, fallbackName = "runtimeValue") {
 
 function markHarnessVariables(text) {
   let out = text;
+  if (CAPTURE_WORKSPACE) {
+    out = replaceAllLiteral(
+      out,
+      CAPTURE_WORKSPACE,
+      harnessScalar("workspaceUri", "/Users/example/Developer/example-repo"),
+    );
+  }
   const literalExamples = new Map();
   const addLiteralExample = (value, name) => {
     if (value && !literalExamples.has(value)) literalExamples.set(value, name);
@@ -364,14 +462,85 @@ function mergeInteractiveTool(toolPath, name, interactiveVariants) {
 function main() {
   const logPath = process.argv[2];
   if (!logPath) usage();
+  const pinnedPlan = readPinnedAntigravityPlan();
 
   const logText = fs.readFileSync(logPath, "utf8");
+  const metadataLogText =
+    process.env.AGY_VERBOSE_LOG && fs.existsSync(process.env.AGY_VERBOSE_LOG)
+      ? fs.readFileSync(process.env.AGY_VERBOSE_LOG, "utf8")
+      : logText;
   const captureMode = process.env.AGY_CAPTURE_MODE === "interactive" ? "interactive" : "non-interactive";
+  const expectedMarker =
+    captureMode === "interactive"
+      ? "ANTIGRAVITY_INTERACTIVE_TRACE_OK"
+      : "ANTIGRAVITY_TRACE_OK";
   const outDir = process.argv[3] ? path.resolve(process.argv[3]) : DEFAULT_OUT_DIR;
-  const requests = readJsonRequests(logPath);
-  const agentRecords = requests.filter((record) => record.payload.requestType === "agent");
+  let requests = readJsonRequests(logPath);
+  const networkRequests = requests.filter((record) => record.network_capture);
+  if (networkRequests.length > 0) {
+    const completedRequests = networkRequests.filter(
+      (record) =>
+        Number.isInteger(record.response_status) &&
+        record.response_status >= 200 &&
+        record.response_status < 300 &&
+        record.response_complete === true,
+    );
+    const completedMarker = completedRequests.some(
+      (record) =>
+        record.capture_marker === expectedMarker &&
+        Array.isArray(record.response_markers) &&
+        record.response_markers.includes(expectedMarker),
+    );
+    if (!completedMarker) {
+      const evidence = networkRequests.map((record) => ({
+        marker: record.capture_marker || null,
+        status: record.response_status ?? null,
+        complete: record.response_complete === true,
+        responseMarkers: Array.isArray(record.response_markers)
+          ? record.response_markers
+          : [],
+        error: record.response_error || null,
+      }));
+      throw new Error(
+        `Missing completed successful ${captureMode} response marker ${expectedMarker}; evidence: ${JSON.stringify(evidence)}`,
+      );
+    }
+    requests = completedRequests;
+  }
+  let agentRecords = requests.filter((record) => record.payload.requestType === "agent");
   if (agentRecords.length === 0) {
     throw new Error(`No agent Cortex API requests found in ${logPath}`);
+  }
+  if (networkRequests.length > 0) {
+    const markerRecords = agentRecords.filter(
+      (record) =>
+        record.capture_marker === expectedMarker &&
+        Array.isArray(record.response_markers) &&
+        record.response_markers.includes(expectedMarker),
+    );
+    if (markerRecords.length === 0) {
+      throw new Error(`Completed ${captureMode} marker was not an agent request`);
+    }
+    const usableMarkerRecords = markerRecords.filter((record) => {
+      const systemPrompt = (record.payload.request?.systemInstruction?.parts || [])
+        .map((part) => part.text || "")
+        .join("")
+        .trim();
+      return (
+        systemPrompt &&
+        Array.isArray(record.payload.request?.tools) &&
+        record.payload.request.tools.length > 0
+      );
+    });
+    if (usableMarkerRecords.length === 0) {
+      throw new Error(
+        `Completed ${captureMode} capture omitted the system prompt or tool declarations`,
+      );
+    }
+    const unusableMarkerRecords = new Set(
+      markerRecords.filter((record) => !usableMarkerRecords.includes(record)),
+    );
+    agentRecords = agentRecords.filter((record) => !unusableMarkerRecords.has(record));
   }
 
   const promptsDir = path.join(outDir, "prompts");
@@ -435,8 +604,17 @@ function main() {
     }
   }
 
-  const agyPath = execOrUnknown("command -v agy");
-  const version = execOrUnknown("agy --version");
+  const agyPath = resolveExecutable(
+    process.env.AGY_CAPTURE_BINARY || process.env.ANTIGRAVITY_BIN || "agy",
+  );
+  const versionOutput = execFileOrUnknown(agyPath, ["--version"]);
+  const installedVersion = versionOutput.match(/[0-9]+\.[0-9]+\.[0-9]+(?:[-.][A-Za-z0-9.]+)?/)?.[0];
+  if (installedVersion !== pinnedPlan.new_version) {
+    throw new Error(
+      `Pinned Antigravity version mismatch: expected ${pinnedPlan.new_version}, found ${installedVersion || "unknown"}`,
+    );
+  }
+  const version = pinnedPlan.new_version;
   const generatedAt = new Date().toISOString();
   const toolNames = [...toolGroups.keys()].sort();
   const modelNames = [...byModel.keys()].sort();
@@ -451,13 +629,16 @@ function main() {
     manifestPlatform === null
       ? "unknown"
       : `https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/${manifestPlatform}.json`;
-  const manifest = manifestUrl === "unknown" ? null : fetchJsonOrNull(manifestUrl);
   const endpoint =
     requests.find((record) => record.url?.includes("streamGenerateContent"))?.url ||
-    logText.match(/URL: (https:\/\/[^\s]+streamGenerateContent[^\s]*)/)?.[1] ||
+    metadataLogText.match(/URL: (https:\/\/[^\s]+streamGenerateContent[^\s]*)/)?.[1] ||
     "unknown";
   const responseModelVersions = [
-    ...new Set([...logText.matchAll(/"modelVersion":\s*"([^"]+)"/g)].map((m) => m[1])),
+    ...new Set(
+      [...metadataLogText.matchAll(/"modelVersion":\s*"([^"]+)"/g)].map(
+        (match) => match[1],
+      ),
+    ),
   ].sort();
   const captureCommand = captureMode === "interactive" ? INTERACTIVE_TRACE_COMMAND : PRINT_TRACE_COMMAND;
 
@@ -471,9 +652,9 @@ function main() {
     `sha512 = ${sha512File(agyPath)}`,
     `installer_url = https://antigravity.google/cli/install.sh`,
     `manifest_url = ${manifestUrl}`,
-    `manifest_version = ${manifest?.version || "unknown"}`,
-    `manifest_tarball_url = ${manifest?.url || "unknown"}`,
-    `manifest_tarball_sha512 = ${manifest?.sha512 || "unknown"}`,
+    `manifest_version = ${pinnedPlan.new_version}`,
+    `manifest_tarball_url = ${pinnedPlan.artifact_url}`,
+    `manifest_tarball_sha512 = ${pinnedPlan.artifact_sha512}`,
     `generated_at = ${generatedAt}`,
     "auth_source = local Antigravity Google OAuth/keyring",
     "trace_script = antigravity/misc/scripts/extract-antigravity-log.cjs",

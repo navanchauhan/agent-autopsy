@@ -1,217 +1,952 @@
-name: Daily capture refresh
+name: Capture refresh
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force_capture:
+        description: Ignore validated capture and Codex-decision caches for this run
+        required: false
+        type: boolean
+        default: false
   schedule:
-    - cron: "17 6 * * *"
+    # Polling is cheap and token-free when no exact release changed.
+    - cron: "17 * * * *"
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: daily-refresh
+  group: capture-refresh-${{ github.repository }}
   cancel-in-progress: false
 
 jobs:
-  # Install current CLIs on the bare runner and avoid the container refresh when
-  # every recorded version is already current.
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
+    permissions:
+      contents: write
     outputs:
       has_changes: ${{ steps.check.outputs.has_changes }}
       changed_tools: ${{ steps.check.outputs.changed_tools }}
+      codex_version: ${{ steps.check.outputs.codex_version }}
+      codex_driver_version: ${{ steps.check.outputs.codex_driver_version }}
+      capture_bucket: ${{ steps.check.outputs.capture_bucket }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: true
 
-      - name: Test review validation
-        run: node .github/scripts/test-validate-review.cjs
-
-      - name: Install CLIs
-        # Codex is source-extracted, so its upstream revision is checked without
-        # installing its CLI in this job.
+      - name: Test pipeline guardrails
         run: |
-          curl -fsSL https://claude.ai/install.sh | bash
-          curl -fsSL https://antigravity.google/cli/install.sh | bash
-          curl -fsSL https://x.ai/cli/install.sh | bash
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          echo "$HOME/.grok/bin" >> "$GITHUB_PATH"
+          node .github/scripts/test-validate-review.cjs
+          node .github/scripts/test-pipeline-results.cjs
+          node --test .github/scripts/test-release-ledger.cjs
+          node --test .github/scripts/test-recapture-state.cjs
+          node --test .github/scripts/test-capture-artifacts.cjs
+          node --test .github/scripts/test-discover-claude-deferred-tools.cjs
+          node --test .github/scripts/test-trace-claude-messages.cjs
+          bash .github/scripts/test-credentials.sh
+          bash .github/scripts/test-automation-state.sh
+          bash -n .github/scripts/*.sh
 
-      - name: Check versions
+      - name: Restore durable release and recapture state
+        run: bash .github/scripts/restore-automation-state.sh
+
+      - name: Resolve exact upstream releases
         id: check
+        env:
+          AUTOMATION_STATE_DIR: ${{ github.workspace }}/.capture-scratch/automation-state
         run: bash .github/scripts/check-versions.sh
 
-  auth-preflight:
+      - name: Persist every observed target before capture begins
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        run: bash .github/scripts/persist-automation-state.sh
+
+  reconcile-release:
     needs: check
-    if: needs.check.outputs.has_changes == 'true'
+    if: always() && needs.check.result == 'success' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    outputs:
-      runnable_tools: ${{ steps.select.outputs.runnable_tools }}
-      has_runnable_tools: ${{ steps.select.outputs.has_runnable_tools }}
+    timeout-minutes: 5
+    permissions:
+      contents: write
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
+      - name: Check out default branch and tags
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
 
-      - name: Build refresh image
-        run: docker build -t agent-autopsy-refresh .
-
-      - name: Refresh capture credentials
+      - name: Recover a missing release for the latest pushed tag
         env:
-          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          CODEX_CHATGPT_AUTH_JSON: ${{ secrets.CODEX_CHATGPT_AUTH_JSON }}
-          GROK_AUTH_JSON: ${{ secrets.GROK_AUTH_JSON }}
-          ANTIGRAVITY_GEMINI_CREDS: ${{ secrets.ANTIGRAVITY_GEMINI_CREDS }}
-          REPO_SECRETS_PAT: ${{ secrets.REPO_SECRETS_PAT }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          mkdir -p .capture-scratch
-          set +e
-          docker run --rm \
-            -v "$PWD":/workspace \
-            -w /workspace \
-            -e CLAUDE_CODE_OAUTH_TOKEN \
-            -e CODEX_CHATGPT_AUTH_JSON \
-            -e GROK_AUTH_JSON \
-            -e ANTIGRAVITY_GEMINI_CREDS \
-            -e REPO_SECRETS_PAT \
-            -e GITHUB_TOKEN \
-            -e GITHUB_REPOSITORY \
-            agent-autopsy-refresh \
-            bash -euo pipefail -c '
-              bash .github/scripts/seed-credentials.sh
-              if grok -p "Reply exactly: GROK_AUTH_OK" --output-format json >/dev/null; then
-                printf true > /workspace/.capture-scratch/grok-auth-ready
-              else
-                printf false > /workspace/.capture-scratch/grok-auth-ready
-                echo "::warning::Grok authentication refresh failed; Grok will be excluded from this run."
-              fi
-              bash .github/scripts/rotate-secrets.sh
-            '
+        run: bash .github/scripts/reconcile-release.sh
 
-      - name: Select authenticated tools
-        id: select
+  capture-tool:
+    needs: check
+    if: needs.check.outputs.has_changes == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    environment:
+      name: agent-autopsy-capture
+      deployment: false
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include: ${{ fromJSON(needs.check.outputs.changed_tools) }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Restore durable recapture state and remove checkout credentials
+        run: |
+          bash .github/scripts/restore-automation-state.sh
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          if git config --local --get-regexp '^http\..*\.extraheader$' >/dev/null; then
+            echo 'Checkout credentials remained after durable-state restore.' >&2
+            exit 1
+          fi
+
+      - name: Select durable recapture state for this exact plan
+        id: recapture-state
+        run: |
+          node .github/scripts/select-recapture-state.cjs \
+            .capture-scratch/automation-state/recapture-state.json \
+            '${{ matrix.tool }}' '${{ matrix.plan_hash }}' \
+            '${{ needs.check.outputs.capture_bucket }}'
+
+      - name: Restore durable validated capture for the exact plan
+        if: inputs.force_capture != true && steps.recapture-state.outputs.state == 'clear'
+        id: capture-positive-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: capture-output/${{ matrix.tool }}
+          key: capture-positive-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.plan_hash }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            capture-positive-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.plan_hash }}-
+
+      - name: Restore bounded capture retry cooldown
+        if: inputs.force_capture != true && steps.recapture-state.outputs.force != 'true' && github.run_attempt == 1 && steps.capture-positive-cache.outputs.cache-matched-key == ''
+        id: capture-retry-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: capture-output/${{ matrix.tool }}
+          key: capture-retry-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.plan_hash }}-${{ needs.check.outputs.capture_bucket }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            capture-retry-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.plan_hash }}-${{ needs.check.outputs.capture_bucket }}-
+
+      - name: Select restored capture generation
+        id: capture-cache
+        shell: bash
+        run: |
+          if [ -n "${{ steps.capture-positive-cache.outputs.cache-matched-key }}" ] || \
+             [ -n "${{ steps.capture-retry-cache.outputs.cache-matched-key }}" ]; then
+            echo 'cache_restored=true' >>"$GITHUB_OUTPUT"
+          else
+            echo 'cache_restored=false' >>"$GITHUB_OUTPUT"
+          fi
+
+      - name: Stage immutable host-side gates
+        env:
+          TOOL_JSON: ${{ toJSON(matrix) }}
+        run: |
+          install -m 0700 .github/scripts/persist-credential.sh "$RUNNER_TEMP/persist-credential.sh"
+          install -m 0700 .github/scripts/select-capture-results.cjs "$RUNNER_TEMP/select-capture-results.cjs"
+          install -m 0700 .github/scripts/write-safe-capture-result.cjs "$RUNNER_TEMP/write-safe-capture-result.cjs"
+          install -m 0700 .github/scripts/write-capture-artifact-metadata.cjs "$RUNNER_TEMP/write-capture-artifact-metadata.cjs"
+          printf '%s\n' "$TOOL_JSON" | jq -e '[.]' >"$RUNNER_TEMP/capture-plan.json"
+
+      - name: Early-stop a repeated rejected capture in the same cooldown bucket
+        if: inputs.force_capture != true && steps.recapture-state.outputs.same_bucket == 'true' && steps.capture-cache.outputs.cache_restored != 'true'
+        id: cooldown-result
+        run: |
+          "$RUNNER_TEMP/write-safe-capture-result.cjs" \
+            "$RUNNER_TEMP/capture-plan.json" capture-output \
+            'A fresh capture was already rejected in this cooldown bucket; retry later.'
+
+      - name: Restore exact source cache
+        if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && (matrix.tool == 'codex' || matrix.tool == 'grok')
+        id: source-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: ${{ matrix.tool == 'codex' && 'references/codex' || 'references/grok-build' }}
+          key: source-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.tool == 'grok' && matrix.mirror_revision || matrix.new_revision }}-${{ matrix.tool == 'codex' && hashFiles('.github/scripts/sync-codex-reference.sh') || hashFiles('.github/scripts/sync-grok-reference.sh') }}
+
+      - name: Synchronize exact source revision on the host
+        if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && (matrix.tool == 'codex' || matrix.tool == 'grok')
+        id: source-sync
+        env:
+          CHANGED_TOOLS_FILE: ${{ runner.temp }}/capture-plan.json
+          CAPTURE_SCRATCH_DIR: ${{ runner.temp }}/source-scratch
+        run: |
+          case "${{ matrix.tool }}" in
+            codex) bash .github/scripts/sync-codex-reference.sh ;;
+            grok) bash .github/scripts/sync-grok-reference.sh ;;
+          esac
+
+      - name: Save verified exact source cache
+        if: (matrix.tool == 'codex' || matrix.tool == 'grok') && steps.source-sync.outcome == 'success' && steps.source-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: ${{ matrix.tool == 'codex' && 'references/codex' || 'references/grok-build' }}
+          key: source-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.tool == 'grok' && matrix.mirror_revision || matrix.new_revision }}-${{ matrix.tool == 'codex' && hashFiles('.github/scripts/sync-codex-reference.sh') || hashFiles('.github/scripts/sync-grok-reference.sh') }}
+
+      - name: Set up provider image builder
+        if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && matrix.tool != 'codex'
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+
+      - name: Build isolated pinned provider image
+        if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && matrix.tool != 'codex'
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+        with:
+          context: .
+          target: capture-${{ matrix.tool }}
+          load: true
+          tags: agent-autopsy-${{ matrix.tool }}:${{ github.run_id }}
+          build-args: |
+            CLAUDE_CODE_ARTIFACT_URL=${{ matrix.artifact_url }}
+            CLAUDE_CODE_ARTIFACT_SHA256=${{ matrix.artifact_sha256 }}
+            GROK_CLI_ARTIFACT_URL=${{ matrix.artifact_url }}
+            GROK_CLI_ARTIFACT_SHA256=${{ matrix.artifact_sha256 }}
+            ANTIGRAVITY_TARBALL_URL=${{ matrix.artifact_url }}
+            ANTIGRAVITY_TARBALL_SHA512=${{ matrix.artifact_sha512 }}
+          cache-from: type=gha,scope=capture-image-${{ matrix.tool }}
+          cache-to: type=gha,mode=max,scope=capture-image-${{ matrix.tool }}
+
+      - name: Capture ${{ matrix.tool }}
+        if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped'
+        id: capture-attempt
+        continue-on-error: true
+        env:
+          REFRESH_IMAGE: agent-autopsy-${{ matrix.tool }}:${{ github.run_id }}
+          TOOL_JSON: ${{ toJSON(matrix) }}
+          SOURCE_ALREADY_SYNCED: 1
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ matrix.tool == 'claude-code' && secrets.CLAUDE_CODE_OAUTH_TOKEN || '' }}
+          CLAUDE_CODE_CREDENTIALS_JSON: ${{ matrix.tool == 'claude-code' && secrets.CLAUDE_CODE_CREDENTIALS_JSON || '' }}
+          GROK_AUTH_JSON: ${{ matrix.tool == 'grok' && secrets.GROK_AUTH_JSON || '' }}
+          ANTIGRAVITY_GEMINI_CREDS: ${{ matrix.tool == 'antigravity' && secrets.ANTIGRAVITY_GEMINI_CREDS || '' }}
+        run: |
+          case "${{ matrix.tool }}" in
+            codex|claude-code|grok|antigravity) ;;
+            *) echo "Unsupported capture tool" >&2; exit 2 ;;
+          esac
+          rm -rf -- "capture-output/${{ matrix.tool }}" ".capture-scratch/${{ matrix.tool }}"
+          mkdir -p "capture-output/${{ matrix.tool }}" ".capture-scratch/${{ matrix.tool }}" references
+          credential_export="$RUNNER_TEMP/credential-export-${{ matrix.tool }}"
+          mkdir -p "$credential_export"
+          if [ "${{ matrix.tool }}" = codex ]; then
+            bash .github/scripts/capture-tool.sh
+          else
+            docker run --rm --init --pids-limit 512 --memory 4g --cpus 2 \
+              -v "$PWD":/workspace:ro \
+              -v "$PWD/.capture-scratch":/workspace/.capture-scratch \
+              -v "$PWD/capture-output":/workspace/capture-output \
+              -v "$PWD/references":/workspace/references:ro \
+              -v "$credential_export":/credential-out \
+              -w /workspace \
+              -e HOST_UID="$(id -u)" \
+              -e HOST_GID="$(id -g)" \
+              -e TOOL_JSON \
+              -e SOURCE_ALREADY_SYNCED \
+              -e CREDENTIAL_EXPORT_DIR=/credential-out \
+              -e CLAUDE_CODE_OAUTH_TOKEN \
+              -e CLAUDE_CODE_CREDENTIALS_JSON \
+              -e GROK_AUTH_JSON \
+              -e ANTIGRAVITY_GEMINI_CREDS \
+              "$REFRESH_IMAGE" \
+              bash -euo pipefail -c '
+                git config --global --add safe.directory /workspace
+                bash .github/scripts/capture-tool.sh
+              '
+          fi
+
+      - name: Persist refreshed provider credential outside the provider container
+        if: always() && matrix.tool != 'codex' && steps.capture-attempt.outcome != 'skipped'
+        id: credential-rotation
+        env:
+          GH_TOKEN: ${{ secrets.REPO_SECRETS_PAT }}
+          CREDENTIAL_ENVIRONMENT: agent-autopsy-capture
+          TOOL: ${{ matrix.tool }}
+          RESULT_PATH: capture-output/${{ matrix.tool }}/result.json
+          EXPORT_DIR: ${{ runner.temp }}/credential-export-${{ matrix.tool }}
+        shell: bash
+        run: |
+          "$RUNNER_TEMP/persist-credential.sh" "$TOOL" "$EXPORT_DIR" "$RESULT_PATH"
+
+      - name: Verify capture in the immutable host gate
+        if: always()
+        id: trusted-verification
+        continue-on-error: true
+        env:
+          RESULT_PATH: capture-output/${{ matrix.tool }}/result.json
+        run: |
+          status="$(jq -r '.status // "missing"' "$RESULT_PATH" 2>/dev/null || printf missing)"
+          verified=false
+          if [ "$status" = captured ] || [ "$status" = retry_capture ]; then
+            if "$RUNNER_TEMP/select-capture-results.cjs" \
+              "$RUNNER_TEMP/capture-plan.json" capture-output \
+              "$RUNNER_TEMP/verified-ready.json" "$RUNNER_TEMP/verified-retry.json"; then
+              if [ "$status" = captured ] && \
+                 jq -e 'length == 1' "$RUNNER_TEMP/verified-ready.json" >/dev/null; then
+                verified=true
+              elif [ "$status" = retry_capture ] && \
+                   jq -e 'length == 0' "$RUNNER_TEMP/verified-ready.json" >/dev/null && \
+                   jq -e 'length == 1 and .[0].status == "retry_capture"' "$RUNNER_TEMP/verified-retry.json" >/dev/null; then
+                verified=true
+              fi
+            fi
+          fi
+
+          if [ "$verified" = true ]; then
+            echo "status=$status" >>"$GITHUB_OUTPUT"
+            echo 'security_degraded=false' >>"$GITHUB_OUTPUT"
+          else
+            "$RUNNER_TEMP/write-safe-capture-result.cjs" \
+              "$RUNNER_TEMP/capture-plan.json" capture-output \
+              'Capture bundle failed immutable host verification; retry with fresh evidence.'
+            "$RUNNER_TEMP/select-capture-results.cjs" \
+              "$RUNNER_TEMP/capture-plan.json" capture-output \
+              "$RUNNER_TEMP/verified-ready.json" "$RUNNER_TEMP/verified-retry.json"
+            jq -e 'length == 0' "$RUNNER_TEMP/verified-ready.json" >/dev/null
+            jq -e 'length == 1 and .[0].status == "retry_capture"' "$RUNNER_TEMP/verified-retry.json" >/dev/null
+            echo 'status=retry_capture' >>"$GITHUB_OUTPUT"
+            echo 'security_degraded=true' >>"$GITHUB_OUTPUT"
+            echo '::error::Capture output was rejected and replaced with a trusted retry record.' >&2
+          fi
+
+      - name: Inspect capture result
+        if: always()
+        id: capture-result
+        run: |
+          status="$(jq -r '.status // "missing"' "capture-output/${{ matrix.tool }}/result.json" 2>/dev/null || printf missing)"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          printf '%s: %s\n' '${{ matrix.tool }}' "$status" >>"$GITHUB_STEP_SUMMARY"
+
+      - name: Cache this durable validated capture generation
+        if: steps.trusted-verification.outcome == 'success' && steps.trusted-verification.outputs.status == 'captured' && (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true)
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: capture-output/${{ matrix.tool }}
+          key: capture-positive-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.plan_hash }}-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Cache this bounded safe retry generation
+        if: steps.trusted-verification.outcome == 'success' && steps.trusted-verification.outputs.status == 'retry_capture' && (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true)
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: capture-output/${{ matrix.tool }}
+          key: capture-retry-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.plan_hash }}-${{ needs.check.outputs.capture_bucket }}-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Bind the verified bundle to this workflow attempt
+        if: always() && steps.trusted-verification.outcome == 'success'
+        id: capture-artifact-metadata
+        shell: bash
+        run: |
+          if [ "${{ steps.capture-attempt.outcome }}" != skipped ]; then
+            source=fresh
+          elif [ -n "${{ steps.capture-positive-cache.outputs.cache-matched-key }}" ]; then
+            source=positive_cache
+          else
+            source=retry_cache
+          fi
+          "$RUNNER_TEMP/write-capture-artifact-metadata.cjs" \
+            'capture-output/${{ matrix.tool }}' '${{ matrix.tool }}' '${{ matrix.plan_hash }}' \
+            '${{ github.run_id }}' '${{ github.run_attempt }}' "$source" \
+            '${{ inputs.force_capture == true }}' \
+            '${{ steps.trusted-verification.outputs.security_degraded }}' \
+            '${{ needs.check.outputs.capture_bucket }}'
+
+      - name: Upload capture bundle
+        if: always() && steps.capture-artifact-metadata.outcome == 'success'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: capture-bundle-${{ matrix.tool }}-attempt-${{ github.run_attempt }}
+          path: capture-output/${{ matrix.tool }}/
+          retention-days: 2
+          if-no-files-found: error
+
+      - name: Enforce unexpected capture failures
+        if: always() && (steps.capture-attempt.outcome == 'failure' || steps.trusted-verification.outcome == 'failure' || steps.trusted-verification.outputs.security_degraded == 'true')
+        run: exit 1
+
+  codex-driver:
+    needs: [check, capture-tool]
+    if: always() && needs.check.result == 'success' && needs.check.outputs.has_changes == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    environment:
+      name: agent-autopsy-capture
+      deployment: false
+    timeout-minutes: 70
+    outputs:
+      has_publishable: ${{ steps.result.outputs.has_publishable }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Restore durable recapture state and stage artifact gates
         env:
           CHANGED_TOOLS_JSON: ${{ needs.check.outputs.changed_tools }}
         run: |
-          grok_auth_ready="$(cat .capture-scratch/grok-auth-ready 2>/dev/null || printf false)"
-          runnable_tools="$(jq -ce --argjson grok_auth_ready "$grok_auth_ready" \
-            '[.[] | select(.tool != "grok" or $grok_auth_ready)]' <<< "$CHANGED_TOOLS_JSON")"
-          printf 'runnable_tools=%s\n' "$runnable_tools" >> "$GITHUB_OUTPUT"
-          if jq -e 'length > 0' <<< "$runnable_tools" >/dev/null; then
-            echo 'has_runnable_tools=true' >> "$GITHUB_OUTPUT"
-          else
-            echo 'has_runnable_tools=false' >> "$GITHUB_OUTPUT"
+          bash .github/scripts/restore-automation-state.sh
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          if git config --local --get-regexp '^http\..*\.extraheader$' >/dev/null; then
+            echo 'Checkout credentials remained before the Codex driver.' >&2
+            exit 1
           fi
+          install -m 0700 .github/scripts/select-capture-artifacts.cjs "$RUNNER_TEMP/select-capture-artifacts.cjs"
+          mkdir -p .capture-scratch
+          printf '%s\n' "$CHANGED_TOOLS_JSON" >.capture-scratch/changed-tools.json
 
-  refresh-tool:
-    needs: [check, auth-preflight]
-    if: needs.auth-preflight.outputs.has_runnable_tools == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.auth-preflight.outputs.runnable_tools) }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
+      - name: Download capture bundles
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          fetch-depth: 0
+          pattern: capture-bundle-*-attempt-*
+          path: capture-downloads
+          merge-multiple: false
 
-      - name: Build refresh image
-        run: docker build -t agent-autopsy-refresh .
+      - name: Select the newest eligible exact-plan bundle per tool
+        run: |
+          "$RUNNER_TEMP/select-capture-artifacts.cjs" \
+            .capture-scratch/changed-tools.json \
+            .capture-scratch/automation-state/recapture-state.json \
+            capture-downloads capture-output \
+            '${{ github.run_id }}' '${{ github.run_attempt }}' '${{ inputs.force_capture == true }}'
 
-      - name: Refresh ${{ matrix.tool }}
+      - name: Select complete captures
+        id: select
+        run: |
+          mkdir -p .capture-scratch capture-output
+          node .github/scripts/select-capture-results.cjs \
+            .capture-scratch/changed-tools.json capture-output \
+            .capture-scratch/ready-tools.json .capture-scratch/capture-retries.json
+
+      - name: Resolve source cache keys
+        if: steps.select.outputs.has_ready == 'true'
+        id: source-keys
         env:
-          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          CODEX_CHATGPT_AUTH_JSON: ${{ secrets.CODEX_CHATGPT_AUTH_JSON }}
-          GROK_AUTH_JSON: ${{ secrets.GROK_AUTH_JSON }}
-          ANTIGRAVITY_GEMINI_CREDS: ${{ secrets.ANTIGRAVITY_GEMINI_CREDS }}
+          CODEX_SOURCE_CONTRACT: ${{ hashFiles('.github/scripts/sync-codex-reference.sh') }}
+          GROK_SOURCE_CONTRACT: ${{ hashFiles('.github/scripts/sync-grok-reference.sh') }}
+        run: |
+          codex_revision="$(jq -r '.[] | select(.tool == "codex") | .new_revision' .capture-scratch/ready-tools.json)"
+          grok_revision="$(jq -r '.[] | select(.tool == "grok") | .mirror_revision' .capture-scratch/ready-tools.json)"
+          codex_key="${codex_revision:+source-Linux-codex-$codex_revision-$CODEX_SOURCE_CONTRACT}"
+          grok_key="${grok_revision:+source-Linux-grok-$grok_revision-$GROK_SOURCE_CONTRACT}"
+          echo "codex_key=$codex_key" >> "$GITHUB_OUTPUT"
+          echo "grok_key=$grok_key" >> "$GITHUB_OUTPUT"
+          if [ -n "$codex_key" ]; then echo 'codex_needed=true' >> "$GITHUB_OUTPUT"; else echo 'codex_needed=false' >> "$GITHUB_OUTPUT"; fi
+          if [ -n "$grok_key" ]; then echo 'grok_needed=true' >> "$GITHUB_OUTPUT"; else echo 'grok_needed=false' >> "$GITHUB_OUTPUT"; fi
+
+      - name: Restore Codex source
+        if: steps.source-keys.outputs.codex_needed == 'true'
+        id: codex-source-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: references/codex
+          key: ${{ steps.source-keys.outputs.codex_key }}
+
+      - name: Restore Grok source
+        if: steps.source-keys.outputs.grok_needed == 'true'
+        id: grok-source-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: references/grok-build
+          key: ${{ steps.source-keys.outputs.grok_key }}
+
+      - name: Verify exact sources and defer only failed source captures
+        if: steps.select.outputs.has_ready == 'true'
+        id: source-sync
+        shell: bash
+        run: |
+          ready=.capture-scratch/ready-tools.json
+          retries=.capture-scratch/capture-retries.json
+          evidence=capture-output/evidence-index.json
+
+          sync_or_defer() {
+            local tool="$1" script="$2" message="$3"
+            jq -e --arg tool "$tool" 'any(.[]; .tool == $tool)' "$ready" >/dev/null || return 0
+            if CHANGED_TOOLS_FILE="$ready" CAPTURE_SCRATCH_DIR="$PWD/.capture-scratch" bash "$script"; then
+              return 0
+            fi
+
+            local entry temp
+            entry="$(jq -ce --arg tool "$tool" '.[] | select(.tool == $tool)' "$ready")"
+            temp="$(mktemp .capture-scratch/.ready.XXXXXX)"
+            jq --arg tool "$tool" '[.[] | select(.tool != $tool)]' "$ready" >"$temp"
+            mv -f "$temp" "$ready"
+            temp="$(mktemp .capture-scratch/.retry.XXXXXX)"
+            jq --argjson entry "$entry" --arg message "$message" \
+              '. + [($entry + {status:"source_sync_error", message:$message})]' "$retries" >"$temp"
+            mv -f "$temp" "$retries"
+            temp="$(mktemp capture-output/.evidence.XXXXXX)"
+            jq --arg tool "$tool" '[.[] | select(.tool != $tool)]' "$evidence" >"$temp"
+            mv -f "$temp" "$evidence"
+            echo "::warning::$tool was deferred: $message"
+          }
+
+          sync_or_defer codex .github/scripts/sync-codex-reference.sh \
+            'Exact Codex source revisions were unavailable.'
+          sync_or_defer grok .github/scripts/sync-grok-reference.sh \
+            'Exact Grok source provenance was unavailable.'
+
+          has_ready="$(jq -r 'length > 0' "$ready")"
+          codex_ready="$(jq -r 'any(.[]; .tool == "codex")' "$ready")"
+          grok_ready="$(jq -r 'any(.[]; .tool == "grok")' "$ready")"
+          {
+            echo "has_ready=$has_ready"
+            echo "codex_ready=$codex_ready"
+            echo "grok_ready=$grok_ready"
+          } >>"$GITHUB_OUTPUT"
+
+      - name: Save verified Codex source
+        if: steps.source-sync.outputs.codex_ready == 'true' && steps.codex-source-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: references/codex
+          key: ${{ steps.source-keys.outputs.codex_key }}
+
+      - name: Save verified Grok source
+        if: steps.source-sync.outputs.grok_ready == 'true' && steps.grok-source-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: references/grok-build
+          key: ${{ steps.source-keys.outputs.grok_key }}
+
+      - name: Compute deterministic Codex input identity
+        if: steps.source-sync.outputs.has_ready == 'true'
+        id: driver-input
+        env:
+          CODEX_DRIVER_VERSION: ${{ needs.check.outputs.codex_driver_version }}
           CODEX_REFRESH_MODEL: gpt-5.6-luna
           CODEX_REFRESH_REASONING_EFFORT: medium
           CODEX_REVIEW_MODEL: gpt-5.6-luna
           CODEX_REVIEW_REASONING_EFFORT: medium
-          CODEX_AUTHOR_TIMEOUT: 30m
-          CODEX_REVIEW_TIMEOUT: 10m
-          TOOL_JSON: ${{ toJSON(matrix) }}
-        run: |
-          mkdir -p .capture-scratch/${{ matrix.tool }}
-          printf '%s\n' "$TOOL_JSON" | jq -c '[.]' > .capture-scratch/changed-tools.json
-          docker run --rm \
-            -v "$PWD":/workspace \
-            -w /workspace \
-            -e CLAUDE_CODE_OAUTH_TOKEN \
-            -e CODEX_CHATGPT_AUTH_JSON \
-            -e GROK_AUTH_JSON \
-            -e ANTIGRAVITY_GEMINI_CREDS \
-            -e CODEX_REFRESH_MODEL \
-            -e CODEX_REFRESH_REASONING_EFFORT \
-            -e CODEX_REVIEW_MODEL \
-            -e CODEX_REVIEW_REASONING_EFFORT \
-            -e CODEX_AUTHOR_TIMEOUT \
-            -e CODEX_REVIEW_TIMEOUT \
-            -e CODEX_SUMMARY_FILE="/workspace/.capture-scratch/${{ matrix.tool }}/summary.md" \
-            -e CODEX_VALIDATION_FILE="/workspace/.capture-scratch/${{ matrix.tool }}/validation.txt" \
-            -e CODEX_REVIEW_FILE="/workspace/.capture-scratch/${{ matrix.tool }}/review.json" \
-            agent-autopsy-refresh \
-            bash -euo pipefail -c '
-              git config --global --add safe.directory /workspace
-              bash .github/scripts/seed-credentials.sh
-              bash .github/scripts/sync-codex-reference.sh
-              if [ -f .capture-scratch/changed-tools.json ] && jq -e "any(.[]; .tool == \"grok\")" .capture-scratch/changed-tools.json >/dev/null; then
-                rm -rf references/grok-build
-                git clone --quiet --depth 1 https://github.com/xai-org/grok-build.git references/grok-build
-              fi
-              bash .github/scripts/run-codex-refresh.sh
-            '
-          refresh_status=$?
-          sudo chown -R "$(id -u):$(id -g)" "${{ matrix.dir }}" ".capture-scratch/${{ matrix.tool }}"
-          exit "$refresh_status"
+          DRIVER_RETRY_BUCKET_HOURS: 24
+        run: node .github/scripts/compute-driver-input.cjs
 
-      - name: Upload run scratch state
-        if: always()
-        uses: actions/upload-artifact@v7
+      - name: Restore newest approved Codex decision
+        if: steps.source-sync.outputs.has_ready == 'true' && inputs.force_capture != true
+        id: driver-positive-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
         with:
-          name: refresh-${{ matrix.tool }}
-          path: |
-            ${{ matrix.dir }}/
-            .capture-scratch/${{ matrix.tool }}/
-          retention-days: 14
-          if-no-files-found: ignore
+          path: driver-output
+          key: driver-positive-${{ runner.os }}-${{ steps.driver-input.outputs.input_hash }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            driver-positive-${{ runner.os }}-${{ steps.driver-input.outputs.input_hash }}-
 
-  publish:
-    needs: [check, auth-preflight, refresh-tool]
-    if: always() && needs.auth-preflight.outputs.has_runnable_tools == 'true' && needs.refresh-tool.result == 'success'
+      - name: Restore current retry cooldown
+        if: steps.source-sync.outputs.has_ready == 'true' && inputs.force_capture != true && github.run_attempt == 1 && steps.driver-positive-cache.outputs.cache-matched-key == ''
+        id: driver-retry-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: driver-output
+          key: driver-retry-${{ runner.os }}-${{ steps.driver-input.outputs.input_hash }}-${{ steps.driver-input.outputs.retry_bucket }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            driver-retry-${{ runner.os }}-${{ steps.driver-input.outputs.input_hash }}-${{ steps.driver-input.outputs.retry_bucket }}-
+
+      - name: Stage immutable Codex prompts and publication gates
+        if: steps.source-sync.outputs.has_ready == 'true' && steps.driver-positive-cache.outputs.cache-matched-key == '' && steps.driver-retry-cache.outputs.cache-matched-key == ''
+        run: |
+          trusted="$RUNNER_TEMP/driver-gate"
+          mkdir -p "$trusted"
+          for file in \
+            codex-orchestrator-prompt.md codex-revise-prompt.md \
+            review-refresh-prompt.md review-result.schema.json \
+            run-codex-refresh.sh validate-refresh.cjs validate-review.cjs \
+            write-safe-retry.cjs prepare-driver-output.cjs \
+            package-driver-output.sh persist-credential.sh seed-credentials.sh \
+            hash-candidate.sh test-codex-sandbox.sh; do
+            install -m 0700 ".github/scripts/$file" "$trusted/$file"
+          done
+          install -m 0400 .capture-scratch/ready-tools.json "$trusted/ready-tools.json"
+          install -m 0400 .capture-scratch/capture-retries.json "$trusted/capture-retries.json"
+          install -m 0400 .capture-scratch/driver-input.json "$trusted/driver-input.json"
+
+      - name: Set up Codex driver image builder
+        if: steps.source-sync.outputs.has_ready == 'true' && steps.driver-positive-cache.outputs.cache-matched-key == '' && steps.driver-retry-cache.outputs.cache-matched-key == ''
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+
+      - name: Build isolated pinned Codex driver
+        if: steps.source-sync.outputs.has_ready == 'true' && steps.driver-positive-cache.outputs.cache-matched-key == '' && steps.driver-retry-cache.outputs.cache-matched-key == ''
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+        with:
+          context: .
+          target: driver
+          load: true
+          tags: agent-autopsy-codex-driver:${{ github.run_id }}-${{ github.run_attempt }}
+          build-args: |
+            CODEX_CLI_VERSION=${{ needs.check.outputs.codex_driver_version }}
+          cache-from: type=gha,scope=codex-driver-image
+          cache-to: type=gha,mode=max,scope=codex-driver-image
+
+      - name: Run one serial Codex normalization and independent review
+        if: steps.source-sync.outputs.has_ready == 'true' && steps.driver-positive-cache.outputs.cache-matched-key == '' && steps.driver-retry-cache.outputs.cache-matched-key == ''
+        id: driver-run
+        continue-on-error: true
+        env:
+          CODEX_CHATGPT_AUTH_JSON: ${{ secrets.CODEX_CHATGPT_AUTH_JSON }}
+          CODEX_REFRESH_MODEL: gpt-5.6-luna
+          CODEX_REFRESH_REASONING_EFFORT: medium
+          CODEX_REVIEW_MODEL: gpt-5.6-luna
+          CODEX_REVIEW_REASONING_EFFORT: medium
+          CODEX_AUTHOR_TIMEOUT: 20m
+          CODEX_REVIEW_TIMEOUT: 8m
+        run: |
+          credential_export="$RUNNER_TEMP/credential-export-codex"
+          credential_home="$RUNNER_TEMP/codex-seed-home"
+          trusted_driver="$RUNNER_TEMP/driver-gate"
+          mkdir -p "$credential_export" "$credential_home" .capture-scratch/work capture-output references
+
+          # Decode the repository secret in a short-lived host process. The
+          # secret value is never passed into either model-running container.
+          HOME="$credential_home" bash "$trusted_driver/seed-credentials.sh" codex-driver
+          install -m 0600 "$credential_home/.codex/auth.json" "$credential_export/codex-auth.json"
+          unset CODEX_CHATGPT_AUTH_JSON
+
+          tool_dirs=()
+          while IFS= read -r dir; do
+            case "$dir" in
+              codex|claude-code|grok|antigravity) ;;
+              *) echo "Unsupported writable tool directory: $dir" >&2; exit 2 ;;
+            esac
+            tool_dirs+=( "$dir" )
+          done < <(jq -r '.[].dir' "$trusted_driver/ready-tools.json")
+
+          run_phase() {
+            local phase="$1" attempt="$2" mount_mode="$3"
+            local tool_mounts=() dir suffix
+            if [ "$mount_mode" = read-only ]; then suffix=:ro; else suffix=; fi
+            for dir in "${tool_dirs[@]}"; do
+              tool_mounts+=( -v "$PWD/$dir:/workspace/$dir$suffix" )
+            done
+            docker run --rm --init --pids-limit 512 --memory 6g --cpus 2 \
+              --security-opt seccomp=unconfined \
+              --security-opt no-new-privileges \
+              -v "$PWD":/workspace:ro \
+              -v "$PWD/.capture-scratch":/workspace/.capture-scratch \
+              -v "$PWD/capture-output":/workspace/capture-output:ro \
+              -v "$PWD/references":/workspace/references:ro \
+              "${tool_mounts[@]}" \
+              -v "$credential_export":/credential-state \
+              -v "$trusted_driver":/trusted-driver:ro \
+              -w /workspace \
+              -e HOST_UID="$(id -u)" \
+              -e HOST_GID="$(id -g)" \
+              -e CODEX_REFRESH_MODEL \
+              -e CODEX_REFRESH_REASONING_EFFORT \
+              -e CODEX_REVIEW_MODEL \
+              -e CODEX_REVIEW_REASONING_EFFORT \
+              -e CODEX_AUTHOR_TIMEOUT \
+              -e CODEX_REVIEW_TIMEOUT \
+              -e UNAPPROVED_SENTINEL=must-not-cross-shell-boundary \
+              -e CODEX_DRIVER_PHASE="$phase" \
+              -e CODEX_DRIVER_ATTEMPT="$attempt" \
+              -e REPO_ROOT=/workspace \
+              -e TRUSTED_SCRIPT_DIR=/trusted-driver \
+              -e CAPTURE_SCRATCH_DIR=/workspace/capture-output \
+              -e CODEX_STATE_DIR=/workspace/.capture-scratch \
+              -e CODEX_WORK_DIR=/workspace/.capture-scratch/work \
+              -e CHANGED_TOOLS_FILE=/trusted-driver/ready-tools.json \
+              -e CODEX_SUMMARY_FILE=/workspace/.capture-scratch/codex-summary.md \
+              -e CODEX_VALIDATION_FILE=/workspace/.capture-scratch/validation.txt \
+              -e CODEX_REVIEW_FILE=/workspace/.capture-scratch/review-result.json \
+              agent-autopsy-codex-driver:${{ github.run_id }}-${{ github.run_attempt }} \
+              bash -euo pipefail -c '
+                git config --global --add safe.directory /workspace
+                mkdir -p "$HOME/.codex"
+                install -m 0600 /credential-state/codex-auth.json "$HOME/.codex/auth.json"
+                set +e
+                bash /trusted-driver/run-codex-refresh.sh
+                phase_status=$?
+                set -e
+                if [ -s "$HOME/.codex/auth.json" ] && jq -e '"'"'type == "object"'"'"' "$HOME/.codex/auth.json" >/dev/null; then
+                  install -m 0600 "$HOME/.codex/auth.json" /credential-state/codex-auth.json
+                fi
+                exit "$phase_status"
+              '
+          }
+
+          rm -f .capture-scratch/codex-summary.md .capture-scratch/validation.txt \
+            .capture-scratch/review-result.json .capture-scratch/candidate-tree.sha256
+          run_phase smoke 1 read-write
+          completed=false
+          for attempt in 1 2; do
+            if ! run_phase author "$attempt" read-write; then
+              if [ "$attempt" -eq 1 ]; then continue; fi
+              echo 'Codex author failed mechanical validation after one repair attempt.' >&2
+              exit 1
+            fi
+
+            has_scoped_changes=false
+            for dir in "${tool_dirs[@]}"; do
+              if [ -n "$(git status --porcelain -- "$dir")" ]; then
+                has_scoped_changes=true
+                break
+              fi
+            done
+            if [ "$has_scoped_changes" = false ]; then
+              node "$trusted_driver/validate-review.cjs" \
+                "$trusted_driver/ready-tools.json" .capture-scratch/review-result.json
+              completed=true
+              break
+            fi
+
+            expected="$(tr -d '[:space:]' <.capture-scratch/candidate-tree.sha256)"
+            actual="$(REPO_ROOT="$PWD" bash "$trusted_driver/hash-candidate.sh" "$trusted_driver/ready-tools.json")"
+            [ "$expected" = "$actual" ] || { echo 'Author candidate changed after container exit.' >&2; exit 1; }
+
+            if run_phase review "$attempt" read-only; then
+              actual="$(REPO_ROOT="$PWD" bash "$trusted_driver/hash-candidate.sh" "$trusted_driver/ready-tools.json")"
+              [ "$expected" = "$actual" ] || { echo 'Reviewed candidate changed after reviewer exit.' >&2; exit 1; }
+              completed=true
+              break
+            fi
+          done
+          [ "$completed" = true ] || { echo 'Independent review did not approve a safe result.' >&2; exit 1; }
+
+      - name: Persist refreshed Codex credentials outside the Codex container
+        if: always() && steps.driver-run.outcome != 'skipped'
+        id: codex-rotation
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.REPO_SECRETS_PAT }}
+          CREDENTIAL_ENVIRONMENT: agent-autopsy-capture
+          EXPORT_DIR: ${{ runner.temp }}/credential-export-codex
+        shell: bash
+        run: |
+          "$RUNNER_TEMP/driver-gate/persist-credential.sh" codex-driver "$EXPORT_DIR"
+
+      - name: Package reviewed patch
+        if: steps.driver-run.outcome == 'success' && steps.codex-rotation.outcome == 'success'
+        env:
+          REPO_ROOT: ${{ github.workspace }}
+          TRUSTED_SCRIPT_DIR: ${{ runner.temp }}/driver-gate
+          DRIVER_INPUT_MANIFEST: ${{ runner.temp }}/driver-gate/driver-input.json
+        run: |
+          bash "$TRUSTED_SCRIPT_DIR/package-driver-output.sh" \
+            "$TRUSTED_SCRIPT_DIR/ready-tools.json" \
+            .capture-scratch/review-result.json \
+            .capture-scratch/codex-summary.md \
+            driver-output \
+            "$TRUSTED_SCRIPT_DIR/capture-retries.json"
+
+      - name: Inspect fresh Codex decision
+        if: steps.driver-run.outcome == 'success' && steps.codex-rotation.outcome == 'success'
+        id: fresh-result
+        run: echo "has_publishable=$(jq -r '.has_publishable' driver-output/result.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache approved Codex decision
+        if: steps.fresh-result.outputs.has_publishable == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: driver-output
+          key: driver-positive-${{ runner.os }}-${{ steps.driver-input.outputs.input_hash }}-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Cache safe retry for the current cooldown
+        if: steps.fresh-result.outputs.has_publishable == 'false'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        continue-on-error: true
+        with:
+          path: driver-output
+          key: driver-retry-${{ runner.os }}-${{ steps.driver-input.outputs.input_hash }}-${{ steps.driver-input.outputs.retry_bucket }}-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Record capture-only no-op
+        if: steps.source-sync.outputs.has_ready != 'true'
+        run: |
+          mkdir -p driver-output
+          jq -n --slurpfile retries .capture-scratch/capture-retries.json \
+            '{has_publishable:false,approved_tools:[],retry_tools:($retries[0] | map(.tool))}' \
+            > driver-output/result.json
+          cp .capture-scratch/capture-retries.json driver-output/capture-retries.json
+
+      - name: Enforce fresh driver and credential persistence
+        if: always() && steps.driver-run.outcome != 'skipped' && (steps.driver-run.outcome != 'success' || steps.codex-rotation.outcome != 'success')
+        run: |
+          echo 'The Codex pass or required credential persistence failed.' >&2
+          exit 1
+
+      - name: Expose publication decision
+        if: always()
+        id: result
+        run: |
+          if [ -f driver-output/result.json ]; then
+            echo "has_publishable=$(jq -r '.has_publishable' driver-output/result.json)" >> "$GITHUB_OUTPUT"
+            jq . driver-output/result.json >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'has_publishable=false' >> "$GITHUB_OUTPUT"
+            echo 'Codex driver did not produce a result.' >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: Bind the Codex decision to this workflow attempt
+        if: always() && steps.result.outcome == 'success'
+        id: driver-artifact-metadata
+        shell: bash
+        run: |
+          if [ "${{ steps.driver-run.outcome }}" != skipped ]; then
+            source=fresh
+          elif [ -n "${{ steps.driver-positive-cache.outputs.cache-matched-key }}" ]; then
+            source=positive_cache
+          elif [ -n "${{ steps.driver-retry-cache.outputs.cache-matched-key }}" ]; then
+            source=retry_cache
+          else
+            source=capture_only
+          fi
+          input_hash='${{ steps.driver-input.outputs.input_hash }}'
+          [ -n "$input_hash" ] || input_hash=none
+          node .github/scripts/write-driver-artifact-metadata.cjs \
+            driver-output "$input_hash" '${{ github.run_id }}' '${{ github.run_attempt }}' \
+            '${{ needs.check.outputs.capture_bucket }}' "$source"
+
+      - name: Upload reviewed driver bundle
+        if: always() && steps.driver-artifact-metadata.outcome == 'success'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: driver-output-attempt-${{ github.run_attempt }}
+          path: driver-output/
+          retention-days: 14
+          if-no-files-found: error
+
+  finalize-state:
+    needs: [check, capture-tool, codex-driver]
+    if: always() && needs.check.result == 'success' && needs.check.outputs.has_changes == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
+    permissions:
+      contents: write
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
+      - name: Check out durable state writer
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           fetch-depth: 0
+          persist-credentials: true
 
-      - name: Download approved refreshes
-        uses: actions/download-artifact@v8
-        with:
-          pattern: refresh-*
-          merge-multiple: true
+      - name: Restore the latest durable state
+        run: bash .github/scripts/restore-automation-state.sh
 
-      - name: Publish approved refreshes
+      - name: Write the exact active plan
         env:
-          CHANGED_TOOLS_JSON: ${{ needs.auth-preflight.outputs.runnable_tools }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          CHANGED_TOOLS_JSON: ${{ needs.check.outputs.changed_tools }}
         run: |
           mkdir -p .capture-scratch
-          printf '%s\n' "$CHANGED_TOOLS_JSON" | jq -e -c 'if type == "array" then . else error("changed-tools output is not an array") end' > .capture-scratch/changed-tools.json
-          : > .capture-scratch/codex-summary.md
-          while IFS= read -r tool; do
-            cat ".capture-scratch/$tool/summary.md" >> .capture-scratch/codex-summary.md
-            printf '\n\n' >> .capture-scratch/codex-summary.md
-          done < <(jq -r '.[].tool' .capture-scratch/changed-tools.json)
-          jq -s '{decision: "approve", publish_safe: true, summary: "Independent per-tool reviews approved publication.", issues: ([.[].issues[]] | unique), tool_results: [.[].tool_results[]]}' .capture-scratch/*/review.json > .capture-scratch/review-result.json
+          printf '%s\n' "$CHANGED_TOOLS_JSON" >.capture-scratch/changed-tools.json
+
+      - name: Download all capture attempts
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: capture-bundle-*-attempt-*
+          path: capture-downloads
+          merge-multiple: false
+
+      - name: Download all Codex decision attempts
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: driver-output-attempt-*
+          path: driver-downloads
+          merge-multiple: false
+
+      - name: Reconcile recapture transitions chronologically
+        run: |
+          node .github/scripts/update-recapture-state.cjs \
+            .capture-scratch/automation-state/recapture-state.json \
+            .capture-scratch/changed-tools.json \
+            capture-downloads driver-downloads \
+            '${{ github.run_id }}' '${{ github.run_attempt }}' \
+            '${{ needs.check.outputs.capture_bucket }}' \
+            .capture-scratch/automation-state/recapture-state.json
+
+      - name: Persist the release FIFO and recapture state atomically
+        run: bash .github/scripts/persist-automation-state.sh
+
+  publish:
+    needs: [check, codex-driver, finalize-state]
+    if: needs.codex-driver.result == 'success' && needs.finalize-state.result == 'success' && needs.codex-driver.outputs.has_publishable == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Check out default branch
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download reviewed driver bundle
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: driver-output-attempt-*
+          path: driver-downloads
+
+      - name: Select newest reviewed driver attempt
+        shell: bash
+        run: |
+          latest="$(find driver-downloads -mindepth 1 -maxdepth 1 -type d \
+            -name 'driver-output-attempt-*' -printf '%f\n' | sort -V | tail -n1)"
+          [ -n "$latest" ] || { echo 'No reviewed driver attempt was downloaded.' >&2; exit 1; }
+          rm -rf -- driver-output
+          mkdir -p driver-output
+          cp -a "driver-downloads/$latest/." driver-output/
+          rm -f -- driver-output/workflow-run.json
+
+      - name: Stage immutable publication gates
+        run: |
+          trusted="$RUNNER_TEMP/publish-gate"
+          mkdir -p "$trusted"
+          for file in validate-publish-bundle.cjs validate-refresh.cjs \
+            validate-review.cjs commit-and-release.sh; do
+            install -m 0700 ".github/scripts/$file" "$trusted/$file"
+          done
+
+      - name: Apply, revalidate, commit, and release the reviewed patch atomically
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          REPO_ROOT: ${{ github.workspace }}
+          TRUSTED_SCRIPT_DIR: ${{ runner.temp }}/publish-gate
+        run: |
+          trusted="$RUNNER_TEMP/publish-gate"
+          node "$trusted/validate-publish-bundle.cjs" driver-output
+          git apply --index driver-output/candidate.patch
+          changed_count=0
+          while IFS= read -r -d '' file; do
+            case "$file" in
+              codex/*|claude-code/*|grok/*|antigravity/*) ;;
+              *) echo "Applied patch escaped the immutable publication allowlist: $file" >&2; exit 1 ;;
+            esac
+            changed_count=$((changed_count + 1))
+          done < <(git diff --cached --name-only --no-renames --diff-filter=ACDMRTUXB -z HEAD --)
+          [ "$changed_count" -gt 0 ] || { echo 'Applied patch contains no staged changes.' >&2; exit 1; }
+          mkdir -p .capture-scratch
+          cp driver-output/changed-tools.json .capture-scratch/changed-tools.json
+          cp driver-output/codex-summary.md .capture-scratch/codex-summary.md
+          cp driver-output/review-result.json .capture-scratch/review-result.json
+          node "$trusted/validate-refresh.cjs"
+          node "$trusted/validate-review.cjs"
           gh auth setup-git
-          bash .github/scripts/commit-and-release.sh
+          bash "$TRUSTED_SCRIPT_DIR/commit-and-release.sh"

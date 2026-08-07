@@ -9,6 +9,8 @@ oauth_creds.json
 
 # Scratch space used by the daily-refresh pipeline and local capture runs.
 .capture-scratch/
+capture-output/
+driver-output/
 *.capture.jsonl
 artifacts/trace/
 grok-capture.jsonl
