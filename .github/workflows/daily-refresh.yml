@@ -46,6 +46,7 @@ jobs:
           node --test .github/scripts/test-capture-artifacts.cjs
           node --test .github/scripts/test-discover-claude-deferred-tools.cjs
           node --test .github/scripts/test-trace-claude-messages.cjs
+          node --test .github/scripts/test-prompt-contracts.cjs
           bash .github/scripts/test-credentials.sh
           bash .github/scripts/test-automation-state.sh
           bash -n .github/scripts/*.sh

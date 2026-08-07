@@ -20,6 +20,17 @@ Read `$CAPTURE_SCRATCH_DIR/evidence-index.json` first. It is a compact inventory
 with hashes and sizes; use it to open only evidence relevant to an observed
 artifact delta instead of scanning every raw request.
 
+For Codex, the exact tagged `references/codex` source checkout is the complete,
+authoritative capture. Codex intentionally has no proxy trace or live model
+request: do not require one and do not mark its capture incomplete merely because
+prompts or schemas are assembled dynamically. Use `source-revisions.json` to
+bind the comparison, treat `source-changes.txt` only as a navigation index, and
+trace the relevant constructors, tests, snapshots, and bundled model metadata in
+the source checkout. A source-verified no-op still advances `codex/VERSION` to
+the planned release revision/version; update counts only when the normalized
+inventory changes. The per-session code-mode listing documented as out of scope
+in `codex/README.md` is not a missing fixed schema.
+
 For Grok, inspect `references/grok-build` before live capture. Its source is
 authoritative for bundled prompt and tool construction; use capture only to
 verify server-provided request material. Record `references/grok-build/SOURCE_REV`

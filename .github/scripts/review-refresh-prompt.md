@@ -17,6 +17,16 @@ not report evidence unavailable until you have attempted to read them. Inspect
 only the listed tool directories and their corresponding evidence. Return one
 tool result for every listed tool; do not return a partial result.
 
+For Codex, the exact tagged `references/codex` source checkout is the complete,
+authoritative capture; there is intentionally no proxy trace or live model
+request. Do not require dynamic request evidence or mark the capture incomplete
+solely because source code assembles prompts and schemas at runtime. Verify the
+candidate by tracing the relevant constructors, tests, snapshots, and bundled
+model metadata between the revisions in `source-revisions.json`.
+`source-changes.txt` is only a navigation index. A source-verified no-op should
+advance `codex/VERSION`, while the per-session code-mode listing documented as
+out of scope in `codex/README.md` is not a missing fixed schema.
+
 For Grok, inspect `/workspace/references/grok-build` when it exists. Its
 `SOURCE_REV` is authoritative for the revision recorded in `grok/VERSION`; the
 checkout HEAD is only the mirror revision. A `sha256` requires evidence from an
