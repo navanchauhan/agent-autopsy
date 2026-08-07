@@ -3,15 +3,15 @@
   "tools": {
     "codex": {
       "plan_hash": "a9f2d3f1a402f49eff1e424cd68080fbeb930029a0cd639bbde2f0461be790d1",
-      "state": "suppress_positive",
+      "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
       "last_fresh_bucket": "20260807",
       "last_reviewer_input_hash": "73c81c3a4a6771ecce435913c57f140dbd6b8c01a68bdf1322f89d58e80ed065",
-      "reason": "capture_retry"
+      "reason": null
     },
     "claude-code": {
-      "plan_hash": "988fa954336baa415502f112048ee32cbd62365fcdd2671cc45d603dfcf456fe",
+      "plan_hash": "f4e1964bd6f3c7eecb3269adcc82a2f46192f7a1a9153f334b59a7569c7af1d9",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
