@@ -31,3 +31,21 @@ test("author and reviewer recognize the immutable Claude artifact attestation", 
     assert.match(prompt, /intentionally not\s+(?:copied into|exposed to)/);
   }
 });
+
+test("author, repair, and reviewer distinguish previews from normalized output", () => {
+  for (const name of [
+    "codex-orchestrator-prompt.md",
+    "codex-revise-prompt.md",
+    "review-refresh-prompt.md",
+  ]) {
+    const prompt = read(name);
+    assert.match(prompt, /`evidence\/candidate\/`/);
+    assert.match(prompt, /pre-author/i);
+    assert.match(prompt, /not\s+(?:the\s+)?expected final working tree/i);
+  }
+
+  const reviewer = read("review-refresh-prompt.md");
+  assert.match(reviewer, /Do not require its files or hashes to equal the tracked candidate/);
+  assert.match(reviewer, /verify each final[\s\S]{0,80}directly against the raw request/);
+  assert.match(reviewer, /preview hash equality is not required/);
+});
