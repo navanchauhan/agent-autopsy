@@ -3,9 +3,13 @@
 const fs = require("fs");
 const path = require("path");
 
-const [traceDirArg, marker] = process.argv.slice(2);
-if (!traceDirArg || !marker || !/^[A-Za-z0-9_.-]{3,160}$/.test(marker)) {
-  console.error("Usage: discover-claude-deferred-tools.cjs <trace-dir> <marker>");
+const [traceDirArg, marker, option] = process.argv.slice(2);
+const allowNone = option === "--allow-none";
+if (
+  !traceDirArg || !marker || !/^[A-Za-z0-9_.-]{3,160}$/.test(marker) ||
+  (option !== undefined && !allowNone)
+) {
+  console.error("Usage: discover-claude-deferred-tools.cjs <trace-dir> <marker> [--allow-none]");
   process.exit(2);
 }
 
@@ -67,6 +71,7 @@ for (const name of entries) {
 if (bodies.length === 0) throw new Error(`no successful base request contained marker ${marker}`);
 
 const discovered = new Set();
+let sawAdvertisement = false;
 function add(candidate) {
   if (namePattern.test(candidate) && !excluded.has(candidate)) discovered.add(candidate);
 }
@@ -100,12 +105,21 @@ function advertisedList(block) {
   return null;
 }
 
+function hasAdvertisementHeader(block) {
+  return (
+    /\bdefer(?:red)?\s+tools?\b/i.test(block) &&
+    /\bToolSearch\b/i.test(block) &&
+    (/\bavailable\b/i.test(block) || /\bdefer(?:red)?\s+tools?\s+(?:are\s+)?(?:now\s+)?via\s+ToolSearch\b/i.test(block))
+  );
+}
+
 for (const body of bodies) {
   for (const text of messageStrings(body)) {
     const blocks = [...text.matchAll(/<system-reminder\b[^>]*>([\s\S]*?)<\/system-reminder>/gi)]
       .map((match) => match[1])
       .filter((block) => /defer(?:red)?\s+tools?|ToolSearch/i.test(block));
     for (const block of blocks) {
+      if (hasAdvertisementHeader(block)) sawAdvertisement = true;
       const advertised = advertisedList(block);
       if (advertised === null) continue;
       // Examples describe how to invoke ToolSearch; their names are not an
@@ -132,6 +146,11 @@ for (const body of bodies) {
 }
 
 if (discovered.size === 0) {
+  // Some modes/releases load every tool eagerly and include only generic
+  // ToolSearch guidance. The capture caller can opt into treating that as a
+  // valid zero-turn early stop. A real advertisement with an unparseable or
+  // empty list remains a hard failure so tool schema loss cannot go unnoticed.
+  if (allowNone && !sawAdvertisement) process.exit(0);
   throw new Error(`successful base request contained marker ${marker}, but advertised no deferred tool names`);
 }
 

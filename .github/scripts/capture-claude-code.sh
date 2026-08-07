@@ -213,9 +213,12 @@ capture_headless_model() {
     capture_headless_request \
       "$model" base "Reply exactly: $base_marker" "$base_marker"
   fi
-  discovered="$(node "$discover_deferred_script" "$headless_trace_dir" "$base_marker")"
+  discovered="$(node "$discover_deferred_script" "$headless_trace_dir" "$base_marker" --allow-none)"
   deferred_csv="$(deferred_names_to_csv "$discovered")"
-  [ -n "$deferred_csv" ] || die "no headless deferred tools were advertised for $model"
+  if [ -z "$deferred_csv" ]; then
+    echo "Claude $model advertised no deferred tools; skipping the expansion turn."
+    return 0
+  fi
   deferred_query="select:$deferred_csv"
   max_results="$(awk -F, '{ print NF }' <<<"$deferred_csv")"
   if ! trace_marker_available "$headless_trace_dir" "$deferred_marker" "$deferred_csv"; then
@@ -296,20 +299,23 @@ wait_for_trace_marker \
   "$interactive_timeout" "$interactive_exit_file" || \
   die "interactive base capture is incomplete"
 
-interactive_discovered="$(node "$discover_deferred_script" "$interactive_trace_dir" "$interactive_base_marker")"
+interactive_discovered="$(node "$discover_deferred_script" "$interactive_trace_dir" "$interactive_base_marker" --allow-none)"
 interactive_deferred_csv="$(deferred_names_to_csv "$interactive_discovered")"
-[ -n "$interactive_deferred_csv" ] || die "no interactive deferred tools were advertised"
-interactive_deferred_query="select:$interactive_deferred_csv"
-interactive_deferred_max="$(awk -F, '{ print NF }' <<<"$interactive_deferred_csv")"
+if [ -n "$interactive_deferred_csv" ]; then
+  interactive_deferred_query="select:$interactive_deferred_csv"
+  interactive_deferred_max="$(awk -F, '{ print NF }' <<<"$interactive_deferred_csv")"
 
-interactive_deferred_marker="CLAUDE_INTERACTIVE_DEFERRED_TRACE_OK"
-echo "Capturing Claude interactive deferred-tool expansion..."
-send_interactive_prompt \
-  "Use ToolSearch once with query \"$interactive_deferred_query\" and max_results $interactive_deferred_max, then reply exactly: $interactive_deferred_marker"
-wait_for_trace_marker \
-  "$interactive_trace_dir" "$interactive_deferred_marker" "$interactive_deferred_csv" \
-  "$interactive_timeout" "$interactive_exit_file" || \
-  die "interactive deferred-tool capture is incomplete"
+  interactive_deferred_marker="CLAUDE_INTERACTIVE_DEFERRED_TRACE_OK"
+  echo "Capturing Claude interactive deferred-tool expansion..."
+  send_interactive_prompt \
+    "Use ToolSearch once with query \"$interactive_deferred_query\" and max_results $interactive_deferred_max, then reply exactly: $interactive_deferred_marker"
+  wait_for_trace_marker \
+    "$interactive_trace_dir" "$interactive_deferred_marker" "$interactive_deferred_csv" \
+    "$interactive_timeout" "$interactive_exit_file" || \
+    die "interactive deferred-tool capture is incomplete"
+else
+  echo "Claude interactive mode advertised no deferred tools; skipping the expansion turn."
+fi
 wait_for_session_title "$interactive_trace_dir" "$interactive_timeout" || \
   die "interactive session-title capture is incomplete"
 

@@ -15,6 +15,10 @@ function run(marker) {
   return childProcess.spawnSync(process.execPath, [script, temp, marker], { encoding: "utf8" });
 }
 
+function runAllowNone(marker) {
+  return childProcess.spawnSync(process.execPath, [script, temp, marker, "--allow-none"], { encoding: "utf8" });
+}
+
 try {
   // Invalid and incomplete files may coexist with the atomically completed
   // trace and must not hide newly advertised tools.
@@ -198,6 +202,16 @@ try {
   const toolSearchProse = run("PROSE_MARKER");
   assert.notEqual(toolSearchProse.status, 0);
   assert.match(toolSearchProse.stderr, /advertised no deferred tool names/);
+
+  const optionalToolSearchProse = runAllowNone("PROSE_MARKER");
+  assert.equal(optionalToolSearchProse.status, 0, optionalToolSearchProse.stderr);
+  assert.equal(optionalToolSearchProse.stdout, "");
+
+  // An actual advertisement that contains no parseable names must never be
+  // treated as an eager-tool mode, even when the caller permits no deferrals.
+  const optionalEmptyAdvertisement = runAllowNone("EMPTY_MARKER");
+  assert.notEqual(optionalEmptyAdvertisement.status, 0);
+  assert.match(optionalEmptyAdvertisement.stderr, /advertised no deferred tool names/);
 
   const compact = run("COMPACT_MARKER");
   assert.equal(compact.status, 0, compact.stderr);

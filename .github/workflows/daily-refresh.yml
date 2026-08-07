@@ -463,7 +463,10 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           pattern: capture-bundle-*-attempt-*
-          path: capture-downloads
+          # Evidence is immutable driver input, not a candidate repository
+          # change. Keep it outside the worktree so scope validation cannot
+          # mistake downloaded artifacts for model-authored files.
+          path: ${{ runner.temp }}/capture-downloads
           merge-multiple: false
 
       - name: Select the newest eligible exact-plan bundle per tool
@@ -471,7 +474,7 @@ jobs:
           "$RUNNER_TEMP/select-capture-artifacts.cjs" \
             .capture-scratch/changed-tools.json \
             .capture-scratch/automation-state/recapture-state.json \
-            capture-downloads capture-output \
+            "$RUNNER_TEMP/capture-downloads" capture-output \
             '${{ github.run_id }}' '${{ github.run_attempt }}' '${{ inputs.force_capture == true }}'
 
       - name: Select complete captures
@@ -978,7 +981,7 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           pattern: capture-bundle-*-attempt-*
-          path: capture-downloads
+          path: ${{ runner.temp }}/capture-downloads
           merge-multiple: false
 
       - name: Download all Codex decision attempts
@@ -986,7 +989,7 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           pattern: driver-output-attempt-*
-          path: driver-downloads
+          path: ${{ runner.temp }}/driver-downloads
           merge-multiple: false
 
       - name: Reconcile recapture transitions chronologically
@@ -994,7 +997,7 @@ jobs:
           node .github/scripts/update-recapture-state.cjs \
             .capture-scratch/automation-state/recapture-state.json \
             .capture-scratch/changed-tools.json \
-            capture-downloads driver-downloads \
+            "$RUNNER_TEMP/capture-downloads" "$RUNNER_TEMP/driver-downloads" \
             '${{ github.run_id }}' '${{ github.run_attempt }}' \
             '${{ needs.check.outputs.capture_bucket }}' \
             .capture-scratch/automation-state/recapture-state.json
@@ -1021,17 +1024,17 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           pattern: driver-output-attempt-*
-          path: driver-downloads
+          path: ${{ runner.temp }}/driver-downloads
 
       - name: Select newest reviewed driver attempt
         shell: bash
         run: |
-          latest="$(find driver-downloads -mindepth 1 -maxdepth 1 -type d \
+          latest="$(find "$RUNNER_TEMP/driver-downloads" -mindepth 1 -maxdepth 1 -type d \
             -name 'driver-output-attempt-*' -printf '%f\n' | sort -V | tail -n1)"
           [ -n "$latest" ] || { echo 'No reviewed driver attempt was downloaded.' >&2; exit 1; }
           rm -rf -- driver-output
           mkdir -p driver-output
-          cp -a "driver-downloads/$latest/." driver-output/
+          cp -a "$RUNNER_TEMP/driver-downloads/$latest/." driver-output/
           rm -f -- driver-output/workflow-run.json
 
       - name: Stage immutable publication gates
