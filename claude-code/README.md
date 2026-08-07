@@ -25,7 +25,7 @@ The wrapper:
 - discovers deferred tool names from the actual base request's deferred-tool `<system-reminder>` and merges them with the bounded baseline inventory before requesting expansion;
 - gives incomplete headless model work two bounded attempts by default (at most three), while revalidating and reusing successful base or deferred traces within the same run;
 - requires successful response completion for each marker and a successful session-title request;
-- pre-seeds onboarding and trust for the isolated `/workspace`, starts interactive Claude in non-bypass `dontAsk` mode inside tmux, and verifies that the real prompt is ready before sending anything;
+- pre-seeds onboarding and trust for the isolated `/workspace`, starts interactive Claude in non-bypass `dontAsk` mode inside tmux through the documented `claude "query"` initial-prompt interface, and requires a completed base trace before sending any deferred-tool turn;
 - kills its tmux session on success, failure, timeout, or interruption; and
 - runs `extract-claude-trace.cjs` against the interactive trace after copying the tracked archive into the scratch candidate directory.
 

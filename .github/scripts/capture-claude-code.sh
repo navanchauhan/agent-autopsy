@@ -120,6 +120,7 @@ trace_has_session_title() {
 wait_for_trace_marker() {
   local trace_dir="$1" marker="$2" required_tools_csv="${3:-}"
   local timeout_seconds="${4:-15}" exit_file="${5:-}"
+  local pane_session="${6:-}"
   local deadline=$((SECONDS + timeout_seconds))
 
   while [ "$SECONDS" -lt "$deadline" ]; do
@@ -136,6 +137,15 @@ wait_for_trace_marker() {
       exit_status="$(tr -d '[:space:]' <"$exit_file")"
       echo "capture-claude-code: interactive Claude exited before completing $marker (status $exit_status)" >&2
       return 1
+    fi
+    if [ -n "$pane_session" ]; then
+      local pane
+      pane="$(tmux capture-pane -p -t "$pane_session:0.0" 2>/dev/null || true)"
+      if grep -Eqi 'quick safety check|trust this folder|bypass permissions|dangerous mode|accept.*disclaimer' <<<"$pane"; then
+        echo "Claude interactive output was suppressed from CI logs." >&2
+        echo "capture-claude-code: interactive Claude stopped at a first-run safety dialog" >&2
+        return 1
+      fi
     fi
     sleep 1
   done
@@ -251,24 +261,6 @@ cleanup_tmux() {
 trap cleanup_tmux EXIT
 trap 'exit 130' INT TERM HUP
 
-wait_for_interactive_ready() {
-  local deadline=$((SECONDS + 30)) pane
-  while [ "$SECONDS" -lt "$deadline" ]; do
-    [ ! -s "$interactive_exit_file" ] || die "interactive Claude exited during startup"
-    pane="$(tmux capture-pane -p -t "$tmux_session:0.0" 2>/dev/null || true)"
-    if grep -Eqi 'quick safety check|trust this folder|bypass permissions|dangerous mode|accept.*disclaimer' <<<"$pane"; then
-      echo "Claude interactive output was suppressed from CI logs." >&2
-      die "interactive Claude stopped at a first-run safety dialog"
-    fi
-    if grep -Eqi 'Claude Code|What can I help|Try "' <<<"$pane"; then
-      return 0
-    fi
-    sleep 1
-  done
-  echo "Claude interactive startup output was suppressed from CI logs." >&2
-  die "interactive Claude did not reach a ready prompt"
-}
-
 tmux_args=(
   new-session -d -s "$tmux_session" -c "$repo_root"
   -e "BUN_OPTIONS=--preload=$trace_script"
@@ -278,12 +270,15 @@ tmux_args=(
   -e "DISABLE_AUTOUPDATER=1"
 )
 
-# Expanded by the shell tmux starts, not by this capture wrapper.
+interactive_base_marker="CLAUDE_INTERACTIVE_TRACE_OK"
+# Anthropic documents `claude "query"` as the supported way to start an
+# interactive REPL with an initial prompt. Shell-quote the fixed capture prompt
+# instead of relying on terminal keystrokes during startup.
 # shellcheck disable=SC2016
-interactive_command='claude --permission-mode dontAsk --strict-mcp-config --tools default; capture_status=$?; printf "%s\n" "$capture_status" > "$CLAUDE_CAPTURE_EXIT_FILE"; exec sleep 86400'
+printf -v interactive_command \
+  'claude --permission-mode dontAsk --strict-mcp-config --tools default %q; capture_status=$?; printf "%%s\n" "$capture_status" > "$CLAUDE_CAPTURE_EXIT_FILE"; exec sleep 86400' \
+  "Reply exactly: $interactive_base_marker"
 tmux "${tmux_args[@]}" "$interactive_command"
-
-wait_for_interactive_ready
 
 send_interactive_prompt() {
   local prompt="$1"
@@ -291,12 +286,10 @@ send_interactive_prompt() {
   tmux send-keys -t "$tmux_session" Enter
 }
 
-interactive_base_marker="CLAUDE_INTERACTIVE_TRACE_OK"
 echo "Capturing Claude interactive base request..."
-send_interactive_prompt "Reply exactly: $interactive_base_marker"
 wait_for_trace_marker \
   "$interactive_trace_dir" "$interactive_base_marker" "" \
-  "$interactive_timeout" "$interactive_exit_file" || \
+  "$interactive_timeout" "$interactive_exit_file" "$tmux_session" || \
   die "interactive base capture is incomplete"
 
 interactive_discovered="$(node "$discover_deferred_script" "$interactive_trace_dir" "$interactive_base_marker" --allow-none)"

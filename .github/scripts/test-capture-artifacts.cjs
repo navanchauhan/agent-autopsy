@@ -121,6 +121,23 @@ try {
   }
 
   {
+    const claudeWrapper = fs.readFileSync(
+      path.join(scripts, "capture-claude-code.sh"),
+      "utf8",
+    );
+    assert.match(
+      claudeWrapper,
+      /interactive_base_marker="CLAUDE_INTERACTIVE_TRACE_OK"[\s\S]+printf -v interactive_command[\s\S]+--tools default %q[\s\S]+"Reply exactly: \$interactive_base_marker"/,
+      "Claude TUI capture must start through the documented initial-prompt interface",
+    );
+    assert.doesNotMatch(
+      claudeWrapper,
+      /send_interactive_prompt "Reply exactly: \$interactive_base_marker"/,
+      "Claude base capture must not depend on post-startup terminal keystroke injection",
+    );
+  }
+
+  {
     const testCase = makeCase("newest");
     artifact(testCase.downloads, 1, { status: "retry_capture" });
     artifact(testCase.downloads, 2);
