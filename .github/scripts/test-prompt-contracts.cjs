@@ -20,3 +20,14 @@ test("author and reviewer preserve the source-authoritative Codex contract", () 
     assert.match(prompt, /per-session code-mode listing/);
   }
 });
+
+test("author and reviewer recognize the immutable Claude artifact attestation", () => {
+  for (const name of ["codex-orchestrator-prompt.md", "review-refresh-prompt.md"]) {
+    const prompt = read(name);
+    assert.match(prompt, /`artifact-attestation\.json` is authoritative binary-identity evidence/);
+    assert.match(prompt, /exact installed binary/);
+    assert.match(prompt, /signed-manifest digest/);
+    assert.match(prompt, /expected[\s\S]{0,30}observed\s+digest/);
+    assert.match(prompt, /intentionally not\s+(?:copied into|exposed to)/);
+  }
+});

@@ -46,6 +46,13 @@ preview seeded from the last successful archive; its seed version and total file
 inventory are not claims about the captured release. Read
 `interactive-preview/preview-provenance.json`, take current version and inventory
 facts from the raw requests, and use the preview only as a normalization aid.
+The root `artifact-attestation.json` is authoritative binary-identity evidence:
+the immutable capture wrapper hashes the exact installed binary after the pinned
+image build has downloaded it and verified it against the signed-manifest digest
+in the capture plan. Cross-check its version, URL, expected digest, observed
+digest, and `verified` field against the changed-tools entry. When they agree,
+use that digest in `claude-code/VERSION`; the binary itself is intentionally not
+copied into the model workspace or retained as text evidence.
 If a required deferred tool cannot be expanded, revert all candidate changes for
 Claude Code, leave its last successful version intact, and report the capture as
 blocked for a later retry.

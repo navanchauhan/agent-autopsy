@@ -66,11 +66,40 @@ installed_version() {
   esac | grep -oE '[0-9]+\.[0-9]+\.[0-9]+([-.][A-Za-z0-9.]+)?' | head -n1
 }
 
+write_artifact_attestation() {
+  local binary expected observed artifact_url
+  case "$tool" in
+    claude-code) binary="$(command -v claude)" ;;
+    grok) binary="$(command -v grok)" ;;
+    *) return 0 ;;
+  esac
+
+  expected="$(jq -er '.artifact_sha256 | select(test("^[0-9a-f]{64}$"))' <<<"$tool_json")" || return 1
+  artifact_url="$(jq -er '.artifact_url | select(length > 0)' <<<"$tool_json")" || return 1
+  observed="$(sha256sum -- "$binary" | cut -d' ' -f1)"
+  [ "$observed" = "$expected" ] || return 1
+
+  jq -n \
+    --arg tool "$tool" \
+    --arg version "$target_version" \
+    --arg artifact_url "$artifact_url" \
+    --arg expected_digest "$expected" \
+    --arg observed_digest "$observed" \
+    '{tool:$tool,version:$version,artifact_url:$artifact_url,digest_algorithm:"sha256",expected_digest:$expected_digest,observed_digest:$observed_digest,verified:($expected_digest == $observed_digest)}' \
+    >"$tool_scratch/artifact-attestation.json"
+}
+
 actual_version="$(installed_version || true)"
 if [ "$actual_version" != "$target_version" ]; then
   write_result retry_capture "Pinned binary mismatch: expected $target_version, found ${actual_version:-unknown}."
   echo "::warning::$tool capture deferred because the image did not contain the planned version" >&2
   exit 0
+fi
+
+if ! write_artifact_attestation; then
+  write_result security_error "The installed $tool binary did not match the pinned artifact digest."
+  echo "::error::$tool installed artifact failed its digest attestation" >&2
+  exit 1
 fi
 
 if [ "$tool" != "codex" ]; then
