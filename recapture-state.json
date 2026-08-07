@@ -2,7 +2,7 @@
   "schema_version": 1,
   "tools": {
     "claude-code": {
-      "plan_hash": "1d58d0bc7e764508acec9ff8a0c06cc697a55c777741870140a90433ca85fecf",
+      "plan_hash": "55ca2ca9623f55b7d92861ba1583204455fdeaecbd97b9b5dc078fc648c71b8a",
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
@@ -18,15 +18,6 @@
       "last_fresh_bucket": "20260807",
       "last_reviewer_input_hash": null,
       "reason": "capture_retry"
-    },
-    "antigravity": {
-      "plan_hash": "eafb62c2bbd294052ce12552630bf675b34330704f2ebdd6a3aa454bb04349c1",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260807",
-      "last_reviewer_input_hash": null,
-      "reason": null
     }
   }
 }
