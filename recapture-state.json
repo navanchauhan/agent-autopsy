@@ -8,10 +8,10 @@
       "request_after_run_attempt": null,
       "last_fresh_bucket": "20260807",
       "last_reviewer_input_hash": "73c81c3a4a6771ecce435913c57f140dbd6b8c01a68bdf1322f89d58e80ed065",
-      "reason": "reviewer"
+      "reason": "capture_retry"
     },
     "claude-code": {
-      "plan_hash": "d1dd8a55acdeb4d0f90fb72f48bf2ab9a712c6fa321909bb90ac943302396a7e",
+      "plan_hash": "988fa954336baa415502f112048ee32cbd62365fcdd2671cc45d603dfcf456fe",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
