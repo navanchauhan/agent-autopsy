@@ -119,6 +119,36 @@ function copyBundle(source, destination) {
   }
 }
 
+function requireArtifactDirectory(directory, label) {
+  const stat = fs.lstatSync(directory);
+  if (!stat.isDirectory() || stat.isSymbolicLink()) fail(`${label} must be a real directory`);
+}
+
+function artifactDirectories(root) {
+  requireArtifactDirectory(root, "artifact download root");
+  const expression = /^capture-bundle-(codex|claude-code|grok|antigravity)-attempt-([1-9][0-9]*)$/;
+  // download-artifact extracts a single pattern match directly into `path`,
+  // while multiple matches are placed in artifact-named subdirectories. Derive
+  // the flattened identity from the host-written metadata, then subject it to
+  // the same plan, attempt, and bundle-digest validation as the nested layout.
+  if (fs.existsSync(path.join(root, metadataName))) {
+    const metadata = readJson(path.join(root, metadataName), "capture artifact metadata", 64 * 1024);
+    const name = `capture-bundle-${metadata.tool}-attempt-${metadata.run_attempt}`;
+    const match = expression.exec(name);
+    if (!match) fail("flattened capture artifact has an invalid identity");
+    return [{ directory: root, name, match }];
+  }
+  const directories = [];
+  for (const name of fs.readdirSync(root).sort()) {
+    const match = expression.exec(name);
+    if (!match) fail(`unexpected capture artifact directory: ${name}`);
+    const directory = path.join(root, name);
+    requireArtifactDirectory(directory, `capture artifact ${name}`);
+    directories.push({ directory, name, match });
+  }
+  return directories;
+}
+
 if (!planArg || !stateArg || !downloadsArg || !outputArg || !/^[1-9][0-9]*$/.test(currentRunId || "") ||
     !/^[1-9][0-9]*$/.test(currentAttemptArg || "") ||
     !["true", "false"].includes(forceArg)) {
@@ -144,26 +174,20 @@ fs.mkdirSync(output, { recursive: true });
 
 const selected = new Map();
 if (fs.existsSync(downloads)) {
-  const downloadsStat = fs.lstatSync(downloads);
-  if (!downloadsStat.isDirectory() || downloadsStat.isSymbolicLink()) fail("artifact download root must be a real directory");
-  for (const directoryName of fs.readdirSync(downloads).sort()) {
-    const match = /^capture-bundle-(codex|claude-code|grok|antigravity)-attempt-([1-9][0-9]*)$/.exec(directoryName);
-    if (!match) fail(`unexpected capture artifact directory: ${directoryName}`);
-    const [, tool, attemptText] = match;
+  for (const artifact of artifactDirectories(downloads)) {
+    const [, tool, attemptText] = artifact.match;
     const planEntry = byTool.get(tool);
     if (!planEntry) continue;
-    const directory = path.join(downloads, directoryName);
-    const stat = fs.lstatSync(directory);
-    if (!stat.isDirectory() || stat.isSymbolicLink()) fail(`capture artifact is not a real directory: ${directoryName}`);
+    const { directory } = artifact;
     const metadata = readJson(path.join(directory, metadataName), `${tool} artifact metadata`, 64 * 1024);
     if (!validMetadata(metadata, tool, planEntry.plan_hash) || metadata.run_attempt !== Number(attemptText) ||
         metadata.run_attempt > currentAttempt ||
         metadata.run_id !== currentRunId || bundleHash(directory) !== metadata.bundle_sha256) {
-      fail(`capture artifact metadata or digest is invalid: ${directoryName}`);
+      fail(`capture artifact metadata or digest is invalid: ${artifact.name}`);
     }
     const result = readJson(path.join(directory, "result.json"), `${tool} capture result`, 64 * 1024);
     if (result.tool !== tool || result.plan_hash !== planEntry.plan_hash || result.status !== metadata.status) {
-      fail(`capture artifact result does not match metadata: ${directoryName}`);
+      fail(`capture artifact result does not match metadata: ${artifact.name}`);
     }
     const state = states.tools[tool]?.plan_hash === planEntry.plan_hash ? states.tools[tool] : null;
     if (!eligible(metadata, state, forced)) continue;

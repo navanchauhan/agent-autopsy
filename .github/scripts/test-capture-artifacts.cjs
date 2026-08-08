@@ -220,6 +220,19 @@ try {
   }
 
   {
+    const testCase = makeCase("single-artifact-flattened-download");
+    const directory = artifact(testCase.downloads, 1, { forced: true });
+    for (const name of fs.readdirSync(directory)) {
+      fs.renameSync(path.join(directory, name), path.join(testCase.downloads, name));
+    }
+    fs.rmdirSync(directory);
+    const selected = select(testCase.root, testCase.downloads, state(), 1, true);
+    assert.equal(selected.result.status, 0, selected.result.stderr);
+    assert.equal(fs.readFileSync(path.join(selected.output, "codex", "evidence", "source.txt"), "utf8"), "attempt 1\n");
+    assert.equal(fs.existsSync(path.join(selected.output, "codex", "workflow-run.json")), false);
+  }
+
+  {
     const testCase = makeCase("tamper");
     const directory = artifact(testCase.downloads, 1);
     fs.appendFileSync(path.join(directory, "evidence", "source.txt"), "tampered\n");
