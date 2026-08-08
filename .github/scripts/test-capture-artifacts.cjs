@@ -112,10 +112,15 @@ try {
       path.join(scripts, "check-versions.sh"),
       "utf8",
     );
-    assert.match(
+    assert.doesNotMatch(
       workflow,
       /GROK_REFRESH_ENABLED:\s*["']false["']/,
-      "the production workflow must keep Grok disabled until its login is restored",
+      "the production workflow must keep Grok enabled",
+    );
+    assert.match(
+      versionCheck,
+      /GROK_REFRESH_ENABLED:-true/,
+      "Grok refresh must default to enabled when the production workflow omits the override",
     );
     assert.match(
       versionCheck,

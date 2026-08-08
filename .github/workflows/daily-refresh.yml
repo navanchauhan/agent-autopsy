@@ -9,8 +9,8 @@ on:
         type: boolean
         default: false
   schedule:
-    # Polling is cheap and token-free when no exact release changed.
-    - cron: "17 * * * *"
+    # Check once daily at 17:17 UTC (09:17 PST / 10:17 PDT).
+    - cron: "17 17 * * *"
 
 permissions:
   contents: read
@@ -58,9 +58,6 @@ jobs:
         id: check
         env:
           AUTOMATION_STATE_DIR: ${{ github.workspace }}/.capture-scratch/automation-state
-          # Temporary provider switch: keep Grok's durable FIFO intact while
-          # omitting it from discovery and the active capture matrix.
-          GROK_REFRESH_ENABLED: "false"
         run: bash .github/scripts/check-versions.sh
 
       - name: Persist every observed target before capture begins
