@@ -5,7 +5,9 @@
     "name": "image_gen",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ImageGenInput",
+      "required": [
+        "prompt"
+      ],
       "type": "object",
       "properties": {
         "prompt": {
@@ -17,10 +19,7 @@
           "type": "string",
           "default": "auto"
         }
-      },
-      "required": [
-        "prompt"
-      ]
+      }
     },
     "description": "Generate a new image from a text description using Imagine; returns the saved image's absolute path. When telling the user where it was saved, refer to it by its short session-relative path (e.g. `images/1.jpg`) rather than the absolute path, so it renders as a clickable link that opens the image. To produce multiple images, emit multiple tool calls with distinct prompts."
   }

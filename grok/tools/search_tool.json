@@ -5,9 +5,9 @@
     "name": "search_tool",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "SearchToolInput",
-      "description": "Input for the `search_tool` tool.",
-      "type": "object",
+      "required": [
+        "query"
+      ],
       "properties": {
         "query": {
           "description": "Keywords to match against tool names, server names, and descriptions.\nInclude the server name and action for best results\n(e.g. \"linear create issue\", \"slack read thread history\").",
@@ -25,9 +25,7 @@
           "default": 5
         }
       },
-      "required": [
-        "query"
-      ]
+      "type": "object"
     },
     "description": "Search for MCP tools by keyword and retrieve their input schemas.\n\nIf status is \"partial\", some servers may still be connecting."
   }

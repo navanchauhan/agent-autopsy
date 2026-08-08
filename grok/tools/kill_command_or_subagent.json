@@ -5,18 +5,16 @@
     "name": "kill_command_or_subagent",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "KillTaskToolInput",
-      "description": "Input for the `kill_task` tool — terminates a running background task,\nmonitor, or subagent by id.",
-      "type": "object",
+      "required": [
+        "task_id"
+      ],
       "properties": {
         "task_id": {
           "description": "The task ID to terminate",
           "type": "string"
         }
       },
-      "required": [
-        "task_id"
-      ]
+      "type": "object"
     },
     "description": "Terminate a running background task, monitor, or subagent.\n\nUsage notes:\n- Pass its task_id (a monitor's task_id is returned by monitor).\n- Sends SIGTERM/SIGKILL to a bash task or monitor; sends Cancel+Shutdown to a subagent.\n- Returns success if the task was killed or had already exited."
   }

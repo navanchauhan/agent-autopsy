@@ -5,17 +5,16 @@
     "name": "list_dir",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ListDirInput",
+      "required": [
+        "target_directory"
+      ],
       "type": "object",
       "properties": {
         "target_directory": {
           "description": "Path to directory to list contents of, relative to the workspace root or absolute.",
           "type": "string"
         }
-      },
-      "required": [
-        "target_directory"
-      ]
+      }
     },
     "description": "Lists files and directories in a given path.\nThe 'target_directory' parameter can be relative to the workspace root or absolute.\n\nOther details:\n    - The result does not display dot-files and dot-directories.\n    - Respects .gitignore patterns (files/directories ignored by git are not shown).\n    - Large directories are summarized with file counts and extension breakdowns instead of listing all files."
   }

@@ -5,7 +5,9 @@
     "name": "grep",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "GrepSearchInput",
+      "required": [
+        "pattern"
+      ],
       "type": "object",
       "properties": {
         "pattern": {
@@ -59,10 +61,7 @@
           "type": "boolean",
           "default": false
         }
-      },
-      "required": [
-        "pattern"
-      ]
+      }
     },
     "description": "Search file contents with regular expressions (ripgrep).\n\n- Full regex syntax, so escape literal special characters: `functionCall\\(`, or `interface\\{\\}` to find interface{} in Go.\n- Pass pattern as a raw regex string — no surrounding quotes.\n- Respects .gitignore unless you pass a broad glob like '--glob *'.\n- Only filter by 'type' or 'glob' when you are sure of the file type; import paths may not match source file types (.js vs .ts).\n- Output is ripgrep-style: ':' marks match lines, '-' marks context lines, grouped by file. Large results are capped and report \"at least\" counts."
   }

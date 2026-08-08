@@ -5,7 +5,9 @@
     "name": "todo_write",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "TodoWriteInput",
+      "required": [
+        "todos"
+      ],
       "type": "object",
       "properties": {
         "merge": {
@@ -50,10 +52,7 @@
             ]
           }
         }
-      },
-      "required": [
-        "todos"
-      ]
+      }
     },
     "description": "Create and manage a structured task list. The user sees this list live — it is your primary way to show progress.\n\nUse for any task with 3+ steps. Skip for trivial single-step work."
   }

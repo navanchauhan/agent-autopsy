@@ -5,7 +5,10 @@
     "name": "image_edit",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ImageEditInput",
+      "required": [
+        "prompt",
+        "image"
+      ],
       "type": "object",
       "properties": {
         "prompt": {
@@ -24,11 +27,7 @@
           "type": "string",
           "default": "auto"
         }
-      },
-      "required": [
-        "prompt",
-        "image"
-      ]
+      }
     },
     "description": "Edit or transform existing image(s) via the xAI Imagine API; use instead of image_gen for image-to-image work (preserve likeness, transfer style, remix). Returns the saved image's absolute path. When telling the user where it was saved, refer to it by its short session-relative path (e.g. `images/1.jpg`) rather than the absolute path, so it renders as a clickable link that opens the image. Each required `image` is one reference — a user-attachment token (e.g. \"[Image #1]\"), an absolute filesystem path, or a `data:image/...;base64,...` URL (see the `image` parameter for the resolution order and details)."
   }

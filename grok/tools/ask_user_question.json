@@ -5,9 +5,9 @@
     "name": "ask_user_question",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "AskUserQuestionInput",
-      "description": "Input for the `AskUserQuestion` tool.",
-      "type": "object",
+      "required": [
+        "questions"
+      ],
       "properties": {
         "questions": {
           "description": "The questions to ask, each with its own options.",
@@ -65,9 +65,7 @@
           }
         }
       },
-      "required": [
-        "questions"
-      ]
+      "type": "object"
     },
     "description": "Ask the user one or more multiple-choice questions.\n\n- Every question automatically gets an \"Other\" choice where the user can type their own answer.\n- Put your recommended option first and append \"(Recommended)\" to its label."
   }

@@ -5,7 +5,9 @@
     "name": "image_to_video",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ImageToVideoInput",
+      "required": [
+        "image"
+      ],
       "type": "object",
       "properties": {
         "prompt": {
@@ -34,10 +36,7 @@
           "type": "string",
           "default": "480p"
         }
-      },
-      "required": [
-        "image"
-      ]
+      }
     },
     "description": "Generate a video from a single source image; returns the saved video's absolute path. When telling the user where it was saved, refer to it by its short session-relative path (e.g. `videos/1.mp4`) rather than the absolute path, so it renders as a clickable link that opens the video. Provide `image` for the image to animate and optionally a `prompt` to guide the animation. Use this tool when the user provides an image and wants it animated, turned into a video, or used as the first frame. Example: image_to_video(image=\"/Users/me/photo.jpg\", prompt=\"gentle camera push-in with wind moving the hair\", duration=6, resolution_name=\"480p\")"
   }

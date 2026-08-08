@@ -8,21 +8,6 @@ Note: Prefer using relative paths over absolute paths as tool call args when pos
 
 ---
 
-<system-reminder>
-The following skills are available for use:
-
-{{#each availableSkills}}
-- {{name}}: {{description}}
-  Absolute path: {{path}}
-{{/each}}
-
-Example:
-- example-skill: Example user-installed skill description.
-  Absolute path: /Users/example/.grok/skills/example-skill/SKILL.md
-</system-reminder>
-
----
-
 <user_query>
 <harnessVariable>{{userRequest=Reply exactly: GROK_TRACE_OK}}</harnessVariable>
 </user_query>

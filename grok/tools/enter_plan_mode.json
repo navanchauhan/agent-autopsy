@@ -5,8 +5,6 @@
     "name": "enter_plan_mode",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "EnterPlanModeInput",
-      "description": "Input for the `EnterPlanMode` tool.\n\nEmpty object — no parameters. The decision to enter plan mode is a binary\ngate. All configuration (workflow variant, explore agent count, etc.) comes\nfrom feature flags and environment variables, not from the tool call.",
       "type": "object",
       "properties": {},
       "required": []

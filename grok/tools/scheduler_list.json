@@ -5,7 +5,6 @@
     "name": "scheduler_list",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "SchedulerListInput",
       "type": "object",
       "properties": {},
       "required": []
