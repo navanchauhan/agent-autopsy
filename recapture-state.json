@@ -2,7 +2,7 @@
   "schema_version": 1,
   "tools": {
     "claude-code": {
-      "plan_hash": "3e587868236fb85215d205df7361d2ee55c338284448217e66ec617364addf12",
+      "plan_hash": "e9c7bb55f094bd3a56500bb505e1a384e55eae6aa4b2f6236945ec430a1c1328",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
