@@ -104,6 +104,32 @@ function makeCase(label) {
 
 try {
   {
+    const workflow = fs.readFileSync(
+      path.join(scripts, "../workflows/daily-refresh.yml"),
+      "utf8",
+    );
+    const versionCheck = fs.readFileSync(
+      path.join(scripts, "check-versions.sh"),
+      "utf8",
+    );
+    assert.match(
+      workflow,
+      /GROK_REFRESH_ENABLED:\s*["']false["']/,
+      "the production workflow must keep Grok disabled until its login is restored",
+    );
+    assert.match(
+      versionCheck,
+      /map\(select\(\.tool != "grok"\)\)/,
+      "a disabled Grok provider must be removed before matrix planning",
+    );
+    assert.match(
+      versionCheck,
+      /preserved in the durable queue but omitted from the active plan/,
+      "disabling Grok must preserve its pending release for later re-enable",
+    );
+  }
+
+  {
     const antigravityWrapper = fs.readFileSync(
       path.join(scripts, "capture-antigravity.sh"),
       "utf8",

@@ -58,6 +58,9 @@ jobs:
         id: check
         env:
           AUTOMATION_STATE_DIR: ${{ github.workspace }}/.capture-scratch/automation-state
+          # Temporary provider switch: keep Grok's durable FIFO intact while
+          # omitting it from discovery and the active capture matrix.
+          GROK_REFRESH_ENABLED: "false"
         run: bash .github/scripts/check-versions.sh
 
       - name: Persist every observed target before capture begins

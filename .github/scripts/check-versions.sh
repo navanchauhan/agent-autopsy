@@ -9,7 +9,13 @@ scratch_dir="${CAPTURE_SCRATCH_DIR:-$repo_root/.capture-scratch}"
 changed_file="${CHANGED_TOOLS_FILE:-$scratch_dir/changed-tools.json}"
 automation_state_dir="${AUTOMATION_STATE_DIR:-$scratch_dir/automation-state}"
 ledger_file="${RELEASE_LEDGER_FILE:-$automation_state_dir/release-ledger.json}"
+grok_refresh_enabled="${GROK_REFRESH_ENABLED:-true}"
 mkdir -p "$scratch_dir"
+
+case "$grok_refresh_enabled" in
+  true|false) ;;
+  *) echo "GROK_REFRESH_ENABLED must be true or false" >&2; exit 2 ;;
+esac
 
 current_version_field() {
   awk -F' = ' -v field="$2" '$1 == field { sub(/\r$/, "", $2); print $2; exit }' "$1"
@@ -269,6 +275,8 @@ fi
 # per-version changelogs preserve releases that share a synchronized source
 # snapshot and therefore cannot be recovered from Cargo.toml alone.
 grok_recorded="$(current_version_field "$repo_root/grok/VERSION" version)"
+grok_version="$grok_recorded"
+if [ "$grok_refresh_enabled" = true ]; then
 grok_version="$(curl -fsSL --connect-timeout 10 --max-time 30 https://x.ai/cli/stable 2>/dev/null | tr -d '[:space:]' || true)"
 if is_release_version "$grok_version"; then
   warn_if_downgrade "Grok" "$grok_recorded" "$grok_version"
@@ -335,6 +343,9 @@ if is_newer_version "$grok_recorded" "$grok_version"; then
   rm -rf -- "$grok_lookup_dir"
 fi
 echo "grok: recorded=$grok_recorded latest=$grok_version" >&2
+else
+  echo "grok: refresh disabled; skipping discovery and capture planning" >&2
+fi
 
 # Merge every observed target into the durable per-tool FIFO. The emitted plan
 # contains only each queue head, rebased to the repository's current VERSION.
@@ -362,6 +373,12 @@ mkdir -p "$(dirname "$ledger_file")"
 node "$repo_root/.github/scripts/release-ledger.cjs" \
   "$ledger_file" "$fresh_file" "$current_state_file" "$ledger_next" "$changed_file"
 mv -f "$ledger_next" "$ledger_file"
+if [ "$grok_refresh_enabled" = false ]; then
+  disabled_plan="$(mktemp "$scratch_dir/.changed-tools.without-grok.XXXXXX")"
+  jq -S 'map(select(.tool != "grok"))' "$changed_file" >"$disabled_plan"
+  mv -f "$disabled_plan" "$changed_file"
+  echo "grok: preserved in the durable queue but omitted from the active plan" >&2
+fi
 echo "Wrote $changed_file:" >&2
 cat "$changed_file" >&2
 
