@@ -6,14 +6,6 @@
     "grok": [
       {
         "tool": "grok",
-        "new_version": "0.2.113",
-        "new_revision": "6372e41d828b8a6ee82c29e01a69e27ec895cca9",
-        "mirror_revision": "500129c714ad1b10e6095481f4a8387a2ec52649",
-        "artifact_url": "https://x.ai/cli/grok-0.2.113-linux-x86_64",
-        "artifact_sha256": "5855a3bac1af64ba95f0fdbfe77e38563dea8766fb5813e3fa6854efe3866c9e"
-      },
-      {
-        "tool": "grok",
         "new_version": "0.2.114",
         "new_revision": "6372e41d828b8a6ee82c29e01a69e27ec895cca9",
         "mirror_revision": "500129c714ad1b10e6095481f4a8387a2ec52649",
