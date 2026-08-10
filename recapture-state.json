@@ -2,11 +2,11 @@
   "schema_version": 1,
   "tools": {
     "grok": {
-      "plan_hash": "4f0e346d99ea9cec5bce6c3d6f26db7fdc9e6195a2a764207776999727427571",
+      "plan_hash": "3ba0a120e89ffb2f6cbf6bfea3f6975fd05c989cceb78ede5f7b5947a20a82bf",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260809",
+      "last_fresh_bucket": "20260810",
       "last_reviewer_input_hash": null,
       "reason": null
     }
