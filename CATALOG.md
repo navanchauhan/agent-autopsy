@@ -92,4 +92,3 @@ Observed release: `0.2.113`
 | `grok.mcp.instructions` | MCP and command prompts | `grok-4.5` | `MCP enabled`, `command invocation` | gap | — | — |
 | `grok.context.session` | dynamic context | `grok-4.5` | `all` | dynamic | — | — |
 | `grok.assembly.model-mode` | assembly recipe | `grok-4.5` | `all` | gap | — | — |
-

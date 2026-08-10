@@ -306,7 +306,7 @@ function renderCatalog(repoRoot, providers = [...providerReleaseFields.keys()].s
     }
     lines.push("");
   }
-  return `${lines.join("\n")}\n`;
+  return lines.join("\n");
 }
 
 module.exports = {
