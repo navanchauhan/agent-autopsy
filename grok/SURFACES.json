@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "provider": "grok",
+  "observed_release": "0.2.113",
+  "privacy": {
+    "tracked_content": "derived-normalized-only",
+    "tracked_raw_requests": false,
+    "tracked_request_headers": false,
+    "tracked_user_messages": false,
+    "tracked_model_responses": false,
+    "tracked_machine_state": false,
+    "unknown_fields": "reject"
+  },
+  "surfaces": [
+    {
+      "id": "grok.prompt.agent.grok-4-5.non-interactive",
+      "category": "agent prompt",
+      "status": "verified-unchanged",
+      "capture_method": "source-and-model-request",
+      "captured_release": "0.2.113",
+      "verified_release": "0.2.113",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/grok-4.5.md"
+      ],
+      "artifact_sha256": "4bb5699721246d89adbed92eac8d1539a571c8fcdec1fa286c907adf70121f1c"
+    },
+    {
+      "id": "grok.prompt.agent.grok-4-5.interactive",
+      "category": "agent prompt",
+      "status": "verified-unchanged",
+      "capture_method": "source-and-model-request",
+      "captured_release": "0.2.113",
+      "verified_release": "0.2.113",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/grok-4.5-interactive.md"
+      ],
+      "artifact_sha256": "6dc0810857af281e42501231987c497a1335dc73ed4ead3fa9d175ac6feb094c"
+    },
+    {
+      "id": "grok.prompt.special.session-title",
+      "category": "session title prompt",
+      "status": "verified-unchanged",
+      "capture_method": "model-request",
+      "captured_release": "0.2.113",
+      "verified_release": "0.2.113",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "session-title"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/grok-session-title.md"
+      ],
+      "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591"
+    },
+    {
+      "id": "grok.steering.catalog",
+      "category": "steering messages",
+      "status": "verified-unchanged",
+      "capture_method": "model-request",
+      "captured_release": "0.2.113",
+      "verified_release": "0.2.113",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "non-interactive",
+        "interactive"
+      ],
+      "dynamic_inputs": [
+        "workspace",
+        "user query",
+        "skills",
+        "AGENTS instructions"
+      ],
+      "artifacts": [
+        "misc/grok-4.5-steering.md",
+        "misc/grok-4.5-interactive-steering.md"
+      ],
+      "artifact_sha256": "1dc76462d7d076c1acbf89acc4da57bb120bb4ed63a1718e3b79c48380197c95"
+    },
+    {
+      "id": "grok.tool.catalog",
+      "category": "tool schemas",
+      "status": "current",
+      "capture_method": "source-and-model-request",
+      "captured_release": "0.2.113",
+      "verified_release": "0.2.113",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "non-interactive",
+        "interactive",
+        "session-title"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "tools/ask_user_question.json",
+        "tools/enter_plan_mode.json",
+        "tools/exit_plan_mode.json",
+        "tools/get_command_or_subagent_output.json",
+        "tools/grep.json",
+        "tools/image_edit.json",
+        "tools/image_gen.json",
+        "tools/image_to_video.json",
+        "tools/kill_command_or_subagent.json",
+        "tools/list_dir.json",
+        "tools/monitor.json",
+        "tools/read_file.json",
+        "tools/reference_to_video.json",
+        "tools/run_terminal_command.json",
+        "tools/scheduler_create.json",
+        "tools/scheduler_delete.json",
+        "tools/scheduler_list.json",
+        "tools/search_replace.json",
+        "tools/search_tool.json",
+        "tools/session_title.json",
+        "tools/spawn_subagent.json",
+        "tools/todo_write.json",
+        "tools/use_tool.json",
+        "tools/web_fetch.json",
+        "tools/web_search.json",
+        "tools/workflow.json",
+        "tools/write.json",
+        "tools/x_search.json"
+      ],
+      "artifact_sha256": "8e9c23a81c783b0fd6d4293445b70004cfe92a2587f0e9b1352dcadd138fc0a6"
+    },
+    {
+      "id": "grok.agent.definitions",
+      "category": "bundled agent prompts",
+      "status": "gap",
+      "capture_method": "source-and-model-request",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "subagent invocation"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "General-purpose, explore, and plan agents are named, but their prompt bodies are absent."
+    },
+    {
+      "id": "grok.skill.definitions",
+      "category": "bundled skills and workflows",
+      "status": "gap",
+      "capture_method": "source-and-model-request",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "skill and workflow invocation"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Built-in skill and workflow definitions are not captured."
+    },
+    {
+      "id": "grok.event.catalog",
+      "category": "event prompts",
+      "status": "gap",
+      "capture_method": "source-and-model-request",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "plan",
+        "scheduler",
+        "workflow",
+        "monitor",
+        "completion"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Event and mode transitions are not captured as separate surfaces."
+    },
+    {
+      "id": "grok.mcp.instructions",
+      "category": "MCP and command prompts",
+      "status": "gap",
+      "capture_method": "source-and-model-request",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "MCP enabled",
+        "command invocation"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Product MCP and command surfaces are not inventoried. User server data is excluded."
+    },
+    {
+      "id": "grok.context.session",
+      "category": "dynamic context",
+      "status": "dynamic",
+      "capture_method": "model-request",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "all"
+      ],
+      "dynamic_inputs": [
+        "workspace",
+        "Git state",
+        "user query",
+        "skills",
+        "AGENTS instructions",
+        "MCP state"
+      ],
+      "artifacts": [],
+      "notes": "Only fixed wrappers and typed placeholders may be stored. Captured values are excluded."
+    },
+    {
+      "id": "grok.assembly.model-mode",
+      "category": "assembly recipe",
+      "status": "gap",
+      "capture_method": "source-and-model-request",
+      "models": [
+        "grok-4.5"
+      ],
+      "modes": [
+        "all"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "No machine-readable recipe maps prompts, steering, tools, agents, skills, and events by mode."
+    }
+  ]
+}

@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "provider": "claude-code",
+  "observed_release": "2.1.226",
+  "privacy": {
+    "tracked_content": "derived-normalized-only",
+    "tracked_raw_requests": false,
+    "tracked_request_headers": false,
+    "tracked_user_messages": false,
+    "tracked_model_responses": false,
+    "tracked_machine_state": false,
+    "unknown_fields": "reject"
+  },
+  "surfaces": [
+    {
+      "id": "claude-code.prompt.agent.claude-fable-5.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.221",
+      "models": [
+        "claude-fable-5"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-fable-5.md"
+      ],
+      "artifact_sha256": "32601637ac81243fe953d2fbb3dbf6a02524b0d5c309a6b388b55825521a16f5",
+      "notes": "The embedded billing header proves version 2.1.221, not the observed 2.1.226 release."
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-haiku-4-5.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.221",
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-haiku-4-5-20251001.md"
+      ],
+      "artifact_sha256": "80b9289ceab45fa59ff9a96a1d27fbf2408f804d57d02720da7250272df28089",
+      "notes": "The embedded billing header proves version 2.1.221."
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-opus-4-7.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.221",
+      "models": [
+        "claude-opus-4-7"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-opus-4-7.md"
+      ],
+      "artifact_sha256": "6646db945f676db51dab4868682ddd138be8b1b68058a1d2121f21476e55bc17",
+      "notes": "The embedded billing header proves version 2.1.221."
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-opus-4-8.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.221",
+      "models": [
+        "claude-opus-4-8"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-opus-4-8.md"
+      ],
+      "artifact_sha256": "ae78e8ef611148c151f5a322aa20804354f9f7b6c36b191ddafe3d5b496c4b7d",
+      "notes": "The embedded billing header proves version 2.1.221."
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-opus-5.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.221",
+      "models": [
+        "claude-opus-5"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-opus-5.md"
+      ],
+      "artifact_sha256": "282697f204d6e1a20191e540d0f7ede4049c50ac256ad9048f26ca97abdd7d9f",
+      "notes": "The embedded billing header proves version 2.1.221."
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-sonnet-4-6.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.221",
+      "models": [
+        "claude-sonnet-4-6"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-sonnet-4-6.md"
+      ],
+      "artifact_sha256": "61ae6ed86e2dfd10116efd084e243c6ac26a4617da64f173214011e758104743",
+      "notes": "The embedded billing header proves version 2.1.221."
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-sonnet-5.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.221",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-sonnet-5.md"
+      ],
+      "artifact_sha256": "8b0d1581865d1b8d91507e48751d547bbc0dc0a2040ad68bf918226b55161209",
+      "notes": "The embedded billing header proves version 2.1.221."
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-sonnet-5.interactive",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "2.1.226",
+      "verified_release": "2.1.226",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-sonnet-5-interactive.md"
+      ],
+      "artifact_sha256": "637a119593cfc049770a17417d630cda58595d78a514f0a163b2fb86477bdfe7"
+    },
+    {
+      "id": "claude-code.prompt.special.session-title",
+      "category": "session title prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.220",
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "modes": [
+        "session-title"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-haiku-4-5-20251001-session-title.md"
+      ],
+      "artifact_sha256": "411a4916ccebeb636ebde02354f33fb5c524132e06abd201027be71a8a4aba5d",
+      "notes": "The embedded billing header proves version 2.1.220."
+    },
+    {
+      "id": "claude-code.steering.non-interactive",
+      "category": "steering messages",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.221",
+      "models": [
+        "claude-fable-5"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [
+        "Git status"
+      ],
+      "artifacts": [
+        "misc/claude-fable-5-steering.md"
+      ],
+      "artifact_sha256": "e41ca868686e31aec543fd634827fd6d59480952dcbb9f9eb8af0b3c7e408706",
+      "notes": "Only one model has a stored non-interactive steering surface."
+    },
+    {
+      "id": "claude-code.steering.interactive",
+      "category": "steering messages",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "2.1.226",
+      "verified_release": "2.1.226",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [
+        "deferred tools",
+        "user skills",
+        "current date"
+      ],
+      "artifacts": [
+        "misc/claude-sonnet-5-interactive-steering.md"
+      ],
+      "artifact_sha256": "200a26ce5de547190a5094dc31405087fa978a5d83c2d630705646de9159a0e3"
+    },
+    {
+      "id": "claude-code.tool.catalog",
+      "category": "tool schemas",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "2.1.226",
+      "verified_release": "2.1.226",
+      "models": [
+        "supported model catalog"
+      ],
+      "modes": [
+        "non-interactive",
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "tools/Agent.json",
+        "tools/Artifact.json",
+        "tools/AskUserQuestion.json",
+        "tools/Bash.json",
+        "tools/CronCreate.json",
+        "tools/CronDelete.json",
+        "tools/CronList.json",
+        "tools/DeferredToolPlaceholder.json",
+        "tools/DesignSync.json",
+        "tools/Edit.json",
+        "tools/EndConversation.json",
+        "tools/EnterPlanMode.json",
+        "tools/EnterWorktree.json",
+        "tools/ExitPlanMode.json",
+        "tools/ExitWorktree.json",
+        "tools/ListAgents.json",
+        "tools/Monitor.json",
+        "tools/NotebookEdit.json",
+        "tools/PushNotification.json",
+        "tools/Read.json",
+        "tools/RemoteTrigger.json",
+        "tools/ReportFindings.json",
+        "tools/ScheduleWakeup.json",
+        "tools/SendMessage.json",
+        "tools/Skill.json",
+        "tools/TaskCreate.json",
+        "tools/TaskGet.json",
+        "tools/TaskList.json",
+        "tools/TaskOutput.json",
+        "tools/TaskStop.json",
+        "tools/TaskUpdate.json",
+        "tools/ToolSearch.json",
+        "tools/WebFetch.json",
+        "tools/WebSearch.json",
+        "tools/Workflow.json",
+        "tools/Write.json"
+      ],
+      "artifact_sha256": "0eaa25d77bf537f2d6668e70d794ca8c1bd6b6868480a7ea2e5e7fdee7dd79ca"
+    },
+    {
+      "id": "claude-code.agent.definitions",
+      "category": "bundled agent prompts",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "agent invocation"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Agent catalogs are observed, but bundled agent prompt bodies are not captured."
+    },
+    {
+      "id": "claude-code.skill.definitions",
+      "category": "bundled skills",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "skill invocation"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Bundled skill bodies are not captured; user-installed skill bodies are excluded."
+    },
+    {
+      "id": "claude-code.command.definitions",
+      "category": "slash commands",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "command invocation"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Slash-command prompt definitions are not captured."
+    },
+    {
+      "id": "claude-code.mcp.instructions",
+      "category": "MCP prompts",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "MCP enabled"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Product MCP instructions are not isolated; user server configuration and data are excluded."
+    },
+    {
+      "id": "claude-code.event.catalog",
+      "category": "event and reminder prompts",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "plan",
+        "worktree",
+        "workflow",
+        "cron",
+        "task",
+        "remote",
+        "background",
+        "compaction",
+        "notification"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "These event paths are not triggered as distinct capture surfaces."
+    },
+    {
+      "id": "claude-code.context.session",
+      "category": "dynamic context",
+      "status": "dynamic",
+      "capture_method": "model-request",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "all"
+      ],
+      "dynamic_inputs": [
+        "workspace",
+        "Git state",
+        "user instructions",
+        "memory",
+        "user skills",
+        "MCP configuration",
+        "account data"
+      ],
+      "artifacts": [],
+      "notes": "Only fixed wrappers and typed placeholders may be stored. Captured values are excluded."
+    },
+    {
+      "id": "claude-code.assembly.model-mode",
+      "category": "assembly recipe",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "all"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "No machine-readable recipe maps each model and mode to ordered prompt, steering, tool, agent, and skill surfaces."
+    }
+  ]
+}

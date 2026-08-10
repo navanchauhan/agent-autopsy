@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "provider": "ampcode",
+  "observed_release": "0.0.1783542413-gb55c7a",
+  "privacy": {
+    "tracked_content": "derived-normalized-only",
+    "tracked_raw_requests": false,
+    "tracked_request_headers": false,
+    "tracked_user_messages": false,
+    "tracked_model_responses": false,
+    "tracked_machine_state": false,
+    "unknown_fields": "reject"
+  },
+  "surfaces": [
+    {
+      "id": "ampcode.prompt.agent.catalog",
+      "category": "agent prompts",
+      "status": "frozen",
+      "capture_method": "local-inspection",
+      "captured_release": "0.0.1779927513-g17febb",
+      "models": [
+        "server-selected"
+      ],
+      "modes": [
+        "smart",
+        "deep",
+        "large",
+        "rush"
+      ],
+      "dynamic_inputs": [
+        "workspace",
+        "skills",
+        "AGENTS instructions",
+        "thread"
+      ],
+      "artifacts": [
+        "prompts/deep.md",
+        "prompts/large.md",
+        "prompts/rush.md",
+        "prompts/smart.md"
+      ],
+      "artifact_sha256": "621bc1051c342fda2de2e05bab04ee4df8ca2ec2319ef94fb038d91df83c60cc",
+      "notes": "Prompt capture is no longer available and the stored prompt release is older than the tool release."
+    },
+    {
+      "id": "ampcode.tool.catalog",
+      "category": "tool schemas",
+      "status": "current",
+      "capture_method": "local-inspection",
+      "captured_release": "0.0.1783542413-gb55c7a",
+      "verified_release": "0.0.1783542413-gb55c7a",
+      "models": [
+        "server-selected"
+      ],
+      "modes": [
+        "smart",
+        "deep",
+        "large",
+        "rush"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "tools/apply_patch.json",
+        "tools/create_file.json",
+        "tools/edit_file.json",
+        "tools/find_thread.json",
+        "tools/read_mcp_resource.json",
+        "tools/read_web_page.json",
+        "tools/shell_command.json",
+        "tools/shell_command_status.json",
+        "tools/skill.json",
+        "tools/web_search.json"
+      ],
+      "artifact_sha256": "88dd03301b41275e70b19cc56f9d66b18ae7b2cb7cc54e82d49860fe2d405624"
+    },
+    {
+      "id": "ampcode.agent.definitions",
+      "category": "bundled agent prompts",
+      "status": "gap",
+      "capture_method": "unavailable",
+      "models": [
+        "server-selected"
+      ],
+      "modes": [
+        "finder",
+        "librarian",
+        "task"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Referenced agent definitions and current schemas are absent."
+    },
+    {
+      "id": "ampcode.skill.definitions",
+      "category": "bundled skills and MCP prompts",
+      "status": "gap",
+      "capture_method": "unavailable",
+      "models": [
+        "server-selected"
+      ],
+      "modes": [
+        "skills and MCP"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Bundled skill definitions and MCP prompt additions are absent."
+    },
+    {
+      "id": "ampcode.context.session",
+      "category": "dynamic context",
+      "status": "dynamic",
+      "capture_method": "unavailable",
+      "models": [
+        "server-selected"
+      ],
+      "modes": [
+        "all"
+      ],
+      "dynamic_inputs": [
+        "workspace",
+        "guidance files",
+        "skills",
+        "MCP state",
+        "thread state"
+      ],
+      "artifacts": [],
+      "notes": "Only typed templates may be stored. Captured values are excluded."
+    },
+    {
+      "id": "ampcode.assembly.model-mode",
+      "category": "assembly recipe",
+      "status": "gap",
+      "capture_method": "unavailable",
+      "models": [
+        "server-selected"
+      ],
+      "modes": [
+        "all"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Server-side prompt assembly is not exposed by the client protocol."
+    }
+  ]
+}

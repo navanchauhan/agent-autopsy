@@ -45,7 +45,10 @@ write_secure_config() {
   local config_file="$codex_home/config.toml"
   local temp_file
   local dirs=()
-  mapfile -t dirs < <(jq -r '.[].dir' "$changed_file")
+  local dir
+  while IFS= read -r dir; do
+    dirs+=("$dir")
+  done < <(jq -r '.[].dir' "$changed_file")
   for dir in "${dirs[@]}"; do
     case "$dir" in
       codex|claude-code|grok|antigravity) ;;
@@ -146,9 +149,22 @@ run_reviewer() {
 
 has_scoped_changes() {
   local dirs=()
-  mapfile -t dirs < <(jq -r '.[].dir' "$changed_file")
+  local dir
+  while IFS= read -r dir; do
+    dirs+=("$dir")
+  done < <(jq -r '.[].dir' "$changed_file")
   [ "${#dirs[@]}" -gt 0 ] || return 1
-  [ -n "$(git -C "$repo_root" status --porcelain -- "${dirs[@]}")" ]
+  [ -n "$(git -C "$repo_root" status --porcelain -- "${dirs[@]}" CATALOG.md)" ]
+}
+
+finalize_surface_metadata() {
+  local dirs=()
+  local dir
+  while IFS= read -r dir; do
+    dirs+=("$dir")
+  done < <(jq -r '.[].dir' "$changed_file")
+  node "$script_dir/update-surface-hashes.cjs" "${dirs[@]}"
+  node "$script_dir/generate-catalog.cjs"
 }
 
 candidate_fingerprint() {
@@ -190,6 +206,7 @@ run_author_phase() {
     return 0
   fi
 
+  finalize_surface_metadata
   validate_candidate
   candidate_fingerprint >"$state_dir/candidate-tree.sha256"
 }

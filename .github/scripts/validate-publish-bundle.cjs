@@ -103,9 +103,10 @@ if (review.decision !== "approve" || review.publish_safe !== true || !Array.isAr
 }
 if (
   review.tool_results.length !== changed.length ||
-  review.tool_results.some((item, index) => item.tool !== changed[index].tool || item.outcome !== "approve")
+  review.tool_results.some((item, index) =>
+    item.tool !== changed[index].tool || item.outcome !== "approve" || item.pii_removed !== true)
 ) {
-  throw new Error("review tool results do not exactly approve the publish plan");
+  throw new Error("review tool results do not exactly approve the publish plan and attest PII removal");
 }
 
 const patchStat = fs.lstatSync(patchPath);
@@ -134,10 +135,11 @@ for (const record of records) {
   ) {
     throw new Error(`unsafe candidate patch path: ${JSON.stringify(relative)}`);
   }
+  if (relative === "CATALOG.md") continue;
   const owner = [...dirs].find((dir) => relative.startsWith(`${dir}/`));
   if (!owner) throw new Error(`candidate patch escapes approved tool directories: ${relative}`);
   const local = relative.slice(owner.length + 1);
-  const allowed = local === "VERSION" ||
+  const allowed = local === "VERSION" || local === "SURFACES.json" ||
     /^prompts\/[A-Za-z0-9][A-Za-z0-9._-]*\.md$/.test(local) ||
     /^tools\/[A-Za-z0-9][A-Za-z0-9._-]*\.json$/.test(local) ||
     /^misc\/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:json|md|txt|xml|VERSION)$/.test(local);

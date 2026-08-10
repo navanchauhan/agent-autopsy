@@ -21,6 +21,12 @@ If a problem cannot be resolved with trustworthy evidence, revert the unsupporte
 candidate edits for that tool and report it blocked. Do not fabricate prompts,
 schemas, versions, or validation evidence. Do not run publishing commands.
 
+Repair `SURFACES.json` with the true per-surface capture release and status for
+each affected surface. Trusted post-processing supplies artifact and evidence
+hashes. Raw evidence can be analyzed, but do not publish raw requests, personal
+identity data, private home paths, tenant or staging hostnames, or run IDs.
+Use semantic inspection rather than regex matching for this PII removal.
+
 For Claude Code deferred tools, the placeholder declaration alone is incomplete
 evidence. Attempt to trigger and inspect the expanded model-facing request. If
 that expansion is unavailable, revert the entire Claude Code candidate directory

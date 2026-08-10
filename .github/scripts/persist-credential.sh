@@ -18,8 +18,14 @@ fi
 
 valid_regular_file() {
   local file="$1"
-  [ -f "$file" ] && [ ! -L "$file" ] && [ "$(stat -c %s "$file")" -gt 0 ] &&
-    [ "$(stat -c %s "$file")" -le "$max_bytes" ]
+  local file_bytes
+  [ -f "$file" ] && [ ! -L "$file" ] || return 1
+  file_bytes="$(wc -c <"$file")"
+  [ "$file_bytes" -gt 0 ] && [ "$file_bytes" -le "$max_bytes" ]
+}
+
+encode_base64() {
+  base64 | tr -d '\r\n'
 }
 
 valid_json_file() {
@@ -69,7 +75,7 @@ valid_opaque_text() {
 store_file() {
   local secret_name="$1" file="$2"
   [ -n "${GH_TOKEN:-}" ] && [ -n "${GITHUB_REPOSITORY:-}" ] &&
-    base64 -w0 <"$file" | gh secret set "$secret_name" \
+    encode_base64 <"$file" | gh secret set "$secret_name" \
       --env "$credential_environment" --repo "$GITHUB_REPOSITORY"
 }
 
@@ -96,7 +102,7 @@ persist() {
          [[ "$(tr -d '[:space:]' <"$installation")" =~ ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$ ]] &&
          [ -n "${GH_TOKEN:-}" ] && [ -n "${GITHUB_REPOSITORY:-}" ] &&
          tar -cf "$archive" -C "$export_dir" antigravity-oauth-token installation_id &&
-         base64 -w0 <"$archive" | gh secret set ANTIGRAVITY_GEMINI_CREDS \
+         encode_base64 <"$archive" | gh secret set ANTIGRAVITY_GEMINI_CREDS \
            --env "$credential_environment" --repo "$GITHUB_REPOSITORY"; then
         rm -f -- "$archive"
         return 0

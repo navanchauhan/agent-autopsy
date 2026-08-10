@@ -27,8 +27,9 @@ make_repo() {
   local repo="$fixture_root/$name"
   git init --quiet "$repo"
   git -C "$repo" remote add origin "$origin"
-  install -D -m 0755 "$restore_source" "$repo/.github/scripts/restore-automation-state.sh"
-  install -D -m 0755 "$persist_source" "$repo/.github/scripts/persist-automation-state.sh"
+  mkdir -p "$repo/.github/scripts"
+  install -m 0755 "$restore_source" "$repo/.github/scripts/restore-automation-state.sh"
+  install -m 0755 "$persist_source" "$repo/.github/scripts/persist-automation-state.sh"
   printf '%s\n' "$repo"
 }
 

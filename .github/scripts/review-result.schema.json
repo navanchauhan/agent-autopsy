@@ -85,6 +85,7 @@
         "changes_supported_by_evidence",
         "inventory_consistent",
         "provenance_noise_excluded",
+        "pii_removed",
         "secret_safe",
         "issues"
       ],
@@ -112,6 +113,9 @@
           "type": "boolean"
         },
         "provenance_noise_excluded": {
+          "type": "boolean"
+        },
+        "pii_removed": {
           "type": "boolean"
         },
         "secret_safe": {

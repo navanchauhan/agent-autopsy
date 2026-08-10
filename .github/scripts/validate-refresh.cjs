@@ -224,6 +224,7 @@ function isNormalizedArtifactPath(relativePath, owner) {
   if (!relativePath.startsWith(`${owner}/`)) return false;
   const local = relativePath.slice(owner.length + 1);
   if (local === "VERSION") return true;
+  if (local === "SURFACES.json") return true;
   if (/^prompts\/[A-Za-z0-9][A-Za-z0-9._-]*\.md$/.test(local)) return true;
   if (/^tools\/[A-Za-z0-9][A-Za-z0-9._-]*\.json$/.test(local)) return true;
   return /^misc\/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:json|md|txt|xml|VERSION)$/.test(local);
@@ -232,6 +233,7 @@ function isNormalizedArtifactPath(relativePath, owner) {
 function validateModificationScope(modifiedPaths, tools) {
   const allowedDirs = tools.map((entry) => entry.dir);
   for (const relativePath of modifiedPaths) {
+    if (relativePath === "CATALOG.md") continue;
     if (!isInsideAllowedDir(relativePath, allowedDirs)) {
       fail(`scope: ${relativePath} is modified but is outside changed tool directories`);
     }
@@ -293,14 +295,8 @@ const secretPatterns = [
   ["Google OAuth token", /\bya29\.[A-Za-z0-9_-]{20,}\b/],
   ["AWS access key", /\bAKIA[0-9A-Z]{16}\b/],
   ["JWT", /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/],
-  [
-    "authorization header",
-    /\b(?:authorization|proxy-authorization)\s*[:=]\s*["']?(?:Bearer|Basic)\s+[A-Za-z0-9._~+/-]{20,}/i,
-  ],
-  [
-    "credential JSON value",
-    /["'](?:access_token|refresh_token|id_token|api_key|client_secret)["']\s*:\s*["'](?!\*{3}|<|example)[^"']{12,}["']/i,
-  ],
+  ["authorization header", /\b(?:authorization|proxy-authorization)\s*[:=]\s*["']?(?:Bearer|Basic)\s+[A-Za-z0-9._~+/-]{20,}/i],
+  ["credential JSON value", /["'](?:access_token|refresh_token|id_token|api_key|client_secret)["']\s*:\s*["'](?!\*{3}|<|example)[^"']{12,}["']/i],
 ];
 
 function validateChangedFileContents(modifiedPaths) {
@@ -465,9 +461,23 @@ function main() {
   validateCandidatePaths(candidatePaths(changedTools));
   const allowedDirs = changedTools.map((tool) => tool.dir);
   validateChangedFileContents(
-    modifiedPaths.filter((file) => isInsideAllowedDir(file, allowedDirs)),
+    modifiedPaths.filter((file) => file === "CATALOG.md" || isInsideAllowedDir(file, allowedDirs)),
   );
   changedTools.forEach(validateVersionInventory);
+  if (allowedDirs.every((dir) => fs.existsSync(path.join(repoRoot, dir, "SURFACES.json")))) {
+    try {
+      childProcess.execFileSync("node", [
+        path.join(__dirname, "validate-surfaces.cjs"),
+        ...allowedDirs,
+        `--base-ref=${baseRef}`,
+      ], { cwd: repoRoot, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+      childProcess.execFileSync("node", [path.join(__dirname, "generate-catalog.cjs"), "--check"], {
+        cwd: repoRoot, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"],
+      });
+    } catch (error) {
+      fail(`surfaces: ${(error.stderr || error.stdout || error.message).toString().trim()}`);
+    }
+  }
 
   if (errors.length > 0) {
     console.error(`Refresh validation failed with ${errors.length} error(s):`);

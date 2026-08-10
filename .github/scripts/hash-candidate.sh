@@ -22,7 +22,7 @@ done < <(jq -r '.[].dir' "$plan_file")
 [ "${#dirs[@]}" -gt 0 ] || { echo "Candidate plan contains no directories" >&2; exit 2; }
 
 {
-  git -C "$repo_root" diff --binary --full-index --no-ext-diff --no-renames HEAD -- "${dirs[@]}"
+  git -C "$repo_root" diff --binary --full-index --no-ext-diff --no-renames HEAD -- "${dirs[@]}" CATALOG.md
   while IFS= read -r -d '' relative; do
     absolute="$repo_root/$relative"
     if [ -L "$absolute" ] || [ ! -f "$absolute" ]; then
@@ -31,5 +31,5 @@ done < <(jq -r '.[].dir' "$plan_file")
     fi
     printf 'untracked\0%s\0' "$relative"
     sha256sum -- "$absolute" | cut -d' ' -f1
-  done < <(git -C "$repo_root" ls-files --others --exclude-standard -z -- "${dirs[@]}" | sort -z)
+  done < <(git -C "$repo_root" ls-files --others --exclude-standard -z -- "${dirs[@]}" CATALOG.md | sort -z)
 } | sha256sum | cut -d' ' -f1

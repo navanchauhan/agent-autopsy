@@ -19,22 +19,25 @@ git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 node "$script_dir/validate-refresh.cjs" "$changed_file" "$summary_file"
 node "$script_dir/validate-review.cjs" "$changed_file" "$review_file"
 
-mapfile -t dirs < <(jq -er '.[].dir' "$changed_file")
+dirs=()
+while IFS= read -r dir; do
+  dirs+=("$dir")
+done < <(jq -er '.[].dir' "$changed_file")
 [ "${#dirs[@]}" -gt 0 ] || { echo 'No approved tool directories were supplied.' >&2; exit 1; }
 
 # The index must still be byte-for-byte the reviewed patch. Never restage whole
 # directories here: that would admit content created after the publication gate.
 indexed_patch="$(mktemp "$scratch_dir/.indexed-patch.XXXXXX")"
 trap 'rm -f -- "$indexed_patch"' EXIT
-git diff --cached --binary --full-index --no-ext-diff --no-renames HEAD -- "${dirs[@]}" >"$indexed_patch"
+git diff --cached --binary --full-index --no-ext-diff --no-renames HEAD -- "${dirs[@]}" CATALOG.md >"$indexed_patch"
 cmp -s "$bundle_dir/candidate.patch" "$indexed_patch" || {
   echo 'The staged candidate no longer matches the independently reviewed patch.' >&2
   exit 1
 }
 [ -s "$indexed_patch" ] || { echo 'The reviewed patch has no staged changes.' >&2; exit 1; }
 
-if ! git diff --quiet -- "${dirs[@]}" ||
-   [ -n "$(git ls-files --others --exclude-standard -- "${dirs[@]}")" ]; then
+if ! git diff --quiet -- "${dirs[@]}" CATALOG.md ||
+   [ -n "$(git ls-files --others --exclude-standard -- "${dirs[@]}" CATALOG.md)" ]; then
   echo 'Unreviewed worktree content appeared after the publication gate.' >&2
   exit 1
 fi

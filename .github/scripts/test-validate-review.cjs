@@ -43,6 +43,7 @@ const retryResult = {
   changes_supported_by_evidence: false,
   inventory_consistent: false,
   provenance_noise_excluded: true,
+  pii_removed: true,
   secret_safe: true,
   issues: [],
 };
@@ -234,6 +235,15 @@ try {
   });
   assert.notStrictEqual(unsafeRetry.status, 0, "unsafe retry must fail validation");
   assert.match(unsafeRetry.stderr, /secret_safe must be true/);
+
+  const piiUnsafeRetry = run({
+    decision: "retry_capture",
+    publish_safe: false,
+    issues: [],
+    tool_results: [{ ...retryResult, pii_removed: false }],
+  });
+  assert.notStrictEqual(piiUnsafeRetry.status, 0, "PII-unsafe retry must fail validation");
+  assert.match(piiUnsafeRetry.stderr, /pii_removed must be true/);
 
   const mismatchedDecision = run({
     decision: "retry_capture",

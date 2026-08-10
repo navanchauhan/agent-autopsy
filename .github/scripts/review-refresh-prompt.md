@@ -69,9 +69,15 @@ available raw capture or upstream-source evidence. Check that:
    attested, or source evidence; preview hash equality is not required.
 3. Schema variants, tool inventories, prompt classification, and VERSION counts
    agree with the evidence and repository conventions.
-4. Host-specific values, timestamps, trace provenance, local plugins/skills,
-   credentials, and unrelated churn were not committed.
+4. Parse the complete candidate semantically and compare it with the private raw
+   evidence. Remove or reject names, email addresses, account data, private
+   paths, repository identity, tenant or staging values, request/session IDs,
+   user content, model responses, and other PII. Do not use regex matching as the
+   privacy decision. Raw captures can be used as evidence but must not appear in
+   the tracked patch. Set `pii_removed` true only after this agent review passes.
 5. A failed or ambiguous capture did not advance the successful version.
+6. `SURFACES.json` states the real capture release and status for each affected
+   surface; older artifacts are not labeled current, and gaps remain explicit.
 
 Choose overall `approve` when every tracked change is supported and safe to
 publish. A tool with missing or ambiguous evidence may have outcome

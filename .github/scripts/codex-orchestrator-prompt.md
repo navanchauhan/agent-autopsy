@@ -86,11 +86,24 @@ For each changed tool:
 - Support every addition, modification, and removal with raw or source evidence.
 - Exclude timestamps, trace paths and line numbers, host state, and other run noise.
 - Update `VERSION` with current facts, not accumulated release history.
-- Modify only `VERSION`, immediate `prompts/*.md`, immediate `tools/*.json`,
+- Update `SURFACES.json` for every affected surface. Record its actual capture
+  release and status. Do not mark an older artifact current. Artifact and
+  evidence hashes are filled by a trusted post-processing step.
+- Modify only `VERSION`, `SURFACES.json`, immediate `prompts/*.md`, immediate `tools/*.json`,
   and immediate non-executable normalized artifacts under `misc/`. Repository
   instructions, `README.md`, dotfiles, nested paths, and `misc/scripts/` are
   immutable inputs and must never be changed.
-- Leave no unrelated changes, invalid JSON, raw captures, or credentials.
+- Leave no unrelated changes, invalid JSON, raw captures, credentials, personal
+  identity data, private home paths, tenant or staging hostnames, or run IDs.
+
+Raw captures are private evidence and can be inspected or sent to the analysis
+model. They must not be copied into tracked files. Normalize only dynamic values;
+do not rewrite product-owned prompt or schema text.
+
+Use semantic inspection, not regex matching, to identify and remove PII. Compare
+the derived candidate with the raw request and replace identity, account,
+repository, tenant, staging, request/session, and user-content values with typed
+templates before the independent review.
 
 Do not infer missing prompts or schemas. A transient capture failure must not be
 represented as a successful refresh or written into tracked documentation. Do

@@ -335,7 +335,7 @@ try {
   fs.writeFileSync(path.join(publishBundle, "review-result.json"), JSON.stringify({
     decision: "approve",
     publish_safe: true,
-    tool_results: [{ tool: "codex", outcome: "approve" }],
+    tool_results: [{ tool: "codex", outcome: "approve", pii_removed: true }],
   }));
   fs.writeFileSync(path.join(publishBundle, "base-sha.txt"), `${publishBaseSha}\n`);
   fs.writeFileSync(path.join(publishBundle, "codex-summary.md"), "## codex\nSafe update.\n");
@@ -344,6 +344,19 @@ try {
   fs.writeFileSync(path.join(publishBundle, "candidate.patch"), safePublishPatch);
   const safePublish = run("validate-publish-bundle.cjs", [publishBundle], { cwd: publishRepo });
   assert.equal(safePublish.status, 0, safePublish.stderr);
+
+  fs.writeFileSync(path.join(publishBundle, "review-result.json"), JSON.stringify({
+    decision: "approve",
+    publish_safe: true,
+    tool_results: [{ tool: "codex", outcome: "approve", pii_removed: false }],
+  }));
+  const piiUnreviewed = run("validate-publish-bundle.cjs", [publishBundle], { cwd: publishRepo });
+  assert.notEqual(piiUnreviewed.status, 0, "publication must require the agent PII-removal attestation");
+  fs.writeFileSync(path.join(publishBundle, "review-result.json"), JSON.stringify({
+    decision: "approve",
+    publish_safe: true,
+    tool_results: [{ tool: "codex", outcome: "approve", pii_removed: true }],
+  }));
 
   fs.writeFileSync(path.join(publishBundle, "base-sha.txt"), `${"f".repeat(40)}\n`);
   fs.writeFileSync(path.join(publishBundle, "result.json"), JSON.stringify({

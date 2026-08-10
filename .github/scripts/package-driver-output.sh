@@ -30,9 +30,12 @@ actual_fingerprint="$(bash "$trusted_script_dir/hash-candidate.sh" "$ready_file"
   exit 1
 }
 
-mapfile -t dirs < <(jq -r '.[].dir' "$output_dir/changed-tools.json")
-git -C "$repo_root" add -N -- "${dirs[@]}"
-git -C "$repo_root" diff --binary --full-index --no-ext-diff --no-renames HEAD -- "${dirs[@]}" \
+dirs=()
+while IFS= read -r dir; do
+  dirs+=("$dir")
+done < <(jq -r '.[].dir' "$output_dir/changed-tools.json")
+git -C "$repo_root" add -N -- "${dirs[@]}" CATALOG.md
+git -C "$repo_root" diff --binary --full-index --no-ext-diff --no-renames HEAD -- "${dirs[@]}" CATALOG.md \
   >"$output_dir/candidate.patch"
 if [ ! -s "$output_dir/candidate.patch" ]; then
   echo "Approved review produced no candidate patch." >&2

@@ -23,7 +23,7 @@ expect_failure() {
 }
 
 encode() {
-  printf '%s' "$1" | base64 -w0
+  printf '%s' "$1" | base64 | tr -d '\r\n'
 }
 
 assert_file_equals() {
@@ -70,7 +70,7 @@ printf '%s\n' "$installation_id" >"$antigravity_fixture/installation_id"
 tar -cf "$test_root/antigravity-valid.tar" -C "$antigravity_fixture" \
   antigravity-oauth-token installation_id
 env HOME="$antigravity_home" \
-  ANTIGRAVITY_GEMINI_CREDS="$(base64 -w0 <"$test_root/antigravity-valid.tar")" \
+  ANTIGRAVITY_GEMINI_CREDS="$(base64 <"$test_root/antigravity-valid.tar" | tr -d '\r\n')" \
   bash "$seed_script" antigravity >"$test_root/antigravity-seed.stdout"
 assert_file_equals "$antigravity_fixture/antigravity-oauth-token" \
   "$antigravity_destination/antigravity-oauth-token" 'Antigravity token'
@@ -84,7 +84,7 @@ printf '%s\n' 'not-a-uuid' >"$antigravity_fixture/installation_id"
 tar -cf "$test_root/antigravity-bad-uuid.tar" -C "$antigravity_fixture" \
   antigravity-oauth-token installation_id
 expect_failure 'Antigravity invalid UUID' env HOME="$antigravity_home" \
-  ANTIGRAVITY_GEMINI_CREDS="$(base64 -w0 <"$test_root/antigravity-bad-uuid.tar")" \
+  ANTIGRAVITY_GEMINI_CREDS="$(base64 <"$test_root/antigravity-bad-uuid.tar" | tr -d '\r\n')" \
   bash "$seed_script" antigravity
 assert_file_equals "$test_root/original-antigravity-token" \
   "$antigravity_destination/antigravity-oauth-token" 'Antigravity token destination'
@@ -95,7 +95,7 @@ printf '%s\n' 'unexpected' >"$antigravity_fixture/extra-file"
 tar -cf "$test_root/antigravity-extra.tar" -C "$antigravity_fixture" \
   antigravity-oauth-token installation_id extra-file
 expect_failure 'Antigravity extra archive member' env HOME="$antigravity_home" \
-  ANTIGRAVITY_GEMINI_CREDS="$(base64 -w0 <"$test_root/antigravity-extra.tar")" \
+  ANTIGRAVITY_GEMINI_CREDS="$(base64 <"$test_root/antigravity-extra.tar" | tr -d '\r\n')" \
   bash "$seed_script" antigravity
 assert_file_equals "$test_root/original-antigravity-token" \
   "$antigravity_destination/antigravity-oauth-token" 'Antigravity token after extra member'
@@ -105,7 +105,7 @@ assert_file_equals "$test_root/original-installation-id" \
 tar -cf "$test_root/antigravity-duplicate.tar" -C "$antigravity_fixture" \
   antigravity-oauth-token installation_id antigravity-oauth-token
 expect_failure 'Antigravity duplicate archive member' env HOME="$antigravity_home" \
-  ANTIGRAVITY_GEMINI_CREDS="$(base64 -w0 <"$test_root/antigravity-duplicate.tar")" \
+  ANTIGRAVITY_GEMINI_CREDS="$(base64 <"$test_root/antigravity-duplicate.tar" | tr -d '\r\n')" \
   bash "$seed_script" antigravity
 assert_file_equals "$test_root/original-antigravity-token" \
   "$antigravity_destination/antigravity-oauth-token" 'Antigravity token after duplicate member'
@@ -128,7 +128,9 @@ chmod 0700 "$mock_bin/gh"
 assert_gh_call() {
   local secret_name="$1" cleartext_fixture="$2"
   local -a args=()
-  mapfile -t args <"$test_root/gh-args"
+  while IFS= read -r arg; do
+    args+=("$arg")
+  done <"$test_root/gh-args"
   [ "${#args[@]}" -eq 7 ] || fail "$secret_name gh argument count was not seven"
   [ "${args[0]}" = secret ] && [ "${args[1]}" = set ] &&
     [ "${args[2]}" = "$secret_name" ] && [ "${args[3]}" = --env ] &&
@@ -180,7 +182,10 @@ printf '%s\n' "$installation_id" >"$persist_dir/installation_id"
 run_persist antigravity "$persist_dir"
 assert_gh_call ANTIGRAVITY_GEMINI_CREDS "$antigravity_token"
 base64 -d <"$test_root/gh-stdin" >"$test_root/persisted-antigravity.tar"
-mapfile -t persisted_entries < <(tar -tf "$test_root/persisted-antigravity.tar")
+persisted_entries=()
+while IFS= read -r entry; do
+  persisted_entries+=("$entry")
+done < <(tar -tf "$test_root/persisted-antigravity.tar")
 [ "${#persisted_entries[@]}" -eq 2 ] &&
   [ "${persisted_entries[0]}" = antigravity-oauth-token ] &&
   [ "${persisted_entries[1]}" = installation_id ] ||

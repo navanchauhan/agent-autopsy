@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "provider": "codex",
+  "observed_release": "0.147.0",
+  "privacy": {
+    "tracked_content": "derived-normalized-only",
+    "tracked_raw_requests": false,
+    "tracked_request_headers": false,
+    "tracked_user_messages": false,
+    "tracked_model_responses": false,
+    "tracked_machine_state": false,
+    "unknown_fields": "reject"
+  },
+  "surfaces": [
+    {
+      "id": "codex.prompt.agent.catalog",
+      "category": "agent prompts",
+      "status": "current",
+      "capture_method": "direct-source",
+      "captured_release": "0.147.0",
+      "verified_release": "0.147.0",
+      "models": [
+        "gpt-5",
+        "gpt-5.1",
+        "gpt-5.2",
+        "gpt-5.4",
+        "gpt-5.5",
+        "gpt-5.6"
+      ],
+      "modes": [
+        "default",
+        "review"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/codex-auto-review.md",
+        "prompts/default.md",
+        "prompts/gpt-5-codex.md",
+        "prompts/gpt-5.1-codex-max.md",
+        "prompts/gpt-5.1.md",
+        "prompts/gpt-5.2-codex.md",
+        "prompts/gpt-5.2.md",
+        "prompts/gpt-5.4-mini.md",
+        "prompts/gpt-5.4.md",
+        "prompts/gpt-5.5.md",
+        "prompts/gpt-5.6-luna.md",
+        "prompts/gpt-5.6-sol.md",
+        "prompts/gpt-5.6-terra.md",
+        "prompts/prompt-with-apply-patch-instructions.md",
+        "prompts/review.md"
+      ],
+      "artifact_sha256": "1160061a0a7501f81c4dc181b397f12a739374c595172b53d65a3dd7c2a7f5ed"
+    },
+    {
+      "id": "codex.tool.catalog",
+      "category": "tool schemas",
+      "status": "current",
+      "capture_method": "direct-source",
+      "captured_release": "0.147.0",
+      "verified_release": "0.147.0",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "configured"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "tools/apply_patch.json",
+        "tools/clock.json",
+        "tools/create_goal.json",
+        "tools/exec_command.json",
+        "tools/get_context_remaining.json",
+        "tools/get_goal.json",
+        "tools/image_gen.json",
+        "tools/list_available_plugins_to_install.json",
+        "tools/list_mcp_resource_templates.json",
+        "tools/list_mcp_resources.json",
+        "tools/new_context_window.json",
+        "tools/read_mcp_resource.json",
+        "tools/request_permissions.json",
+        "tools/request_plugin_install.json",
+        "tools/request_user_input.json",
+        "tools/shell_command.json",
+        "tools/tool_search.json",
+        "tools/update_goal.json",
+        "tools/update_plan.json",
+        "tools/view_image.json",
+        "tools/wait_for_environment.json",
+        "tools/web_search.json",
+        "tools/web_search_indexed.json",
+        "tools/web_search_text_and_image.json",
+        "tools/write_stdin.json"
+      ],
+      "artifact_sha256": "6cd72b18550827fee3601a55ad5726bd02c61b9241b115ad6c9384ceefd276bf"
+    },
+    {
+      "id": "codex.steering.catalog",
+      "category": "runtime messages",
+      "status": "current",
+      "capture_method": "direct-source",
+      "captured_release": "0.147.0",
+      "verified_release": "0.147.0",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "configured",
+        "multi-agent",
+        "realtime",
+        "review"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "misc/agents-orchestrator.md",
+        "misc/apply-patch-tool-instructions.md",
+        "misc/apps-instructions.md",
+        "misc/collab-experimental-prompt.md",
+        "misc/compact-prompt.md",
+        "misc/compact-summary-prefix.md",
+        "misc/environments-instructions.md",
+        "misc/goal-budget-limit.md",
+        "misc/goal-continuation.md",
+        "misc/goal-objective-updated.md",
+        "misc/guardian-policy.md",
+        "misc/inter-agent-message.md",
+        "misc/multi-agent-mode-explicit-request-only.md",
+        "misc/multi-agent-mode-proactive.md",
+        "misc/permissions-approval-policy-never.md",
+        "misc/permissions-approval-policy-on-request-rule-request-permission.md",
+        "misc/permissions-approval-policy-on-request.md",
+        "misc/permissions-approval-policy-unless-trusted.md",
+        "misc/permissions-sandbox-mode-danger-full-access.md",
+        "misc/permissions-sandbox-mode-read-only.md",
+        "misc/permissions-sandbox-mode-workspace-write.md",
+        "misc/plugins-instructions.md",
+        "misc/realtime-backend-prompt.md",
+        "misc/realtime-delegation.md",
+        "misc/realtime-end.md",
+        "misc/realtime-start.md",
+        "misc/recommended-plugins.md",
+        "misc/review-exit-interrupted.xml",
+        "misc/review-exit-success.xml"
+      ],
+      "artifact_sha256": "51de398c953180d3b82b9219d6574514797e869790899db62d5c0de8c7ee18ef"
+    },
+    {
+      "id": "codex.assembly.model-mode",
+      "category": "assembly recipe",
+      "status": "gap",
+      "capture_method": "direct-source",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "all"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "No machine-readable recipe maps each model and mode to its ordered prompts, runtime messages, and tools."
+    },
+    {
+      "id": "codex.context.session",
+      "category": "dynamic context",
+      "status": "dynamic",
+      "capture_method": "direct-source",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "all"
+      ],
+      "dynamic_inputs": [
+        "AGENTS instructions",
+        "environment",
+        "memory",
+        "plugins",
+        "applications",
+        "MCP state"
+      ],
+      "artifacts": [],
+      "notes": "Only product-owned wrappers and typed inputs may be stored; captured values are excluded."
+    },
+    {
+      "id": "codex.tool.code-mode-listing",
+      "category": "dynamic tool catalog",
+      "status": "dynamic",
+      "capture_method": "direct-source",
+      "models": [
+        "gpt-5.6"
+      ],
+      "modes": [
+        "code-mode-only"
+      ],
+      "dynamic_inputs": [
+        "per-session code-mode tool listing"
+      ],
+      "artifacts": [],
+      "notes": "The current archive does not store the dynamic per-session listing or image and audio output-helper schemas."
+    },
+    {
+      "id": "codex.policy.external-overrides",
+      "category": "external policy inputs",
+      "status": "dynamic",
+      "capture_method": "direct-source",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "managed",
+        "custom",
+        "realtime"
+      ],
+      "dynamic_inputs": [
+        "managed Guardian policy",
+        "catalog collaboration messages",
+        "custom multi-agent instructions",
+        "Realtime overrides"
+      ],
+      "artifacts": [],
+      "notes": "External values are not product-owned fixed artifacts and must not be copied from a capture."
+    }
+  ]
+}

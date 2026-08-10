@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "provider": "antigravity",
+  "observed_release": "1.1.11",
+  "privacy": {
+    "tracked_content": "derived-normalized-only",
+    "tracked_raw_requests": false,
+    "tracked_request_headers": false,
+    "tracked_user_messages": false,
+    "tracked_model_responses": false,
+    "tracked_machine_state": false,
+    "unknown_fields": "reject"
+  },
+  "surfaces": [
+    {
+      "id": "antigravity.prompt.agent.gemini-3-6-flash-high.non-interactive",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "1.1.11",
+      "verified_release": "1.1.11",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/gemini-3.6-flash-high.md"
+      ],
+      "artifact_sha256": "7ab16bb2afc1dc3f15935c8d7e169d3b5a19f7fcdd0a76ad2ddd02847c6e0b10"
+    },
+    {
+      "id": "antigravity.prompt.agent.gemini-3-6-flash-high.interactive",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "1.1.11",
+      "verified_release": "1.1.11",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/gemini-3.6-flash-high-interactive.md"
+      ],
+      "artifact_sha256": "f9fb7bfd4a670cbb9dff5107cb0d48d45e2ff9ba0582ee3335c47483087e007b"
+    },
+    {
+      "id": "antigravity.tool.catalog",
+      "category": "tool schemas",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "1.1.11",
+      "verified_release": "1.1.11",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "non-interactive",
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "tools/ask_question.json",
+        "tools/define_subagent.json",
+        "tools/generate_image.json",
+        "tools/grep_search.json",
+        "tools/invoke_subagent.json",
+        "tools/list_dir.json",
+        "tools/manage_subagents.json",
+        "tools/manage_task.json",
+        "tools/multi_replace_file_content.json",
+        "tools/read_url_content.json",
+        "tools/replace_file_content.json",
+        "tools/run_command.json",
+        "tools/schedule.json",
+        "tools/search_web.json",
+        "tools/send_message.json",
+        "tools/view_file.json",
+        "tools/write_to_file.json"
+      ],
+      "artifact_sha256": "e980f8e017b346ca422fb8fd6842a512fee4428283fbd242924a225ca934ceac"
+    },
+    {
+      "id": "antigravity.agent.definitions",
+      "category": "bundled agent prompts",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "research and self subagents"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Agent catalog entries are present in the base prompt, but agent prompt bodies are absent."
+    },
+    {
+      "id": "antigravity.skill.definitions",
+      "category": "bundled skills",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "skill invocation"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Built-in skill catalog text is present, but skill bodies are absent."
+    },
+    {
+      "id": "antigravity.command.definitions",
+      "category": "slash commands",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "command invocation"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Command recommendations are present, but execution definitions are absent."
+    },
+    {
+      "id": "antigravity.event.catalog",
+      "category": "event prompts",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "task",
+        "schedule",
+        "background result",
+        "subagent result",
+        "peer message",
+        "plan"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Event paths are not captured as separate surfaces."
+    },
+    {
+      "id": "antigravity.mcp.instructions",
+      "category": "MCP and rules prompts",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "MCP and rules enabled"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Product MCP, rules, and user-instruction wrappers are not isolated."
+    },
+    {
+      "id": "antigravity.context.session",
+      "category": "dynamic context",
+      "status": "dynamic",
+      "capture_method": "model-request",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "all"
+      ],
+      "dynamic_inputs": [
+        "workspace",
+        "open files",
+        "cursor",
+        "conversation ID",
+        "user skills",
+        "rules",
+        "MCP state"
+      ],
+      "artifacts": [],
+      "notes": "Only fixed wrappers and typed placeholders may be stored. Captured values are excluded."
+    },
+    {
+      "id": "antigravity.assembly.model-mode",
+      "category": "assembly recipe",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "gemini-3.6-flash-high"
+      ],
+      "modes": [
+        "non-interactive",
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "The monolithic prompt loses message-role and conditional assembly boundaries."
+    },
+    {
+      "id": "antigravity.prompt.model-variants",
+      "category": "model and reasoning variants",
+      "status": "gap",
+      "capture_method": "model-request",
+      "models": [
+        "other response models"
+      ],
+      "modes": [
+        "reasoning variants"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Only gemini-3.6-flash-high is currently captured."
+    }
+  ]
+}

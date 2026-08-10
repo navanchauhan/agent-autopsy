@@ -47,6 +47,7 @@ jobs:
           node --test .github/scripts/test-discover-claude-deferred-tools.cjs
           node --test .github/scripts/test-trace-claude-messages.cjs
           node --test .github/scripts/test-prompt-contracts.cjs
+          node --test .github/scripts/test-surface-registry.cjs
           bash .github/scripts/test-credentials.sh
           bash .github/scripts/test-automation-state.sh
           bash -n .github/scripts/*.sh
@@ -624,6 +625,8 @@ jobs:
             codex-orchestrator-prompt.md codex-revise-prompt.md \
             review-refresh-prompt.md review-result.schema.json \
             run-codex-refresh.sh validate-refresh.cjs validate-review.cjs \
+            surface-registry.cjs validate-surfaces.cjs \
+            update-surface-hashes.cjs generate-catalog.cjs \
             write-safe-retry.cjs prepare-driver-output.cjs \
             package-driver-output.sh persist-credential.sh seed-credentials.sh \
             hash-candidate.sh test-codex-sandbox.sh; do
@@ -732,6 +735,7 @@ jobs:
               --security-opt apparmor=unconfined \
               --security-opt no-new-privileges \
               -v "$PWD":/workspace:ro \
+              -v "$PWD/CATALOG.md":/workspace/CATALOG.md \
               -v "$PWD/.capture-scratch":/workspace/.capture-scratch \
               -v "$PWD/capture-output":/workspace/capture-output:ro \
               -v "$PWD/references":/workspace/references:ro \
@@ -1049,7 +1053,8 @@ jobs:
           trusted="$RUNNER_TEMP/publish-gate"
           mkdir -p "$trusted"
           for file in validate-publish-bundle.cjs validate-refresh.cjs \
-            validate-review.cjs commit-and-release.sh; do
+            validate-review.cjs surface-registry.cjs \
+            validate-surfaces.cjs generate-catalog.cjs commit-and-release.sh; do
             install -m 0700 ".github/scripts/$file" "$trusted/$file"
           done
 
@@ -1066,7 +1071,7 @@ jobs:
           changed_count=0
           while IFS= read -r -d '' file; do
             case "$file" in
-              codex/*|claude-code/*|grok/*|antigravity/*) ;;
+              codex/*|claude-code/*|grok/*|antigravity/*|CATALOG.md) ;;
               *) echo "Applied patch escaped the immutable publication allowlist: $file" >&2; exit 1 ;;
             esac
             changed_count=$((changed_count + 1))
