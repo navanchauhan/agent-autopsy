@@ -1,12 +1,30 @@
 {
   "schema_version": 1,
   "tools": {
+    "claude-code": {
+      "plan_hash": "219a14e615581fbd71e1a80f2c64627f34838933dfe346bff9e32738235ae933",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260811",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
     "grok": {
       "plan_hash": "3ba0a120e89ffb2f6cbf6bfea3f6975fd05c989cceb78ede5f7b5947a20a82bf",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
       "last_fresh_bucket": "20260810",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "antigravity": {
+      "plan_hash": "48b981f68db211ecf832571fcd3f27290cc0226fdddfbf2f68cf53a2f58c8429",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260811",
       "last_reviewer_input_hash": null,
       "reason": null
     }
