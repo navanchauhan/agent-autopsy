@@ -106,7 +106,7 @@ function validatePrivacy(provider, privacy, errors) {
     tracked_request_headers: false,
     tracked_user_messages: false,
     tracked_model_responses: false,
-    tracked_machine_state: false,
+    tracked_machine_state: true,
     unknown_fields: "reject",
   };
   if (!privacy || typeof privacy !== "object" || Array.isArray(privacy)) {

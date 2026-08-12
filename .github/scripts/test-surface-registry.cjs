@@ -36,7 +36,7 @@ test("Claude embedded release cannot be mislabeled current", () => {
     privacy: {
       tracked_content: "derived-normalized-only", tracked_raw_requests: false,
       tracked_request_headers: false, tracked_user_messages: false,
-      tracked_model_responses: false, tracked_machine_state: false,
+      tracked_model_responses: false, tracked_machine_state: true,
       unknown_fields: "reject",
     },
     surfaces: [surface],

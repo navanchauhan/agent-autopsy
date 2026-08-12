@@ -49,3 +49,20 @@ test("author, repair, and reviewer distinguish previews from normalized output",
   assert.match(reviewer, /verify each final[\s\S]{0,80}directly against the raw request/);
   assert.match(reviewer, /preview hash equality is not required/);
 });
+
+test("privacy review allows non-PII model-facing context", () => {
+  for (const name of [
+    "codex-orchestrator-prompt.md",
+    "codex-revise-prompt.md",
+    "review-refresh-prompt.md",
+  ]) {
+    const prompt = read(name);
+    assert.match(prompt, /actual PII/);
+    assert.match(prompt, /synthetic[\s\S]{0,100}`\/Users\/example`/i);
+    assert.match(prompt, /model-facing[\s\S]{0,120}(?:machine|OS)[\s\S]{0,160}(?:repository|Git)/i);
+  }
+
+  const reviewer = read("review-refresh-prompt.md");
+  assert.match(reviewer, /do not use it to reject model-facing context/);
+  assert.doesNotMatch(reviewer, /Remove or reject names, email addresses, account data, private\s+paths, repository identity/);
+});

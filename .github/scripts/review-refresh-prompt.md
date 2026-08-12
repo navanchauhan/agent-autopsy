@@ -53,9 +53,9 @@ a claim to verify, not evidence.
 
 The immutable `evidence/candidate/` tree is a pre-author extractor preview, not
 the expected final working tree. It is evidence of what the capture wrapper
-initially produced. Expected differences include removal of
-host/provenance fields and evidence-backed repairs to normalization or VERSION
-metadata. Do not require its files or hashes to equal the tracked candidate and
+initially produced. Expected differences include removal of transport-only trace
+provenance and evidence-backed repairs to normalization or VERSION metadata.
+Do not require its files or hashes to equal the tracked candidate and
 do not request recapture merely because they differ. Instead, verify each final
 tracked value directly against the raw request, artifact attestation, manifest,
 or authoritative source. A difference is an error only when the final tracked
@@ -70,11 +70,15 @@ available raw capture or upstream-source evidence. Check that:
 3. Schema variants, tool inventories, prompt classification, and VERSION counts
    agree with the evidence and repository conventions.
 4. Parse the complete candidate semantically and compare it with the private raw
-   evidence. Remove or reject names, email addresses, account data, private
-   paths, repository identity, tenant or staging values, request/session IDs,
-   user content, model responses, and other PII. Do not use regex matching as the
-   privacy decision. Raw captures can be used as evidence but must not appear in
-   the tracked patch. Set `pii_removed` true only after this agent review passes.
+   evidence. Remove or reject actual PII, including real names, personal contact
+   details, account identifiers, and path segments that identify a person. Do
+   not use regex matching as the privacy decision. Model-facing OS, shell, Git,
+   repository, MCP, skills, tenant, staging, request/session, and user-content
+   context is publishable when it contains no actual PII or secrets. Synthetic
+   examples such as `/Users/example` are safe. Raw capture files must not appear
+   in the tracked patch. Set `pii_removed` true only after this review passes.
+   Set `transport_noise_excluded` true when trace timestamps, trace paths, and
+   trace line numbers are absent; do not use it to reject model-facing context.
 5. A failed or ambiguous capture did not advance the successful version.
 6. `SURFACES.json` states the real capture release and status for each affected
    surface; older artifacts are not labeled current, and gaps remain explicit.

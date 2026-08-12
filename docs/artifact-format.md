@@ -19,8 +19,8 @@ Statuses are:
 - `gap`: a known surface with no tracked artifact.
 - `dynamic`: runtime input represented by type, not captured value.
 
-Tracked artifacts must be normalized derived output. Raw requests can remain in
-private capture evidence and can be analyzed by the model. Do not commit request
-bodies, headers, user or model messages, PII, credentials, machine state, tenant
-values, staging values, or run identifiers. PII classification and removal are
-agent review tasks, not regex classification tasks.
+Tracked artifacts must be derived output. Raw requests can remain in private
+capture evidence and can be analyzed by the model. Do not commit raw request
+files, PII, credentials, or secrets. Model-facing machine, repository, tenant,
+staging, request, and user context is allowed when it contains no actual PII.
+PII classification and removal are agent review tasks, not regex tasks.

@@ -23,9 +23,11 @@ schemas, versions, or validation evidence. Do not run publishing commands.
 
 Repair `SURFACES.json` with the true per-surface capture release and status for
 each affected surface. Trusted post-processing supplies artifact and evidence
-hashes. Raw evidence can be analyzed, but do not publish raw requests, personal
-identity data, private home paths, tenant or staging hostnames, or run IDs.
-Use semantic inspection rather than regex matching for this PII removal.
+hashes. Raw evidence can be analyzed, but do not publish raw requests, secrets,
+or actual PII. Use semantic inspection rather than regex matching. Preserve
+model-facing machine, repository, MCP, skills, tenant, staging, request/session,
+and user-content context when it contains no actual PII. Synthetic placeholder
+paths such as `/Users/example` are safe.
 
 For Claude Code deferred tools, the placeholder declaration alone is incomplete
 evidence. Attempt to trigger and inspect the expanded model-facing request. If

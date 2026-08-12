@@ -35,11 +35,11 @@ that must not be mistaken for fixed product text.
 ## Trust and privacy
 
 Raw requests are private evidence and can be used by the analysis model. They
-are not repository artifacts. The author agent semantically removes personal
-identity data, private home paths, tenant or staging values, run IDs, and user
-content. An independent reviewer agent must attest that PII was removed before
-publication. Product-owned prompt and schema text stays exact; only
-runtime-specific values are normalized.
+are not repository artifacts. The author agent semantically removes actual PII
+and secrets. Model-facing machine, repository, tenant, staging, request, and user
+context can remain when it contains no actual PII. Synthetic placeholder paths
+such as `/Users/example` are safe. An independent reviewer agent must attest that
+PII was removed before publication.
 
 Run the local integrity checks with:
 

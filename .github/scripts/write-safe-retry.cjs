@@ -26,7 +26,7 @@ const review = {
     capture_complete: false,
     changes_supported_by_evidence: false,
     inventory_consistent: false,
-    provenance_noise_excluded: true,
+    transport_noise_excluded: true,
     pii_removed: true,
     secret_safe: true,
     issues: [{ ...issue, path: entry.dir }],

@@ -84,7 +84,7 @@ For each changed tool:
 - Cover every model and capture mode required for a current snapshot.
 - Preserve exact prompt and tool-schema content.
 - Support every addition, modification, and removal with raw or source evidence.
-- Exclude timestamps, trace paths and line numbers, host state, and other run noise.
+- Exclude transport-only timestamps, trace paths, and trace line numbers.
 - Update `VERSION` with current facts, not accumulated release history.
 - Update `SURFACES.json` for every affected surface. Record its actual capture
   release and status. Do not mark an older artifact current. Artifact and
@@ -93,17 +93,19 @@ For each changed tool:
   and immediate non-executable normalized artifacts under `misc/`. Repository
   instructions, `README.md`, dotfiles, nested paths, and `misc/scripts/` are
   immutable inputs and must never be changed.
-- Leave no unrelated changes, invalid JSON, raw captures, credentials, personal
-  identity data, private home paths, tenant or staging hostnames, or run IDs.
+- Leave no unrelated changes, invalid JSON, raw captures, credentials, secrets,
+  or actual PII.
 
 Raw captures are private evidence and can be inspected or sent to the analysis
 model. They must not be copied into tracked files. Normalize only dynamic values;
 do not rewrite product-owned prompt or schema text.
 
-Use semantic inspection, not regex matching, to identify and remove PII. Compare
-the derived candidate with the raw request and replace identity, account,
-repository, tenant, staging, request/session, and user-content values with typed
-templates before the independent review.
+Use semantic inspection, not regex matching, to identify and remove actual PII.
+Normalize real names, personal contact details, account identifiers, and path
+segments that identify a person. Preserve model-facing OS, shell, Git,
+repository, MCP, skills, tenant, staging, request/session, and user-content
+context when it contains no actual PII or secrets. Synthetic examples such as
+`/Users/example` are safe and must not be rejected as PII.
 
 Do not infer missing prompts or schemas. A transient capture failure must not be
 represented as a successful refresh or written into tracked documentation. Do

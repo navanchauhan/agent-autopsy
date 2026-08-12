@@ -14,6 +14,6 @@ node .github/scripts/validate-surfaces.cjs
 node --test .github/scripts/test-*.cjs
 ```
 
-Do not commit raw requests, credentials, PII, private paths, tenant or staging
-values, or run identifiers. Raw evidence can be shared with the private analysis
-model, but the reviewed patch must contain only normalized derived artifacts.
+Do not commit raw request files, credentials, secrets, or actual PII. Raw evidence
+can be shared with the private analysis model. Model-facing machine, repository,
+tenant, staging, request, and user context is allowed when it contains no PII.
