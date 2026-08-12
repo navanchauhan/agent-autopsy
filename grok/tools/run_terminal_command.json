@@ -15,7 +15,7 @@
           "type": "string"
         },
         "timeout": {
-          "description": "Optional timeout in milliseconds (max 36000000). Default: 120000. If not specified, commands exceeding the default timeout will be automatically backgrounded. `timeout: 0` in background mode disables the wrapper timeout entirely; the task runs until it exits or is killed via the kill task tool.",
+          "description": "Optional timeout in milliseconds (max 36000000). Default: 120000; foreground commands exceeding it are automatically backgrounded.",
           "type": [
             "integer",
             "null"

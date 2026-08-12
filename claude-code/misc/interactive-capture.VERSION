@@ -1,9 +1,9 @@
 source = anthropic-ai/claude-code
-version = 2.1.226
+version = 2.1.227
 capture_mode = interactive
 platform = linux-x64
-sha256 = 4e9bec1177ce9690e8bd988b710ac24105e70da428dd094c5adcbbe786a55555
-capture_user_agent = claude-cli/2.1.226 (external, cli)
+sha256 = 6832dc3f1797b890b71116e5f2dbbf9a83fd3d0498c235b4b0f9cd0e6e499ad6
+capture_user_agent = claude-cli/2.1.227 (external, cli)
 trace_script = claude-code/misc/scripts/trace-claude-messages.cjs
 extract_script = claude-code/misc/scripts/extract-claude-trace.cjs
 prompt_models = claude-sonnet-5

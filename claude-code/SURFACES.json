@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.226",
+  "observed_release": "2.1.227",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -148,7 +148,7 @@
     {
       "id": "claude-code.prompt.agent.claude-sonnet-5.interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.226",
       "verified_release": "2.1.226",
@@ -162,7 +162,8 @@
       "artifacts": [
         "prompts/claude-sonnet-5-interactive.md"
       ],
-      "artifact_sha256": "637a119593cfc049770a17417d630cda58595d78a514f0a163b2fb86477bdfe7"
+      "artifact_sha256": "637a119593cfc049770a17417d630cda58595d78a514f0a163b2fb86477bdfe7",
+      "notes": "The 2.1.227 interactive request was captured, but its prompt normalization remains unsupported; retained the last successful 2.1.226 artifact."
     },
     {
       "id": "claude-code.prompt.special.session-title",
@@ -207,7 +208,7 @@
     {
       "id": "claude-code.steering.interactive",
       "category": "steering messages",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.226",
       "verified_release": "2.1.226",
@@ -225,15 +226,16 @@
       "artifacts": [
         "misc/claude-sonnet-5-interactive-steering.md"
       ],
-      "artifact_sha256": "200a26ce5de547190a5094dc31405087fa978a5d83c2d630705646de9159a0e3"
+      "artifact_sha256": "200a26ce5de547190a5094dc31405087fa978a5d83c2d630705646de9159a0e3",
+      "notes": "The 2.1.227 interactive request was captured, but its steering normalization remains unsupported; retained the last successful 2.1.226 artifact."
     },
     {
       "id": "claude-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.226",
-      "verified_release": "2.1.226",
+      "captured_release": "2.1.227",
+      "verified_release": "2.1.227",
       "models": [
         "supported model catalog"
       ],
@@ -280,7 +282,9 @@
         "tools/Workflow.json",
         "tools/Write.json"
       ],
-      "artifact_sha256": "0eaa25d77bf537f2d6668e70d794ca8c1bd6b6868480a7ea2e5e7fdee7dd79ca"
+      "artifact_sha256": "440dfdf529d1c437feb27926a5ade0d31d8fffb72ae59f11481f406610460c3d",
+      "evidence_sha256": "3785919c628f54ac11e8ff1b19cb7b4de95e0dc6ef2b3aabafb41e804165d21a",
+      "notes": "Expanded deferred-tool schemas were present in raw model-facing requests; the catalog includes the supported 2.1.227 interactive variants."
     },
     {
       "id": "claude-code.agent.definitions",
