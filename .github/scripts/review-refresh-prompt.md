@@ -17,6 +17,16 @@ not report evidence unavailable until you have attempted to read them. Inspect
 only the listed tool directories and their corresponding evidence. Return one
 tool result for every listed tool; do not return a partial result.
 
+Use a bounded review sequence. First read the manifest, summary, compact evidence
+index, and path-limited candidate diff. Then review every added or changed
+tracked artifact semantically. Open only the specific raw request, attestation,
+or source file needed to support a changed value or resolve a privacy ambiguity.
+Do not recursively scan source trees, enumerate all raw requests, inspect
+unrelated response payloads, or inventory dependency manifests. Use
+`source-changes.txt`, `SOURCE_REV`, and specifically named constructors or
+snapshots as navigation. After all listed tools have a decision, emit the
+required JSON and stop.
+
 For Codex, the exact tagged `references/codex` source checkout is the complete,
 authoritative capture; there is intentionally no proxy trace or live model
 request. Do not require dynamic request evidence or mark the capture incomplete

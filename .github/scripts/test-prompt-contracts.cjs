@@ -66,3 +66,15 @@ test("privacy review allows non-PII model-facing context", () => {
   assert.match(reviewer, /do not use it to reject model-facing context/);
   assert.doesNotMatch(reviewer, /Remove or reject names, email addresses, account data, private\s+paths, repository identity/);
 });
+
+test("author and reviewer use bounded evidence inspection", () => {
+  const author = read("codex-orchestrator-prompt.md");
+  const reviewer = read("review-refresh-prompt.md");
+
+  assert.match(author, /Required bounded execution order/);
+  assert.match(author, /make the first tracked edits before doing optional\s+source research/);
+  assert.match(author, /Never print, enumerate, or parse every raw\s+request/);
+  assert.match(author, /Do not scan a whole Cargo\s+workspace/);
+  assert.match(reviewer, /Use a bounded review sequence/);
+  assert.match(reviewer, /Do not recursively scan source trees, enumerate all raw requests/);
+});

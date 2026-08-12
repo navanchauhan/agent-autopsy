@@ -76,6 +76,35 @@ directories: use targeted file reads and path-limited diffs, never an unbounded
 repository-wide `git diff`. If a capture is ambiguous, leave that tool unchanged
 and report the blocker rather than iterating on speculative normalization.
 
+## Required bounded execution order
+
+Do not start with a recursive source search or a raw-request inventory. Complete
+the following sequence, and make the first tracked edits before doing optional
+source research:
+
+1. Read the changed-tools manifest, the compact evidence index, and the existing
+   `VERSION` and `SURFACES.json` files for all listed tools.
+2. List and compare only each listed tool's `evidence/candidate/` or
+   `interactive-preview/` files against its immediate tracked artifact paths.
+   Use these previews as navigation and as a normalization starting point, while
+   correcting their known metadata or provenance defects.
+3. Update each listed tool's allowed tracked artifacts from that bounded delta.
+   Finish one tool before moving to the next so useful work is not deferred.
+4. Semantically inspect the complete resulting tracked candidate for actual PII
+   and secrets. Open only the specific raw request that supports a changed value
+   or resolves a privacy ambiguity. Never print, enumerate, or parse every raw
+   request, and never inspect response payloads that are unrelated to the patch.
+5. Use `source-changes.txt`, `SOURCE_REV`, and specifically named constructors or
+   snapshots for targeted source confirmation only. Do not scan a whole Cargo
+   workspace, dependency manifest, or source tree. If targeted evidence is not
+   enough, leave that tool unchanged and report it blocked.
+6. Run the required validation, inspect the path-limited final diff once, write
+   the exact requested summary, and stop.
+
+The task is normalization and semantic publication review, not repository
+reconnaissance. Broad searches, exhaustive inventories, and repeated evidence
+reads consume the execution window and are a task failure.
+
 # Success criteria
 
 For each changed tool:
