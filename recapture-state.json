@@ -18,6 +18,15 @@
       "last_fresh_bucket": "20260813",
       "last_reviewer_input_hash": null,
       "reason": null
+    },
+    "antigravity": {
+      "plan_hash": "aaed1e67f5ba79bdb6a743fea053e0d8e641f5663d633c66a8d9b4073e8c5628",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260814",
+      "last_reviewer_input_hash": null,
+      "reason": null
     }
   }
 }
