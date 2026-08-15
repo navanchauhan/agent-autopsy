@@ -121,6 +121,8 @@ For each changed tool:
   Preserve durable repository script references such as `trace_script`,
   `extract_script`, `capture_script`, and `network_capture_script`.
 - Update `VERSION` with current facts, not accumulated release history.
+  Root `misc` counts include immediate misc artifacts but exclude `*.VERSION`
+  metadata files; trusted post-processing recomputes root inventory counts.
 - Update `SURFACES.json` for every affected surface. Record its actual capture
   release and status. Do not mark an older artifact current. Artifact and
   evidence hashes are filled by a trusted post-processing step.

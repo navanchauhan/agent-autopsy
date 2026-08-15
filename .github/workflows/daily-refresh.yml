@@ -627,7 +627,7 @@ jobs:
             review-refresh-prompt.md review-result.schema.json \
             run-codex-refresh.sh validate-refresh.cjs validate-review.cjs \
             surface-registry.cjs validate-surfaces.cjs \
-            update-surface-hashes.cjs generate-catalog.cjs \
+            update-version-counts.cjs update-surface-hashes.cjs generate-catalog.cjs \
             write-safe-retry.cjs prepare-driver-output.cjs \
             package-driver-output.sh persist-credential.sh seed-credentials.sh \
             hash-candidate.sh test-codex-sandbox.sh; do

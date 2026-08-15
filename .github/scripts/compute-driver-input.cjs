@@ -40,6 +40,7 @@ const contractFiles = [
   ".github/scripts/validate-refresh.cjs",
   ".github/scripts/surface-registry.cjs",
   ".github/scripts/validate-surfaces.cjs",
+  ".github/scripts/update-version-counts.cjs",
   ".github/scripts/update-surface-hashes.cjs",
   ".github/scripts/generate-catalog.cjs",
   ".github/scripts/validate-review.cjs",

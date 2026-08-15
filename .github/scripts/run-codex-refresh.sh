@@ -163,6 +163,7 @@ finalize_surface_metadata() {
   while IFS= read -r dir; do
     dirs+=("$dir")
   done < <(jq -r '.[].dir' "$changed_file")
+  node "$script_dir/update-version-counts.cjs" "${dirs[@]}"
   node "$script_dir/update-surface-hashes.cjs" "${dirs[@]}"
   node "$script_dir/generate-catalog.cjs"
 }

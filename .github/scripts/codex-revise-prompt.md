@@ -34,6 +34,8 @@ Durable repository script fields such as `trace_script`, `extract_script`,
 `capture_script`, and `network_capture_script` are allowed. For Antigravity,
 retain `manifest_tarball_sha512`, but remove capture-derived executable
 `sha256` and `sha512` fields from root and misc `VERSION` artifacts.
+Root `misc` counts exclude `*.VERSION` metadata files. Trusted post-processing
+recomputes root prompt, tool, and misc inventory counts.
 
 For Claude Code deferred tools, the placeholder declaration alone is incomplete
 evidence. Attempt to trigger and inspect the expanded model-facing request. If

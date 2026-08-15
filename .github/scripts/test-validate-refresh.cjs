@@ -6,6 +6,7 @@ const path = require("node:path");
 const test = require("node:test");
 
 const validator = path.join(__dirname, "validate-refresh.cjs");
+const countUpdater = path.join(__dirname, "update-version-counts.cjs");
 
 function runValidator(root, plan, summary) {
   return childProcess.spawnSync(process.execPath, [validator, plan, summary], {
@@ -90,4 +91,27 @@ test("VERSION metadata excludes transport fields and unsupported Antigravity exe
   );
   const safe = runValidator(root, plan, summary);
   assert.equal(safe.status, 0, safe.stderr);
+});
+
+test("trusted VERSION count update excludes misc VERSION metadata", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "update-version-counts-"));
+  const provider = path.join(root, "antigravity");
+  fs.mkdirSync(path.join(provider, "prompts"), { recursive: true });
+  fs.mkdirSync(path.join(provider, "tools"), { recursive: true });
+  fs.mkdirSync(path.join(provider, "misc"), { recursive: true });
+  fs.writeFileSync(path.join(provider, "prompts", "one.md"), "prompt\n");
+  fs.writeFileSync(path.join(provider, "tools", "one.json"), "{}\n");
+  fs.writeFileSync(path.join(provider, "misc", "interactive-capture.VERSION"), "version = 1.0.1\n");
+  fs.writeFileSync(path.join(provider, "misc", "artifact.md"), "artifact\n");
+  fs.writeFileSync(path.join(provider, "VERSION"), "version = 1.0.1\nprompts = 9\ntools = 9\nmisc = 9\n");
+  childProcess.execFileSync("git", ["init", "-q"], { cwd: root });
+  const result = childProcess.spawnSync(process.execPath, [countUpdater, "antigravity"], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  assert.equal(result.status, 0, result.stderr);
+  const version = fs.readFileSync(path.join(provider, "VERSION"), "utf8");
+  assert.match(version, /^prompts = 1$/m);
+  assert.match(version, /^tools = 1$/m);
+  assert.match(version, /^misc = 1$/m);
 });
