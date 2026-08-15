@@ -428,6 +428,28 @@ function validateVersionInventory(tool) {
   }
   validateCount("tools", fields.get("tools"), toolFiles.length, versionPath);
 
+  if (tool.tool === "grok") {
+    const promptModels = listedFiles(fields.get("prompt_models"));
+    if (!promptModels || promptModels.length !== 1) {
+      fail(`VERSION: ${tool.dir}/prompt_models must name exactly one captured Grok model`);
+    } else {
+      const modelField = `${promptModels[0].replace(/[^A-Za-z0-9]+/g, "_").replace(/^_+|_+$/g, "").toLowerCase()}_tools`;
+      const modelToolFields = [...fields.keys()].filter(
+        (name) => /^grok_[A-Za-z0-9_]+_tools$/.test(name) && name !== "grok_session_title_tools",
+      );
+      if (!fields.has(modelField)) {
+        fail(`VERSION: ${tool.dir}/VERSION must use ${modelField} for prompt_models=${promptModels[0]}`);
+      }
+      for (const staleField of modelToolFields) {
+        if (staleField !== modelField) {
+          fail(`VERSION: ${tool.dir}/VERSION retains stale model tool field ${staleField}; expected ${modelField}`);
+        }
+      }
+      const sessionTitleTools = leadingInteger(fields.get("grok_session_title_tools")) || 0;
+      validateCount(modelField, fields.get(modelField), toolFiles.length - sessionTitleTools, versionPath);
+    }
+  }
+
   const miscFiles = immediateFiles(path.join(dirPath, "misc"));
   const miscArtifacts = miscFiles.filter((name) => !name.endsWith(".VERSION"));
   const declaredMiscFiles = listedFiles(fields.get("misc_files"));

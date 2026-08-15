@@ -36,6 +36,9 @@ authoritative for bundled prompt and tool construction; use capture only to
 verify server-provided request material. Record `references/grok-build/SOURCE_REV`
 in `grok/VERSION`, never the checkout's mirror commit. Omit `sha256` unless a
 trusted released binary is actually available to hash; a capture cannot prove it.
+When `prompt_models` changes, rename the model-specific `*_tools` VERSION field
+to match the current model and remove the stale model field. For example,
+`prompt_models = grok-4.6` requires `grok_4_6_tools`, not `grok_4_5_tools`.
 
 For Claude Code, inspect deferred-tool declarations and their expanded requests
 as separate evidence. A `DeferredToolPlaceholder` declaration does not establish
