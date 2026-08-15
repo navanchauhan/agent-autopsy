@@ -52,6 +52,9 @@ For Grok, `references/grok-build/SOURCE_REV` is the authoritative revision for
 If `prompt_models` changed, rename its model-specific `*_tools` VERSION field to
 the current model and remove the stale model field. For example, Grok 4.6 uses
 `grok_4_6_tools`, never `grok_4_5_tools`.
+For the session-title surface, use the model from that specific raw request. Do
+not inherit the main prompt model or `prompt_models`; if the request uses
+Grok 4.5, keep that surface's model as `grok-4.5`.
 
 Return the same canonical Markdown format as the original refresh: exactly one
 `## <tool>` section per changed-tools entry, in input order, with two to four

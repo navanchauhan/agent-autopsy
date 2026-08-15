@@ -792,10 +792,10 @@ jobs:
             .capture-scratch/review-result.json .capture-scratch/candidate-tree.sha256
           run_phase smoke 1 read-write
           completed=false
-          for attempt in 1 2 3; do
+          for attempt in 1 2 3 4; do
             if ! run_phase author "$attempt" read-write; then
-              if [ "$attempt" -lt 3 ]; then continue; fi
-              echo 'Codex author failed mechanical validation after two repair attempts.' >&2
+              if [ "$attempt" -lt 4 ]; then continue; fi
+              echo 'Codex author failed mechanical validation after three repair attempts.' >&2
               exit 1
             fi
 

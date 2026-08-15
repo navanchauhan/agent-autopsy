@@ -309,11 +309,18 @@ function renderCatalog(repoRoot, providers = [...providerReleaseFields.keys()].s
   return lines.join("\n");
 }
 
+function shouldUpdateEvidenceHash(surface, targetRelease) {
+  return Boolean(targetRelease)
+    && ["current", "verified-unchanged"].includes(surface.status)
+    && surface.verified_release === targetRelease;
+}
+
 module.exports = {
   artifactDigest,
   providerReleaseFields,
   readManifest,
   renderCatalog,
+  shouldUpdateEvidenceHash,
   trackedArtifacts,
   validateManifest,
 };

@@ -6,7 +6,7 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
-const { artifactDigest, validateManifest } = require("./surface-registry.cjs");
+const { artifactDigest, shouldUpdateEvidenceHash, validateManifest } = require("./surface-registry.cjs");
 
 const repoRoot = childProcess.execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim();
 
@@ -43,4 +43,10 @@ test("Claude embedded release cannot be mislabeled current", () => {
   }));
   const result = validateManifest(root, provider);
   assert.ok(result.errors.some((error) => error.includes("embedded cc_version 2.1.221")), result.errors.join("\n"));
+});
+
+test("fresh evidence hashes do not alter surfaces retained at an older release", () => {
+  assert.equal(shouldUpdateEvidenceHash({ status: "current", verified_release: "2.1.227" }, "2.1.228"), false);
+  assert.equal(shouldUpdateEvidenceHash({ status: "verified-unchanged", verified_release: "2.1.228" }, "2.1.228"), true);
+  assert.equal(shouldUpdateEvidenceHash({ status: "gap", verified_release: "2.1.228" }, "2.1.228"), false);
 });
