@@ -694,8 +694,8 @@ jobs:
           CODEX_REFRESH_REASONING_EFFORT: medium
           CODEX_REVIEW_MODEL: gpt-5.6-luna
           CODEX_REVIEW_REASONING_EFFORT: medium
-          CODEX_AUTHOR_TIMEOUT: 20m
-          CODEX_REVIEW_TIMEOUT: 8m
+          CODEX_AUTHOR_TIMEOUT: 10m
+          CODEX_REVIEW_TIMEOUT: 6m
         run: |
           credential_export="$RUNNER_TEMP/credential-export-codex"
           credential_home="$RUNNER_TEMP/codex-seed-home"

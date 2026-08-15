@@ -105,7 +105,7 @@ write_secure_config
 
 run_author() {
   local prompt_file="$1"
-  timeout --foreground --signal=TERM --kill-after=30s "$author_timeout" codex exec \
+  timeout --signal=TERM --kill-after=30s "$author_timeout" codex exec \
     --model "$author_model" \
     -c "model_reasoning_effort=\"$author_effort\"" \
     -c 'model_verbosity="low"' \
@@ -130,7 +130,7 @@ validate_candidate() {
 
 run_reviewer() {
   rm -f "$review_file"
-  timeout --foreground --signal=TERM --kill-after=30s "$review_timeout" codex exec \
+  timeout --signal=TERM --kill-after=30s "$review_timeout" codex exec \
     --model "$review_model" \
     -c "model_reasoning_effort=\"$review_effort\"" \
     -c 'model_verbosity="low"' \

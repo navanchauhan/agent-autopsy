@@ -88,3 +88,13 @@ test("driver allows three bounded repair attempts", () => {
   assert.match(read("codex-revise-prompt.md"), /Never bulk-advance Claude surface release fields/);
   assert.match(read("codex-revise-prompt.md"), /session-title surface[\s\S]*specific raw request/);
 });
+
+test("model timeouts return control to the bounded repair loop", () => {
+  const driver = read("run-codex-refresh.sh");
+  const workflow = fs.readFileSync(path.join(scripts, "..", "workflows", "daily-refresh.yml"), "utf8");
+  assert.doesNotMatch(driver, /timeout\s+--foreground/);
+  assert.match(driver, /timeout --signal=TERM --kill-after=30s "\$author_timeout" codex exec/);
+  assert.match(driver, /timeout --signal=TERM --kill-after=30s "\$review_timeout" codex exec/);
+  assert.match(workflow, /CODEX_AUTHOR_TIMEOUT: 10m/);
+  assert.match(workflow, /CODEX_REVIEW_TIMEOUT: 6m/);
+});
