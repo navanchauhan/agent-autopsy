@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.1.12",
+  "observed_release": "1.1.13",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,50 +17,50 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.12",
-      "verified_release": "1.1.12",
+      "captured_release": "1.1.13",
+      "verified_release": "1.1.13",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "non-interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/gemini-3.6-flash-high.md"
+        "prompts/gemini-3.7-flash-high.md"
       ],
-      "artifact_sha256": "a7c61de5f7e67d1b9b11c8a376747311784a689c6d4799178e35c2f39e59ea14",
-      "evidence_sha256": "291fb4adb4c9acbd4f0ede6e9bb3c55ac8c70cd2208984ef6c7ef518ab3b3436"
+      "artifact_sha256": "63e4dc07ea1c9ccf9de2faf3d63115676b8e2bcc1b5e6e63de02588d4871e2ff",
+      "evidence_sha256": "e072937762edfdcef80d405861b0ad6797e6adb1a92097a32b3f94ff713d7a19"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-6-flash-high.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.12",
-      "verified_release": "1.1.12",
+      "captured_release": "1.1.13",
+      "verified_release": "1.1.13",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/gemini-3.6-flash-high-interactive.md"
+        "prompts/gemini-3.7-flash-high-interactive.md"
       ],
-      "artifact_sha256": "56b38d585938e9fd33c8399b8b6feee4fc8215c8a6449be97aac32bd4da668f1",
-      "evidence_sha256": "291fb4adb4c9acbd4f0ede6e9bb3c55ac8c70cd2208984ef6c7ef518ab3b3436"
+      "artifact_sha256": "cfcc993a786dc29ed45fc01cfd3c0ff90cd17c2791cd63e97632fb70bc515ec7",
+      "evidence_sha256": "e072937762edfdcef80d405861b0ad6797e6adb1a92097a32b3f94ff713d7a19"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.12",
-      "verified_release": "1.1.12",
+      "captured_release": "1.1.13",
+      "verified_release": "1.1.13",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "non-interactive",
@@ -76,7 +76,6 @@
         "tools/list_dir.json",
         "tools/manage_subagents.json",
         "tools/manage_task.json",
-        "tools/multi_replace_file_content.json",
         "tools/read_url_content.json",
         "tools/replace_file_content.json",
         "tools/run_command.json",
@@ -86,8 +85,8 @@
         "tools/view_file.json",
         "tools/write_to_file.json"
       ],
-      "artifact_sha256": "76edfd69564100a3d100a94a1b7a97aba1a3a1764dfb71f6778b3830fe07bca3",
-      "evidence_sha256": "291fb4adb4c9acbd4f0ede6e9bb3c55ac8c70cd2208984ef6c7ef518ab3b3436"
+      "artifact_sha256": "d57315c069403005d96ac1a3224ff80052fab117819f8ad8a9277e669824b33e",
+      "evidence_sha256": "e072937762edfdcef80d405861b0ad6797e6adb1a92097a32b3f94ff713d7a19"
     },
     {
       "id": "antigravity.agent.definitions",
@@ -95,7 +94,7 @@
       "status": "gap",
       "capture_method": "model-request",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "research and self subagents"
@@ -110,7 +109,7 @@
       "status": "gap",
       "capture_method": "model-request",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "skill invocation"
@@ -125,7 +124,7 @@
       "status": "gap",
       "capture_method": "model-request",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "command invocation"
@@ -140,7 +139,7 @@
       "status": "gap",
       "capture_method": "model-request",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "task",
@@ -160,7 +159,7 @@
       "status": "gap",
       "capture_method": "model-request",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "MCP and rules enabled"
@@ -175,7 +174,7 @@
       "status": "dynamic",
       "capture_method": "model-request",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "all"
@@ -198,7 +197,7 @@
       "status": "gap",
       "capture_method": "model-request",
       "models": [
-        "gemini-3.6-flash-high"
+        "gemini-3.7-flash-high"
       ],
       "modes": [
         "non-interactive",
@@ -221,7 +220,7 @@
       ],
       "dynamic_inputs": [],
       "artifacts": [],
-      "notes": "Only gemini-3.6-flash-high is currently captured."
+      "notes": "Only gemini-3.7-flash-high is currently captured."
     }
   ]
 }

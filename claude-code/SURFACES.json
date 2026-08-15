@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.227",
+  "observed_release": "2.1.228",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -29,7 +29,7 @@
         "prompts/claude-fable-5.md"
       ],
       "artifact_sha256": "32601637ac81243fe953d2fbb3dbf6a02524b0d5c309a6b388b55825521a16f5",
-      "notes": "The embedded billing header proves version 2.1.221, not the observed 2.1.226 release."
+      "notes": "The stored artifact's embedded billing header proves version 2.1.221."
     },
     {
       "id": "claude-code.prompt.agent.claude-haiku-4-5.non-interactive",
@@ -48,7 +48,7 @@
         "prompts/claude-haiku-4-5-20251001.md"
       ],
       "artifact_sha256": "80b9289ceab45fa59ff9a96a1d27fbf2408f804d57d02720da7250272df28089",
-      "notes": "The embedded billing header proves version 2.1.221."
+      "notes": "The stored artifact's embedded billing header proves version 2.1.221."
     },
     {
       "id": "claude-code.prompt.agent.claude-opus-4-7.non-interactive",
@@ -67,7 +67,7 @@
         "prompts/claude-opus-4-7.md"
       ],
       "artifact_sha256": "6646db945f676db51dab4868682ddd138be8b1b68058a1d2121f21476e55bc17",
-      "notes": "The embedded billing header proves version 2.1.221."
+      "notes": "The stored artifact's embedded billing header proves version 2.1.221."
     },
     {
       "id": "claude-code.prompt.agent.claude-opus-4-8.non-interactive",
@@ -86,7 +86,7 @@
         "prompts/claude-opus-4-8.md"
       ],
       "artifact_sha256": "ae78e8ef611148c151f5a322aa20804354f9f7b6c36b191ddafe3d5b496c4b7d",
-      "notes": "The embedded billing header proves version 2.1.221."
+      "notes": "The stored artifact's embedded billing header proves version 2.1.221."
     },
     {
       "id": "claude-code.prompt.agent.claude-opus-5.non-interactive",
@@ -105,7 +105,7 @@
         "prompts/claude-opus-5.md"
       ],
       "artifact_sha256": "282697f204d6e1a20191e540d0f7ede4049c50ac256ad9048f26ca97abdd7d9f",
-      "notes": "The embedded billing header proves version 2.1.221."
+      "notes": "The stored artifact's embedded billing header proves version 2.1.221."
     },
     {
       "id": "claude-code.prompt.agent.claude-sonnet-4-6.non-interactive",
@@ -124,7 +124,7 @@
         "prompts/claude-sonnet-4-6.md"
       ],
       "artifact_sha256": "61ae6ed86e2dfd10116efd084e243c6ac26a4617da64f173214011e758104743",
-      "notes": "The embedded billing header proves version 2.1.221."
+      "notes": "The stored artifact's embedded billing header proves version 2.1.221."
     },
     {
       "id": "claude-code.prompt.agent.claude-sonnet-5.non-interactive",
@@ -143,7 +143,7 @@
         "prompts/claude-sonnet-5.md"
       ],
       "artifact_sha256": "8b0d1581865d1b8d91507e48751d547bbc0dc0a2040ad68bf918226b55161209",
-      "notes": "The embedded billing header proves version 2.1.221."
+      "notes": "The stored artifact's embedded billing header proves version 2.1.221."
     },
     {
       "id": "claude-code.prompt.agent.claude-sonnet-5.interactive",
@@ -163,7 +163,7 @@
         "prompts/claude-sonnet-5-interactive.md"
       ],
       "artifact_sha256": "637a119593cfc049770a17417d630cda58595d78a514f0a163b2fb86477bdfe7",
-      "notes": "The 2.1.227 interactive request was captured, but its prompt normalization remains unsupported; retained the last successful 2.1.226 artifact."
+      "notes": "The 2.1.228 interactive request was captured, but its prompt normalization remains unsupported; retained the last successful 2.1.226 artifact."
     },
     {
       "id": "claude-code.prompt.special.session-title",
@@ -182,14 +182,15 @@
         "prompts/claude-haiku-4-5-20251001-session-title.md"
       ],
       "artifact_sha256": "411a4916ccebeb636ebde02354f33fb5c524132e06abd201027be71a8a4aba5d",
-      "notes": "The embedded billing header proves version 2.1.220."
+      "notes": "The stored artifact's embedded billing header proves version 2.1.220."
     },
     {
       "id": "claude-code.steering.non-interactive",
       "category": "steering messages",
-      "status": "stale",
+      "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.221",
+      "captured_release": "2.1.228",
+      "verified_release": "2.1.228",
       "models": [
         "claude-fable-5"
       ],
@@ -203,7 +204,8 @@
         "misc/claude-fable-5-steering.md"
       ],
       "artifact_sha256": "e41ca868686e31aec543fd634827fd6d59480952dcbb9f9eb8af0b3c7e408706",
-      "notes": "Only one model has a stored non-interactive steering surface."
+      "notes": "Only one model has a stored non-interactive steering surface.",
+      "evidence_sha256": "005f4fa10510878b97a6e45401d8430723d68255fdfb175b4a2afdcff918f9ec"
     },
     {
       "id": "claude-code.steering.interactive",
@@ -227,15 +229,15 @@
         "misc/claude-sonnet-5-interactive-steering.md"
       ],
       "artifact_sha256": "200a26ce5de547190a5094dc31405087fa978a5d83c2d630705646de9159a0e3",
-      "notes": "The 2.1.227 interactive request was captured, but its steering normalization remains unsupported; retained the last successful 2.1.226 artifact."
+      "notes": "The 2.1.228 interactive request was captured, but its steering normalization remains unsupported; retained the last successful 2.1.226 artifact."
     },
     {
       "id": "claude-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.227",
-      "verified_release": "2.1.227",
+      "captured_release": "2.1.228",
+      "verified_release": "2.1.228",
       "models": [
         "supported model catalog"
       ],
@@ -282,9 +284,9 @@
         "tools/Workflow.json",
         "tools/Write.json"
       ],
-      "artifact_sha256": "440dfdf529d1c437feb27926a5ade0d31d8fffb72ae59f11481f406610460c3d",
-      "evidence_sha256": "3785919c628f54ac11e8ff1b19cb7b4de95e0dc6ef2b3aabafb41e804165d21a",
-      "notes": "Expanded deferred-tool schemas were present in raw model-facing requests; the catalog includes the supported 2.1.227 interactive variants."
+      "artifact_sha256": "54598809cdb6a83196b54d1dc87ce3c5afe976437a60a25ab795607fdbb1aa74",
+      "evidence_sha256": "005f4fa10510878b97a6e45401d8430723d68255fdfb175b4a2afdcff918f9ec",
+      "notes": "Expanded deferred-tool schemas were present in raw model-facing requests; the catalog includes the supported 2.1.228 interactive variants."
     },
     {
       "id": "claude-code.agent.definitions",

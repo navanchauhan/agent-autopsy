@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "grok",
-  "observed_release": "0.2.114",
+  "observed_release": "0.2.115",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,50 +17,50 @@
       "category": "agent prompt",
       "status": "verified-unchanged",
       "capture_method": "source-and-model-request",
-      "captured_release": "0.2.114",
-      "verified_release": "0.2.114",
+      "captured_release": "0.2.115",
+      "verified_release": "0.2.115",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "non-interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/grok-4.5.md"
+        "prompts/grok-4.6.md"
       ],
-      "artifact_sha256": "4bb5699721246d89adbed92eac8d1539a571c8fcdec1fa286c907adf70121f1c",
-      "evidence_sha256": "3390499e68d006f8b3bfc2aefb2f8804242916472da4c8bad49c1f597b1cc442"
+      "artifact_sha256": "3a086ba6b38eddf9e83298d76beeacc4975426288a05269183c6ab4e1fbc5208",
+      "evidence_sha256": "6adc0c0881330ed0d9a354f2181317612728c6a493bc4ecceee970d1cb36e526"
     },
     {
       "id": "grok.prompt.agent.grok-4-5.interactive",
       "category": "agent prompt",
       "status": "verified-unchanged",
       "capture_method": "source-and-model-request",
-      "captured_release": "0.2.114",
-      "verified_release": "0.2.114",
+      "captured_release": "0.2.115",
+      "verified_release": "0.2.115",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/grok-4.5-interactive.md"
+        "prompts/grok-4.6-interactive.md"
       ],
-      "artifact_sha256": "6dc0810857af281e42501231987c497a1335dc73ed4ead3fa9d175ac6feb094c",
-      "evidence_sha256": "3390499e68d006f8b3bfc2aefb2f8804242916472da4c8bad49c1f597b1cc442"
+      "artifact_sha256": "fd03ace3fe76d94e36aa56ff517d3473ea64e9ed849b0a363d47c7c26ecee003",
+      "evidence_sha256": "6adc0c0881330ed0d9a354f2181317612728c6a493bc4ecceee970d1cb36e526"
     },
     {
       "id": "grok.prompt.special.session-title",
       "category": "session title prompt",
       "status": "verified-unchanged",
       "capture_method": "model-request",
-      "captured_release": "0.2.114",
-      "verified_release": "0.2.114",
+      "captured_release": "0.2.115",
+      "verified_release": "0.2.115",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "session-title"
@@ -69,18 +69,18 @@
       "artifacts": [
         "prompts/grok-session-title.md"
       ],
-      "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "3390499e68d006f8b3bfc2aefb2f8804242916472da4c8bad49c1f597b1cc442"
+      "artifact_sha256": "563671fe5edb29909e64d3ebc6e3bc3c4670df05e028a1aba814f87d9384168e",
+      "evidence_sha256": "6adc0c0881330ed0d9a354f2181317612728c6a493bc4ecceee970d1cb36e526"
     },
     {
       "id": "grok.steering.catalog",
       "category": "steering messages",
       "status": "verified-unchanged",
       "capture_method": "model-request",
-      "captured_release": "0.2.114",
-      "verified_release": "0.2.114",
+      "captured_release": "0.2.115",
+      "verified_release": "0.2.115",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "non-interactive",
@@ -93,21 +93,21 @@
         "AGENTS instructions"
       ],
       "artifacts": [
-        "misc/grok-4.5-steering.md",
-        "misc/grok-4.5-interactive-steering.md"
+        "misc/grok-4.6-steering.md",
+        "misc/grok-4.6-interactive-steering.md"
       ],
-      "artifact_sha256": "b350646635c669ed261d039938c62894fa0e87be0d62712c0978a2842a1b55de",
-      "evidence_sha256": "3390499e68d006f8b3bfc2aefb2f8804242916472da4c8bad49c1f597b1cc442"
+      "artifact_sha256": "a00d26711cc086efb63e08617bf6fd922af7b0a0cd5fc08ddb3ec5710071d24e",
+      "evidence_sha256": "6adc0c0881330ed0d9a354f2181317612728c6a493bc4ecceee970d1cb36e526"
     },
     {
       "id": "grok.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "0.2.114",
-      "verified_release": "0.2.114",
+      "captured_release": "0.2.115",
+      "verified_release": "0.2.115",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "non-interactive",
@@ -145,8 +145,8 @@
         "tools/write.json",
         "tools/x_search.json"
       ],
-      "artifact_sha256": "b26f1025803cb3e06b6f7e41c1c32b9bcc6e55b80c7df78dd0913d6c096d8ef2",
-      "evidence_sha256": "3390499e68d006f8b3bfc2aefb2f8804242916472da4c8bad49c1f597b1cc442"
+      "artifact_sha256": "1193203ff1739ef2cd38c7164aa7bdd3b8f815b795887dd87f0c51be799b2d13",
+      "evidence_sha256": "6adc0c0881330ed0d9a354f2181317612728c6a493bc4ecceee970d1cb36e526"
     },
     {
       "id": "grok.agent.definitions",
@@ -154,7 +154,7 @@
       "status": "gap",
       "capture_method": "source-and-model-request",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "subagent invocation"
@@ -169,7 +169,7 @@
       "status": "gap",
       "capture_method": "source-and-model-request",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "skill and workflow invocation"
@@ -184,7 +184,7 @@
       "status": "gap",
       "capture_method": "source-and-model-request",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "plan",
@@ -203,7 +203,7 @@
       "status": "gap",
       "capture_method": "source-and-model-request",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "MCP enabled",
@@ -219,7 +219,7 @@
       "status": "dynamic",
       "capture_method": "model-request",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "all"
@@ -241,7 +241,7 @@
       "status": "gap",
       "capture_method": "source-and-model-request",
       "models": [
-        "grok-4.5"
+        "grok-4.6"
       ],
       "modes": [
         "all"

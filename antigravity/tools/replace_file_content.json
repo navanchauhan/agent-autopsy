@@ -1,7 +1,7 @@
 {
   "name": "replace_file_content",
   "models": [
-    "gemini-3.6-flash-high"
+    "gemini-3.7-flash-high"
   ],
   "request_kinds": [
     "agent"
@@ -10,7 +10,7 @@
     "functionDeclarations": [
       {
         "name": "replace_file_content",
-        "description": "Use this tool to edit an existing file. Follow these rules:\n1. Use this tool ONLY when you are making a SINGLE CONTIGUOUS block of edits to the same file (i.e. replacing a single contiguous block of text). If you are making edits to multiple non-adjacent lines, use the multi_replace_file_content tool instead.\n2. Do NOT make multiple parallel calls to this tool or the multi_replace_file_content tool for the same file.\n3. To edit multiple, non-adjacent lines of code in the same file, make a single call to the multi_replace_file_content tool..\n4. For the ReplacementChunk, specify StartLine, EndLine, TargetContent and ReplacementContent. StartLine and EndLine should specify a range of lines containing precisely the instances of TargetContent that you wish to edit. To edit a single instance of the TargetContent, the range should be such that it contains that specific instance of the TargetContent and no other instances. In TargetContent, specify the precise lines of code to edit. These lines MUST EXACTLY MATCH text in the existing file content. In ReplacementContent, specify the replacement content for the specified target content. This must be a complete drop-in replacement of the TargetContent, with necessary modifications made.\n5. If you are making multiple edits across a single file, use the multi_replace_file_content tool instead. DO NOT try to replace the entire existing content with the new content, this is very expensive.\n6. You may not edit file extensions: [.ipynb]",
+        "description": "Use this tool to edit an existing file. Follow these rules:\n1. Use this tool ONLY when you are making a SINGLE CONTIGUOUS block of edits to the same file (i.e. replacing a single contiguous block of text).\n2. Do NOT make multiple parallel calls to this tool for the same file.\n3. To edit multiple, non-adjacent lines of code in the same file, make multiple calls to this tool.\n4. For the ReplacementChunk, specify StartLine, EndLine, TargetContent and ReplacementContent. StartLine and EndLine should specify a range of lines containing precisely the instances of TargetContent that you wish to edit. To edit a single instance of the TargetContent, the range should be such that it contains that specific instance of the TargetContent and no other instances. In TargetContent, specify the precise lines of code to edit. These lines MUST EXACTLY MATCH text in the existing file content. In ReplacementContent, specify the replacement content for the specified target content. This must be a complete drop-in replacement of the TargetContent, with necessary modifications made.\n5. If you are making multiple edits across a single file, make multiple calls to this tool. DO NOT try to replace the entire existing content with the new content, this is very expensive.\n6. You may not edit file extensions: [.ipynb]",
         "parameters": {
           "type": "OBJECT",
           "properties": {

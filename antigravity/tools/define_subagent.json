@@ -1,7 +1,7 @@
 {
   "name": "define_subagent",
   "models": [
-    "gemini-3.6-flash-high"
+    "gemini-3.7-flash-high"
   ],
   "request_kinds": [
     "agent"
@@ -32,7 +32,7 @@
             },
             "name": {
               "type": "STRING",
-              "description": "Unique name for the subagent. Used to invoke it via invoke_subagent."
+              "description": "Unique name for the subagent. Used to invoke it via invoke_subagent. Must start with a letter or digit and contain only letters, digits, '_', '-', and '.'."
             },
             "system_prompt": {
               "type": "STRING",
