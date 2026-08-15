@@ -401,10 +401,27 @@ function validateCount(label, declaredValue, actual, versionPath) {
   }
 }
 
+function validateVersionMetadata(tool, versionPath) {
+  const fields = parseVersion(versionPath);
+  for (const field of ["generated_at", "trace_source", "trace_path", "trace_file", "trace_lines"]) {
+    if (fields.has(field)) {
+      fail(`VERSION: ${displayPath(versionPath)} contains transport-only field ${field}`);
+    }
+  }
+  if (tool.tool === "antigravity") {
+    for (const field of ["sha256", "sha512"]) {
+      if (fields.has(field)) {
+        fail(`VERSION: ${displayPath(versionPath)} contains unsupported executable digest field ${field}; use signed manifest_tarball_sha512 evidence`);
+      }
+    }
+  }
+}
+
 function validateVersionInventory(tool) {
   const dirPath = path.join(repoRoot, tool.dir);
   const versionPath = path.join(dirPath, "VERSION");
   const fields = parseVersion(versionPath);
+  validateVersionMetadata(tool, versionPath);
 
   const allPrompts = immediateFiles(path.join(dirPath, "prompts"), (name) => name.endsWith(".md"));
   const declaredPromptFiles = listedFiles(fields.get("prompt_files"));
@@ -451,6 +468,9 @@ function validateVersionInventory(tool) {
   }
 
   const miscFiles = immediateFiles(path.join(dirPath, "misc"));
+  for (const miscVersion of miscFiles.filter((name) => name.endsWith(".VERSION"))) {
+    validateVersionMetadata(tool, path.join(dirPath, "misc", miscVersion));
+  }
   const miscArtifacts = miscFiles.filter((name) => !name.endsWith(".VERSION"));
   const declaredMiscFiles = listedFiles(fields.get("misc_files"));
   if (declaredMiscFiles) {

@@ -89,9 +89,17 @@ available raw capture or upstream-source evidence. Check that:
    in the tracked patch. Set `pii_removed` true only after this review passes.
    Set `transport_noise_excluded` true when trace timestamps, trace paths, and
    trace line numbers are absent; do not use it to reject model-facing context.
+   In normalized `VERSION` artifacts, `generated_at` and `trace_source` are
+   transport noise. Durable repository script references such as `trace_script`,
+   `extract_script`, `capture_script`, and `network_capture_script` are allowed
+   and must not be rejected as run-specific trace paths.
 5. A failed or ambiguous capture did not advance the successful version.
 6. `SURFACES.json` states the real capture release and status for each affected
    surface; older artifacts are not labeled current, and gaps remain explicit.
+
+For Antigravity, the signed manifest supports `manifest_tarball_sha512`. It does
+not support capture-derived executable `sha256` or `sha512` fields in normalized
+root or misc `VERSION` artifacts.
 
 Choose overall `approve` when every tracked change is supported and safe to
 publish. A tool with missing or ambiguous evidence may have outcome

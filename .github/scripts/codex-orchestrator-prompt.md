@@ -117,6 +117,9 @@ For each changed tool:
 - Preserve exact prompt and tool-schema content.
 - Support every addition, modification, and removal with raw or source evidence.
 - Exclude transport-only timestamps, trace paths, and trace line numbers.
+- In normalized `VERSION` artifacts, remove `generated_at` and `trace_source`.
+  Preserve durable repository script references such as `trace_script`,
+  `extract_script`, `capture_script`, and `network_capture_script`.
 - Update `VERSION` with current facts, not accumulated release history.
 - Update `SURFACES.json` for every affected surface. Record its actual capture
   release and status. Do not mark an older artifact current. Artifact and
@@ -138,6 +141,10 @@ segments that identify a person. Preserve model-facing OS, shell, Git,
 repository, MCP, skills, tenant, staging, request/session, and user-content
 context when it contains no actual PII or secrets. Synthetic examples such as
 `/Users/example` are safe and must not be rejected as PII.
+
+For Antigravity, retain the signed `manifest_tarball_sha512` but do not publish
+capture-derived executable `sha256` or `sha512` fields in root or misc `VERSION`
+artifacts.
 
 Do not infer missing prompts or schemas. A transient capture failure must not be
 represented as a successful refresh or written into tracked documentation. Do

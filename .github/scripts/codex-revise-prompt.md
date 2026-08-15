@@ -29,6 +29,12 @@ model-facing machine, repository, MCP, skills, tenant, staging, request/session,
 and user-content context when it contains no actual PII. Synthetic placeholder
 paths such as `/Users/example` are safe.
 
+Remove `generated_at` and `trace_source` from normalized `VERSION` artifacts.
+Durable repository script fields such as `trace_script`, `extract_script`,
+`capture_script`, and `network_capture_script` are allowed. For Antigravity,
+retain `manifest_tarball_sha512`, but remove capture-derived executable
+`sha256` and `sha512` fields from root and misc `VERSION` artifacts.
+
 For Claude Code deferred tools, the placeholder declaration alone is incomplete
 evidence. Attempt to trigger and inspect the expanded model-facing request. If
 that expansion is unavailable, revert the entire Claude Code candidate directory
