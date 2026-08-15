@@ -2,6 +2,12 @@ Review the candidate capture refresh in this repository. Work read-only: do not
 edit files, run capture commands, use credentials, commit, tag, push, or publish.
 Do not use a browser, GitHub/MCP applications, web search, or external services.
 
+Finish the review in at most 12 targeted shell calls. Do not emit progress,
+placeholder, or interim JSON. Use the tools silently, then emit exactly one final
+JSON object after every listed tool has a complete decision. If a command fails,
+use the remaining indexed evidence; do not broaden the search or repeat the
+inventory.
+
 Inputs are available at:
 
 - changed tools: `$CHANGED_TOOLS_FILE`

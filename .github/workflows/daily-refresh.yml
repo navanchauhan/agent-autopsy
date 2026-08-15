@@ -590,8 +590,8 @@ jobs:
           CODEX_DRIVER_VERSION: ${{ needs.check.outputs.codex_driver_version }}
           CODEX_REFRESH_MODEL: gpt-5.6-luna
           CODEX_REFRESH_REASONING_EFFORT: medium
-          CODEX_REVIEW_MODEL: gpt-5.6-luna
-          CODEX_REVIEW_REASONING_EFFORT: medium
+          CODEX_REVIEW_MODEL: gpt-5.6-sol
+          CODEX_REVIEW_REASONING_EFFORT: low
           DRIVER_RETRY_BUCKET_HOURS: 24
         run: node .github/scripts/compute-driver-input.cjs
 

@@ -101,3 +101,13 @@ test("model timeouts return control to the bounded repair loop", () => {
   assert.match(workflow, /review\) phase_timeout=6m/);
   assert.match(workflow, /timeout --signal=TERM --kill-after=30s "\$phase_timeout"[\s\S]*docker run/);
 });
+
+test("independent review uses a bounded final-only pass", () => {
+  const reviewer = read("review-refresh-prompt.md");
+  const workflow = fs.readFileSync(path.join(scripts, "..", "workflows", "daily-refresh.yml"), "utf8");
+  assert.match(reviewer, /at most 12 targeted shell calls/);
+  assert.match(reviewer, /Do not emit progress,[\s\S]*interim JSON/);
+  assert.match(reviewer, /exactly one final[\s\S]*JSON object/);
+  assert.match(workflow, /CODEX_REVIEW_MODEL: gpt-5\.6-sol/);
+  assert.match(workflow, /CODEX_REVIEW_REASONING_EFFORT: low/);
+});
