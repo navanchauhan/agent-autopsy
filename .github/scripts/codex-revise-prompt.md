@@ -41,6 +41,10 @@ For Claude Code deferred tools, the placeholder declaration alone is incomplete
 evidence. Attempt to trigger and inspect the expanded model-facing request. If
 that expansion is unavailable, revert the entire Claude Code candidate directory
 to the baseline, preserve its last successful version, and report `retry_capture`.
+Never bulk-advance Claude surface release fields. If a stored prompt contains an
+older embedded `cc_version`, keep that surface non-current and keep its
+`captured_release` and `verified_release` at the embedded release. Only artifacts
+supported by the current capture can be current for the observed release.
 
 For Grok, `references/grok-build/SOURCE_REV` is the authoritative revision for
 `grok/VERSION`; the checkout HEAD is only a mirror commit. Do not retain or add a

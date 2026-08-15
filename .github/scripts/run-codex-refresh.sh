@@ -186,10 +186,10 @@ run_author_phase() {
   if [ "$attempt" -eq 1 ]; then
     rm -f "$summary_file"
     run_author "$script_dir/codex-orchestrator-prompt.md"
-  elif [ "$attempt" -eq 2 ]; then
+  elif [ "$attempt" -eq 2 ] || [ "$attempt" -eq 3 ]; then
     run_author "$script_dir/codex-revise-prompt.md"
   else
-    echo "CODEX_DRIVER_ATTEMPT must be 1 or 2" >&2
+    echo "CODEX_DRIVER_ATTEMPT must be 1, 2, or 3" >&2
     return 2
   fi
 
@@ -265,12 +265,12 @@ case "$phase" in
   *) echo "CODEX_DRIVER_PHASE must be author, review, smoke, or full" >&2; exit 2 ;;
 esac
 
-for attempt in 1 2; do
+for attempt in 1 2 3; do
   if ! run_author_phase; then
-    if [ "$attempt" -eq 1 ]; then
+    if [ "$attempt" -lt 3 ]; then
       continue
     fi
-    echo "Refresh failed mechanical validation after one repair attempt." >&2
+    echo "Refresh failed mechanical validation after two repair attempts." >&2
     exit 1
   fi
 
@@ -290,8 +290,8 @@ for attempt in 1 2; do
   else
     echo "Independent reviewer did not produce $review_file." >&2
   fi
-  if [ "$attempt" -eq 2 ]; then
-    echo "Refresh was not approved after one repair attempt." >&2
+  if [ "$attempt" -eq 3 ]; then
+    echo "Refresh was not approved after two repair attempts." >&2
     exit 1
   fi
 done

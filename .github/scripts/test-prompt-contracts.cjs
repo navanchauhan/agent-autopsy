@@ -78,3 +78,12 @@ test("author and reviewer use bounded evidence inspection", () => {
   assert.match(reviewer, /Use a bounded review sequence/);
   assert.match(reviewer, /Do not recursively scan source trees, enumerate all raw requests/);
 });
+
+test("driver allows two bounded repair attempts", () => {
+  const driver = read("run-codex-refresh.sh");
+  const workflow = fs.readFileSync(path.join(scripts, "..", "workflows", "daily-refresh.yml"), "utf8");
+  assert.match(driver, /for attempt in 1 2 3/);
+  assert.match(driver, /CODEX_DRIVER_ATTEMPT must be 1, 2, or 3/);
+  assert.match(workflow, /for attempt in 1 2 3/);
+  assert.match(read("codex-revise-prompt.md"), /Never bulk-advance Claude surface release fields/);
+});
