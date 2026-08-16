@@ -694,8 +694,8 @@ jobs:
           CODEX_REFRESH_REASONING_EFFORT: medium
           CODEX_REVIEW_MODEL: gpt-5.6-luna
           CODEX_REVIEW_REASONING_EFFORT: medium
-          CODEX_AUTHOR_TIMEOUT: 8m
-          CODEX_REVIEW_TIMEOUT: 5m
+          CODEX_AUTHOR_TIMEOUT: 30m
+          CODEX_REVIEW_TIMEOUT: 30m
         run: |
           credential_export="$RUNNER_TEMP/credential-export-codex"
           credential_home="$RUNNER_TEMP/codex-seed-home"
@@ -722,8 +722,8 @@ jobs:
             local phase_timeout tool_mounts=() dir suffix
             case "$phase" in
               smoke) phase_timeout=3m ;;
-              author) phase_timeout=9m ;;
-              review) phase_timeout=6m ;;
+              author) phase_timeout=32m ;;
+              review) phase_timeout=32m ;;
               *) echo "Unsupported Codex driver phase: $phase" >&2; return 2 ;;
             esac
             if [ "$mount_mode" = read-only ]; then suffix=:ro; else suffix=; fi
