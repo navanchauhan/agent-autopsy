@@ -102,6 +102,13 @@ test("model timeouts return control to the bounded repair loop", () => {
   assert.match(workflow, /timeout --signal=TERM --kill-after=30s "\$phase_timeout"[\s\S]*docker run/);
 });
 
+test("Codex runs unsandboxed inside the outer Docker boundary", () => {
+  const driver = read("run-codex-refresh.sh");
+  const invocations = driver.match(/--dangerously-bypass-approvals-and-sandbox/g) || [];
+  assert.equal(invocations.length, 2);
+  assert.doesNotMatch(driver, /default_permissions|approval_policy|codex sandbox|permissions\.author|permissions\.review/);
+});
+
 test("independent review uses a bounded final-only pass", () => {
   const reviewer = read("review-refresh-prompt.md");
   const workflow = fs.readFileSync(path.join(scripts, "..", "workflows", "daily-refresh.yml"), "utf8");
