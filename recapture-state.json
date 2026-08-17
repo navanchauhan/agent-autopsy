@@ -8,7 +8,7 @@
       "request_after_run_attempt": null,
       "last_fresh_bucket": "20260817",
       "last_reviewer_input_hash": "4b2d48aea3c9bf59adbd6395f9bab50ba28213535f765c1561460c46e542d82d",
-      "reason": "reviewer"
+      "reason": "capture_retry"
     },
     "grok": {
       "plan_hash": "ce53167da554d3e0ce5351729010b333644c48f3819199490f903e7ac06f0192",
@@ -17,7 +17,7 @@
       "request_after_run_attempt": null,
       "last_fresh_bucket": "20260817",
       "last_reviewer_input_hash": "a987b72517888dc3d4e7c533428a1ba5041dbd23e8e4ea54e107e03fc7c714fd",
-      "reason": "reviewer"
+      "reason": "capture_retry"
     }
   }
 }
