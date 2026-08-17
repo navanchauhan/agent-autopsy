@@ -118,6 +118,13 @@
         "artifact_sha256": "79f49625f153923db491a5c290e9b04c3444da488b6b9d6aac533ccb5bff2455"
       }
     ],
-    "antigravity": []
+    "antigravity": [],
+    "qwen-code": [
+      {
+        "tool": "qwen-code",
+        "new_version": "0.21.13",
+        "new_revision": "d959015974302fb60ebd99adb81a68c2f482eaa3"
+      }
+    ]
   }
 }
