@@ -47,3 +47,7 @@ Example:
 - example-skill: Example user-installed skill description.
 </system-reminder>
 </harnessVariable>
+
+<system-reminder>
+<total_tokens>15000000 tokens left</total_tokens>
+</system-reminder>

@@ -51,6 +51,9 @@ by `direct-source-manifest.json`. Treat workspace, memory, settings, extension,
 hook, MCP, and other session-specific layers as dynamic inputs rather than
 missing raw evidence. Do not return `retry_capture` merely because network
 capture evidence is absent for Qwen Code.
+Reject a Qwen version advance that leaves any `gap` surface, publishes no
+`prompts/*.md`, publishes no built-in `tools/*.json`, or names a captured
+surface without concrete artifact paths.
 
 For Grok, inspect `/workspace/references/grok-build` when it exists. Its
 `SOURCE_REV` is authoritative for the revision recorded in `grok/VERSION`; the

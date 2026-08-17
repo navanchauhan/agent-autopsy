@@ -101,6 +101,7 @@ test("driver allows three bounded repair attempts", () => {
 
 test("model timeouts return control to the bounded repair loop", () => {
   const driver = read("run-codex-refresh.sh");
+  const validateRefresh = read("validate-refresh.cjs");
   const workflow = fs.readFileSync(path.join(scripts, "..", "workflows", "daily-refresh.yml"), "utf8");
   assert.doesNotMatch(driver, /timeout\s+--foreground/);
   assert.match(driver, /timeout --signal=TERM --kill-after=30s "\$author_timeout" codex exec/);
@@ -110,6 +111,8 @@ test("model timeouts return control to the bounded repair loop", () => {
   assert.match(workflow, /codex-driver:[\s\S]*?timeout-minutes: 300/);
   assert.match(workflow, /codex\/\*\|claude-code\/\*\|grok\/\*\|antigravity\/\*\|qwen-code\/\*\|CATALOG\.md/);
   assert.match(workflow, /git status --porcelain -- "\$\{tool_dirs\[@\]\}" CATALOG\.md/);
+  assert.match(validateRefresh, /qwen-code must publish at least one source-derived prompts\/\*\.md artifact/);
+  assert.match(validateRefresh, /qwen-code must publish source-derived tools\/\*\.json artifacts/);
   assert.match(workflow, /author\) phase_timeout=32m/);
   assert.match(workflow, /review\) phase_timeout=32m/);
   assert.match(workflow, /timeout --signal=TERM --kill-after=30s "\$phase_timeout"[\s\S]*docker run/);
