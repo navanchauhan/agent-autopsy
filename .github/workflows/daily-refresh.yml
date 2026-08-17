@@ -1052,7 +1052,7 @@ jobs:
           changed_count=0
           while IFS= read -r -d '' file; do
             case "$file" in
-              codex/*|claude-code/*|grok/*|antigravity/*|CATALOG.md) ;;
+              codex/*|claude-code/*|grok/*|antigravity/*|qwen-code/*|CATALOG.md) ;;
               *) echo "Applied patch escaped the immutable publication allowlist: $file" >&2; exit 1 ;;
             esac
             changed_count=$((changed_count + 1))
