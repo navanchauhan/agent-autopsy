@@ -1,0 +1,25 @@
+{
+  "name": "tool_search",
+  "description": "Fetches function declarations for deferred tools and registers them with the active session so subsequent turns can call them.\n\nDeferred tools appear by name in the deferred-tools startup reminder. Until fetched, only the name is known — there is no parameter schema, so the tool cannot be invoked. This tool takes a query, matches it against the deferred tool list, and returns the matched tools' function declarations (name + description + parameter schema) inside a <functions> block.\n\nThe returned <functions> block is informational — it shows what the schema looks like. Calling the tool itself happens via the model's normal function-call mechanism on the NEXT turn, after the active session's declaration list has been updated. Tools fetched here remain available for the rest of the session.\n\nQuery forms:\n- \"select:ToolA,ToolB\" — fetch these exact tools by name\n- \"keyword phrase\" — keyword search, up to max_results best matches\n- \"+must-word other\" — require \"must-word\" in the name, rank remaining terms\n",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "description": "Query to find deferred tools. Use \"select:<tool_name>\" for direct selection, or keywords to search.",
+        "minLength": 1
+      },
+      "max_results": {
+        "type": "integer",
+        "description": "Maximum number of results to return (default: 5)",
+        "minimum": 1,
+        "maximum": 20,
+        "default": 5
+      }
+    },
+    "required": [
+      "query"
+    ],
+    "additionalProperties": false
+  }
+}

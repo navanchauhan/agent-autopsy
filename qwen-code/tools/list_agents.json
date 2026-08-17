@@ -1,0 +1,9 @@
+{
+  "name": "list_agents",
+  "description": "List addressable background agents in the current session, including agents restored from a prior session run. Use the returned task_id with send_message to continue a running, paused, or completed agent.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  }
+}

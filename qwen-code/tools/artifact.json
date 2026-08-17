@@ -1,0 +1,20 @@
+{
+  "name": "artifact",
+  "description": "Publishes a self-contained HTML page as an interactive Artifact, optionally opens it in the browser depending on settings, and returns a shareable link when a remote host is configured. Use it to turn session output into a durable, interactive page — a PR walkthrough, an architecture tour, a project dashboard.\n\nWorkflow:\n- Write the page to a file first (via Write/Edit), then call Artifact with that file's absolute path.\n- Write a BODY-ONLY fragment: no <!doctype>, <html>, <head>, or <body> tags — they are added at publish time, along with a minimal CSS reset.\n- Self-contained only: inline all CSS and JS; embed images/fonts as data: URIs. No external scripts, stylesheets, fonts, or remote images.\n- Responsive: relative units, flex/grid, max-width:100% on media; wide content (tables, diagrams, code) scrolls inside its own overflow-x:auto container.\n- Set a concise `title` — it names the browser tab.\n\nTo update an artifact, call Artifact again with the SAME file path: it redeploys to the same URL. A different path creates a separate Artifact.\n\nSet artifact.autoOpen=false in settings.json, or QWEN_ARTIFACT_NO_AUTO_OPEN=1, to publish without launching a browser.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "file_path": {
+        "type": "string",
+        "description": "Absolute path to the body-only HTML fragment file to publish."
+      },
+      "title": {
+        "type": "string",
+        "description": "Concise title for the artifact (names the browser tab and listing)."
+      }
+    },
+    "required": [
+      "file_path"
+    ]
+  }
+}

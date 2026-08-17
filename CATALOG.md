@@ -95,11 +95,11 @@ Observed release: `0.2.116`
 
 ## qwen-code
 
-Observed release: `0.0.1`
+Observed release: `0.21.13`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `qwen-code.prompt.agent.catalog` | agent prompts | `all` | `default` | gap | — | — |
-| `qwen-code.tool.catalog` | tool schemas | `all` | `configured` | gap | — | — |
-| `qwen-code.steering.catalog` | runtime messages | `all` | `configured` | gap | — | — |
+| `qwen-code.prompt.agent.catalog` | agent prompts | `all` | `interactive`, `headless`, `acp` | current | `0.21.13` | [core-acp-qwen3-coder-plus.md](qwen-code/prompts/core-acp-qwen3-coder-plus.md), [core-headless-qwen3-coder-plus.md](qwen-code/prompts/core-headless-qwen3-coder-plus.md), [core-interactive-qwen3-coder-plus.md](qwen-code/prompts/core-interactive-qwen3-coder-plus.md) |
+| `qwen-code.tool.catalog` | tool schemas | `all` | `configured`, `deferred` | current | `0.21.13` | 79 files ([manifest](qwen-code/SURFACES.json)) |
+| `qwen-code.steering.catalog` | runtime messages | `all` | `configured`, `planning`, `compression`, `insights` | current | `0.21.13` | 14 files ([manifest](qwen-code/SURFACES.json)) |
 | `qwen-code.context.session` | dynamic context | `all` | `all` | dynamic | — | — |

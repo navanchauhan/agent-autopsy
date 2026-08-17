@@ -1,0 +1,17 @@
+{
+  "name": "task_stop",
+  "description": "Stop a background task by its ID. Running agents and shells are cancelled; paused recovered agents are abandoned without resuming them.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "task_id": {
+        "type": "string",
+        "description": "The ID of the background task to stop (from the launch response or notification)."
+      }
+    },
+    "required": [
+      "task_id"
+    ],
+    "additionalProperties": false
+  }
+}

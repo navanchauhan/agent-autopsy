@@ -1,0 +1,189 @@
+{
+  "name": "lsp",
+  "description": "Language Server Protocol (LSP) tool for code intelligence: definitions, references, hover, symbols, call hierarchy, diagnostics, and code actions.\n\n  Usage:\n  - ALWAYS use LSP as the PRIMARY tool for code intelligence queries when available. Do NOT use grep_search or glob first.\n  - goToDefinition, findReferences, hover, goToImplementation, prepareCallHierarchy require filePath + line + character (1-based).\n  - documentSymbol and diagnostics require filePath.\n  - workspaceSymbol requires query (use when user asks \"where is X defined?\" without specifying a file).\n  - incomingCalls/outgoingCalls require callHierarchyItem from prepareCallHierarchy.\n  - workspaceDiagnostics needs no parameters.\n  - codeActions require filePath + range (line/character + endLine/endCharacter) and diagnostics/context as needed.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "operation": {
+        "type": "string",
+        "description": "LSP operation to execute.",
+        "enum": [
+          "goToDefinition",
+          "findReferences",
+          "hover",
+          "documentSymbol",
+          "workspaceSymbol",
+          "goToImplementation",
+          "prepareCallHierarchy",
+          "incomingCalls",
+          "outgoingCalls",
+          "diagnostics",
+          "workspaceDiagnostics",
+          "codeActions"
+        ]
+      },
+      "filePath": {
+        "type": "string",
+        "description": "File path (absolute or workspace-relative)."
+      },
+      "line": {
+        "type": "number",
+        "description": "1-based line number for the target location."
+      },
+      "character": {
+        "type": "number",
+        "description": "1-based character/column number for the target location."
+      },
+      "endLine": {
+        "type": "number",
+        "description": "1-based end line number for range-based operations."
+      },
+      "endCharacter": {
+        "type": "number",
+        "description": "1-based end character for range-based operations."
+      },
+      "includeDeclaration": {
+        "type": "boolean",
+        "description": "Include the declaration itself when looking up references."
+      },
+      "query": {
+        "type": "string",
+        "description": "Symbol query for workspace symbol search."
+      },
+      "callHierarchyItem": {
+        "$ref": "#/definitions/LspCallHierarchyItem",
+        "description": "Call hierarchy item for incoming/outgoing calls."
+      },
+      "serverName": {
+        "type": "string",
+        "description": "Optional LSP server name to target."
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Optional maximum number of results to return."
+      },
+      "diagnostics": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/LspDiagnostic"
+        },
+        "description": "Diagnostics for code action context."
+      },
+      "codeActionKinds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Filter code actions by kind (quickfix, refactor, etc.)."
+      }
+    },
+    "required": [
+      "operation"
+    ],
+    "definitions": {
+      "LspPosition": {
+        "type": "object",
+        "properties": {
+          "line": {
+            "type": "number"
+          },
+          "character": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "line",
+          "character"
+        ]
+      },
+      "LspRange": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "$ref": "#/definitions/LspPosition"
+          },
+          "end": {
+            "$ref": "#/definitions/LspPosition"
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ]
+      },
+      "LspCallHierarchyItem": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "rawKind": {
+            "type": "number"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "uri": {
+            "type": "string"
+          },
+          "range": {
+            "$ref": "#/definitions/LspRange"
+          },
+          "selectionRange": {
+            "$ref": "#/definitions/LspRange"
+          },
+          "data": {},
+          "serverName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "uri",
+          "range",
+          "selectionRange"
+        ]
+      },
+      "LspDiagnostic": {
+        "type": "object",
+        "properties": {
+          "range": {
+            "$ref": "#/definitions/LspRange"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning",
+              "information",
+              "hint"
+            ]
+          },
+          "code": {
+            "type": [
+              "string",
+              "number"
+            ]
+          },
+          "source": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "serverName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "range",
+          "message"
+        ]
+      }
+    }
+  }
+}

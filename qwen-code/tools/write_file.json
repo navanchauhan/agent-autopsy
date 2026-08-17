@@ -1,0 +1,21 @@
+{
+  "name": "write_file",
+  "description": "Writes content to a specified file in the local filesystem. A request to create or generate a file does not establish that the target path is new. Unless the target's absence or current text contents have already been established in this session, you MUST use the read_file tool first; if the file does not exist, then create it. With prior-read enforcement enabled, blind overwrites are rejected. The file_path argument MUST be an absolute path. Always construct it by combining the project root with the file's relative path (e.g. project root '/path/to/project/' + relative 'foo/bar.txt' = '/path/to/project/foo/bar.txt'). If the user provides a relative path, resolve it against the project root first.\n\nThe user has the ability to modify `content`. If modified, this will be stated in the response.",
+  "parametersJsonSchema": {
+    "properties": {
+      "file_path": {
+        "description": "The absolute path to the file to write to (e.g., '/home/user/project/file.txt'). Relative paths are not supported.",
+        "type": "string"
+      },
+      "content": {
+        "description": "The content to write to the file.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "file_path",
+      "content"
+    ],
+    "type": "object"
+  }
+}

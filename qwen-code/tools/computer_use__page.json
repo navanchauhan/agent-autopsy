@@ -1,0 +1,59 @@
+{
+  "name": "computer_use__page",
+  "description": "Interact with the browser page loaded in a running app. Supports Chrome, Brave, Edge, Safari (via AppleScript on macOS), Electron apps (via CDP), Chromium/Firefox on Windows (via UIA for read; CDP for execute_javascript when --remote-debugging-port is set), and WKWebView/Tauri/AT-SPI fallbacks.\n\nActions:\n- execute_javascript: Run JS and return the result.\n- get_text: Extract visible text from the page.\n- query_dom: Find elements matching a CSS selector.\n- click_element: Click a CSS-selected element AND animate the agent cursor to its on-screen center first (so the user sees what the agent is doing). Prefer over `execute_javascript('el.click()')` whenever you want visible cursor feedback.\n- enable_javascript_apple_events: macOS-only — patch the browser's Preferences to allow JS from Apple Events (Chrome/Brave/Edge, requires user confirmation and a browser restart).",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "action": {
+        "description": "Action to perform.",
+        "enum": [
+          "execute_javascript",
+          "get_text",
+          "query_dom",
+          "click_element",
+          "enable_javascript_apple_events"
+        ],
+        "type": "string"
+      },
+      "attributes": {
+        "description": "Element attributes to include in query_dom results.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "bundle_id": {
+        "description": "Bundle ID of the browser. Required for enable_javascript_apple_events (macOS only).",
+        "type": "string"
+      },
+      "css_selector": {
+        "description": "CSS selector for query_dom (e.g. 'a', 'button', 'input', 'h1'-'h6', 'p', 'img', 'select', '*').",
+        "type": "string"
+      },
+      "javascript": {
+        "description": "JavaScript to execute. Required for execute_javascript.",
+        "type": "string"
+      },
+      "pid": {
+        "description": "Target process ID.",
+        "type": "integer"
+      },
+      "selector": {
+        "description": "CSS selector for click_element (e.g. 'button.submit', '#login a').",
+        "type": "string"
+      },
+      "user_has_confirmed_enabling": {
+        "description": "Must be true to proceed with enable_javascript_apple_events. This will quit and relaunch the browser.",
+        "type": "boolean"
+      },
+      "window_id": {
+        "description": "Target window ID from list_windows.",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "action"
+    ],
+    "type": "object"
+  }
+}

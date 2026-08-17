@@ -1,0 +1,30 @@
+{
+  "name": "team_plan_approval",
+  "description": "Approve or reject a plan submitted by a plan-required teammate. Only the team leader can use this tool.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "request_id": {
+        "type": "string",
+        "description": "The request id from the team plan approval request."
+      },
+      "action": {
+        "type": "string",
+        "enum": [
+          "approve",
+          "reject"
+        ],
+        "description": "Approve or reject the teammate plan."
+      },
+      "message": {
+        "type": "string",
+        "description": "Optional feedback for the teammate, especially when rejecting."
+      }
+    },
+    "required": [
+      "request_id",
+      "action"
+    ],
+    "additionalProperties": false
+  }
+}

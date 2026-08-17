@@ -1,0 +1,23 @@
+{
+  "name": "image_gen",
+  "description": "Generates a PNG image with the configured image model and saves it as a workspace artifact. Use size in width*height form when the user requests a specific aspect ratio.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 10000,
+        "description": "Detailed text description of the image to generate."
+      },
+      "size": {
+        "type": "string",
+        "pattern": "^\\d+\\*\\d+$",
+        "description": "Optional output size in width*height form, for example 1536*864."
+      }
+    },
+    "required": [
+      "prompt"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "task_create",
+  "description": "Create a new task in the team task list. Tasks are automatically assigned to idle teammates.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "subject": {
+        "type": "string",
+        "description": "Short title for the task.",
+        "maxLength": 200
+      },
+      "description": {
+        "type": "string",
+        "description": "Detailed description of the task.",
+        "maxLength": 10000
+      },
+      "activeForm": {
+        "type": "string",
+        "maxLength": 200,
+        "description": "Present tense label for UI (e.g., \"Running tests\")."
+      },
+      "metadata": {
+        "type": "object",
+        "description": "Optional arbitrary metadata."
+      }
+    },
+    "required": [
+      "subject",
+      "description"
+    ],
+    "additionalProperties": false
+  }
+}

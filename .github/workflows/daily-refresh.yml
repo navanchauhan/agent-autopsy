@@ -799,12 +799,30 @@ jobs:
 
           rm -f .capture-scratch/codex-summary.md .capture-scratch/validation.txt \
             .capture-scratch/review-result.json .capture-scratch/candidate-tree.sha256
+          salvage_author_candidate() {
+            local candidate_env=(
+              REPO_ROOT="$PWD"
+              CHANGED_TOOLS_FILE="$trusted_driver/ready-tools.json"
+              DRIVER_INPUT_MANIFEST="$trusted_driver/driver-input.json"
+              CODEX_SUMMARY_FILE="$PWD/.capture-scratch/codex-summary.md"
+            )
+            env "${candidate_env[@]}" node "$trusted_driver/update-version-counts.cjs" "${tool_dirs[@]}"
+            env "${candidate_env[@]}" node "$trusted_driver/update-surface-hashes.cjs" "${tool_dirs[@]}"
+            env "${candidate_env[@]}" node "$trusted_driver/generate-catalog.cjs"
+            env "${candidate_env[@]}" node "$trusted_driver/validate-refresh.cjs" \
+              "$trusted_driver/ready-tools.json" .capture-scratch/codex-summary.md || return 1
+            REPO_ROOT="$PWD" bash "$trusted_driver/hash-candidate.sh" \
+              "$trusted_driver/ready-tools.json" >.capture-scratch/candidate-tree.sha256
+          }
           completed=false
           for attempt in 1 2 3 4 5; do
             if ! run_phase author "$attempt" read-write; then
               if [ "$attempt" -lt 5 ]; then continue; fi
-              echo 'Codex author failed mechanical validation after four repair attempts.' >&2
-              exit 1
+              echo 'Codex author exited after four repairs; trying deterministic candidate salvage.' >&2
+              salvage_author_candidate || {
+                echo 'Codex author failed mechanical validation after four repair attempts.' >&2
+                exit 1
+              }
             fi
 
             has_scoped_changes=false

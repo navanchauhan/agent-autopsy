@@ -1,0 +1,21 @@
+{
+  "name": "computer_use__start_recording",
+  "description": "Start trajectory recording. Every subsequent action-tool invocation (click, right_click, scroll, type_text, press_key, hotkey, set_value) writes a turn folder under `output_dir`:\n\n- `app_state.json` — post-action AX/UIA snapshot for the target pid.\n- `screenshot.png` — post-action per-window screenshot of the target's frontmost on-screen window.\n- `action.json` — tool name, full input arguments, result summary, pid, click point (when applicable), ISO-8601 timestamp.\n- `click.png` — for click-family actions only, `screenshot.png` with a red dot drawn at the click point.\n\nTurn folders are named `turn-00001/`, `turn-00002/`, etc.  Turn numbering restarts at 1 each time recording is (re-)started.\n\n**Video is off by default.** Pass `record_video: true` to also capture the main display to `<output_dir>/recording.mp4` (H.264 / 30 fps) for the lifetime of the session. The recording is torn down automatically when the MCP client disconnects.\n\n**macOS uses native ScreenCaptureKit** (in-process SCStream + SCRecordingOutput) so video inherits Cua Driver's own Screen Recording grant — no extra TCC prompt, no ffmpeg subprocess. Requires macOS 15.0+.\n\n**Windows + Linux use an ffmpeg subprocess** (`gdigrab` / `x11grab` + libx264). Requires ffmpeg on PATH (winget install Gyan.FFmpeg / apt install ffmpeg); when ffmpeg is missing or fails on startup the per-turn capture (screenshots + action.json) still runs and the session's `last_error` field carries the diagnostic.\n\nState persists for the life of the daemon / MCP session; a restart resets to disabled with no on-disk state. Call `stop_recording` to disable + finalize the mp4.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "output_dir": {
+        "description": "Absolute or ~-rooted directory where turn folders and (when enabled) the video file are written.",
+        "type": "string"
+      },
+      "record_video": {
+        "description": "Capture the main display to <output_dir>/recording.mp4. Default: false. Set to true to also capture the main display to recording.mp4 (otherwise only the per-turn screenshots + JSON are recorded). On macOS this uses native ScreenCaptureKit (no extra TCC prompt, macOS 15.0+); on Windows + Linux it requires ffmpeg on PATH.",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "output_dir"
+    ],
+    "type": "object"
+  }
+}

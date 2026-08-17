@@ -95,6 +95,8 @@ test("driver allows four bounded repair attempts", () => {
   assert.match(driver, /for attempt in 1 2 3 4 5/);
   assert.match(driver, /CODEX_DRIVER_ATTEMPT must be 1, 2, 3, 4, or 5/);
   assert.match(workflow, /for attempt in 1 2 3 4 5/);
+  assert.match(workflow, /trying deterministic candidate salvage/);
+  assert.match(workflow, /salvage_author_candidate\(\)[\s\S]*update-version-counts\.cjs[\s\S]*update-surface-hashes\.cjs[\s\S]*generate-catalog\.cjs[\s\S]*validate-refresh\.cjs/);
   assert.match(read("codex-revise-prompt.md"), /Never bulk-advance Claude surface release fields/);
   assert.match(read("codex-revise-prompt.md"), /session-title surface[\s\S]*specific raw request/);
 });

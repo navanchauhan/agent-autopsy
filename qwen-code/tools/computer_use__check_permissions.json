@@ -1,0 +1,14 @@
+{
+  "name": "computer_use__check_permissions",
+  "description": "Report TCC permission status for Accessibility and Screen Recording. By default also raises the system permission dialogs for any missing grants — Apple's request APIs are no-ops when the grant is already active, so this is safe to call repeatedly. Pass {\"prompt\": false} for a purely read-only status check.\n\nReturns: `accessibility` + `screen_recording` (booleans from the TCC preflight APIs), `screen_recording_capturable` (a live ScreenCaptureKit probe — if it disagrees with `screen_recording`, the preflight grant belongs to a different process), and `source` (which TCC identity the booleans reflect: the CuaDriver daemon vs the launching terminal/IDE). macOS attributes grants to the responsible process, so a standalone call from a terminal reports the terminal's grants, not the driver's.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "prompt": {
+        "description": "Raise the system permission prompts for missing grants. Default true.",
+        "type": "boolean"
+      }
+    },
+    "type": "object"
+  }
+}

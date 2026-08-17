@@ -1,0 +1,17 @@
+{
+  "name": "display_image",
+  "description": "Displays an existing workspace PNG in the user’s interactive terminal. Only the main agent can execute this tool. This is only a user-visible preview: it does not return image contents to you. Use read_file when you need to inspect or understand the image. The file_path must be absolute.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "file_path": {
+        "type": "string",
+        "description": "Absolute path to a PNG inside the current workspace."
+      }
+    },
+    "required": [
+      "file_path"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "exit_worktree",
+  "description": "Exits a worktree previously created by enter_worktree.\n\n## Behavior\n\n- `action='keep'` — preserves the worktree directory and branch on disk so it can be revisited later. Use when work is in progress and the user might come back to it.\n- `action='remove'` — deletes the worktree directory and branch. **Refuses to run** if the worktree contains uncommitted changes (tracked or untracked) unless `discard_changes: true` is set. Use when the work is committed (or intentionally being discarded).\n\n## When to Use\n\nOnly invoke this tool when the user explicitly asks to leave or clean up a worktree (e.g. \"exit the worktree\", \"remove that worktree\", \"we're done with the worktree\"). Always pass the same `name` that was used with `enter_worktree`.\n",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Slug of the worktree to exit (must match the name used in enter_worktree)."
+      },
+      "action": {
+        "type": "string",
+        "enum": [
+          "keep",
+          "remove"
+        ],
+        "description": "\"keep\" preserves the worktree on disk; \"remove\" deletes it and its branch."
+      },
+      "discard_changes": {
+        "type": "boolean",
+        "description": "When action=\"remove\", must be true to delete a worktree with uncommitted changes."
+      }
+    },
+    "required": [
+      "name",
+      "action"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+}
