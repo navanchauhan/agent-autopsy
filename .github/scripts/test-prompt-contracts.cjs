@@ -107,6 +107,7 @@ test("model timeouts return control to the bounded repair loop", () => {
   assert.match(driver, /timeout --signal=TERM --kill-after=30s "\$review_timeout" codex exec/);
   assert.match(workflow, /CODEX_AUTHOR_TIMEOUT: 30m/);
   assert.match(workflow, /CODEX_REVIEW_TIMEOUT: 30m/);
+  assert.match(workflow, /codex-driver:[\s\S]*?timeout-minutes: 300/);
   assert.match(workflow, /author\) phase_timeout=32m/);
   assert.match(workflow, /review\) phase_timeout=32m/);
   assert.match(workflow, /timeout --signal=TERM --kill-after=30s "\$phase_timeout"[\s\S]*docker run/);
