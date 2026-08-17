@@ -438,7 +438,11 @@ jobs:
     environment:
       name: agent-autopsy-capture
       deployment: false
-    timeout-minutes: 70
+    # Four bounded 32-minute author attempts and up to four bounded 32-minute
+    # reviews can follow source preparation and image builds. Keep the job
+    # ceiling above that complete retry budget so GitHub does not kill a
+    # healthy phase before its own timeout can report a useful failure.
+    timeout-minutes: 300
     outputs:
       has_publishable: ${{ steps.result.outputs.has_publishable }}
     steps:
