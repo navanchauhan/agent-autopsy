@@ -6,7 +6,7 @@ set -euo pipefail
 profile="${1:?profile is required}"
 tool_dir="${2:?tool directory is required}"
 case "$tool_dir" in
-  codex|claude-code|grok|antigravity) ;;
+  codex|claude-code|grok|antigravity|qwen-code) ;;
   *) echo "Unsupported smoke-test tool directory: $tool_dir" >&2; exit 2 ;;
 esac
 

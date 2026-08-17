@@ -56,6 +56,11 @@ For the session-title surface, use the model from that specific raw request. Do
 not inherit the main prompt model or `prompt_models`; if the request uses
 Grok 4.5, keep that surface's model as `grok-4.5`.
 
+For Qwen Code, repair directly against the exact `references/qwen-code`
+revision recorded in `source-revisions.json`. Qwen Code is source-authoritative:
+the absence of a proxy trace, live response, or artifact attestation is expected
+and is not a reason to revert or request recapture.
+
 Return the same canonical Markdown format as the original refresh: exactly one
 `## <tool>` section per changed-tools entry, in input order, with two to four
 sentences covering result, version/source, material changes, and evidence or the

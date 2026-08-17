@@ -3,7 +3,7 @@
 const fs = require("fs");
 
 const [file, tool, planHash, bucket] = process.argv.slice(2);
-const tools = new Set(["codex", "claude-code", "grok", "antigravity"]);
+const tools = new Set(["codex", "claude-code", "grok", "antigravity", "qwen-code"]);
 const states = new Set(["clear", "force_once", "suppress_positive"]);
 const reasons = new Set(["reviewer", "security", "manual", "capture_retry"]);
 

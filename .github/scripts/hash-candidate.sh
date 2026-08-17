@@ -13,7 +13,7 @@ jq -e 'type == "array" and length > 0' "$plan_file" >/dev/null
 dirs=()
 while IFS= read -r dir; do
   case "$dir" in
-    codex|claude-code|grok|antigravity) ;;
+    codex|claude-code|grok|antigravity|qwen-code) ;;
     *) echo "Unsupported candidate directory: $dir" >&2; exit 2 ;;
   esac
   dirs+=("$dir")

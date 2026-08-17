@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 
 const [planArg, stateArg, downloadsArg, outputArg, currentRunId, currentAttemptArg, forceArg = "false"] = process.argv.slice(2);
-const knownTools = new Set(["codex", "claude-code", "grok", "antigravity"]);
+const knownTools = new Set(["codex", "claude-code", "grok", "antigravity", "qwen-code"]);
 const metadataName = "workflow-run.json";
 
 function fail(message) {
@@ -126,7 +126,7 @@ function requireArtifactDirectory(directory, label) {
 
 function artifactDirectories(root) {
   requireArtifactDirectory(root, "artifact download root");
-  const expression = /^capture-bundle-(codex|claude-code|grok|antigravity)-attempt-([1-9][0-9]*)$/;
+  const expression = /^capture-bundle-(codex|claude-code|grok|antigravity|qwen-code)-attempt-([1-9][0-9]*)$/;
   // download-artifact extracts a single pattern match directly into `path`,
   // while multiple matches are placed in artifact-named subdirectories. Derive
   // the flattened identity from the host-written metadata, then subject it to

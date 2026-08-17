@@ -91,5 +91,9 @@ RUN test -n "${ANTIGRAVITY_TARBALL_URL}" \
     && rm -f /tmp/antigravity /tmp/antigravity.tar.gz
 USER root
 
+# Qwen Code is captured directly from its exact public source tag. This stage
+# deliberately installs no provider binary, proxy, or credential helper.
+FROM base AS capture-qwen-code
+
 # Keep a useful default target for local `docker build` invocations.
 FROM driver AS runtime

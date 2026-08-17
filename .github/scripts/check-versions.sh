@@ -34,6 +34,7 @@ capture_contract_hash() {
   )
   case "$tool" in
     codex) files+=("$repo_root/.github/scripts/sync-codex-reference.sh") ;;
+    qwen-code) files+=("$repo_root/.github/scripts/sync-qwen-code-reference.sh") ;;
     grok) files+=("$repo_root/.github/scripts/sync-grok-reference.sh") ;;
   esac
   if [ -d "$repo_root/$tool/misc/scripts" ]; then
@@ -347,6 +348,29 @@ else
   echo "grok: refresh disabled; skipping discovery and capture planning" >&2
 fi
 
+# Qwen Code publishes stable npm releases and matching public Git tags. Source
+# is complete capture evidence, so no package installation or credential is needed.
+qwen_recorded="$(current_version_field "$repo_root/qwen-code/VERSION" version)"
+qwen_version="$(timeout 30s npm view @qwen-code/qwen-code version --json 2>/dev/null | jq -er '.' 2>/dev/null || true)"
+qwen_revision=''
+if is_release_version "$qwen_version"; then
+  qwen_revision="$(git ls-remote --tags https://github.com/QwenLM/qwen-code.git \
+    "refs/tags/v${qwen_version}" 2>/dev/null | cut -f1 | head -n1)"
+fi
+echo "qwen-code: recorded=$qwen_recorded latest=${qwen_version:-unresolved} revision=${qwen_revision:-missing}" >&2
+warn_if_downgrade "Qwen Code" "$qwen_recorded" "${qwen_version:-$qwen_recorded}"
+if is_newer_version "$qwen_recorded" "$qwen_version" && [[ "$qwen_revision" =~ ^[0-9a-f]{40}$ ]]; then
+  append_entry "$(jq -cn \
+    --arg tool qwen-code --arg dir qwen-code \
+    --arg old "$qwen_recorded" --arg new "$qwen_version" \
+    --arg old_revision "$(current_version_field "$repo_root/qwen-code/VERSION" revision)" \
+    --arg new_revision "$qwen_revision" \
+    --arg contract "$(capture_contract_hash qwen-code)" \
+    '{tool:$tool,dir:$dir,old_version:$old,new_version:$new,version_field:"version",old_revision:$old_revision,new_revision:$new_revision,capture_contract_hash:$contract}')"
+else
+  qwen_version="$qwen_recorded"
+fi
+
 # Merge every observed target into the durable per-tool FIFO. The emitted plan
 # contains only each queue head, rebased to the repository's current VERSION.
 fresh_file="$scratch_dir/fresh-targets.json"
@@ -364,10 +388,14 @@ jq -n \
   --arg grok_contract "$(capture_contract_hash grok)" \
   --arg antigravity_version "$antigravity_recorded" \
   --arg antigravity_contract "$(capture_contract_hash antigravity)" \
+  --arg qwen_version "$qwen_recorded" \
+  --arg qwen_revision "$(current_version_field "$repo_root/qwen-code/VERSION" revision)" \
+  --arg qwen_contract "$(capture_contract_hash qwen-code)" \
   '{codex:{version:$codex_version,revision:$codex_revision,capture_contract_hash:$codex_contract},
     "claude-code":{version:$claude_version,capture_contract_hash:$claude_contract},
     grok:{version:$grok_version,revision:$grok_revision,capture_contract_hash:$grok_contract},
-    antigravity:{version:$antigravity_version,capture_contract_hash:$antigravity_contract}}' \
+    antigravity:{version:$antigravity_version,capture_contract_hash:$antigravity_contract},
+    "qwen-code":{version:$qwen_version,revision:$qwen_revision,capture_contract_hash:$qwen_contract}}' \
   >"$current_state_file"
 mkdir -p "$(dirname "$ledger_file")"
 node "$repo_root/.github/scripts/release-ledger.cjs" \
@@ -397,6 +425,7 @@ if [ -n "${GITHUB_OUTPUT:-}" ]; then
     echo "antigravity_version=$antigravity_version"
     echo "antigravity_url=$antigravity_url"
     echo "antigravity_sha512=$antigravity_sha512"
+    echo "qwen_version=$qwen_version"
     echo "capture_bucket=$(date -u +%Y%m%d)"
     echo "release_ledger_hash=$(sha256sum "$ledger_file" | cut -d' ' -f1)"
   } >>"$GITHUB_OUTPUT"

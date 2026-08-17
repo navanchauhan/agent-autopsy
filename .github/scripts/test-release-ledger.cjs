@@ -40,6 +40,7 @@ function makePlan(tool, oldVersion, newVersion, options = {}) {
   };
   switch (tool) {
     case "codex":
+    case "qwen-code":
       return withHash({
         ...common,
         old_revision: options.oldRevision || "a".repeat(40),
@@ -95,6 +96,11 @@ function makeState() {
       version: "4.0.0",
       capture_contract_hash: "4".repeat(64),
     },
+    "qwen-code": {
+      version: "5.0.0",
+      revision: "c".repeat(40),
+      capture_contract_hash: "5".repeat(64),
+    },
   };
 }
 
@@ -145,7 +151,7 @@ try {
   assert.equal(third.result.status, 0, third.result.stderr);
   assert.deepEqual(third.ledger.queues.codex.map((entry) => entry.new_version), ["1.0.1", "1.0.2", "1.0.3"]);
   assert.deepEqual(Object.keys(third.ledger.queues.codex[0]).sort(), ["new_revision", "new_version", "tool"]);
-  assert.deepEqual(Object.keys(third.ledger.queues), ["codex", "claude-code", "grok", "antigravity"]);
+  assert.deepEqual(Object.keys(third.ledger.queues), ["codex", "claude-code", "grok", "antigravity", "qwen-code"]);
 
   // Publishing N drops it and rebases N+1 to the new repository version,
   // revision, and capture contract without mutating the queued target.
@@ -234,6 +240,16 @@ try {
   });
   assert.equal(everyTool.head[3].artifact_sha512, "e".repeat(128));
   assert.equal(everyTool.head[3].capture_contract_hash, "4".repeat(64));
+
+  const qwen = makePlan("qwen-code", "5.0.0", "5.0.1", {
+    oldRevision: "c".repeat(40),
+    newRevision: "d".repeat(40),
+    contract: "5".repeat(64),
+  });
+  const withQwen = execute(null, [qwen], state);
+  assert.equal(withQwen.result.status, 0, withQwen.result.stderr);
+  assert.equal(withQwen.head[0].tool, "qwen-code");
+  assert.equal(withQwen.head[0].new_revision, "d".repeat(40));
 
   // A nonexistent ledger is equivalent to `-`.
   const missing = execute(null, [claude], state, { missingLedger: true });

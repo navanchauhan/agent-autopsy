@@ -43,6 +43,15 @@ model metadata between the revisions in `source-revisions.json`.
 advance `codex/VERSION`, while the per-session code-mode listing documented as
 out of scope in `codex/README.md` is not a missing fixed schema.
 
+For Qwen Code, the exact tagged `references/qwen-code` checkout is the complete,
+authoritative capture; there is intentionally no proxy trace, live request,
+credential, or binary attestation. Verify every normalized artifact against the
+exact revision in `source-revisions.json`, beginning with the entrypoints named
+by `direct-source-manifest.json`. Treat workspace, memory, settings, extension,
+hook, MCP, and other session-specific layers as dynamic inputs rather than
+missing raw evidence. Do not return `retry_capture` merely because network
+capture evidence is absent for Qwen Code.
+
 For Grok, inspect `/workspace/references/grok-build` when it exists. Its
 `SOURCE_REV` is authoritative for the revision recorded in `grok/VERSION`; the
 checkout HEAD is only the mirror revision. A `sha256` requires evidence from an

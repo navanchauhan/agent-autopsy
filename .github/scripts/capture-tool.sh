@@ -62,6 +62,7 @@ installed_version() {
     grok) grok --version ;;
     antigravity) agy --version ;;
     codex) printf '%s\n' "$target_version" ;;
+    qwen-code) printf '%s\n' "$target_version" ;;
     *) return 2 ;;
   esac | grep -oE '[0-9]+\.[0-9]+\.[0-9]+([-.][A-Za-z0-9.]+)?' | head -n1
 }
@@ -102,7 +103,7 @@ if ! write_artifact_attestation; then
   exit 1
 fi
 
-if [ "$tool" != "codex" ]; then
+if [ "$tool" != "codex" ] && [ "$tool" != "qwen-code" ]; then
   if ! bash "$repo_root/.github/scripts/seed-credentials.sh" "$tool"; then
     write_result retry_capture "The isolated $tool credential could not be seeded."
     echo "::warning::$tool capture deferred because its isolated credential was unavailable" >&2
@@ -133,6 +134,14 @@ case "$tool" in
       } >"$tool_scratch/source-changes.txt"
       jq -n --arg old "$old_revision" --arg new "$new_revision" \
         '{old_revision:$old,new_revision:$new}' >"$tool_scratch/source-revisions.json"
+    fi
+    ;;
+  qwen-code)
+    if { [ "${SOURCE_ALREADY_SYNCED:-0}" != 1 ] && \
+         ! bash "$repo_root/.github/scripts/sync-qwen-code-reference.sh"; } || \
+       ! bash "$repo_root/.github/scripts/capture-qwen-code.sh"; then
+      capture_status=1
+      capture_message="Exact Qwen Code source could not be synchronized or indexed."
     fi
     ;;
   claude-code)

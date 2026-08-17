@@ -9,7 +9,7 @@ const message = process.argv[4] || "Capture bundle failed immutable host verific
 const plan = JSON.parse(fs.readFileSync(planPath, "utf8"));
 if (!Array.isArray(plan) || plan.length !== 1) throw new Error("safe capture retry requires exactly one plan entry");
 const entry = plan[0];
-if (!entry || !["codex", "claude-code", "grok", "antigravity"].includes(entry.tool)) {
+if (!entry || !["codex", "claude-code", "grok", "antigravity", "qwen-code"].includes(entry.tool)) {
   throw new Error("safe capture retry contains an unsupported tool");
 }
 if (typeof message !== "string" || message.length < 1 || message.length > 4096) {
