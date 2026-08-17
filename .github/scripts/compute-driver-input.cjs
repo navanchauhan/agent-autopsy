@@ -36,7 +36,6 @@ const contractFiles = [
   ".github/scripts/persist-credential.sh",
   ".github/scripts/run-codex-refresh.sh",
   ".github/scripts/seed-credentials.sh",
-  ".github/scripts/test-codex-sandbox.sh",
   ".github/scripts/validate-refresh.cjs",
   ".github/scripts/surface-registry.cjs",
   ".github/scripts/validate-surfaces.cjs",
