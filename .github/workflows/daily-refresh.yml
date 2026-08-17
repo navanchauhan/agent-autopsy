@@ -808,12 +808,9 @@ jobs:
             fi
 
             has_scoped_changes=false
-            for dir in "${tool_dirs[@]}"; do
-              if [ -n "$(git status --porcelain -- "$dir")" ]; then
-                has_scoped_changes=true
-                break
-              fi
-            done
+            if [ -n "$(git status --porcelain -- "${tool_dirs[@]}" CATALOG.md)" ]; then
+              has_scoped_changes=true
+            fi
             if [ "$has_scoped_changes" = false ]; then
               node "$trusted_driver/validate-review.cjs" \
                 "$trusted_driver/ready-tools.json" .capture-scratch/review-result.json
