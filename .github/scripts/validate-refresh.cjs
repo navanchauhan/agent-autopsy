@@ -445,6 +445,24 @@ function validateVersionInventory(tool) {
   }
   validateCount("tools", fields.get("tools"), toolFiles.length, versionPath);
 
+  if (tool.tool === "qwen-code") {
+    if (allPrompts.length === 0) {
+      fail("VERSION: qwen-code must publish at least one source-derived prompts/*.md artifact");
+    }
+    if (toolFiles.length === 0) {
+      fail("VERSION: qwen-code must publish source-derived tools/*.json artifacts");
+    }
+    const manifest = parseJsonFile(path.join(dirPath, "SURFACES.json"), "Qwen surface registry");
+    for (const surface of manifest?.surfaces || []) {
+      if (surface.status === "gap") {
+        fail(`Qwen surface registry: ${surface.id} must be resolved from the authoritative source checkout`);
+      }
+      if (surface.status === "captured" && (!Array.isArray(surface.artifacts) || surface.artifacts.length === 0)) {
+        fail(`Qwen surface registry: ${surface.id} must name its extracted artifacts`);
+      }
+    }
+  }
+
   if (tool.tool === "grok") {
     const promptModels = listedFiles(fields.get("prompt_models"));
     if (!promptModels || promptModels.length !== 1) {

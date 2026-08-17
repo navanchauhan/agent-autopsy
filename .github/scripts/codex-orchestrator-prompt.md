@@ -40,7 +40,11 @@ assembly from `packages/core/src/core/prompts.ts`, prompt registration from
 `packages/core/src/tools/tool-registry.ts`. Extract normalized prompt, tool, and
 runtime-message artifacts directly from that exact revision. Dynamic workspace,
 memory, settings, extension, hook, and MCP layers belong in `dynamic_inputs`;
-do not invent concrete values for them.
+do not invent concrete values for them. A Qwen version advance is invalid unless
+it creates at least one `qwen-code/prompts/*.md` artifact, the source-derived
+built-in `qwen-code/tools/*.json` schemas, and resolves every initial `gap`
+surface with explicit artifact paths. Do not merely update VERSION or reformat
+SURFACES.json.
 
 For Grok, inspect `references/grok-build` before live capture. Its source is
 authoritative for bundled prompt and tool construction; use capture only to

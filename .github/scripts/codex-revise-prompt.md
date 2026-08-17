@@ -60,6 +60,8 @@ For Qwen Code, repair directly against the exact `references/qwen-code`
 revision recorded in `source-revisions.json`. Qwen Code is source-authoritative:
 the absence of a proxy trace, live response, or artifact attestation is expected
 and is not a reason to revert or request recapture.
+Qwen cannot pass with zero prompt/tool files or any remaining `gap` surface;
+materialize the source-derived artifacts before returning.
 
 Return the same canonical Markdown format as the original refresh: exactly one
 `## <tool>` section per changed-tools entry, in input order, with two to four
