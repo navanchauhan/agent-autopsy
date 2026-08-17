@@ -1,0 +1,15 @@
+{
+  "name": "enter_worktree",
+  "description": "Creates an isolated git worktree at `<projectRoot>/.qwen/worktrees/<slug>` and returns its absolute path so subsequent file edits, shell commands, and other tools can operate inside it.\n\n## When to Use\n\nOnly invoke this tool when the user **explicitly asks for a worktree** — e.g. \"start a worktree\", \"use a worktree\", \"work in a worktree\", \"create a worktree\".\n\n## When NOT to Use\n\nDo NOT call this tool when the user simply asks to fix a bug, implement a feature, create a branch, or check out code — those tasks belong to the regular working directory unless the user specifically mentions worktrees.\n\n## Behavior\n\n- Requires the current project to be a git repository.\n- Creates a new branch `worktree-<slug>` based on the current branch.\n- Returns the absolute `worktreePath`. From that point on, route every file path you create or edit through this directory; absolute paths are recommended.\n- The worktree persists across the session until `exit_worktree` is invoked.\n",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Optional slug (letters, digits, dot, underscore, hyphen; max 64 chars). Auto-generated when omitted."
+      }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+}

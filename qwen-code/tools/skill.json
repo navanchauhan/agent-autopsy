@@ -1,0 +1,22 @@
+{
+  "name": "skill",
+  "description": "Execute a skill within the main conversation\n\n<skills_instructions>\nWhen users ask you to perform tasks, check if any of the available skills can help complete the task more effectively. Skills provide specialized capabilities and domain knowledge.\n\nHow to invoke:\n- Use this tool with the skill name only (no arguments)\n- Examples:\n  - `skill: \"pdf\"` - invoke the pdf skill\n  - `skill: \"xlsx\"` - invoke the xlsx skill\n  - `skill: \"ms-office-suite:pdf\"` - invoke using fully qualified name\n  - `skill: \"mcp-prompt\", args: \"topic\"` - invoke a model-invocable command with arguments\n\nImportant:\n- Available skills are listed in <system-reminder> messages in the conversation; only use skills listed there.\n- When a skill is relevant, you must invoke this tool IMMEDIATELY as your first action\n- NEVER just announce or mention a skill in your text response without actually calling this tool\n- This is a BLOCKING REQUIREMENT: invoke the relevant Skill tool BEFORE generating any other response about the task\n- Do not invoke a skill that is already running\n- Do not use this tool for built-in CLI commands (like /help, /clear, etc.)\n- When executing scripts or loading referenced files, ALWAYS resolve absolute paths from skill's base directory. Examples:\n  - `bash scripts/init.sh` -> `bash /path/to/skill/scripts/init.sh`\n  - `python scripts/helper.py` -> `python /path/to/skill/scripts/helper.py`\n  - `reference.md` -> `/path/to/skill/reference.md`\n</skills_instructions>",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "skill": {
+        "type": "string",
+        "description": "The skill or command name. E.g., \"pdf\" or \"xlsx\""
+      },
+      "args": {
+        "type": "string",
+        "description": "Optional arguments for model-invocable slash commands."
+      }
+    },
+    "required": [
+      "skill"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+}

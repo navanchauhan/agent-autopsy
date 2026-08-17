@@ -1,0 +1,15 @@
+{
+  "name": "enter_plan_mode",
+  "description": "Use this tool only after the user explicitly asks to switch into plan mode or confirms they want plan mode. Entering plan mode is a privilege reduction, so it does not require user confirmation at execution time.\n\n## When to Use This Tool\nUse this tool when the user has opted into plan mode for a task that should be read-only while the plan is formed, such as multi-file changes, design choices, or ambiguous requirements.\n\n## When NOT to Use This Tool\nDo not use this tool just because a task involves planning, is complex, or requires investigation. In the current mode, you can still think, inspect files, ask clarifying questions, and present a plan without switching modes.\n\n## Important\nIf plan mode seems helpful but the user has not asked for it, ask first. Do NOT use this tool if the user has explicitly asked you not to use plan mode.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "userRequested": {
+        "type": "boolean",
+        "description": "Set to true ONLY when the user explicitly asked for plan mode in this turn, or explicitly confirmed they want it. Leave unset (or false) when you are deciding to plan on your own without the user asking. In YOLO mode, an explicit user request will not take effect unless this is true."
+      }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+}

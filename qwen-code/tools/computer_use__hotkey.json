@@ -1,0 +1,34 @@
+{
+  "name": "computer_use__hotkey",
+  "description": "Press a combination of keys simultaneously — e.g. `[\"cmd\", \"c\"]` for Copy, `[\"cmd\", \"shift\", \"4\"]` for screenshot selection. The combo is posted directly to the target pid's event queue; the target does NOT need to be frontmost.\n\nTwo delivery paths:\n• Default (no window_id): auth-message envelope — Chromium/Electron apps accept the keystrokes as trusted live input on macOS 14+.\n• With window_id: NSMenu path — briefly activates the target WindowServer-frontmost via SLPSSetFrontProcessWithOptions (kCPSNoWindows, < 1 ms), posts WITHOUT the auth envelope so IOHIDPostEvent fires and NSApplication.sendEvent: dispatches NSMenu key equivalents (e.g. Cmd+Z undo, Cmd+W close). Restores prior frontmost immediately. Use this path when you need native menu-bar actions on non-Chromium apps.\n\nRecognized modifiers: cmd/command, shift, option/alt, ctrl/control, fn. Non-modifier keys use the same vocabulary as `press_key` (return, tab, escape, up/down/left/right, space, delete, home, end, pageup, pagedown, f1-f12, letters, digits). Order: modifiers first, one non-modifier last.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "keys": {
+        "description": "Modifier(s) and one non-modifier key, e.g. [\"cmd\", \"c\"].",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 2,
+        "type": "array"
+      },
+      "pid": {
+        "description": "Target process ID.",
+        "type": "integer"
+      },
+      "session": {
+        "description": "Optional session id: declares/uses the agent cursor and per-session state for this run. The same id works over MCP, the CLI, or the raw socket, and follows the run across apps/windows. Omit to run cursor-less.",
+        "type": "string"
+      },
+      "window_id": {
+        "description": "When set, uses NSMenu path: briefly activates the window for menu key dispatch, then restores prior frontmost.",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "pid",
+      "keys"
+    ],
+    "type": "object"
+  }
+}

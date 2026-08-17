@@ -1,0 +1,64 @@
+{
+  "name": "task_update",
+  "description": "Update an existing task. Can change status, owner, subject, description, and blocking relationships. Set status to \"deleted\" to remove a task. Setting status to \"in_progress\" auto-assigns you as owner if no owner is set.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "taskId": {
+        "type": "string",
+        "description": "ID of the task to update."
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "in_progress",
+          "completed",
+          "deleted"
+        ],
+        "description": "New task status."
+      },
+      "owner": {
+        "type": "string",
+        "description": "New owner agent name. Set to empty string to unassign."
+      },
+      "subject": {
+        "type": "string",
+        "maxLength": 200,
+        "description": "Updated task title."
+      },
+      "description": {
+        "type": "string",
+        "maxLength": 10000,
+        "description": "Updated task description."
+      },
+      "activeForm": {
+        "type": "string",
+        "maxLength": 200,
+        "description": "Present tense label for UI."
+      },
+      "metadata": {
+        "type": "object",
+        "description": "Metadata to merge. Set a key to null to delete it."
+      },
+      "addBlocks": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Task IDs that this task blocks."
+      },
+      "addBlockedBy": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Task IDs that block this task."
+      }
+    },
+    "required": [
+      "taskId"
+    ],
+    "additionalProperties": false
+  }
+}

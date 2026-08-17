@@ -1,0 +1,51 @@
+{
+  "name": "computer_use__scroll",
+  "description": "Scroll the target pid's focused region by synthesized keystrokes.\n\nMapping: by='page' → PageDown/PageUp × amount; by='line' → DownArrow/UpArrow × amount. Horizontal variants use Left/Right arrow keys.\n\nOptional element_index + window_id pre-focuses the element before scrolling.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "amount": {
+        "description": "Number of keystroke repetitions. Default: 3.",
+        "maximum": 50,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "by": {
+        "description": "Scroll granularity. Default: line.",
+        "enum": [
+          "line",
+          "page"
+        ],
+        "type": "string"
+      },
+      "direction": {
+        "description": "Scroll direction.",
+        "enum": [
+          "up",
+          "down",
+          "left",
+          "right"
+        ],
+        "type": "string"
+      },
+      "element_index": {
+        "type": "integer"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "session": {
+        "description": "Optional session id: declares/uses the agent cursor and per-session state for this run. The same id works over MCP, the CLI, or the raw socket, and follows the run across apps/windows. Omit to run cursor-less.",
+        "type": "string"
+      },
+      "window_id": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "pid",
+      "direction"
+    ],
+    "type": "object"
+  }
+}

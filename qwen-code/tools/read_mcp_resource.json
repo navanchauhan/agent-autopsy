@@ -1,0 +1,26 @@
+{
+  "name": "read_mcp_resource",
+  "description": "Reads a resource from a configured MCP server by server_name and URI. The server_name must match a configured MCP server (see the session MCP server list or /mcp). The uri must be an exact resource URI previously advertised by that server. Use this tool when the user asks you to read a specific MCP resource; for inline prompt references, prefer the @server:uri syntax.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "server_name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1024,
+        "description": "The configured MCP server name."
+      },
+      "uri": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096,
+        "description": "The exact resource URI to read from that server."
+      }
+    },
+    "required": [
+      "server_name",
+      "uri"
+    ],
+    "additionalProperties": false
+  }
+}

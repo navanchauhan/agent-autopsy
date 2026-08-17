@@ -1,0 +1,60 @@
+{
+  "name": "computer_use__click",
+  "description": "Left-click against a target pid. **Prefer `element_index` over pixel coordinates** — element_index works on backgrounded / minimized / hidden / off-Space windows, surfaces a stable handle that survives rebuilds, and tells you what you're clicking via the cached element's role + label. Reach for `x, y` only when the target is a canvas / video / WebGL / custom-drawn surface that doesn't appear in the AX tree.\n\nTwo addressing modes:\n\n- element_index + window_id (from last get_window_state): AX action path. Works on backgrounded/hidden windows. No cursor move, no focus steal. element_index cache is scoped per (pid, window_id) and is replaced by the next snapshot of the same window — re-snapshot every turn before clicking.\n\n- x, y (window-local screenshot pixels, top-left origin of the PNG returned by get_window_state): CGEvent path. Synthesizes mouse events and posts to pid. Use modifier for cmd/shift/option/ctrl. Needs a visible on-screen window to anchor the conversion.\n\naction: press (default), show_menu, pick, confirm, cancel, open.\nfrom_zoom: set true after a zoom call to auto-translate zoom-image pixel coordinates to full-window space.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "action": {
+        "description": "AX action: press, show_menu, pick, confirm, cancel, open.",
+        "type": "string"
+      },
+      "count": {
+        "description": "Click count (pixel path only). Default 1.",
+        "type": "integer"
+      },
+      "debug_image_out": {
+        "description": "Optional file path. When set on a pixel-addressed click, captures a fresh screenshot, draws a red crosshair at (x, y), and writes the PNG. Use to verify coordinate spaces. Requires window_id; incompatible with from_zoom.",
+        "type": "string"
+      },
+      "element_index": {
+        "description": "Element index from last get_window_state.",
+        "type": "integer"
+      },
+      "from_zoom": {
+        "description": "When true, x and y are in the last zoom image for this pid; driver translates back to full-window coordinates.",
+        "type": "boolean"
+      },
+      "modifier": {
+        "description": "Modifier keys: cmd, shift, option/alt, ctrl.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "pid": {
+        "description": "Target process ID.",
+        "type": "integer"
+      },
+      "session": {
+        "description": "Optional session id: declares/uses the agent cursor and per-session state for this run. The same id works over MCP, the CLI, or the raw socket, and follows the run across apps/windows. Omit to run cursor-less.",
+        "type": "string"
+      },
+      "window_id": {
+        "description": "Target window ID. Required for element_index.",
+        "type": "integer"
+      },
+      "x": {
+        "description": "Window-local screenshot X coordinate.",
+        "type": "number"
+      },
+      "y": {
+        "description": "Window-local screenshot Y coordinate.",
+        "type": "number"
+      }
+    },
+    "required": [
+      "pid"
+    ],
+    "type": "object"
+  }
+}

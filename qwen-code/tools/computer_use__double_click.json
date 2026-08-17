@@ -1,0 +1,36 @@
+{
+  "name": "computer_use__double_click",
+  "description": "Double-click at (x, y) or on an AX element identified by element_index + window_id.\n\nAX path (element_index provided): performs `AXOpen` when the element advertises it (Finder items, openable list rows/cells); otherwise resolves the element's on-screen center and falls back to a pixel double-click there.\n\nPixel path (x, y provided): two down/up pairs ~80 ms apart at the given coordinates.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "element_index": {
+        "description": "Element index from last get_window_state. Uses AX path.",
+        "type": "integer"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "session": {
+        "description": "Optional session id: declares/uses the agent cursor and per-session state for this run. The same id works over MCP, the CLI, or the raw socket, and follows the run across apps/windows. Omit to run cursor-less.",
+        "type": "string"
+      },
+      "window_id": {
+        "description": "CGWindowID. Required when element_index is used.",
+        "type": "integer"
+      },
+      "x": {
+        "description": "Screen X coordinate (pixel path).",
+        "type": "number"
+      },
+      "y": {
+        "description": "Screen Y coordinate (pixel path).",
+        "type": "number"
+      }
+    },
+    "required": [
+      "pid"
+    ],
+    "type": "object"
+  }
+}

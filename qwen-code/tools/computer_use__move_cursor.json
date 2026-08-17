@@ -1,0 +1,28 @@
+{
+  "name": "computer_use__move_cursor",
+  "description": "Move the agent cursor overlay to (x, y). Does NOT move the real mouse cursor — the user's cursor stays where it is. Useful for showing the agent's attention without interrupting the user.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "cursor_id": {
+        "description": "Cursor instance to move. Default: 'default'.",
+        "type": "string"
+      },
+      "session": {
+        "description": "Optional session id: declares/uses the agent cursor and per-session state for this run. The same id works over MCP, the CLI, or the raw socket, and follows the run across apps/windows. Omit to run cursor-less.",
+        "type": "string"
+      },
+      "x": {
+        "type": "number"
+      },
+      "y": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "x",
+      "y"
+    ],
+    "type": "object"
+  }
+}

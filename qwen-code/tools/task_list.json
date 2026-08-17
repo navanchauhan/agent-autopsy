@@ -1,0 +1,27 @@
+{
+  "name": "task_list",
+  "description": "List tasks in the team task list. All filter parameters are optional.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "in_progress",
+          "completed"
+        ],
+        "description": "Filter by task status."
+      },
+      "owner": {
+        "type": "string",
+        "description": "Filter by owner agent name."
+      },
+      "blockedBy": {
+        "type": "string",
+        "description": "Filter for tasks blocked by this task ID."
+      }
+    },
+    "additionalProperties": false
+  }
+}

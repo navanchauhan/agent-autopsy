@@ -1,0 +1,14 @@
+{
+  "name": "computer_use__get_agent_cursor_state",
+  "description": "Return the current state of THIS session's agent cursor: position, config (color, icon, label, size, opacity), enabled flag. Pass cursor_id to inspect a specific instance.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "cursor_id": {
+        "description": "Cursor instance. Default: this session's cursor.",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

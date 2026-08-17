@@ -1,0 +1,40 @@
+{
+  "name": "computer_use__type_text",
+  "description": "Insert text into the target pid via `AXSetAttribute(kAXSelectedText)`. Works for standard Cocoa text fields and text views. No keystrokes are synthesized — special keys (Return / Escape / arrows) go through `press_key` / `hotkey`. For Chromium / Electron inputs that don't implement `kAXSelectedText`, the tool falls back to CGEvent character synthesis automatically.\n\nOptional `element_index` + `window_id` (from the last `get_window_state` snapshot) directs the write to a specific field. Without `element_index`, the write goes to the pid's currently focused element.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "delay_ms": {
+        "description": "Milliseconds between characters in the CGEvent fallback path. Default 30. Ignored when the AX path succeeds.",
+        "maximum": 200,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "element_index": {
+        "description": "Element index from last get_window_state. Directs the write to a specific field. Requires window_id.",
+        "type": "integer"
+      },
+      "pid": {
+        "description": "Target process ID.",
+        "type": "integer"
+      },
+      "session": {
+        "description": "Optional session id: declares/uses the agent cursor and per-session state for this run. The same id works over MCP, the CLI, or the raw socket, and follows the run across apps/windows. Omit to run cursor-less.",
+        "type": "string"
+      },
+      "text": {
+        "description": "Text to insert at the target's cursor.",
+        "type": "string"
+      },
+      "window_id": {
+        "description": "CGWindowID. Required when element_index is used.",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "pid",
+      "text"
+    ],
+    "type": "object"
+  }
+}

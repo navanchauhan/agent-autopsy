@@ -1,0 +1,78 @@
+{
+  "name": "computer_use__set_agent_cursor_motion",
+  "description": "Configure the visual appearance and motion curve of an agent cursor instance.\n\nAppearance (multi-cursor customization):\n- cursor_id: instance name (default='default')\n- cursor_icon: built-in ('arrow','crosshair','hand','dot') or PNG/SVG file path\n- cursor_color: hex color e.g. '#00FFFF' or CSS name\n- cursor_label: short text shown near the cursor\n- cursor_size: dot radius in points (default=16)\n- cursor_opacity: 0.0–1.0 (default=0.85)\n\nMotion curve (Bezier path shape):\n- start_handle: departure control-point fraction [0,1]. Default 0.3\n- end_handle: arrival control-point fraction [0,1]. Default 0.3\n- arc_size: perpendicular deflection as fraction of path length [0,1]. Default 0.25\n- arc_flow: asymmetry [-1,1]; positive bulges toward destination. Default 0.0\n- spring: settle damping [0.3,1.0]; 1.0=no overshoot. Default 0.72\n- glide_duration_ms: fixed flight duration per move [50,5000]; omit for speed-based (the default)\n- dwell_after_click_ms: pause after click ripple [0,5000]. Default 80\n- idle_hide_ms: auto-hide delay [0,60000]; 0=never. Default 20000",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "arc_flow": {
+        "description": "Asymmetry bias in [-1, 1]. Default 0.0.",
+        "type": "number"
+      },
+      "arc_size": {
+        "description": "Arc deflection as fraction of path length [0, 1]. Default 0.25.",
+        "type": "number"
+      },
+      "cursor_color": {
+        "description": "Hex color (e.g. '#00FFFF') or CSS color name.",
+        "type": "string"
+      },
+      "cursor_icon": {
+        "description": "Built-in icon name or file path to PNG/SVG.",
+        "type": "string"
+      },
+      "cursor_id": {
+        "description": "Cursor instance name. Default: 'default'.",
+        "type": "string"
+      },
+      "cursor_label": {
+        "description": "Short label near the cursor dot.",
+        "type": "string"
+      },
+      "cursor_opacity": {
+        "description": "Opacity 0.0–1.0. Default: 0.85.",
+        "type": "number"
+      },
+      "cursor_size": {
+        "description": "Dot radius in points. Default: 16.",
+        "type": "number"
+      },
+      "dwell_after_click_ms": {
+        "description": "Pause after click ripple in ms. Default 80.",
+        "maximum": 5000,
+        "minimum": 0,
+        "type": "number"
+      },
+      "end_handle": {
+        "description": "End-handle fraction in [0, 1]. Default 0.3.",
+        "type": "number"
+      },
+      "glide_duration_ms": {
+        "description": "Fixed flight duration per move in ms; omit for speed-based timing (the default).",
+        "maximum": 5000,
+        "minimum": 50,
+        "type": "number"
+      },
+      "idle_hide_ms": {
+        "description": "Auto-hide delay in ms. 0 = never hide. Default 20000.",
+        "maximum": 60000,
+        "minimum": 0,
+        "type": "number"
+      },
+      "spring": {
+        "description": "Settle damping in [0.3, 1.0]. Default 0.72.",
+        "type": "number"
+      },
+      "start_handle": {
+        "description": "Start-handle fraction in [0, 1]. Default 0.3.",
+        "type": "number"
+      },
+      "turn_radius": {
+        "description": "Minimum turning radius of the glide path in points; smaller = tighter curves. Default 80.",
+        "maximum": 1000,
+        "minimum": 1,
+        "type": "number"
+      }
+    },
+    "type": "object"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "cron_delete",
+  "description": "Stop or cancel a cron job previously scheduled with CronCreate, or a pending loop wakeup scheduled with LoopWakeup. Removes cron jobs from the in-memory session store or from ~/.qwen/tmp/<project-hash>/scheduled_tasks.json (durable jobs).",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Job ID returned by CronCreate or LoopWakeup."
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false
+  }
+}

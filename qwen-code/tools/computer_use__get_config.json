@@ -1,0 +1,9 @@
+{
+  "name": "computer_use__get_config",
+  "description": "Return the current cua-driver-rs configuration.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {},
+    "type": "object"
+  }
+}

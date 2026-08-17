@@ -1,0 +1,31 @@
+{
+  "name": "computer_use__set_config",
+  "description": "Update cua-driver-rs configuration. Changes to capture_mode and max_image_dimension take effect immediately. The experimental_pip keys are persisted to ~/.cua-driver/config.json and take effect on the next daemon restart (the PiP backend is initialised once at startup).",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "capture_mode": {
+        "description": "Default capture mode for get_window_state.",
+        "enum": [
+          "som",
+          "vision",
+          "ax"
+        ],
+        "type": "string"
+      },
+      "experimental_pip": {
+        "description": "Enable the experimental picture-in-picture preview window. Applies on next daemon restart.",
+        "type": "boolean"
+      },
+      "experimental_pip_geometry": {
+        "description": "PiP window size + optional position in `WxH` or `WxH+X+Y` form (e.g. `320x200+24+24`). Applies on next daemon restart.",
+        "type": "string"
+      },
+      "max_image_dimension": {
+        "description": "Max dimension for screenshot resizing (0 = no limit).",
+        "type": "integer"
+      }
+    },
+    "type": "object"
+  }
+}

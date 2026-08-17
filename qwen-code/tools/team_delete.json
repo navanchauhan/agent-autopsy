@@ -1,0 +1,9 @@
+{
+  "name": "team_delete",
+  "description": "Delete the current team. Stops all teammates, cleans up team files, tasks, and inboxes. Only the team leader can use this.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  }
+}

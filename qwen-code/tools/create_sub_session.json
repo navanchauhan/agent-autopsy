@@ -1,0 +1,33 @@
+{
+  "name": "create_sub_session",
+  "description": "Spawn a fresh, independent sub-session (its own clean context and transcript) and run a prompt in it. Use to fan work out into a separate session — e.g. a self-contained sub-task you want isolated from this conversation.\n\nONLY available when running under `qwen serve` (daemon mode); it is inert in a plain interactive session.\n\n## Completion modes\n- `first-turn` (default): waits for the sub-session's first turn to finish and returns its result to you. Use when you need the answer back.\n- `sent`: returns immediately after dispatching the prompt, without waiting. Use for fire-and-forget launches whose output you do not need inline.\n\nThe sub-session runs the prompt with full tool access, starting from zero context — brief it completely in `prompt` (it cannot see this conversation).",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "description": "The full, self-contained prompt to run in the new sub-session. It starts with no context from this conversation, so include everything it needs."
+      },
+      "completion": {
+        "type": "string",
+        "enum": [
+          "sent",
+          "first-turn"
+        ],
+        "description": "'first-turn' (default) waits for the sub-session's first turn and returns its result. 'sent' returns immediately after the prompt is dispatched (fire-and-forget)."
+      },
+      "model": {
+        "type": "string",
+        "description": "Optional model service id for the sub-session. Omit to use the default model."
+      },
+      "name": {
+        "type": "string",
+        "description": "Optional display name for the sub-session in the session list."
+      }
+    },
+    "required": [
+      "prompt"
+    ],
+    "additionalProperties": false
+  }
+}

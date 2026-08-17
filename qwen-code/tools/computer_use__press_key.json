@@ -1,0 +1,38 @@
+{
+  "name": "computer_use__press_key",
+  "description": "Press and release a single key, delivered to the target pid via CGEventPostToPid. No focus steal.\n\nTwo delivery paths:\n• window_id + element_index: focuses the AX element first, then posts via the auth-message path (Chromium-safe).\n• window_id only (no element_index): NSMenu path — briefly activates the window WindowServer-frontmost via SLPSSetFrontProcessWithOptions (kCPSNoWindows, < 1 ms), posts WITHOUT the auth envelope so IOHIDPostEvent fires and NSApplication.sendEvent: dispatches NSMenu key equivalents. Restores prior frontmost immediately.\n• No window_id: standard auth-message path.\n\nKey names: return, tab, escape, up/down/left/right, space, delete, home, end, pageup, pagedown, f1-f12, plus any letter or digit.\nModifiers array: cmd, shift, option/alt, ctrl, fn.",
+  "parametersJsonSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "element_index": {
+        "type": "integer"
+      },
+      "key": {
+        "description": "Key name: return, tab, escape, up, down, etc.",
+        "type": "string"
+      },
+      "modifiers": {
+        "description": "Modifier keys: cmd, shift, option/alt, ctrl, fn.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "session": {
+        "description": "Optional session id: declares/uses the agent cursor and per-session state for this run. The same id works over MCP, the CLI, or the raw socket, and follows the run across apps/windows. Omit to run cursor-less.",
+        "type": "string"
+      },
+      "window_id": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "pid",
+      "key"
+    ],
+    "type": "object"
+  }
+}

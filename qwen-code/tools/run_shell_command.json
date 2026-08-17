@@ -1,0 +1,32 @@
+{
+  "name": "run_shell_command",
+  "description": "Executes a given shell command (as `cmd.exe /d /s /c <command>`) in a subprocess with optional timeout, ensuring proper handling and security measures.\n\nIMPORTANT: This tool is for terminal operations like git, npm, docker, etc. DO NOT use it for file operations (reading, writing, editing, searching, finding files) - use the specialized tools for this instead.\n\n**Usage notes**:\n- The command argument is required.\n- You can specify an optional timeout in milliseconds (up to 600000ms / 10 minutes). If not specified, commands will timeout after 120000ms (2 minutes).\n- It is very helpful if you write a clear, concise description of what this command does in 5-10 words.\n\n- Avoid using run_shell_command with the `find`, `grep`, `cat`, `head`, `tail`, `sed`, `awk`, or `echo` commands, unless explicitly instructed or when these commands are truly necessary for the task. Instead, always prefer using the dedicated tools for these commands:\n  - File search: Use glob (NOT find or ls)\n  - Content search: Use grep_search (NOT grep or rg)\n  - Read files: Use read_file (NOT cat/head/tail)\n  - Edit files: Use edit (NOT sed/awk)\n  - Write files: Use write_file (NOT echo >/cat <<EOF)\n  - Communication: Output text directly (NOT echo/printf)\n- **Shell argument quoting and special characters**: The active shell is cmd.exe. When passing arguments that contain special characters (parentheses `()`, backticks ````, dollar signs `$`, backslashes `\\`, semicolons `;`, pipes `|`, angle brackets `<>`, ampersands `&`, exclamation marks `!`, etc.), you MUST ensure they are properly quoted to prevent cmd.exe from misinterpreting them as shell syntax:\n  - Use double quotes around arguments that contain spaces or metacharacters.\n  - Escape literal cmd.exe metacharacters such as `&`, `|`, `<`, `>`, and `^` with caret (`^`).\n  - Single quotes do not quote arguments in cmd.exe.\n  - Be careful with `%VAR%` environment-variable expansion; avoid literal `%...%` unless expansion is intended.\n  - Do NOT use Bash-only forms such as ANSI-C quoting (`$'...'`) or Bash heredocs.\n- When issuing multiple commands:\n  - If the commands are independent and can run in parallel, make multiple run_shell_command tool calls in a single message. For example, if you need to run \"git status\" and \"git diff\", send a single message with two run_shell_command tool calls in parallel.\n  - If the commands depend on each other and must run sequentially, use a single run_shell_command call with '&&' to chain them together (e.g., `git add . && git commit -m \"message\" && git push`).\n  - Use '&' only when you need to run commands sequentially but don't care if earlier commands fail.\n  - DO NOT use ';' or newlines to separate commands in cmd.exe.\n- Try to maintain your current working directory throughout the session by using absolute paths and avoiding usage of `cd`. You may use `cd` if the User explicitly requests it.\n  <good-example>\n  pytest /foo/bar/tests\n  </good-example>\n  <bad-example>\n  cd /foo/bar && pytest tests\n  </bad-example>\n\n**Background vs Foreground Execution:**\n- You should decide whether commands should run in background or foreground based on their nature:\n- Use background execution (is_background: true) for:\n  - Long-running development servers: `npm run start`, `npm run dev`, `yarn dev`, `bun run start`\n  - Build watchers: `npm run watch`, `webpack --watch`\n  - Database servers: `mongod`, `mysql`, `redis-server`\n  - Web servers: `python -m http.server`, `php -S localhost:8000`\n  - Any command expected to run indefinitely until manually stopped\n\n  - To stop a background command started by this tool, use `task_stop` when a task id is available. Do not use broad process-name kills such as `kill $(pgrep node)`, `pkill node`, or `killall node`; use a specific PID or process group id where supported.\n- Use foreground execution (is_background: false) for:\n  - One-time commands: `ls`, `cat`, `grep`\n  - Build commands: `npm run build`, `make`\n  - Installation commands: `npm install`, `pip install`\n  - Git operations: `git commit`, `git push`\n  - Test runs: `npm test`, `pytest`\n",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string",
+        "description": "Exact cmd.exe command to execute as `cmd.exe /d /s /c <command>`"
+      },
+      "is_background": {
+        "type": "boolean",
+        "description": "Optional: Whether to run the command in background. If not specified, defaults to false (foreground execution). Explicitly set to true for long-running processes like development servers, watchers, or daemons that should continue running without blocking further commands."
+      },
+      "timeout": {
+        "type": "number",
+        "description": "Optional timeout in milliseconds (max 600000)"
+      },
+      "description": {
+        "type": "string",
+        "description": "Brief description of the command for the user. Be specific and concise. Ideally a single sentence. Can be up to 3 sentences for clarity. No line breaks."
+      },
+      "directory": {
+        "type": "string",
+        "description": "(OPTIONAL) The absolute path of the directory to run the command in. If not provided, the project root directory is used. Must be a directory within the workspace and must already exist."
+      }
+    },
+    "required": [
+      "command"
+    ]
+  }
+}

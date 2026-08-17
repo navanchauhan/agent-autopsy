@@ -1,0 +1,31 @@
+{
+  "name": "web_fetch",
+  "description": "Fetches content from a specified URL and processes it using an AI model\n- Takes a URL and a prompt as input\n- Supports content negotiation for markdown (reduces tokens by ~80%)\n- Fetches the URL content and converts HTML to markdown (links preserved)\n- Processes the content with the prompt using an AI model\n- Returns the model's response about the content, prefixed with fetch metadata (HTTP status, content type, size)\n- Use this tool when you need to retrieve and analyze web content\n\nUsage notes:\n  - IMPORTANT: This tool cannot access authenticated or private URLs (e.g. Google Docs, Confluence, Jira, private GitHub). If an MCP-provided web fetch tool is available, prefer using that tool instead of this one, as it may have fewer restrictions. All MCP-provided tools start with \"mcp__\".\n  - The URL must be a fully-formed valid URL\n  - Plain-http URLs to public hosts are upgraded to https automatically; localhost/private hosts are fetched as-is\n  - When a URL redirects to a different host, the redirect is NOT followed; the tool returns the redirect URL so you can re-issue web_fetch with it\n  - Binary content (PDFs, images, archives) is saved to a local file; the result includes the file path — use read_file on it (it reads PDFs and images natively)\n  - Repeated fetches of the same URL within 15 minutes are served from a local cache\n  - The prompt should describe what information you want to extract from the page\n  - format parameter (optional): controls only the Accept header sent to the server. All content is normalized to plain text for LLM processing, regardless of format.\n  - \"auto\" (default): Prefers markdown via content negotiation, accepts HTML, text, or other content as fallback. Use when user does NOT specify a format.\n  - \"markdown\": Prefers text/markdown. Use when user explicitly asks for markdown content.\n  - \"html\": Prefers text/html. Content is still converted to markdown for LLM processing.\n  - \"text\": Prefers text/plain. Use when user explicitly asks for plain text.\n  - This tool does not modify any files (other than saving fetched binary content)\n  - Results may be summarized if the content is very large\n  - Supports both public and private/localhost URLs using direct fetch",
+  "parametersJsonSchema": {
+    "properties": {
+      "url": {
+        "description": "The URL to fetch content from",
+        "type": "string"
+      },
+      "prompt": {
+        "description": "The prompt to run on the fetched content",
+        "type": "string"
+      },
+      "format": {
+        "description": "Preferred content format (Accept header only): auto (default, prefers markdown), markdown, html, or text. All content is normalized to plain text.",
+        "type": "string",
+        "enum": [
+          "auto",
+          "markdown",
+          "html",
+          "text"
+        ]
+      }
+    },
+    "required": [
+      "url",
+      "prompt"
+    ],
+    "type": "object"
+  }
+}

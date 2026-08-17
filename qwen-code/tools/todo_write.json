@@ -1,0 +1,53 @@
+{
+  "name": "todo_write",
+  "description": "\nUse this tool to create and manage a user-visible task list when explicit progress tracking improves clarity.\n\n## When to Use This Tool\nUse this tool for work that is complex, ambiguous, or multi-phase; has multiple independent outcomes or important dependencies; benefits from checkpoints; or when the user explicitly asks for a todo list.\n\nDo not use it for simple or single-step work, purely conversational or informational requests, or tasks that can be answered or completed directly unless the user explicitly requests a todo list.\n\n## Planning with Todos\n\nKeep the list short and outcome-oriented. Use a small number of meaningful, logically ordered, verifiable steps. Do not create a separate todo for every error, file, command, or minor edit.\n\nUse blockedBy only when the work has real dependencies. Reference Todo IDs from the same list and keep independent work unblocked.\n\nKeep at most one task in_progress. When a plan exists, keep its statuses current, mark finished work completed, revise the plan when the scope or approach changes, and remove items that are no longer relevant. Do not mark incomplete or blocked work completed.\n",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "todos": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "minLength": 1
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "in_progress",
+                "completed"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "blockedBy": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "uniqueItems": true,
+              "description": "Todo IDs that must be completed before this item"
+            }
+          },
+          "required": [
+            "content",
+            "status",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "description": "The updated todo list"
+      }
+    },
+    "required": [
+      "todos"
+    ],
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+}

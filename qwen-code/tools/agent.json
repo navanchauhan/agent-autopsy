@@ -1,0 +1,77 @@
+{
+  "name": "agent",
+  "description": "Launch a new agent to handle complex, multi-step tasks autonomously.\n\nThe Agent tool launches specialized agents (subprocesses) that autonomously handle complex tasks. Each agent type has specific capabilities and tools available to it.\n\nAvailable agent types and the tools they have access to:\n",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "description": {
+        "type": "string",
+        "description": "A short (3-5 word) description of the task"
+      },
+      "prompt": {
+        "type": "string",
+        "description": "The task for the agent to perform"
+      },
+      "todo_id": {
+        "type": "string",
+        "maxLength": 500,
+        "description": "ID of the todo this top-level agent execution implements. Use an ID from the current todo list when one exists."
+      },
+      "subagent_type": {
+        "type": "string",
+        "description": "The named agent type to use, or \"fork\" to inherit the parent conversation context"
+      },
+      "fork_turns": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "all"
+            ]
+          },
+          {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        ],
+        "description": "Only valid with subagent_type \"fork\". Omit it or use \"all\" to inherit the full parent conversation; use a positive integer string such as \"3\" to inherit the most recent three real user turns. Tool responses and pure system reminders do not count as turns."
+      },
+      "fork_tools": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": "Only valid with subagent_type \"fork\". Exact tool names and MCP server patterns this fork may execute. Entries cannot have surrounding whitespace; wildcard entries must be \"mcp__*\" or a trailing MCP tool-prefix pattern such as \"mcp__github__read_*\". The model-visible tool declarations remain unchanged for prompt-cache sharing, while the task prompt tells the fork about the restriction. Forks can never execute ask_user_question; omit fork_tools to allow every other inherited tool, or use an empty array to reject every tool call."
+      },
+      "fork_profile": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 50,
+        "description": "Only valid with subagent_type \"fork\". Loads a project profile from .qwen/fork-profiles/<name>.md and applies its tools and optional promptHint. Cannot be combined with fork_tools."
+      },
+      "run_in_background": {
+        "type": "boolean",
+        "default": true,
+        "description": "Defaults to true for top-level regular subagents. Set to false to run a regular agent in the foreground and return its result inline. Set to true for an interactive fork to receive its completion notification; headless forks always run in the background. Nested agents run in the foreground unless run_in_background is explicitly true, which is rejected because they cannot receive background completion notifications. Unnamed caller-owned working_dir launches default to foreground. Named teammates may run in the background, but must be shut down before their caller-owned worktree is removed."
+      },
+      "isolation": {
+        "type": "string",
+        "enum": [
+          "worktree"
+        ],
+        "description": "Isolation mode. 'worktree' creates a temporary git worktree under <projectRoot>/.qwen/worktrees/agent-<7hex> so the agent works on an isolated copy of the repo. The worktree is auto-removed if the agent makes no changes; otherwise the worktree path and branch are returned in the result."
+      },
+      "working_dir": {
+        "type": "string",
+        "description": "Pin a sub-agent or named teammate to an EXISTING, caller-owned git worktree of this repo (absolute path, or relative to the current directory). Unlike 'isolation', the worktree is NOT created or cleaned up by Agent. Relative file, shell, and search operations resolve inside it. This is a cwd pin, not a filesystem sandbox: explicit absolute paths can still reach outside. The path must be a registered linked worktree of this repository. If both working_dir and isolation are provided, isolation is ignored."
+      }
+    },
+    "required": [
+      "description",
+      "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+}
