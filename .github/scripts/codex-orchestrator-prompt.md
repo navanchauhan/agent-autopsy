@@ -31,6 +31,17 @@ the planned release revision/version; update counts only when the normalized
 inventory changes. The per-session code-mode listing documented as out of scope
 in `codex/README.md` is not a missing fixed schema.
 
+For Qwen Code, the exact tagged `references/qwen-code` source checkout is also
+the complete, authoritative capture. There is intentionally no proxy trace,
+live model request, artifact attestation, or provider credential. Read
+`direct-source-manifest.json` and `source-revisions.json`, then trace prompt
+assembly from `packages/core/src/core/prompts.ts`, prompt registration from
+`packages/core/src/prompts/prompt-registry.ts`, and built-in declarations from
+`packages/core/src/tools/tool-registry.ts`. Extract normalized prompt, tool, and
+runtime-message artifacts directly from that exact revision. Dynamic workspace,
+memory, settings, extension, hook, and MCP layers belong in `dynamic_inputs`;
+do not invent concrete values for them.
+
 For Grok, inspect `references/grok-build` before live capture. Its source is
 authoritative for bundled prompt and tool construction; use capture only to
 verify server-provided request material. Record `references/grok-build/SOURCE_REV`

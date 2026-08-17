@@ -223,16 +223,16 @@ jobs:
             'A fresh capture was already rejected in this cooldown bucket; retry later.'
 
       - name: Restore exact source cache
-        if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && (matrix.tool == 'codex' || matrix.tool == 'grok')
+        if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && (matrix.tool == 'codex' || matrix.tool == 'grok' || matrix.tool == 'qwen-code')
         id: source-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
-          path: ${{ matrix.tool == 'codex' && 'references/codex' || 'references/grok-build' }}
-          key: source-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.tool == 'grok' && matrix.mirror_revision || matrix.new_revision }}-${{ matrix.tool == 'codex' && hashFiles('.github/scripts/sync-codex-reference.sh') || hashFiles('.github/scripts/sync-grok-reference.sh') }}
+          path: ${{ matrix.tool == 'codex' && 'references/codex' || matrix.tool == 'grok' && 'references/grok-build' || 'references/qwen-code' }}
+          key: source-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.tool == 'grok' && matrix.mirror_revision || matrix.new_revision }}-${{ matrix.tool == 'codex' && hashFiles('.github/scripts/sync-codex-reference.sh') || matrix.tool == 'grok' && hashFiles('.github/scripts/sync-grok-reference.sh') || hashFiles('.github/scripts/sync-qwen-code-reference.sh') }}
 
       - name: Synchronize exact source revision on the host
-        if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && (matrix.tool == 'codex' || matrix.tool == 'grok')
+        if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && (matrix.tool == 'codex' || matrix.tool == 'grok' || matrix.tool == 'qwen-code')
         id: source-sync
         env:
           CHANGED_TOOLS_FILE: ${{ runner.temp }}/capture-plan.json
@@ -241,15 +241,16 @@ jobs:
           case "${{ matrix.tool }}" in
             codex) bash .github/scripts/sync-codex-reference.sh ;;
             grok) bash .github/scripts/sync-grok-reference.sh ;;
+            qwen-code) bash .github/scripts/sync-qwen-code-reference.sh ;;
           esac
 
       - name: Save verified exact source cache
-        if: (matrix.tool == 'codex' || matrix.tool == 'grok') && steps.source-sync.outcome == 'success' && steps.source-cache.outputs.cache-hit != 'true'
+        if: (matrix.tool == 'codex' || matrix.tool == 'grok' || matrix.tool == 'qwen-code') && steps.source-sync.outcome == 'success' && steps.source-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
-          path: ${{ matrix.tool == 'codex' && 'references/codex' || 'references/grok-build' }}
-          key: source-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.tool == 'grok' && matrix.mirror_revision || matrix.new_revision }}-${{ matrix.tool == 'codex' && hashFiles('.github/scripts/sync-codex-reference.sh') || hashFiles('.github/scripts/sync-grok-reference.sh') }}
+          path: ${{ matrix.tool == 'codex' && 'references/codex' || matrix.tool == 'grok' && 'references/grok-build' || 'references/qwen-code' }}
+          key: source-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.tool == 'grok' && matrix.mirror_revision || matrix.new_revision }}-${{ matrix.tool == 'codex' && hashFiles('.github/scripts/sync-codex-reference.sh') || matrix.tool == 'grok' && hashFiles('.github/scripts/sync-grok-reference.sh') || hashFiles('.github/scripts/sync-qwen-code-reference.sh') }}
 
       - name: Set up provider image builder
         if: (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true) && steps.cooldown-result.outcome == 'skipped' && matrix.tool != 'codex'
@@ -287,7 +288,7 @@ jobs:
           ANTIGRAVITY_GEMINI_CREDS: ${{ matrix.tool == 'antigravity' && secrets.ANTIGRAVITY_GEMINI_CREDS || '' }}
         run: |
           case "${{ matrix.tool }}" in
-            codex|claude-code|grok|antigravity) ;;
+            codex|claude-code|grok|antigravity|qwen-code) ;;
             *) echo "Unsupported capture tool" >&2; exit 2 ;;
           esac
           rm -rf -- "capture-output/${{ matrix.tool }}" ".capture-scratch/${{ matrix.tool }}"
@@ -321,7 +322,7 @@ jobs:
           fi
 
       - name: Persist refreshed provider credential outside the provider container
-        if: always() && matrix.tool != 'codex' && steps.capture-attempt.outcome != 'skipped'
+        if: always() && matrix.tool != 'codex' && matrix.tool != 'qwen-code' && steps.capture-attempt.outcome != 'skipped'
         id: credential-rotation
         env:
           GH_TOKEN: ${{ secrets.REPO_SECRETS_PAT }}
@@ -494,15 +495,22 @@ jobs:
         env:
           CODEX_SOURCE_CONTRACT: ${{ hashFiles('.github/scripts/sync-codex-reference.sh') }}
           GROK_SOURCE_CONTRACT: ${{ hashFiles('.github/scripts/sync-grok-reference.sh') }}
+          QWEN_SOURCE_CONTRACT: ${{ hashFiles('.github/scripts/sync-qwen-code-reference.sh') }}
         run: |
           codex_revision="$(jq -r '.[] | select(.tool == "codex") | .new_revision' .capture-scratch/ready-tools.json)"
           grok_revision="$(jq -r '.[] | select(.tool == "grok") | .mirror_revision' .capture-scratch/ready-tools.json)"
+          qwen_revision="$(jq -r '.[] | select(.tool == "qwen-code") | .new_revision' .capture-scratch/ready-tools.json)"
           codex_key="${codex_revision:+source-Linux-codex-$codex_revision-$CODEX_SOURCE_CONTRACT}"
           grok_key="${grok_revision:+source-Linux-grok-$grok_revision-$GROK_SOURCE_CONTRACT}"
-          echo "codex_key=$codex_key" >> "$GITHUB_OUTPUT"
-          echo "grok_key=$grok_key" >> "$GITHUB_OUTPUT"
-          if [ -n "$codex_key" ]; then echo 'codex_needed=true' >> "$GITHUB_OUTPUT"; else echo 'codex_needed=false' >> "$GITHUB_OUTPUT"; fi
-          if [ -n "$grok_key" ]; then echo 'grok_needed=true' >> "$GITHUB_OUTPUT"; else echo 'grok_needed=false' >> "$GITHUB_OUTPUT"; fi
+          qwen_key="${qwen_revision:+source-Linux-qwen-code-$qwen_revision-$QWEN_SOURCE_CONTRACT}"
+          {
+            echo "codex_key=$codex_key"
+            echo "grok_key=$grok_key"
+            echo "qwen_key=$qwen_key"
+            if [ -n "$codex_key" ]; then echo 'codex_needed=true'; else echo 'codex_needed=false'; fi
+            if [ -n "$grok_key" ]; then echo 'grok_needed=true'; else echo 'grok_needed=false'; fi
+            if [ -n "$qwen_key" ]; then echo 'qwen_needed=true'; else echo 'qwen_needed=false'; fi
+          } >> "$GITHUB_OUTPUT"
 
       - name: Restore Codex source
         if: steps.source-keys.outputs.codex_needed == 'true'
@@ -521,6 +529,15 @@ jobs:
         with:
           path: references/grok-build
           key: ${{ steps.source-keys.outputs.grok_key }}
+
+      - name: Restore Qwen Code source
+        if: steps.source-keys.outputs.qwen_needed == 'true'
+        id: qwen-source-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        continue-on-error: true
+        with:
+          path: references/qwen-code
+          key: ${{ steps.source-keys.outputs.qwen_key }}
 
       - name: Verify exact sources and defer only failed source captures
         if: steps.select.outputs.has_ready == 'true'
@@ -557,14 +574,18 @@ jobs:
             'Exact Codex source revisions were unavailable.'
           sync_or_defer grok .github/scripts/sync-grok-reference.sh \
             'Exact Grok source provenance was unavailable.'
+          sync_or_defer qwen-code .github/scripts/sync-qwen-code-reference.sh \
+            'Exact Qwen Code source revision was unavailable.'
 
           has_ready="$(jq -r 'length > 0' "$ready")"
           codex_ready="$(jq -r 'any(.[]; .tool == "codex")' "$ready")"
           grok_ready="$(jq -r 'any(.[]; .tool == "grok")' "$ready")"
+          qwen_ready="$(jq -r 'any(.[]; .tool == "qwen-code")' "$ready")"
           {
             echo "has_ready=$has_ready"
             echo "codex_ready=$codex_ready"
             echo "grok_ready=$grok_ready"
+            echo "qwen_ready=$qwen_ready"
           } >>"$GITHUB_OUTPUT"
 
       - name: Save verified Codex source
@@ -582,6 +603,14 @@ jobs:
         with:
           path: references/grok-build
           key: ${{ steps.source-keys.outputs.grok_key }}
+
+      - name: Save verified Qwen Code source
+        if: steps.source-sync.outputs.qwen_ready == 'true' && steps.qwen-source-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        continue-on-error: true
+        with:
+          path: references/qwen-code
+          key: ${{ steps.source-keys.outputs.qwen_key }}
 
       - name: Compute deterministic Codex input identity
         if: steps.source-sync.outputs.has_ready == 'true'
@@ -681,7 +710,7 @@ jobs:
           tool_dirs=()
           while IFS= read -r dir; do
             case "$dir" in
-              codex|claude-code|grok|antigravity) ;;
+              codex|claude-code|grok|antigravity|qwen-code) ;;
               *) echo "Unsupported writable tool directory: $dir" >&2; exit 2 ;;
             esac
             tool_dirs+=( "$dir" )

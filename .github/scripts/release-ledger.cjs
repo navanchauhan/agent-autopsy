@@ -6,7 +6,8 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const TOOLS = ["codex", "claude-code", "grok", "antigravity"];
+const TOOLS = ["codex", "claude-code", "grok", "antigravity", "qwen-code"];
+const LEGACY_TOOLS = ["codex", "claude-code", "grok", "antigravity"];
 const HEX_40 = /^[0-9a-f]{40}$/;
 const HEX_64 = /^[0-9a-f]{64}$/;
 const HEX_128 = /^[0-9a-f]{128}$/;
@@ -43,6 +44,12 @@ const SPECS = {
     versionField: "version",
     targetKeys: ["tool", "new_version", "artifact_url", "artifact_sha512"],
     requiresRevision: false,
+  },
+  "qwen-code": {
+    dir: "qwen-code",
+    versionField: "version",
+    targetKeys: ["tool", "new_version", "new_revision"],
+    requiresRevision: true,
   },
 };
 
@@ -176,6 +183,7 @@ function validateTargetMetadata(raw, tool, label) {
   requireStableVersion(version, `${label}.new_version`);
   switch (tool) {
     case "codex":
+    case "qwen-code":
       if (!HEX_40.test(raw.new_revision)) fail(`${label}.new_revision must be a lowercase 40-character Git revision`);
       return { tool, new_version: version, new_revision: raw.new_revision };
     case "claude-code": {
@@ -304,10 +312,16 @@ function readLedger(raw) {
   }
   exactKeys(raw, ["schema_version", "queues"], "release ledger");
   if (raw.schema_version !== 1) fail("release ledger schema_version must be 1");
-  exactKeys(raw.queues, TOOLS, "release ledger queues");
+  const queueKeys = Object.keys(raw.queues || {}).sort();
+  const currentKeys = [...TOOLS].sort();
+  const legacyKeys = [...LEGACY_TOOLS].sort();
+  const currentShape = queueKeys.length === currentKeys.length && queueKeys.every((key, index) => key === currentKeys[index]);
+  const legacyShape = queueKeys.length === legacyKeys.length && queueKeys.every((key, index) => key === legacyKeys[index]);
+  if (!currentShape && !legacyShape) fail(`release ledger queues must contain exactly: ${currentKeys.join(", ")}`);
   for (const tool of TOOLS) {
-    if (!Array.isArray(raw.queues[tool])) fail(`release ledger queue for ${tool} must be an array`);
-    result.queues[tool] = raw.queues[tool].map((entry, index) => (
+    const queue = raw.queues[tool] ?? [];
+    if (!Array.isArray(queue)) fail(`release ledger queue for ${tool} must be an array`);
+    result.queues[tool] = queue.map((entry, index) => (
       sanitizeStoredTarget(entry, tool, `release ledger ${tool} entry ${index}`)
     ));
   }

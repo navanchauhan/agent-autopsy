@@ -5,7 +5,7 @@ steering surfaces from coding-agent CLIs. It shows what each product sends to a
 model, which release supports each artifact, and what is still unknown.
 
 Start with the [cross-provider catalog](CATALOG.md). It lists every known surface
-for Codex, Claude Code, Grok, Antigravity, and Amp, including explicit gaps and
+for Codex, Claude Code, Qwen Code, Grok, Antigravity, and Amp, including explicit gaps and
 dynamic inputs.
 
 ## Providers
@@ -14,6 +14,7 @@ dynamic inputs.
 | --- | --- | --- |
 | [Codex](codex/README.md) | Tagged open-source tree | Active |
 | [Claude Code](claude-code/README.md) | Traced `/v1/messages` requests | Mixed; see per-surface status |
+| [Qwen Code](qwen-code/README.md) | Tagged open-source tree | Active |
 | [Grok](grok/README.md) | Source inspection and traced `/v1/responses` requests | Active |
 | [Antigravity](antigravity/README.md) | Parsed Cortex request logs | Active |
 | [Amp](ampcode/README.md) | Local inspection | Frozen |

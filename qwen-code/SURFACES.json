@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "provider": "qwen-code",
+  "observed_release": "0.0.1",
+  "privacy": {
+    "tracked_content": "derived-normalized-only",
+    "tracked_raw_requests": false,
+    "tracked_request_headers": false,
+    "tracked_user_messages": false,
+    "tracked_model_responses": false,
+    "tracked_machine_state": true,
+    "unknown_fields": "reject"
+  },
+  "surfaces": [
+    {
+      "id": "qwen-code.prompt.agent.catalog",
+      "category": "agent prompts",
+      "status": "gap",
+      "capture_method": "direct-source",
+      "captured_release": null,
+      "verified_release": null,
+      "models": ["all"],
+      "modes": ["default"],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Initial baseline; the first automated source extraction will populate this surface."
+    },
+    {
+      "id": "qwen-code.tool.catalog",
+      "category": "tool schemas",
+      "status": "gap",
+      "capture_method": "direct-source",
+      "captured_release": null,
+      "verified_release": null,
+      "models": ["all"],
+      "modes": ["configured"],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Initial baseline; the first automated source extraction will populate this surface."
+    },
+    {
+      "id": "qwen-code.steering.catalog",
+      "category": "runtime messages",
+      "status": "gap",
+      "capture_method": "direct-source",
+      "captured_release": null,
+      "verified_release": null,
+      "models": ["all"],
+      "modes": ["configured"],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Initial baseline; the first automated source extraction will populate this surface."
+    },
+    {
+      "id": "qwen-code.context.session",
+      "category": "dynamic context",
+      "status": "dynamic",
+      "capture_method": "direct-source",
+      "captured_release": null,
+      "verified_release": null,
+      "models": ["all"],
+      "modes": ["all"],
+      "dynamic_inputs": ["workspace", "settings", "memory", "extensions", "MCP"],
+      "artifacts": [],
+      "notes": "Session-specific context remains dynamic and is intentionally not stored as a fixed artifact."
+    }
+  ]
+}

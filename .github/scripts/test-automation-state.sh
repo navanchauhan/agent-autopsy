@@ -89,7 +89,7 @@ first_state="$first_repo/state"
 expected_ledger="$fixture_root/expected-empty-ledger.json"
 expected_recapture="$fixture_root/expected-empty-recapture.json"
 printf '%s\n' \
-  '{"schema_version":1,"queues":{"codex":[],"claude-code":[],"grok":[],"antigravity":[]}}' \
+  '{"schema_version":1,"queues":{"codex":[],"claude-code":[],"grok":[],"antigravity":[],"qwen-code":[]}}' \
   >"$expected_ledger"
 printf '%s\n' '{"schema_version":1,"tools":{}}' >"$expected_recapture"
 AUTOMATION_STATE_DIR="$first_state" \

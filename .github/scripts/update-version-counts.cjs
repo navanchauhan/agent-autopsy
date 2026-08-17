@@ -7,11 +7,11 @@ const path = require("node:path");
 const repoRoot = childProcess.execFileSync("git", ["rev-parse", "--show-toplevel"], {
   encoding: "utf8",
 }).trim();
-const allowed = new Set(["codex", "claude-code", "grok", "antigravity"]);
+const allowed = new Set(["codex", "claude-code", "grok", "antigravity", "qwen-code"]);
 const providers = process.argv.slice(2);
 
 if (providers.length === 0 || providers.some((provider) => !allowed.has(provider))) {
-  throw new Error("Usage: update-version-counts.cjs <codex|claude-code|grok|antigravity> [...]");
+  throw new Error("Usage: update-version-counts.cjs <codex|claude-code|grok|antigravity|qwen-code> [...]");
 }
 
 function countFiles(directory, predicate) {

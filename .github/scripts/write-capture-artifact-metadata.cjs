@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 
 const [bundleArg, tool, planHash, runId, runAttemptArg, source, forcedArg, degradedArg, bucket] = process.argv.slice(2);
-const tools = new Set(["codex", "claude-code", "grok", "antigravity"]);
+const tools = new Set(["codex", "claude-code", "grok", "antigravity", "qwen-code"]);
 const sources = new Set(["fresh", "positive_cache", "retry_cache"]);
 const metadataName = "workflow-run.json";
 

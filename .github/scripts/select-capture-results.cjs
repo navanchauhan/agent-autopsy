@@ -13,6 +13,7 @@ const knownDirectories = new Map([
   ["claude-code", "claude-code"],
   ["grok", "grok"],
   ["antigravity", "antigravity"],
+  ["qwen-code", "qwen-code"],
 ]);
 
 function readRegularJson(file, label, maxBytes = 4 * 1024 * 1024) {

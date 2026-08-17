@@ -10,6 +10,7 @@ const providerReleaseFields = new Map([
   ["claude-code", "version"],
   ["codex", "codex_cli_package_version"],
   ["grok", "version"],
+  ["qwen-code", "version"],
 ]);
 
 const statuses = new Set(["current", "verified-unchanged", "stale", "frozen", "gap", "dynamic"]);

@@ -14,6 +14,7 @@ const knownDirectories = new Map([
   ["claude-code", "claude-code"],
   ["grok", "grok"],
   ["antigravity", "antigravity"],
+  ["qwen-code", "qwen-code"],
 ]);
 
 function canonical(value) {

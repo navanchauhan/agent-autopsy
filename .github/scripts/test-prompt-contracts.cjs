@@ -21,6 +21,16 @@ test("author and reviewer preserve the source-authoritative Codex contract", () 
   }
 });
 
+test("author and reviewer treat Qwen Code as source-authoritative", () => {
+  for (const name of ["codex-orchestrator-prompt.md", "review-refresh-prompt.md"]) {
+    const prompt = read(name);
+    assert.match(prompt, /exact tagged `references\/qwen-code`[\s\S]*complete,[\s\S]*authoritative capture/);
+    assert.match(prompt, /no proxy trace/);
+    assert.match(prompt, /direct-source-manifest\.json/);
+  }
+  assert.match(read("codex-revise-prompt.md"), /Qwen Code is source-authoritative/);
+});
+
 test("author and reviewer recognize the immutable Claude artifact attestation", () => {
   for (const name of ["codex-orchestrator-prompt.md", "review-refresh-prompt.md"]) {
     const prompt = read(name);

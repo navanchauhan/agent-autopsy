@@ -92,3 +92,14 @@ Observed release: `0.2.115`
 | `grok.mcp.instructions` | MCP and command prompts | `grok-4.6` | `MCP enabled`, `command invocation` | gap | — | — |
 | `grok.context.session` | dynamic context | `grok-4.6` | `all` | dynamic | — | — |
 | `grok.assembly.model-mode` | assembly recipe | `grok-4.6` | `all` | gap | — | — |
+
+## qwen-code
+
+Observed release: `0.0.1`
+
+| Surface | Category | Models | Modes | Status | Captured | Artifacts |
+| --- | --- | --- | --- | --- | --- | --- |
+| `qwen-code.prompt.agent.catalog` | agent prompts | `all` | `default` | gap | — | — |
+| `qwen-code.tool.catalog` | tool schemas | `all` | `configured` | gap | — | — |
+| `qwen-code.steering.catalog` | runtime messages | `all` | `configured` | gap | — | — |
+| `qwen-code.context.session` | dynamic context | `all` | `all` | dynamic | — | — |

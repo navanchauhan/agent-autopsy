@@ -54,7 +54,7 @@ if [ "$lookup_status" -eq 0 ]; then
   trap - EXIT
 elif [ "$lookup_status" -eq 2 ]; then
   printf '%s\n' \
-    '{"schema_version":1,"queues":{"codex":[],"claude-code":[],"grok":[],"antigravity":[]}}' \
+    '{"schema_version":1,"queues":{"codex":[],"claude-code":[],"grok":[],"antigravity":[],"qwen-code":[]}}' \
     >"$state_dir/release-ledger.json"
   printf '%s\n' '{"schema_version":1,"tools":{}}' >"$state_dir/recapture-state.json"
 else

@@ -23,6 +23,7 @@ const knownDirectories = new Map([
   ["claude-code", "claude-code"],
   ["grok", "grok"],
   ["antigravity", "antigravity"],
+  ["qwen-code", "qwen-code"],
 ]);
 const captureSources = new Set(["fresh", "positive_cache", "retry_cache"]);
 const driverSources = new Set(["fresh", "positive_cache", "retry_cache", "capture_only"]);
@@ -286,7 +287,7 @@ function captureEvents(planByTool) {
   const seen = new Set();
   for (const artifact of artifactDirectories(
     captureDownloadsArg,
-    /^capture-bundle-(codex|claude-code|grok|antigravity)-attempt-([1-9][0-9]*)$/,
+    /^capture-bundle-(codex|claude-code|grok|antigravity|qwen-code)-attempt-([1-9][0-9]*)$/,
     "capture",
   )) {
     const [, tool, attemptText] = artifact.match;
