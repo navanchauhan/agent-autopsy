@@ -1,17 +1,17 @@
 source = antigravity.google/cli
 distribution = native Go binary
-version = 1.1.13
+version = 1.1.14
 platform = linux-x64
 installer_url = https://antigravity.google/cli/install.sh
 manifest_url = https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json
-manifest_version = 1.1.13
-manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.13-6057583128215552/linux-x64/cli_linux_x64.tar.gz
-manifest_tarball_sha512 = 89c6881b6c1999cb8236e7181c2192ae8f372b0413396c0f7bcff83d27ac9c0cc1202795cc0d629ec1ecbf4937d1c294cf4f5e4f9f8e05b1e972e27198313442
+manifest_version = 1.1.14
+manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.14-6392696810635264/linux-x64/cli_linux_x64.tar.gz
+manifest_tarball_sha512 = 481f590b102ca6847ef13b865f08d457048a1f3f01851ed2a3818eb09a53264b107ca5e442a8677248d9790fd96eccf4918a2aed82d866b23d294422ba42f67e
 capture_modes = non-interactive, interactive
 capture_script = antigravity/misc/scripts/extract-antigravity-log.cjs
 network_capture_script = antigravity/misc/scripts/mitm-capture-antigravity.py
 endpoint = https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse
-response_model_versions = gemini-3.1-flash-lite, gemini-3.7-flash
+response_model_versions = unknown
 prompt_models = gemini-3.7-flash-high
 prompts = 2
 tools = 16

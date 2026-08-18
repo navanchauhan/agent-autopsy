@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.229",
+  "observed_release": "2.1.231",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -150,8 +150,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.229",
-      "verified_release": "2.1.229",
+      "captured_release": "2.1.231",
+      "verified_release": "2.1.231",
       "models": [
         "claude-sonnet-5"
       ],
@@ -162,9 +162,9 @@
       "artifacts": [
         "prompts/claude-sonnet-5-interactive.md"
       ],
-      "artifact_sha256": "8f524c02c4e81e1bfbf3ed37816db36b26086236f9b6ba83d48e52646f16923b",
+      "artifact_sha256": "8a8056e6c767ca4d601884b5be7065b6b1a6de114c244c75d5a9fce9fc2ecf12",
       "notes": "The interactive prompt was normalized from the 2.1.229 model-facing request.",
-      "evidence_sha256": "d730b8cb16d13e33aa282d47448e5d3aaf550c2ce2a938d3ec10022302a6be16"
+      "evidence_sha256": "5740d75cae13e6610fda94c825306c94b38e59a36c8e739c0e5ad4ef4c1bd8ad"
     },
     {
       "id": "claude-code.prompt.special.session-title",
@@ -213,8 +213,8 @@
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.229",
-      "verified_release": "2.1.229",
+      "captured_release": "2.1.231",
+      "verified_release": "2.1.231",
       "models": [
         "claude-sonnet-5"
       ],
@@ -231,15 +231,15 @@
       ],
       "artifact_sha256": "2a4157e864c736a1f5f8956f7812c7f95ec4eb122c7443739b5bd5a9e635ad3a",
       "notes": "The interactive steering message was normalized from the 2.1.229 model-facing request.",
-      "evidence_sha256": "d730b8cb16d13e33aa282d47448e5d3aaf550c2ce2a938d3ec10022302a6be16"
+      "evidence_sha256": "5740d75cae13e6610fda94c825306c94b38e59a36c8e739c0e5ad4ef4c1bd8ad"
     },
     {
       "id": "claude-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.229",
-      "verified_release": "2.1.229",
+      "captured_release": "2.1.231",
+      "verified_release": "2.1.231",
       "models": [
         "supported model catalog"
       ],
@@ -286,8 +286,8 @@
         "tools/Workflow.json",
         "tools/Write.json"
       ],
-      "artifact_sha256": "726426234742c276e127d101987cfd0fa5d60cb26ae5d9c5a1ee5191c1ecc726",
-      "evidence_sha256": "d730b8cb16d13e33aa282d47448e5d3aaf550c2ce2a938d3ec10022302a6be16",
+      "artifact_sha256": "d4e684fed2b5bfcc942693ca47f6a57f0fccf230c314b7e715d0de72ae2f3d67",
+      "evidence_sha256": "5740d75cae13e6610fda94c825306c94b38e59a36c8e739c0e5ad4ef4c1bd8ad",
       "notes": "Expanded deferred-tool schemas were present in raw model-facing requests; the catalog includes the supported 2.1.229 interactive variants."
     },
     {
