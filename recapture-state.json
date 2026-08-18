@@ -19,12 +19,12 @@
       "last_reviewer_input_hash": null,
       "reason": null
     },
-    "qwen-code": {
-      "plan_hash": "3c68289777befc758a929ca34b3e7f7e3bbd804b2b4cd7d5761a35b168c6267c",
+    "antigravity": {
+      "plan_hash": "422e68abba98df79acfde09bb772c2f792cf234c2f5c55a714d5e1ee785f0fc2",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260817",
+      "last_fresh_bucket": "20260818",
       "last_reviewer_input_hash": null,
       "reason": null
     }
