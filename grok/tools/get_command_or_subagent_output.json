@@ -15,19 +15,20 @@
           "default": []
         },
         "timeout_ms": {
-          "description": "Max wait time in milliseconds. A positive value waits for completion; omit or pass 0 for a non-blocking status poll.",
+          "description": "Max wait time in milliseconds, up to 600000 (~10 min). A positive value waits for completion; omit or pass 0 for a non-blocking status poll.",
           "type": [
             "integer",
             "null"
           ],
           "format": "uint64",
           "minimum": 0,
-          "default": null
+          "default": null,
+          "maximum": 600000
         }
       },
       "type": "object",
       "required": []
     },
-    "description": "Get output and status from a background task, monitor, or subagent.\n\nUsage notes:\n- Pass task_ids with one or more ids from background=true commands or subagents (a monitor's task_id is returned by monitor); for a single task use a one-element array. Multiple ids with a positive timeout_ms wait until all complete\n- Omit timeout_ms or pass 0 for a non-blocking status snapshot; set a positive timeout_ms to wait up to that many milliseconds, capped at ~10 min\n- Returns current output, status, and exit code if completed\n- If output is large, use read_file on the output_file path"
+    "description": "Get output and status from a background task, monitor, or subagent.\n\nUsage notes:\n- Pass task_ids with one or more ids from background=true commands or subagents (a monitor's task_id is returned by monitor); for a single task use a one-element array. Multiple ids with a positive timeout_ms wait until all complete\n- Omit timeout_ms or pass 0 for a non-blocking status snapshot; set a positive timeout_ms to wait up to that many milliseconds, capped at 600000 (~10 min)\n- Returns current output, status, and exit code if completed\n- If output is large, use read_file on the output_file path"
   }
 }
