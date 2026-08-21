@@ -2,16 +2,16 @@
   "schema_version": 1,
   "tools": {
     "codex": {
-      "plan_hash": "5cc18c7b40340045a1f68cb279ab5239a122a28c6d12d81ea0106b986a7c2ae2",
+      "plan_hash": "77ab3a188e97f521e4f14484829e864d3e6671b9e7f57e0fde5160efa85009ac",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
       "last_fresh_bucket": "20260821",
-      "last_reviewer_input_hash": "e135a6aa9804f9469b58196ba7331c20d338ea34e7d5bcc77286424cbc9f98af",
+      "last_reviewer_input_hash": null,
       "reason": null
     },
     "claude-code": {
-      "plan_hash": "f6f0576c1bc2bf29af648d9c39164955608e44b2f294a08d6722e91140451afd",
+      "plan_hash": "aafe6565289b6abca535d22bec99b22f1bd345e031587bc15fff19093c82446d",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
@@ -20,7 +20,7 @@
       "reason": null
     },
     "grok": {
-      "plan_hash": "b57368b1a9f24dd60385e296143aff474ba13deafe65d879ef7c71637f1c6784",
+      "plan_hash": "a00aa36d436a1adde416602d2edadf7cd044d4df7828d0f8de4bc74768698286",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
@@ -29,16 +29,16 @@
       "reason": null
     },
     "antigravity": {
-      "plan_hash": "0acdca6b50103539d93c890b489a20699a0731de4809820d30c7951e17f2ec8d",
+      "plan_hash": "7d654ae22e1561af726399055059ce3f293b4c380f46f48a44f190556da6ce37",
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
       "last_fresh_bucket": "20260821",
-      "last_reviewer_input_hash": "52f41cbcc8f6437be6fcb3de98bd1504d8f2d8cc168c38d347f29d2b0f9197a8",
+      "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
     "qwen-code": {
-      "plan_hash": "ea169140b4e94dbf141efedf1f3861d79b9e8b0abb497c1c423def09a75a26b1",
+      "plan_hash": "cd735054264122b750abfe8854cd2bae3973fda6c5d3b93a9c9bb5d068912728",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
