@@ -61,6 +61,9 @@ if (manifestTools.length !== planTools.length || manifestTools.some((tool, index
 const approved = [];
 const approvedResults = [];
 const retries = [];
+// A held tool is recorded in the same report but never asks for a new capture:
+// its evidence is already complete, so only a code or prompt change can advance it.
+const held = [];
 for (let index = 0; index < plan.length; index += 1) {
   const entry = plan[index];
   const result = review.tool_results[index];
@@ -73,12 +76,14 @@ for (let index = 0; index < plan.length; index += 1) {
     if (typeof reviewInputHash !== "string" || !/^[0-9a-f]{64}$/.test(reviewInputHash)) {
       throw new Error(`missing per-tool driver input hash for ${entry.tool}`);
     }
-    retries.push({
+    const record = {
       tool: entry.tool,
       outcome: result.outcome,
       review_input_hash: reviewInputHash,
       issues: result.issues || [],
-    });
+    };
+    retries.push(record);
+    if (result.outcome === "hold") held.push(record);
   }
 }
 
@@ -129,7 +134,7 @@ fs.writeFileSync(
     base_sha: baseSha,
     approved_tools: approved.map((entry) => entry.tool),
     retry_tools: [...new Set([
-      ...retries.map((entry) => entry.tool),
+      ...retries.filter((entry) => entry.outcome !== "hold").map((entry) => entry.tool),
       ...captureRetries.map((entry) => entry.tool),
     ])],
   }, null, 2)}\n`,
@@ -139,4 +144,7 @@ if (process.env.GITHUB_OUTPUT) {
   fs.appendFileSync(process.env.GITHUB_OUTPUT, `has_publishable=${approved.length > 0}\n`);
   fs.appendFileSync(process.env.GITHUB_OUTPUT, `approved_count=${approved.length}\n`);
 }
-console.log(`Driver output: ${approved.length} approved, ${retries.length + captureRetries.length} deferred.`);
+console.log(
+  `Driver output: ${approved.length} approved, ` +
+  `${retries.length - held.length + captureRetries.length} deferred, ${held.length} held.`,
+);

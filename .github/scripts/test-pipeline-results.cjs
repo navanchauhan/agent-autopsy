@@ -176,6 +176,31 @@ try {
   assert.match(fs.readFileSync(path.join(driverOutput, "codex-summary.md"), "utf8"), /Codex changed/);
   assert.doesNotMatch(fs.readFileSync(path.join(driverOutput, "codex-summary.md"), "utf8"), /Grok deferred/);
   assert.equal(JSON.parse(fs.readFileSync(path.join(driverOutput, "retry-report.json")))[0].review_input_hash, "8".repeat(64));
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(driverOutput, "result.json"))).retry_tools, ["grok"]);
+
+  // A held tool is reported alongside retries but never asks for a new capture,
+  // so it must stay out of `retry_tools`.
+  const heldReviewPath = path.join(temp, "review-hold.json");
+  const heldOutput = path.join(temp, "driver-output-hold");
+  fs.writeFileSync(heldReviewPath, JSON.stringify({
+    decision: "approve",
+    publish_safe: true,
+    issues: [],
+    tool_results: [
+      { tool: "codex", outcome: "approve", issues: [] },
+      { tool: "grok", outcome: "hold", issues: [] },
+    ],
+  }));
+  const preparedHold = run(
+    "prepare-driver-output.cjs",
+    [planPath, heldReviewPath, summaryPath, heldOutput, captureRetriesPath],
+    { env: { ...process.env, DRIVER_INPUT_MANIFEST: driverInputPath } },
+  );
+  assert.equal(preparedHold.status, 0, preparedHold.stderr);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(heldOutput, "result.json"))).retry_tools, []);
+  const heldReport = JSON.parse(fs.readFileSync(path.join(heldOutput, "retry-report.json")));
+  assert.deepEqual(heldReport.map((entry) => [entry.tool, entry.outcome]), [["grok", "hold"]]);
+  assert.match(preparedHold.stdout, /1 approved, 0 deferred, 1 held/);
 
   const evidenceSource = path.join(temp, "evidence-source");
   const evidenceOut = path.join(temp, "evidence-out");

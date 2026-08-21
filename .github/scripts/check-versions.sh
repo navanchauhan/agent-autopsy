@@ -33,7 +33,12 @@ capture_contract_hash() {
     "$repo_root/.github/scripts/docker-entrypoint.sh"
   )
   case "$tool" in
-    codex) files+=("$repo_root/.github/scripts/sync-codex-reference.sh") ;;
+    codex)
+      files+=("$repo_root/.github/scripts/sync-codex-reference.sh")
+      # The artifact source map is part of the Codex capture output, so a change
+      # to it must invalidate cached Codex bundles.
+      files+=("$repo_root/.github/scripts/codex-artifact-map.cjs")
+      ;;
     qwen-code) files+=("$repo_root/.github/scripts/sync-qwen-code-reference.sh") ;;
     grok) files+=("$repo_root/.github/scripts/sync-grok-reference.sh") ;;
   esac

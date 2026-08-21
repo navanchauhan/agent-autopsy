@@ -77,6 +77,63 @@ test("privacy review allows non-PII model-facing context", () => {
   assert.doesNotMatch(reviewer, /Remove or reject names, email addresses, account data, private\s+paths, repository identity/);
 });
 
+test("the pinned release digest is written by a trusted step, not by a model", () => {
+  // A digest that a model rewrites by hand is non-deterministic: the same prompt
+  // wrote grok/VERSION sha256 correctly on one day and deleted the line on the
+  // next, which failed every review attempt on the pinned-digest check.
+  for (const name of ["codex-orchestrator-prompt.md", "codex-revise-prompt.md"]) {
+    const prompt = read(name);
+    assert.match(prompt, /Never add, edit, or\s+delete/);
+    assert.match(prompt, /`VERSION` `sha256`/);
+    assert.match(prompt, /trusted post-processing step\s+writes|trusted post-processing step writes/);
+  }
+  assert.match(
+    read("codex-orchestrator-prompt.md"),
+    /root `VERSION` `sha256`, `manifest_tarball_sha512`, `manifest_tarball_url`, and\s+`manifest_version` from the capture plan/,
+  );
+  assert.match(read("review-refresh-prompt.md"), /Treat that digest as\s+supported evidence/);
+
+  const driver = read("run-codex-refresh.sh");
+  const workflow = fs.readFileSync(path.join(scripts, "..", "workflows", "daily-refresh.yml"), "utf8");
+  assert.match(driver, /update-version-counts\.cjs[\s\S]*update-version-artifacts\.cjs[\s\S]*update-surface-hashes\.cjs/);
+  assert.match(workflow, /salvage_author_candidate\(\)[\s\S]*update-version-artifacts\.cjs/);
+  // The trusted driver gate must stage the script it now depends on.
+  assert.match(workflow, /update-version-counts\.cjs update-version-artifacts\.cjs/);
+});
+
+test("the reviewer can hold one stuck tool instead of failing the run", () => {
+  const reviewer = read("review-refresh-prompt.md");
+  assert.match(reviewer, /outcome `hold`/);
+  assert.match(reviewer, /requires `capture_complete: true`/);
+  assert.match(reviewer, /does not\s+request a new capture/);
+  assert.match(reviewer, /Prefer `hold` over `reject`/);
+  assert.match(reviewer, /return outcome `hold` for\s+Codex/);
+
+  const schema = JSON.parse(read("review-result.schema.json"));
+  assert.deepEqual(
+    schema.$defs.toolResult.properties.outcome.enum,
+    ["approve", "hold", "reject", "retry_capture"],
+  );
+  // The overall decision stays a three-way choice; `hold` is per tool only.
+  assert.deepEqual(schema.properties.decision.enum, ["approve", "reject", "retry_capture"]);
+});
+
+test("Codex artifacts carry a per-artifact source index", () => {
+  // Without this index the author has only a path list, cannot satisfy the
+  // bounded execution order, and falls through to "report it blocked".
+  for (const name of [
+    "codex-orchestrator-prompt.md",
+    "codex-revise-prompt.md",
+    "review-refresh-prompt.md",
+  ]) {
+    assert.match(read(name), /artifact-source-map\.json/);
+  }
+  const author = read("codex-orchestrator-prompt.md");
+  assert.match(author, /Open the\s+`source_paths` of every entry whose `changed` is true/);
+  assert.match(author, /not a\s+prohibited source scan|not a prohibited source scan/);
+  assert.match(read("capture-tool.sh"), /codex-artifact-map\.cjs/);
+});
+
 test("author and reviewer use bounded evidence inspection", () => {
   const author = read("codex-orchestrator-prompt.md");
   const reviewer = read("review-refresh-prompt.md");

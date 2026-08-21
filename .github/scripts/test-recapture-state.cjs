@@ -111,6 +111,7 @@ function driverArtifact(root, options = {}) {
   const source = options.source ?? "fresh";
   const approved = options.approved ?? [];
   const retries = options.retries ?? [];
+  const holds = options.holds ?? [];
   const captureRetries = options.captureRetries ?? [];
   const inputHash = options.inputHash ?? "a".repeat(64);
   const reviewInputHash = options.reviewInputHash ?? inputHash;
@@ -134,12 +135,20 @@ function driverArtifact(root, options = {}) {
   if (source !== "capture_only") {
     writeJson(
       path.join(directory, "retry-report.json"),
-      retries.map((tool) => ({
-        tool,
-        outcome: "retry_capture",
-        review_input_hash: reviewInputHashes[tool] ?? reviewInputHash,
-        issues: ["more evidence required"],
-      })),
+      [
+        ...retries.map((tool) => ({
+          tool,
+          outcome: "retry_capture",
+          review_input_hash: reviewInputHashes[tool] ?? reviewInputHash,
+          issues: ["more evidence required"],
+        })),
+        ...holds.map((tool) => ({
+          tool,
+          outcome: "hold",
+          review_input_hash: reviewInputHashes[tool] ?? reviewInputHash,
+          issues: ["complete capture, unchanged candidate"],
+        })),
+      ],
     );
     fs.writeFileSync(path.join(directory, "base-sha.txt"), `${"b".repeat(40)}\n`);
     fs.writeFileSync(path.join(directory, "candidate.patch"), approved.length > 0 ? "reviewed patch\n" : "");
@@ -752,6 +761,61 @@ try {
     });
     assert.notEqual(driverFailure.result.status, 0);
     assert.match(driverFailure.result.stderr, /driver artifact digest is invalid/);
+  }
+
+  // A held tool is a complete capture that still could not advance, so recapturing
+  // it would produce identical evidence. It partitions the plan like a retry but
+  // leaves the durable state untouched, and it stays out of `retry_tools`.
+  {
+    const testCase = makeCase("reviewer-hold");
+    const codex = makePlan("codex", "1");
+    const grok = makePlan("grok", "2");
+    const drivers = path.join(testCase, "driver-downloads");
+    driverArtifact(drivers, { approved: ["grok"], holds: ["codex"] });
+    const prior = state({ codex: entry(codex.plan_hash), grok: entry(grok.plan_hash) });
+    const held = finalized(testCase, [codex, grok], prior, { driverRoot: drivers });
+    assert.equal(held.output.tools.codex.state, "clear");
+    assert.equal(held.output.tools.codex.reason, null);
+    assert.equal(held.output.tools.codex.request_after_run_id, null);
+    // A reviewer retry would have recorded the hash and armed another capture.
+    assert.equal(held.output.tools.codex.last_reviewer_input_hash, null);
+    assert.equal(held.output.tools.grok.state, "clear");
+  }
+
+  // A hold and a reviewer retry are different partitions: only the retry may
+  // appear in `retry_tools`.
+  {
+    const testCase = makeCase("hold-not-a-retry");
+    const codex = makePlan("codex", "1");
+    const grok = makePlan("grok", "2");
+    const drivers = path.join(testCase, "driver-downloads");
+    const driver = driverArtifact(drivers, { approved: ["grok"], holds: ["codex"] });
+    const resultPath = path.join(driver, "result.json");
+    const result = JSON.parse(fs.readFileSync(resultPath, "utf8"));
+    result.retry_tools = ["codex"];
+    writeJson(resultPath, result);
+    pass(driverMetadataWriter, [driver, "a".repeat(64), "100", "1", "20260806", "fresh"]);
+    const rejected = finalize(
+      testCase,
+      [codex, grok],
+      state({ codex: entry(codex.plan_hash), grok: entry(grok.plan_hash) }),
+      { driverRoot: drivers },
+    );
+    assert.notEqual(rejected.result.status, 0);
+    assert.match(rejected.result.stderr, /retry_tools does not equal the reviewer and capture retry partitions/);
+  }
+
+  // A tool cannot be approved and held at the same time.
+  {
+    const testCase = makeCase("hold-and-approve");
+    const codex = makePlan("codex", "1");
+    const drivers = path.join(testCase, "driver-downloads");
+    driverArtifact(drivers, { approved: ["codex"], holds: ["codex"] });
+    const rejected = finalize(testCase, [codex], state({ codex: entry(codex.plan_hash) }), {
+      driverRoot: drivers,
+    });
+    assert.notEqual(rejected.result.status, 0);
+    assert.match(rejected.result.stderr, /approves and defers the same tool/);
   }
 
   console.log("recapture state regression tests passed");

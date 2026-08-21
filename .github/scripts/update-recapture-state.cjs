@@ -435,25 +435,30 @@ function driverEvents(planByTool) {
     }
 
     let retries = [];
+    let holds = [];
     const retryPath = path.join(artifact.directory, "retry-report.json");
     if (fs.existsSync(retryPath)) {
       const rawRetries = readJson(retryPath, "driver retry report", 1024 * 1024);
       if (!Array.isArray(rawRetries)) fail(`driver retry report must be an array: ${artifact.name}`);
-      const retryTools = new Set();
-      retries = rawRetries.map((entry) => {
+      const reportTools = new Set();
+      for (const entry of rawRetries) {
         if (
           !exactKeys(entry, ["tool", "outcome", "review_input_hash", "issues"]) ||
           !planByTool.has(entry.tool) ||
-          entry.outcome !== "retry_capture" ||
+          (entry.outcome !== "retry_capture" && entry.outcome !== "hold") ||
           !validHash(entry.review_input_hash) ||
           !Array.isArray(entry.issues) ||
-          retryTools.has(entry.tool)
+          reportTools.has(entry.tool)
         ) {
           fail(`driver retry report contains an invalid or duplicate entry: ${artifact.name}`);
         }
-        retryTools.add(entry.tool);
-        return { tool: entry.tool, reviewInputHash: entry.review_input_hash };
-      });
+        reportTools.add(entry.tool);
+        const record = { tool: entry.tool, reviewInputHash: entry.review_input_hash };
+        // A hold reports a complete capture that still cannot advance, so it must
+        // not schedule another capture. It leaves the tool's durable state alone.
+        if (entry.outcome === "hold") holds.push(record);
+        else retries.push(record);
+      }
     } else if (metadata.source !== "capture_only") {
       fail(`reviewed driver artifact is missing retry-report.json: ${artifact.name}`);
     }
@@ -461,14 +466,15 @@ function driverEvents(planByTool) {
     const captureRetries = captureRetryPartition(artifact.directory, planByTool, `driver artifact ${artifact.name}`);
     const approvedSet = new Set(approved);
     const reviewerRetries = new Set(retries.map((retry) => retry.tool));
-    if (retries.some((retry) => approvedSet.has(retry.tool))) {
-      fail(`driver artifact approves and retries the same tool: ${artifact.name}`);
+    const heldSet = new Set(holds.map((hold) => hold.tool));
+    if (retries.some((retry) => approvedSet.has(retry.tool)) || holds.some((hold) => approvedSet.has(hold.tool))) {
+      fail(`driver artifact approves and defers the same tool: ${artifact.name}`);
     }
-    if (captureOnly && (approved.length > 0 || retries.length > 0)) {
+    if (captureOnly && (approved.length > 0 || retries.length > 0 || holds.length > 0)) {
       fail(`capture_only driver artifact may not contain reviewer decisions: ${artifact.name}`);
     }
     for (const tool of captureRetries) {
-      if (approvedSet.has(tool) || reviewerRetries.has(tool)) {
+      if (approvedSet.has(tool) || reviewerRetries.has(tool) || heldSet.has(tool)) {
         fail(`driver artifact places ${tool} in more than one decision partition: ${artifact.name}`);
       }
     }
@@ -476,9 +482,12 @@ function driverEvents(planByTool) {
     if (resultRetries.length !== partitionRetries.size || resultRetries.some((tool) => !partitionRetries.has(tool))) {
       fail(`driver retry_tools does not equal the reviewer and capture retry partitions: ${artifact.name}`);
     }
-    if (approvedSet.size + partitionRetries.size !== planByTool.size) {
+    if (approvedSet.size + partitionRetries.size + heldSet.size !== planByTool.size) {
       fail(`driver artifact does not partition every planned tool exactly once: ${artifact.name}`);
     }
+    // `holds` is deliberately absent from the event: a held tool keeps whatever
+    // durable state it already had, so the next poll repeats the same cheap work
+    // instead of forcing or suppressing a capture that cannot help.
     events.push({ kind: "driver", order: 1, attempt, metadata, approved, retries });
   }
   return events;
