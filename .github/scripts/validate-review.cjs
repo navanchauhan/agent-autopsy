@@ -114,6 +114,7 @@ function main() {
 
   let approvedCount = 0;
   let retryCount = 0;
+  let heldCount = 0;
   const count = Math.max(expected.length, results.length);
   for (let index = 0; index < count; index += 1) {
     const tool = expected[index];
@@ -167,6 +168,23 @@ function main() {
       if (hasChanges(tool.dir)) {
         errors.push(`${tool.tool}: retry_capture is allowed only when ${tool.dir}/ is unchanged`);
       }
+    } else if (result.outcome === "hold") {
+      // A hold is the honest verdict when the capture is complete but the
+      // candidate still cannot be advanced, so recapturing would yield identical
+      // evidence. It requires an unchanged directory and blocks only its own
+      // tool, which keeps one stuck provider from failing an otherwise good run.
+      // Before this outcome existed the reviewer had to choose `reject`, which
+      // failed the whole run and discarded every other tool's approved work.
+      heldCount += 1;
+      if (result.capture_complete !== true) {
+        errors.push(`${tool.tool}: hold requires capture_complete=true; use retry_capture instead`);
+      }
+      for (const field of ["transport_noise_excluded", "pii_removed", "secret_safe"]) {
+        if (result[field] !== true) errors.push(`${tool.tool}: ${field} must be true for a hold`);
+      }
+      if (hasChanges(tool.dir)) {
+        errors.push(`${tool.tool}: hold is allowed only when ${tool.dir}/ is unchanged`);
+      }
     } else {
       errors.push(`${tool.tool}: outcome ${JSON.stringify(result.outcome)} is not publishable`);
     }
@@ -175,8 +193,11 @@ function main() {
   if (publicationApproval && expected.length > 0 && approvedCount === 0) {
     errors.push("at least one changed tool must be approved for publication");
   }
-  if (safeNoopReview && retryCount !== expected.length) {
-    errors.push("a safe retry requires every changed tool to remain an unchanged retry_capture");
+  if (safeNoopReview && retryCount + heldCount !== expected.length) {
+    errors.push("a safe retry requires every changed tool to remain an unchanged retry_capture or hold");
+  }
+  if (safeNoopReview && retryCount === 0) {
+    errors.push("a safe retry requires at least one retry_capture; an all-hold review must not request recapture");
   }
   if (errors.length > 0) {
     console.error(`Review validation failed with ${errors.length} error(s):`);

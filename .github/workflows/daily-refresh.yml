@@ -44,6 +44,8 @@ jobs:
           node --test .github/scripts/test-release-ledger.cjs
           node --test .github/scripts/test-recapture-state.cjs
           node --test .github/scripts/test-capture-artifacts.cjs
+          node --test .github/scripts/test-version-artifacts.cjs
+          node --test .github/scripts/test-codex-artifact-map.cjs
           node --test .github/scripts/test-discover-claude-deferred-tools.cjs
           node --test .github/scripts/test-trace-claude-messages.cjs
           node --test .github/scripts/test-prompt-contracts.cjs
@@ -660,7 +662,8 @@ jobs:
             review-refresh-prompt.md review-result.schema.json \
             run-codex-refresh.sh validate-refresh.cjs validate-review.cjs \
             surface-registry.cjs validate-surfaces.cjs \
-            update-version-counts.cjs update-surface-hashes.cjs generate-catalog.cjs \
+            update-version-counts.cjs update-version-artifacts.cjs \
+            update-surface-hashes.cjs generate-catalog.cjs \
             write-safe-retry.cjs prepare-driver-output.cjs \
             package-driver-output.sh persist-credential.sh seed-credentials.sh \
             hash-candidate.sh; do
@@ -807,6 +810,7 @@ jobs:
               CODEX_SUMMARY_FILE="$PWD/.capture-scratch/codex-summary.md"
             )
             env "${candidate_env[@]}" node "$trusted_driver/update-version-counts.cjs" "${tool_dirs[@]}"
+            env "${candidate_env[@]}" node "$trusted_driver/update-version-artifacts.cjs" "${tool_dirs[@]}"
             env "${candidate_env[@]}" node "$trusted_driver/update-surface-hashes.cjs" "${tool_dirs[@]}"
             env "${candidate_env[@]}" node "$trusted_driver/generate-catalog.cjs"
             env "${candidate_env[@]}" node "$trusted_driver/validate-refresh.cjs" \

@@ -99,6 +99,7 @@
           "type": "string",
           "enum": [
             "approve",
+            "hold",
             "reject",
             "retry_capture"
           ]

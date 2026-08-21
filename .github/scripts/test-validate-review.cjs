@@ -17,6 +17,12 @@ const ignoredFixtureRoot = path.join(repoRoot, ".capture-scratch");
 fs.mkdirSync(ignoredFixtureRoot, { recursive: true });
 const metadataFixtureDir = fs.mkdtempSync(path.join(ignoredFixtureRoot, "review-metadata-"));
 const metadataFixtureName = path.relative(repoRoot, metadataFixtureDir);
+// `hasChanges` asks git, so a fixture that must look dirty has to live outside
+// the ignored scratch tree. This one is created untracked and removed below.
+const dirtyFixtureName = "__review-fixture-changed__";
+const dirtyFixtureDir = path.join(repoRoot, dirtyFixtureName);
+fs.mkdirSync(dirtyFixtureDir, { recursive: true });
+fs.writeFileSync(path.join(dirtyFixtureDir, "VERSION"), "version = 2.1.217\n");
 
 const changed = [{
   tool: "claude-code",
@@ -260,8 +266,75 @@ try {
   assert.notStrictEqual(mismatchedDecision.status, 0, "retry decision cannot publish an approval");
   assert.match(mismatchedDecision.stderr, /safe retry requires every changed tool/);
 
+  // A hold lets one stuck provider block only itself. Before this outcome existed
+  // the reviewer had to pick `reject`, which failed the whole run and discarded
+  // every other tool's approved work.
+  const heldResult = {
+    ...retryResult,
+    tool: "codex",
+    outcome: "hold",
+    capture_complete: true,
+    issues: [{ severity: "error", code: "version_not_advanced", message: "source advanced" }],
+  };
+  const twoToolPlan = [
+    { ...changed[0], tool: "claude-code" },
+    { ...changed[0], tool: "codex", dir: "__review-fixture-unchanged-codex__" },
+  ];
+  const heldBesideApproval = run({
+    decision: "approve",
+    publish_safe: true,
+    issues: [{ severity: "warning", code: "version_not_advanced", message: "source advanced" }],
+    tool_results: [approvedResult("claude-code"), heldResult],
+  }, twoToolPlan);
+  assert.strictEqual(heldBesideApproval.status, 0, heldBesideApproval.stderr);
+
+  const heldWithIncompleteCapture = run({
+    decision: "approve",
+    publish_safe: true,
+    issues: [],
+    tool_results: [approvedResult("claude-code"), { ...heldResult, capture_complete: false }],
+  }, twoToolPlan);
+  assert.notStrictEqual(heldWithIncompleteCapture.status, 0, "an incomplete capture must retry, not hold");
+  assert.match(heldWithIncompleteCapture.stderr, /hold requires capture_complete=true/);
+
+  const unsafeHold = run({
+    decision: "approve",
+    publish_safe: true,
+    issues: [],
+    tool_results: [approvedResult("claude-code"), { ...heldResult, pii_removed: false }],
+  }, twoToolPlan);
+  assert.notStrictEqual(unsafeHold.status, 0, "an unsafe hold must fail validation");
+  assert.match(unsafeHold.stderr, /pii_removed must be true for a hold/);
+
+  const heldChangedDirectory = run({
+    decision: "approve",
+    publish_safe: true,
+    issues: [],
+    tool_results: [approvedResult("claude-code"), { ...heldResult, tool: "antigravity" }],
+  }, [twoToolPlan[0], { ...changed[0], tool: "antigravity", dir: dirtyFixtureName }]);
+  assert.notStrictEqual(heldChangedDirectory.status, 0, "a hold must leave its directory unchanged");
+  assert.match(heldChangedDirectory.stderr, /hold is allowed only when .* is unchanged/);
+
+  const holdBesideRetry = run({
+    decision: "retry_capture",
+    publish_safe: false,
+    issues: [],
+    tool_results: [retryResult, heldResult],
+  }, twoToolPlan);
+  assert.strictEqual(holdBesideRetry.status, 0, holdBesideRetry.stderr);
+
+  const allHold = run({
+    decision: "retry_capture",
+    publish_safe: false,
+    issues: [],
+    tool_results: [{ ...heldResult, tool: "claude-code" }, heldResult],
+  }, twoToolPlan);
+  assert.notStrictEqual(allHold.status, 0, "an all-hold review must not request a recapture");
+  assert.match(allHold.stderr, /requires at least one retry_capture/);
+
   console.log("validate-review regression tests passed");
 } finally {
   fs.rmSync(tempDir, { recursive: true, force: true });
   fs.rmSync(metadataFixtureDir, { recursive: true, force: true });
+  fs.rmSync(dirtyFixtureDir, { recursive: true, force: true });
 }

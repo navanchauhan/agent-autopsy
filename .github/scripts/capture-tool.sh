@@ -134,6 +134,11 @@ case "$tool" in
       } >"$tool_scratch/source-changes.txt"
       jq -n --arg old "$old_revision" --arg new "$new_revision" \
         '{old_revision:$old,new_revision:$new}' >"$tool_scratch/source-revisions.json"
+      # Locate the source file behind each tracked artifact deterministically, so
+      # the author has a named, bounded read list instead of only a path index.
+      node "$repo_root/.github/scripts/codex-artifact-map.cjs" \
+        "$repo_root/references/codex" "$old_revision" "$new_revision" \
+        "$repo_root/codex" "$tool_scratch/artifact-source-map.json"
     fi
     ;;
   qwen-code)

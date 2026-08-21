@@ -39,9 +39,14 @@ request. Do not require dynamic request evidence or mark the capture incomplete
 solely because source code assembles prompts and schemas at runtime. Verify the
 candidate by tracing the relevant constructors, tests, snapshots, and bundled
 model metadata between the revisions in `source-revisions.json`.
-`source-changes.txt` is only a navigation index. A source-verified no-op should
-advance `codex/VERSION`, while the per-session code-mode listing documented as
-out of scope in `codex/README.md` is not a missing fixed schema.
+`source-changes.txt` is only a navigation index, and `artifact-source-map.json`
+names the exact source file behind each tracked artifact and whether that file
+changed between the two revisions. A source-verified no-op should advance
+`codex/VERSION`, while the per-session code-mode listing documented as out of
+scope in `codex/README.md` is not a missing fixed schema. If the author left
+`codex/` unchanged even though the source advanced, return outcome `hold` for
+Codex with an error-severity issue; never `reject`, which would discard every
+other tool's approved work in the same run.
 
 For Qwen Code, the exact tagged `references/qwen-code` checkout is the complete,
 authoritative capture; there is intentionally no proxy trace, live request,
@@ -57,8 +62,10 @@ surface without concrete artifact paths.
 
 For Grok, inspect `/workspace/references/grok-build` when it exists. Its
 `SOURCE_REV` is authoritative for the revision recorded in `grok/VERSION`; the
-checkout HEAD is only the mirror revision. A `sha256` requires evidence from an
-actual trusted binary artifact, not a capture.
+checkout HEAD is only the mirror revision. The root `VERSION` `sha256` is written
+by a trusted post-processing step from the pinned capture plan, and the capture
+container refuses to build unless the download matches it. Treat that digest as
+supported evidence, and do not ask the author to remove or restate it.
 
 For Claude Code, `interactive-preview/` is a non-authoritative extractor preview
 seeded from the last successful archive, as recorded in its
@@ -130,9 +137,20 @@ decision is `approve`. Under an overall approval, use warning severity for an
 unchanged tool's retry blocker; error severity means the candidate is not
 publishable.
 
+Use the per-tool outcome `hold` when the capture is complete but the author still
+left that tool's tracked directory unchanged, so another capture would deliver
+exactly the same evidence. This is the correct verdict for a source-authoritative
+tool whose released source clearly advanced while the candidate keeps the old
+release metadata. A `hold` requires `capture_complete: true` and an unchanged
+tracked directory, may carry an error-severity issue of its own, and does not
+request a new capture. Prefer `hold` over `reject` in this case: `reject` fails
+the entire run and discards every other tool's approved work, while a `hold`
+blocks only its own tool.
+
 If every tool result is `retry_capture`, the overall decision must also be
 `retry_capture` with `publish_safe: false`; do not return an approval with no
-approved tool results.
+approved tool results. A `hold` may accompany either overall decision, but a
+review whose results are all deferred must contain at least one `retry_capture`.
 
 For an unchanged `retry_capture` result, `inventory_consistent` describes the
 captured current inventory and may be false when that capture is unavailable.

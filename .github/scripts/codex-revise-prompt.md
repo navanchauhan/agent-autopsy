@@ -47,14 +47,24 @@ older embedded `cc_version`, keep that surface non-current and keep its
 supported by the current capture can be current for the observed release.
 
 For Grok, `references/grok-build/SOURCE_REV` is the authoritative revision for
-`grok/VERSION`; the checkout HEAD is only a mirror commit. Do not retain or add a
-`sha256` unless it is supported by an actual trusted binary artifact.
+`grok/VERSION`; the checkout HEAD is only a mirror commit. Never add, edit, or
+delete the root `VERSION` `sha256` field: a trusted post-processing step writes
+the pinned release digest that the capture container verified at download.
 If `prompt_models` changed, rename its model-specific `*_tools` VERSION field to
 the current model and remove the stale model field. For example, Grok 4.6 uses
 `grok_4_6_tools`, never `grok_4_5_tools`.
 For the session-title surface, use the model from that specific raw request. Do
 not inherit the main prompt model or `prompt_models`; if the request uses
 Grok 4.5, keep that surface's model as `grok-4.5`.
+
+For Codex, repair directly against the exact `references/codex` revision recorded
+in `source-revisions.json`. Codex is source-authoritative: the absence of a proxy
+trace or live response is expected and is not a reason to revert or request
+recapture. `artifact-source-map.json` already names the source file behind each
+tracked artifact and marks which of those files changed between the two
+revisions. Read the `source_paths` of the changed entries and resolve each
+`unresolved` entry; those are targeted reads, not a prohibited source scan. Do
+not report Codex blocked merely because the release touched many files.
 
 For Qwen Code, repair directly against the exact `references/qwen-code`
 revision recorded in `source-revisions.json`. Qwen Code is source-authoritative:

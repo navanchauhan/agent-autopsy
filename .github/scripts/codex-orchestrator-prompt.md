@@ -24,9 +24,15 @@ For Codex, the exact tagged `references/codex` source checkout is the complete,
 authoritative capture. Codex intentionally has no proxy trace or live model
 request: do not require one and do not mark its capture incomplete merely because
 prompts or schemas are assembled dynamically. Use `source-revisions.json` to
-bind the comparison, treat `source-changes.txt` only as a navigation index, and
-trace the relevant constructors, tests, snapshots, and bundled model metadata in
-the source checkout. A source-verified no-op still advances `codex/VERSION` to
+bind the comparison and treat `source-changes.txt` only as a navigation index.
+`artifact-source-map.json` is the authoritative read list: a trusted step already
+located the source file behind each tracked artifact at the pinned revision and
+recorded whether that file changed between the two revisions. Open the
+`source_paths` of every entry whose `changed` is true, and leave the rest alone.
+Each `unresolved` entry names an artifact whose text is gone from the new
+release; decide it explicitly instead of carrying it forward unexamined. Those
+named paths are targeted evidence, so reading them is required work, not a
+prohibited source scan. A source-verified no-op still advances `codex/VERSION` to
 the planned release revision/version; update counts only when the normalized
 inventory changes. The per-session code-mode listing documented as out of scope
 in `codex/README.md` is not a missing fixed schema.
@@ -49,8 +55,9 @@ SURFACES.json.
 For Grok, inspect `references/grok-build` before live capture. Its source is
 authoritative for bundled prompt and tool construction; use capture only to
 verify server-provided request material. Record `references/grok-build/SOURCE_REV`
-in `grok/VERSION`, never the checkout's mirror commit. Omit `sha256` unless a
-trusted released binary is actually available to hash; a capture cannot prove it.
+in `grok/VERSION`, never the checkout's mirror commit. Never add, edit, or delete
+the root `VERSION` `sha256` field: a trusted post-processing step writes the
+pinned release digest that the capture container already verified at download.
 When `prompt_models` changes, rename the model-specific `*_tools` VERSION field
 to match the current model and remove the stale model field. For example,
 `prompt_models = grok-4.6` requires `grok_4_6_tools`, not `grok_4_5_tools`.
@@ -105,17 +112,23 @@ source research:
 2. List and compare only each listed tool's `evidence/candidate/` or
    `interactive-preview/` files against its immediate tracked artifact paths.
    Use these previews as navigation and as a normalization starting point, while
-   correcting their known metadata or provenance defects.
+   correcting their known metadata or provenance defects. Codex has no preview by
+   design; its equivalent starting point is `artifact-source-map.json`, whose
+   changed entries name exactly which artifacts need work and where their text
+   now lives.
 3. Update each listed tool's allowed tracked artifacts from that bounded delta.
    Finish one tool before moving to the next so useful work is not deferred.
 4. Semantically inspect the complete resulting tracked candidate for actual PII
    and secrets. Open only the specific raw request that supports a changed value
    or resolves a privacy ambiguity. Never print, enumerate, or parse every raw
    request, and never inspect response payloads that are unrelated to the patch.
-5. Use `source-changes.txt`, `SOURCE_REV`, and specifically named constructors or
-   snapshots for targeted source confirmation only. Do not scan a whole Cargo
-   workspace, dependency manifest, or source tree. If targeted evidence is not
-   enough, leave that tool unchanged and report it blocked.
+5. Use `source-changes.txt`, `SOURCE_REV`, `artifact-source-map.json`, and
+   specifically named constructors or snapshots for targeted source confirmation
+   only. Do not scan a whole Cargo workspace, dependency manifest, or source tree.
+   A path named by `artifact-source-map.json` is already targeted: read it rather
+   than declaring the evidence insufficient. Report a tool blocked only when the
+   named evidence itself is absent or contradictory, not merely because the
+   release is large.
 6. Run the required validation, inspect the path-limited final diff once, write
    the exact requested summary, and stop.
 
@@ -141,6 +154,10 @@ For each changed tool:
 - Update `SURFACES.json` for every affected surface. Record its actual capture
   release and status. Do not mark an older artifact current. Artifact and
   evidence hashes are filled by a trusted post-processing step.
+- Never write the pinned release digests by hand. The same trusted step writes
+  root `VERSION` `sha256`, `manifest_tarball_sha512`, `manifest_tarball_url`, and
+  `manifest_version` from the capture plan, and only for a tool you advanced to
+  the planned release. Leave those fields exactly as you found them.
 - Modify only `VERSION`, `SURFACES.json`, immediate `prompts/*.md`, immediate `tools/*.json`,
   and immediate non-executable normalized artifacts under `misc/`. Repository
   instructions, `README.md`, dotfiles, nested paths, and `misc/scripts/` are
