@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "codex",
-  "observed_release": "0.147.0",
+  "observed_release": "0.148.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.147.0",
-      "verified_release": "0.147.0",
+      "captured_release": "0.148.0",
+      "verified_release": "0.148.0",
       "models": [
         "gpt-5",
         "gpt-5.1",
@@ -49,15 +49,16 @@
         "prompts/prompt-with-apply-patch-instructions.md",
         "prompts/review.md"
       ],
-      "artifact_sha256": "1160061a0a7501f81c4dc181b397f12a739374c595172b53d65a3dd7c2a7f5ed"
+      "artifact_sha256": "8ecc0140c58f49527c2c1d9946d7b5c24a877e0f93b7b90c6a0572620011f78f",
+      "evidence_sha256": "cb9dae0eeb309866915bf101351b9eb45ceada5355d0c30cf039041b75442d5a"
     },
     {
       "id": "codex.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.147.0",
-      "verified_release": "0.147.0",
+      "captured_release": "0.148.0",
+      "verified_release": "0.148.0",
       "models": [
         "all"
       ],
@@ -92,15 +93,16 @@
         "tools/web_search_text_and_image.json",
         "tools/write_stdin.json"
       ],
-      "artifact_sha256": "6cd72b18550827fee3601a55ad5726bd02c61b9241b115ad6c9384ceefd276bf"
+      "artifact_sha256": "6cd72b18550827fee3601a55ad5726bd02c61b9241b115ad6c9384ceefd276bf",
+      "evidence_sha256": "cb9dae0eeb309866915bf101351b9eb45ceada5355d0c30cf039041b75442d5a"
     },
     {
       "id": "codex.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.147.0",
-      "verified_release": "0.147.0",
+      "captured_release": "0.148.0",
+      "verified_release": "0.148.0",
       "models": [
         "all"
       ],
@@ -142,7 +144,8 @@
         "misc/review-exit-interrupted.xml",
         "misc/review-exit-success.xml"
       ],
-      "artifact_sha256": "51de398c953180d3b82b9219d6574514797e869790899db62d5c0de8c7ee18ef"
+      "artifact_sha256": "51de398c953180d3b82b9219d6574514797e869790899db62d5c0de8c7ee18ef",
+      "evidence_sha256": "cb9dae0eeb309866915bf101351b9eb45ceada5355d0c30cf039041b75442d5a"
     },
     {
       "id": "codex.assembly.model-mode",

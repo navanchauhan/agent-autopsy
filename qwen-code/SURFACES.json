@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "qwen-code",
-  "observed_release": "0.21.14",
+  "observed_release": "0.21.15",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.21.14",
-      "verified_release": "0.21.14",
+      "captured_release": "0.21.15",
+      "verified_release": "0.21.15",
       "models": [
         "all"
       ],
@@ -34,15 +34,15 @@
         "prompts/core-interactive-qwen3-coder-plus.md"
       ],
       "artifact_sha256": "0d06d20cf7e52c78828075c71757046641b0001774ee8932354561be73d3cbd7",
-      "evidence_sha256": "979cfcba4a9ec45e753162606b6d4c8e9b7e01033974bdcb1f472e9afe51a62f"
+      "evidence_sha256": "1aaace32af13ad49fc1799b921e9b4c7c5844dba419949149ae468a064243410"
     },
     {
       "id": "qwen-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.21.14",
-      "verified_release": "0.21.14",
+      "captured_release": "0.21.15",
+      "verified_release": "0.21.15",
       "models": [
         "all"
       ],
@@ -133,15 +133,15 @@
         "tools/zoom_image.json"
       ],
       "artifact_sha256": "3af83b99b301732985f4b6fae137d4bfbcb7628729b5ecc1628a817a8cb34b12",
-      "evidence_sha256": "979cfcba4a9ec45e753162606b6d4c8e9b7e01033974bdcb1f472e9afe51a62f"
+      "evidence_sha256": "1aaace32af13ad49fc1799b921e9b4c7c5844dba419949149ae468a064243410"
     },
     {
       "id": "qwen-code.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.21.14",
-      "verified_release": "0.21.14",
+      "captured_release": "0.21.15",
+      "verified_release": "0.21.15",
       "models": [
         "all"
       ],
@@ -169,7 +169,7 @@
         "misc/project-summary-prompt.md"
       ],
       "artifact_sha256": "c58a6c24978ecd241da3632fbe65bbe71cc71e98811ecc491c47fb70afe0c0ac",
-      "evidence_sha256": "979cfcba4a9ec45e753162606b6d4c8e9b7e01033974bdcb1f472e9afe51a62f"
+      "evidence_sha256": "1aaace32af13ad49fc1799b921e9b4c7c5844dba419949149ae468a064243410"
     },
     {
       "id": "qwen-code.context.session",
