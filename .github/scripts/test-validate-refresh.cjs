@@ -115,3 +115,78 @@ test("trusted VERSION count update excludes misc VERSION metadata", () => {
   assert.match(version, /^tools = 1$/m);
   assert.match(version, /^misc = 1$/m);
 });
+
+test("a Codex advance cannot ignore an unresolved artifact source map entry", () => {
+  // The 0.149.0 refresh advanced the release while leaving
+  // misc/permissions-approval-policy-unless-trusted.md at its 0.148.0 wording,
+  // even though the map had flagged that text as absent from the new source.
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), "validate-refresh-codex-map-"));
+  const root = path.join(temp, "repo");
+  const codex = path.join(root, "codex");
+  const misc = path.join(codex, "misc");
+  fs.mkdirSync(misc, { recursive: true });
+  fs.writeFileSync(path.join(misc, "drifted.md"), "the old wording\n");
+  fs.writeFileSync(
+    path.join(codex, "VERSION"),
+    "codex_cli_package_version = 0.148.0\nprompts = 0\ntools = 0\nmisc = 1\n",
+  );
+  childProcess.execFileSync("git", ["init", "-q"], { cwd: root });
+  childProcess.execFileSync("git", ["config", "user.email", "test@example.invalid"], { cwd: root });
+  childProcess.execFileSync("git", ["config", "user.name", "Validation Test"], { cwd: root });
+  childProcess.execFileSync("git", ["add", "--", "codex"], { cwd: root });
+  childProcess.execFileSync("git", ["commit", "-qm", "baseline"], { cwd: root });
+
+  const scratch = path.join(temp, "scratch");
+  fs.mkdirSync(path.join(scratch, "codex", "evidence"), { recursive: true });
+  fs.writeFileSync(
+    path.join(scratch, "codex", "evidence", "artifact-source-map.json"),
+    JSON.stringify({
+      schema_version: 1,
+      artifacts: [],
+      unresolved: [{ artifact: "misc/drifted.md", reason: "probe not found at the new revision" }],
+    }),
+  );
+
+  const plan = path.join(temp, "plan.json");
+  const summary = path.join(temp, "summary.md");
+  fs.writeFileSync(plan, JSON.stringify([{
+    tool: "codex",
+    dir: "codex",
+    old_version: "0.148.0",
+    new_version: "0.149.0",
+    version_field: "codex_cli_package_version",
+  }]));
+  fs.writeFileSync(summary, "## codex\n\nAdvanced Codex.\n");
+
+  function run() {
+    return childProcess.spawnSync(process.execPath, [validator, plan, summary], {
+      cwd: root,
+      encoding: "utf8",
+      env: { ...process.env, CAPTURE_SCRATCH_DIR: scratch },
+    });
+  }
+
+  // Advancing the release without touching the flagged artifact is refused.
+  fs.writeFileSync(
+    path.join(codex, "VERSION"),
+    "codex_cli_package_version = 0.149.0\nprompts = 0\ntools = 0\nmisc = 1\n",
+  );
+  const ignored = run();
+  assert.notEqual(ignored.status, 0);
+  assert.match(ignored.stderr, /codex\/misc\/drifted\.md/);
+  assert.match(ignored.stderr, /must be re-derived from the source checkout/);
+
+  // Re-deriving the artifact clears the gate.
+  fs.writeFileSync(path.join(misc, "drifted.md"), "the new wording\n");
+  const rederived = run();
+  assert.equal(rederived.status, 0, rederived.stderr);
+
+  // Holding the release at its old version is also allowed.
+  fs.writeFileSync(path.join(misc, "drifted.md"), "the old wording\n");
+  fs.writeFileSync(
+    path.join(codex, "VERSION"),
+    "codex_cli_package_version = 0.148.0\nprompts = 0\ntools = 0\nmisc = 1\n",
+  );
+  const held = run();
+  assert.equal(held.status, 0, held.stderr);
+});

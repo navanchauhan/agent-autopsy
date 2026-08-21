@@ -445,6 +445,32 @@ function validateVersionInventory(tool) {
   }
   validateCount("tools", fields.get("tools"), toolFiles.length, versionPath);
 
+  if (tool.tool === "codex") {
+    // An unresolved map entry means the artifact's exact text no longer appears
+    // upstream, which is the strongest available signal that it drifted. The
+    // 0.149.0 refresh advanced the release while leaving one such artifact at its
+    // 0.148.0 wording, so an advance now has to touch every unresolved artifact
+    // or leave the release where it was.
+    const mapPath = path.join(scratchDir, "codex", "evidence", "artifact-source-map.json");
+    const sourceMap = fs.existsSync(mapPath) ? parseJsonFile(mapPath, "Codex artifact source map") : null;
+    const advanced = fields.get(tool.version_field || "codex_cli_package_version") === tool.new_version;
+    for (const entry of (advanced && sourceMap?.unresolved) || []) {
+      const artifactPath = path.join(dirPath, entry.artifact);
+      const changed = childProcess
+        .execFileSync("git", ["status", "--porcelain", "--", path.relative(repoRoot, artifactPath)], {
+          cwd: repoRoot,
+          encoding: "utf8",
+        })
+        .trim() !== "";
+      if (!changed) {
+        fail(
+          `codex/${entry.artifact}: the artifact source map could not find this text at ${tool.new_version} ` +
+          "(" + entry.reason + "), so it must be re-derived from the source checkout or the release must not advance",
+        );
+      }
+    }
+  }
+
   if (tool.tool === "qwen-code") {
     if (allPrompts.length === 0) {
       fail("VERSION: qwen-code must publish at least one source-derived prompts/*.md artifact");

@@ -19,6 +19,14 @@ command_timeout="${ANTIGRAVITY_COMMAND_TIMEOUT_SECONDS:-180}"
 extraction_timeout="${CAPTURE_EXTRACTION_TIMEOUT_SECONDS:-60}"
 poll_interval="${CAPTURE_POLL_INTERVAL_SECONDS:-1}"
 
+# The Antigravity CLI self-updates to whatever its auto-updater manifest serves,
+# overwriting the release the capture plan pinned and verified by SHA-512. That
+# makes every target older than the current manifest head impossible to capture:
+# the extractor's pin assertion fails, the tool defers, and the ledger keeps
+# re-serving the same unreachable target. The CLI supports an opt-out, which it
+# acknowledges with "Auto-update disabled via environment variable".
+export AGY_CLI_DISABLE_AUTO_UPDATE=1
+
 noninteractive_marker="ANTIGRAVITY_TRACE_OK"
 interactive_marker="ANTIGRAVITY_INTERACTIVE_TRACE_OK"
 tmux_session="antigravity-capture-$$"
@@ -78,6 +86,22 @@ for command_name in "$agy_bin" mitmdump tmux jq node timeout realpath; do
   fi
 done
 agy_executable="$(realpath "$(command -v "$agy_bin")")"
+
+# Assert the pin before spending a capture. The extractor checks this again at the
+# very end, but failing here names the cause instead of reporting a generic
+# incomplete capture after several minutes of tmux and proxy work.
+antigravity_planned_version="$(jq -r '.[] | select(.tool == "antigravity") | .new_version' \
+  "${CHANGED_TOOLS_FILE:-$scratch_root/changed-tools.json}" 2>/dev/null || true)"
+if [ -n "$antigravity_planned_version" ]; then
+  antigravity_installed_version="$("$agy_executable" --version 2>/dev/null |
+    grep -oE '[0-9]+\.[0-9]+\.[0-9]+([-.][A-Za-z0-9.]+)?' | head -n1 || true)"
+  if [ "$antigravity_installed_version" != "$antigravity_planned_version" ]; then
+    echo "Antigravity is ${antigravity_installed_version:-unknown} but the plan pinned ${antigravity_planned_version}." >&2
+    echo "The pinned tarball installs the planned release, so a different running version means the" >&2
+    echo "CLI self-updated. AGY_CLI_DISABLE_AUTO_UPDATE did not take effect for this build." >&2
+    exit 1
+  fi
+fi
 if [ -L "$tool_scratch" ] || [ -L "$raw_root" ]; then
   echo "Refusing to capture through symlinked scratch path: $tool_scratch" >&2
   exit 1

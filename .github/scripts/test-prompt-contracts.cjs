@@ -137,6 +137,19 @@ test("Codex artifacts carry a per-artifact source index", () => {
   assert.match(read("capture-tool.sh"), /codex-artifact-map\.cjs/);
 });
 
+test("the Antigravity CLI cannot self-update past the pinned release", () => {
+  // The CLI replaces its own binary with whatever its auto-updater manifest
+  // serves, so without this every target older than the manifest head fails the
+  // extractor's pin assertion and can never be captured.
+  const capture = read("capture-antigravity.sh");
+  const dockerfile = fs.readFileSync(path.join(scripts, "..", "..", "Dockerfile"), "utf8");
+  assert.match(capture, /export AGY_CLI_DISABLE_AUTO_UPDATE=1/);
+  assert.match(dockerfile, /capture-antigravity[\s\S]*?ENV AGY_CLI_DISABLE_AUTO_UPDATE=1/);
+  // The pin is asserted before a capture is spent, not only by the extractor.
+  assert.match(capture, /the plan pinned/);
+  assert.match(capture, /--version/);
+});
+
 test("author and reviewer use bounded evidence inspection", () => {
   const author = read("codex-orchestrator-prompt.md");
   const reviewer = read("review-refresh-prompt.md");
