@@ -4,22 +4,11 @@
     "codex": [
       {
         "tool": "codex",
-        "new_version": "0.148.0",
-        "new_revision": "3ba0f711642a888aec92a611a3f3b2211157ff89"
-      },
-      {
-        "tool": "codex",
         "new_version": "0.149.0",
         "new_revision": "758ef40f50c1a458425c7cfbf1eb12cbc07af0b0"
       }
     ],
     "claude-code": [
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.233",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.233/linux-x64/claude",
-        "artifact_sha256": "55d281096f57d411ebbdd94dbf5e9ff3accb7c05713e37348c2c11d4b83bf9d9"
-      },
       {
         "tool": "claude-code",
         "new_version": "2.1.234",
@@ -52,14 +41,6 @@
       }
     ],
     "grok": [
-      {
-        "tool": "grok",
-        "new_version": "0.2.119",
-        "new_revision": "27d2088ae3b3f25e9ddab462caa18a07005ada9a",
-        "mirror_revision": "e5478eff1e4050558e12e1328b85e6616632efb6",
-        "artifact_url": "https://x.ai/cli/grok-0.2.119-linux-x86_64",
-        "artifact_sha256": "3bb1d960c683d28f283c4a39fa08234839a6b6234d87148284e2de915e3ffc14"
-      },
       {
         "tool": "grok",
         "new_version": "0.2.120",
@@ -145,12 +126,6 @@
         "artifact_sha512": "5c6047a19e80025ea7cecc8152fb263a7f14e80591ee75bdf1ca10191cc0cd1639b5b5ebdce4d1c9d43b14bd2446f038a457821694579f4392b6ca9736512936"
       }
     ],
-    "qwen-code": [
-      {
-        "tool": "qwen-code",
-        "new_version": "0.21.15",
-        "new_revision": "5dce2515a778f9cf2013168962b4fbc3454636e3"
-      }
-    ]
+    "qwen-code": []
   }
 }
