@@ -130,7 +130,10 @@ test("Codex artifacts carry a per-artifact source index", () => {
   }
   const author = read("codex-orchestrator-prompt.md");
   assert.match(author, /Open the\s+`source_paths` of every entry whose `changed` is true/);
-  assert.match(author, /not a\s+prohibited source scan|not a prohibited source scan/);
+  assert.match(author, /not a\s+prohibited\s+source\s+scan/);
+  // A wide match is a lead, not an origin; the author has to be told the difference.
+  assert.match(author, /`match_confidence`/);
+  assert.match(author, /`exact`[\s\S]{0,120}`narrow`[\s\S]{0,120}`wide`/);
   assert.match(read("capture-tool.sh"), /codex-artifact-map\.cjs/);
 });
 

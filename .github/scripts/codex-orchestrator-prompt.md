@@ -29,10 +29,13 @@ bind the comparison and treat `source-changes.txt` only as a navigation index.
 located the source file behind each tracked artifact at the pinned revision and
 recorded whether that file changed between the two revisions. Open the
 `source_paths` of every entry whose `changed` is true, and leave the rest alone.
-Each `unresolved` entry names an artifact whose text is gone from the new
-release; decide it explicitly instead of carrying it forward unexamined. Those
-named paths are targeted evidence, so reading them is required work, not a
-prohibited source scan. A source-verified no-op still advances `codex/VERSION` to
+`match_confidence` says how far to trust each binding: `exact` is a single
+originating file, `narrow` is a small candidate set, and `wide` means the probe
+is shared with unrelated code and the paths are only leads. Each `unresolved`
+entry names an artifact whose text is gone from the new release; decide it
+explicitly instead of carrying it forward unexamined. Those named paths are
+targeted evidence, so reading them is required work, not a prohibited source
+scan. A source-verified no-op still advances `codex/VERSION` to
 the planned release revision/version; update counts only when the normalized
 inventory changes. The per-session code-mode listing documented as out of scope
 in `codex/README.md` is not a missing fixed schema.
