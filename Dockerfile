@@ -80,6 +80,10 @@ USER root
 
 FROM proxy-base AS capture-antigravity
 USER runner
+# The CLI self-updates to its manifest head on launch, replacing the SHA-512
+# verified release installed below. Without this the archive can only ever track
+# whatever version the updater currently serves.
+ENV AGY_CLI_DISABLE_AUTO_UPDATE=1
 ARG ANTIGRAVITY_TARBALL_URL
 ARG ANTIGRAVITY_TARBALL_SHA512
 RUN test -n "${ANTIGRAVITY_TARBALL_URL}" \
