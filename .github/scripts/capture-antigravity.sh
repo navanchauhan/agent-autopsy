@@ -23,8 +23,13 @@ poll_interval="${CAPTURE_POLL_INTERVAL_SECONDS:-1}"
 # overwriting the release the capture plan pinned and verified by SHA-512. That
 # makes every target older than the current manifest head impossible to capture:
 # the extractor's pin assertion fails, the tool defers, and the ledger keeps
-# re-serving the same unreachable target. The CLI supports an opt-out, which it
-# acknowledges with "Auto-update disabled via environment variable".
+# re-serving the same unreachable target.
+#
+# This opt-out is the CLI's own, acknowledged with "Auto-update disabled via
+# environment variable". It is necessary but NOT sufficient: run 32535416761
+# still updated 1.1.15 to 1.1.17 with it set, because the CLI also spawns a
+# background updater. The workflow additionally blackholes the updater host for
+# this container, which is what actually holds the pin.
 export AGY_CLI_DISABLE_AUTO_UPDATE=1
 
 noninteractive_marker="ANTIGRAVITY_TRACE_OK"

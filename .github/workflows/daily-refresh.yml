@@ -297,10 +297,24 @@ jobs:
           mkdir -p "capture-output/${{ matrix.tool }}" ".capture-scratch/${{ matrix.tool }}" references
           credential_export="$RUNNER_TEMP/credential-export-${{ matrix.tool }}"
           mkdir -p "$credential_export"
+          # The Antigravity CLI spawns a background auto-updater that replaces its
+          # own binary with the manifest head, defeating the SHA-512 verified pin
+          # and making every non-head release impossible to capture.
+          # AGY_CLI_DISABLE_AUTO_UPDATE alone does not stop the background spawn,
+          # so the updater host is blackholed for the capture container. Version
+          # discovery reads the same manifest from the host runner and is
+          # unaffected. /etc/hosts is remounted by Docker at run time, which is
+          # why this is a run flag rather than an image layer.
+          capture_hosts=()
+          if [ "${{ matrix.tool }}" = antigravity ]; then
+            capture_hosts+=(--add-host
+              "antigravity-cli-auto-updater-974169037036.us-central1.run.app:127.0.0.1")
+          fi
           if [ "${{ matrix.tool }}" = codex ]; then
             bash .github/scripts/capture-tool.sh
           else
             docker run --rm --init --pids-limit 512 --memory 4g --cpus 2 \
+              "${capture_hosts[@]}" \
               -v "$PWD":/workspace:ro \
               -v "$PWD/.capture-scratch":/workspace/.capture-scratch \
               -v "$PWD/capture-output":/workspace/capture-output \
