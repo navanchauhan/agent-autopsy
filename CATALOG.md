@@ -77,15 +77,15 @@ Observed release: `0.149.0`
 
 ## grok
 
-Observed release: `1.0.0`
+Observed release: `1.0.1`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.0` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
-| `grok.prompt.agent.grok-4-6.interactive` | agent prompt | `grok-4.6` | `interactive` | current | `1.0.0` | [grok-4.6-interactive.md](grok/prompts/grok-4.6-interactive.md) |
-| `grok.prompt.special.session-title` | session title prompt | `grok-4.5` | `session-title` | current | `1.0.0` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
-| `grok.steering.catalog` | steering messages | `grok-4.6` | `non-interactive`, `interactive` | stale | `0.2.121` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md), [grok-4.6-interactive-steering.md](grok/misc/grok-4.6-interactive-steering.md) |
-| `grok.tool.catalog` | tool schemas | `grok-4.6` | `non-interactive`, `interactive`, `session-title` | current | `1.0.0` | 28 files ([manifest](grok/SURFACES.json)) |
+| `grok.prompt.agent.grok-4-5.non-interactive` | agent prompt | `grok-4.5` | `non-interactive` | current | `1.0.1` | [grok-4.5.md](grok/prompts/grok-4.5.md) |
+| `grok.prompt.agent.grok-4-6.interactive` | agent prompt | `grok-4.5`, `grok-4.6` | `interactive` | current | `1.0.1` | [grok-4.6-interactive.md](grok/prompts/grok-4.6-interactive.md) |
+| `grok.prompt.special.session-title` | session title prompt | `grok-4.5` | `session-title` | current | `1.0.1` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
+| `grok.steering.catalog` | steering messages | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive` | current | `1.0.1` | [grok-4.5-steering.md](grok/misc/grok-4.5-steering.md), [grok-4.6-interactive-steering.md](grok/misc/grok-4.6-interactive-steering.md) |
+| `grok.tool.catalog` | tool schemas | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive`, `session-title` | current | `1.0.1` | 28 files ([manifest](grok/SURFACES.json)) |
 | `grok.agent.definitions` | bundled agent prompts | `grok-4.6` | `subagent invocation` | gap | — | — |
 | `grok.skill.definitions` | bundled skills and workflows | `grok-4.6` | `skill and workflow invocation` | gap | — | — |
 | `grok.event.catalog` | event prompts | `grok-4.6` | `plan`, `scheduler`, `workflow`, `monitor`, `completion` | gap | — | — |
