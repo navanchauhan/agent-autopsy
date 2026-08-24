@@ -1,7 +1,13 @@
 {
   "schema_version": 1,
   "queues": {
-    "codex": [],
+    "codex": [
+      {
+        "tool": "codex",
+        "new_version": "0.149.1",
+        "new_revision": "ff29a44391deccde0aba0f8390337d7f3c319ea4"
+      }
+    ],
     "claude-code": [
       {
         "tool": "claude-code",
@@ -53,14 +59,6 @@
       }
     ],
     "grok": [
-      {
-        "tool": "grok",
-        "new_version": "1.0.1",
-        "new_revision": "5d08d7e4123092567ccd584cd9f99afa2972065c",
-        "mirror_revision": "be713136d2a69080743a3f6b3c72077057e5948f",
-        "artifact_url": "https://x.ai/cli/grok-1.0.1-linux-x86_64",
-        "artifact_sha256": "4cb4bb292a5f5522e01de4650bb632930d86d9a1e728a5509aed3bda21dfa8f8"
-      },
       {
         "tool": "grok",
         "new_version": "1.0.2",
