@@ -63,13 +63,13 @@ Observed release: `2.1.233`
 
 ## codex
 
-Observed release: `0.149.0`
+Observed release: `0.149.1`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `codex.prompt.agent.catalog` | agent prompts | `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.4`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | current | `0.149.0` | 15 files ([manifest](codex/SURFACES.json)) |
-| `codex.tool.catalog` | tool schemas | `all` | `configured` | current | `0.149.0` | 25 files ([manifest](codex/SURFACES.json)) |
-| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | current | `0.149.0` | 29 files ([manifest](codex/SURFACES.json)) |
+| `codex.prompt.agent.catalog` | agent prompts | `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.4`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | current | `0.149.1` | 15 files ([manifest](codex/SURFACES.json)) |
+| `codex.tool.catalog` | tool schemas | `all` | `configured` | current | `0.149.1` | 25 files ([manifest](codex/SURFACES.json)) |
+| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | current | `0.149.1` | 29 files ([manifest](codex/SURFACES.json)) |
 | `codex.assembly.model-mode` | assembly recipe | `all` | `all` | gap | — | — |
 | `codex.context.session` | dynamic context | `all` | `all` | dynamic | — | — |
 | `codex.tool.code-mode-listing` | dynamic tool catalog | `gpt-5.6` | `code-mode-only` | dynamic | — | — |
@@ -77,15 +77,15 @@ Observed release: `0.149.0`
 
 ## grok
 
-Observed release: `1.0.1`
+Observed release: `1.0.2`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `grok.prompt.agent.grok-4-5.non-interactive` | agent prompt | `grok-4.5` | `non-interactive` | current | `1.0.1` | [grok-4.5.md](grok/prompts/grok-4.5.md) |
-| `grok.prompt.agent.grok-4-6.interactive` | agent prompt | `grok-4.5`, `grok-4.6` | `interactive` | current | `1.0.1` | [grok-4.6-interactive.md](grok/prompts/grok-4.6-interactive.md) |
-| `grok.prompt.special.session-title` | session title prompt | `grok-4.5` | `session-title` | current | `1.0.1` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
-| `grok.steering.catalog` | steering messages | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive` | current | `1.0.1` | [grok-4.5-steering.md](grok/misc/grok-4.5-steering.md), [grok-4.6-interactive-steering.md](grok/misc/grok-4.6-interactive-steering.md) |
-| `grok.tool.catalog` | tool schemas | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive`, `session-title` | current | `1.0.1` | 28 files ([manifest](grok/SURFACES.json)) |
+| `grok.prompt.agent.grok-4-5.non-interactive` | agent prompt | `grok-4.5` | `non-interactive` | current | `1.0.2` | [grok-4.5.md](grok/prompts/grok-4.5.md) |
+| `grok.prompt.agent.grok-4-6.interactive` | agent prompt | `grok-4.5`, `grok-4.6` | `interactive` | current | `1.0.2` | [grok-4.6-interactive.md](grok/prompts/grok-4.6-interactive.md) |
+| `grok.prompt.special.session-title` | session title prompt | `grok-4.5` | `session-title` | current | `1.0.2` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
+| `grok.steering.catalog` | steering messages | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive` | current | `1.0.2` | [grok-4.5-steering.md](grok/misc/grok-4.5-steering.md), [grok-4.6-interactive-steering.md](grok/misc/grok-4.6-interactive-steering.md) |
+| `grok.tool.catalog` | tool schemas | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive`, `session-title` | current | `1.0.2` | 28 files ([manifest](grok/SURFACES.json)) |
 | `grok.agent.definitions` | bundled agent prompts | `grok-4.6` | `subagent invocation` | gap | — | — |
 | `grok.skill.definitions` | bundled skills and workflows | `grok-4.6` | `skill and workflow invocation` | gap | — | — |
 | `grok.event.catalog` | event prompts | `grok-4.6` | `plan`, `scheduler`, `workflow`, `monitor`, `completion` | gap | — | — |
