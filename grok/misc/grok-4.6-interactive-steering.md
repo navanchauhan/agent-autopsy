@@ -45,6 +45,7 @@ Example:
 - example-skill: Example user-installed skill description.
   Absolute path: /Users/example/.grok/skills/example-skill/SKILL.md
 </system-reminder>
+
 ---
 
 <system-reminder>
