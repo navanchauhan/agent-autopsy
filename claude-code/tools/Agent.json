@@ -139,7 +139,10 @@
     },
     {
       "models": [
-        "claude-sonnet-5"
+        "claude-sonnet-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-7",
+        "claude-sonnet-4-6"
       ],
       "runs": [
         "interactive"
@@ -238,6 +241,70 @@
                 "haiku",
                 "fable"
               ]
+            },
+            "isolation": {
+              "description": "Isolation mode. \"worktree\" creates a temporary git worktree so the agent works on an isolated copy of the repo. \"remote\" launches the agent in a remote cloud environment (always runs in background; availability is gated).",
+              "type": "string",
+              "enum": [
+                "worktree",
+                "remote"
+              ]
+            }
+          },
+          "required": [
+            "description",
+            "prompt"
+          ],
+          "additionalProperties": false
+        },
+        "eager_input_streaming": true
+      }
+    },
+    {
+      "models": [
+        "claude-fable-5",
+        "claude-opus-4-8",
+        "claude-opus-5"
+      ],
+      "runs": [
+        "interactive"
+      ],
+      "request_kind": "agent",
+      "capture_modes": [
+        "interactive"
+      ],
+      "schema": {
+        "name": "Agent",
+        "description": "Launch a new agent to handle complex, multi-step tasks. Each agent type has specific capabilities and tools available to it.\n\nAvailable agent types are listed in <system-reminder> messages in the conversation.\n\nWhen using the Agent tool, specify a subagent_type parameter to select which agent type to use. If omitted, the general-purpose agent is used.\n\n## When to use\n\nReach for this when the task matches an available agent type, when you have independent work to run in parallel, or when answering would mean reading across several files — delegate it and you keep the conclusion, not the file dumps. For a single-fact lookup where you already know the file, symbol, or value, search directly. Once you've delegated a search, don't also run it yourself — wait for the result.\n\n- The agent's final report is not shown to the user — relay what matters.\n- Use SendMessage with the agent's ID or name to continue a previously spawned agent with its context intact; a new Agent call starts fresh.\n- Each agent type's model, reasoning effort, and tools come from its definition (`.claude/agents/*.md` frontmatter or SDK `agents`).\n- `isolation: \"worktree\"` gives the agent its own git worktree (auto-cleaned if unchanged).\n- Subagents run in the background by default; you'll be notified when one completes. Pass `run_in_background: false` only when your very next action depends on the result and nothing else could usefully happen while it runs — otherwise background it so the user can interject. Never fabricate or predict a pending agent's results — the notification is never something you write yourself; if the user asks before it arrives, say it's still running.",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "description": {
+              "description": "A short (3-5 word) description of the task",
+              "type": "string"
+            },
+            "prompt": {
+              "description": "The task for the agent to perform",
+              "type": "string"
+            },
+            "subagent_type": {
+              "description": "The type of specialized agent to use for this task",
+              "type": "string"
+            },
+            "model": {
+              "description": "Optional model override for this agent. Takes precedence over the agent definition's model frontmatter. If omitted, uses the agent definition's model, or inherits from the parent. Ignored for subagent_type: \"fork\" — forks always inherit the parent model.",
+              "type": "string",
+              "enum": [
+                "sonnet",
+                "opus",
+                "haiku",
+                "fable"
+              ]
+            },
+            "run_in_background": {
+              "description": "Agents run in the background by default; you will be notified when one completes. Set to false only when your very next action depends on this agent's result and nothing else could usefully happen while it runs — otherwise leave it in the background so the user can hand you other work.",
+              "type": "boolean"
             },
             "isolation": {
               "description": "Isolation mode. \"worktree\" creates a temporary git worktree so the agent works on an isolated copy of the repo. \"remote\" launches the agent in a remote cloud environment (always runs in background; availability is gated).",

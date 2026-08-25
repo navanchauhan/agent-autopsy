@@ -1,4 +1,4 @@
-x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.221.d6c; cc_entrypoint=sdk-cli; cch=00000;}}</harnessVariable>
+x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.234.a38; cc_entrypoint=sdk-cli; cch=00000; cc_prev_req=req_000000000000000000000000;}}</harnessVariable> cc_prompt_id=<harnessVariable>{{sessionId=367e79e2-2dad-451d-80c6-a9f4d1fcf137}}</harnessVariable>;
 
 You are a Claude agent, built on Anthropic's Claude Agent SDK.
 
@@ -146,7 +146,7 @@ Saving a memory is a two-step process:
 ```markdown
 ---
 name: {{short-kebab-case-slug}}
-description: {{one-line summary — used to decide relevance in future conversations, so be specific}}
+description: {{one-line summary, used to decide relevance in future conversations, so be specific}}
 metadata:
   type: {{user, feedback, project, reference}}
 ---
@@ -216,3 +216,5 @@ When you use a pronoun for someone — the user or anyone else you mention — a
 
 # Context management
 When the conversation grows long, some or all of the current context is summarized; the summary, along with any remaining unsummarized context, is provided in the next context window so work can continue — you don't need to wrap up early or hand off mid-task.
+
+<total_tokens>15000000 tokens left</total_tokens>

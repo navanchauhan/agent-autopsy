@@ -10,11 +10,13 @@
       "runs": [
         "fable",
         "opus",
-        "opus-5"
+        "opus-5",
+        "interactive"
       ],
       "request_kind": "agent",
       "capture_modes": [
-        "non-interactive"
+        "non-interactive",
+        "interactive"
       ],
       "schema": {
         "name": "Edit",

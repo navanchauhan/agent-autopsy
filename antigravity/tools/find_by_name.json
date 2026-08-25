@@ -1,0 +1,74 @@
+{
+  "name": "find_by_name",
+  "models": [
+    "gemini-3.7-flash-high"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "find_by_name",
+        "description": "Search for files and subdirectories within a specified directory using fd.\nSearch uses smart case and will ignore gitignored files by default.\nPattern and Excludes both use the glob format. If you are searching for Extensions, there is no need to specify both Pattern AND Extensions.\nTo avoid overwhelming output, the results are capped at 50 matches. Use the various arguments to filter the search scope as needed.\nResults will include the type, size, modification time, and relative path.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "Excludes": {
+              "type": "ARRAY",
+              "description": "Optional, exclude files/directories that match the given glob patterns",
+              "items": {
+                "type": "STRING"
+              }
+            },
+            "Extensions": {
+              "type": "ARRAY",
+              "description": "Optional, file extensions to include (without leading .), matching paths must match at least one of the included extensions",
+              "items": {
+                "type": "STRING"
+              }
+            },
+            "FullPath": {
+              "type": "BOOLEAN",
+              "description": "Optional, whether the full absolute path must match the glob pattern, default: only filename needs to match. Take care when specifying glob patterns with this flag on, e.g when FullPath is on, pattern '*.py' will not match to the file '/foo/bar.py', but pattern '**/*.py' will match."
+            },
+            "MaxDepth": {
+              "type": "INTEGER",
+              "description": "Optional, maximum depth to search"
+            },
+            "Pattern": {
+              "type": "STRING",
+              "description": "Optional, Pattern to search for, supports glob format"
+            },
+            "SearchDirectory": {
+              "type": "STRING",
+              "description": "The directory to search within. Must be an absolute path."
+            },
+            "Type": {
+              "type": "STRING",
+              "description": "Optional, type filter, enum=file,directory,any"
+            },
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word summary of what this tool is doing. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Editing file', 'Viewing file', 'Running command', 'Semantic searching'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing what this tool call is about. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'File edit', 'Command execution', 'Semantic search'."
+            }
+          },
+          "required": [
+            "SearchDirectory",
+            "Pattern",
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  },
+  "capture_modes": [
+    "non-interactive",
+    "interactive"
+  ]
+}

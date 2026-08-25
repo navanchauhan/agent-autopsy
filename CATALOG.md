@@ -19,13 +19,13 @@ Observed release: `0.0.1783542413-gb55c7a`
 
 ## antigravity
 
-Observed release: `1.1.14`
+Observed release: `1.1.15`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `antigravity.prompt.agent.gemini-3-6-flash-high.non-interactive` | agent prompt | `gemini-3.7-flash-high` | `non-interactive` | current | `1.1.14` | [gemini-3.7-flash-high.md](antigravity/prompts/gemini-3.7-flash-high.md) |
-| `antigravity.prompt.agent.gemini-3-6-flash-high.interactive` | agent prompt | `gemini-3.7-flash-high` | `interactive` | current | `1.1.14` | [gemini-3.7-flash-high-interactive.md](antigravity/prompts/gemini-3.7-flash-high-interactive.md) |
-| `antigravity.tool.catalog` | tool schemas | `gemini-3.7-flash-high` | `non-interactive`, `interactive` | current | `1.1.14` | 16 files ([manifest](antigravity/SURFACES.json)) |
+| `antigravity.prompt.agent.gemini-3-6-flash-high.non-interactive` | agent prompt | `gemini-3.7-flash-high` | `non-interactive` | current | `1.1.15` | [gemini-3.7-flash-high.md](antigravity/prompts/gemini-3.7-flash-high.md) |
+| `antigravity.prompt.agent.gemini-3-6-flash-high.interactive` | agent prompt | `gemini-3.7-flash-high` | `interactive` | current | `1.1.15` | [gemini-3.7-flash-high-interactive.md](antigravity/prompts/gemini-3.7-flash-high-interactive.md) |
+| `antigravity.tool.catalog` | tool schemas | `gemini-3.7-flash-high` | `non-interactive`, `interactive` | current | `1.1.15` | 17 files ([manifest](antigravity/SURFACES.json)) |
 | `antigravity.agent.definitions` | bundled agent prompts | `gemini-3.7-flash-high` | `research and self subagents` | gap | — | — |
 | `antigravity.skill.definitions` | bundled skills | `gemini-3.7-flash-high` | `skill invocation` | gap | — | — |
 | `antigravity.command.definitions` | slash commands | `gemini-3.7-flash-high` | `command invocation` | gap | — | — |
@@ -37,22 +37,22 @@ Observed release: `1.1.14`
 
 ## claude-code
 
-Observed release: `2.1.233`
+Observed release: `2.1.234`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `claude-code.prompt.agent.claude-fable-5.non-interactive` | agent prompt | `claude-fable-5` | `non-interactive` | stale | `2.1.221` | [claude-fable-5.md](claude-code/prompts/claude-fable-5.md) |
-| `claude-code.prompt.agent.claude-haiku-4-5.non-interactive` | agent prompt | `claude-haiku-4-5-20251001` | `non-interactive` | stale | `2.1.221` | [claude-haiku-4-5-20251001.md](claude-code/prompts/claude-haiku-4-5-20251001.md) |
-| `claude-code.prompt.agent.claude-opus-4-7.non-interactive` | agent prompt | `claude-opus-4-7` | `non-interactive` | stale | `2.1.221` | [claude-opus-4-7.md](claude-code/prompts/claude-opus-4-7.md) |
-| `claude-code.prompt.agent.claude-opus-4-8.non-interactive` | agent prompt | `claude-opus-4-8` | `non-interactive` | stale | `2.1.221` | [claude-opus-4-8.md](claude-code/prompts/claude-opus-4-8.md) |
-| `claude-code.prompt.agent.claude-opus-5.non-interactive` | agent prompt | `claude-opus-5` | `non-interactive` | stale | `2.1.221` | [claude-opus-5.md](claude-code/prompts/claude-opus-5.md) |
-| `claude-code.prompt.agent.claude-sonnet-4-6.non-interactive` | agent prompt | `claude-sonnet-4-6` | `non-interactive` | stale | `2.1.221` | [claude-sonnet-4-6.md](claude-code/prompts/claude-sonnet-4-6.md) |
-| `claude-code.prompt.agent.claude-sonnet-5.non-interactive` | agent prompt | `claude-sonnet-5` | `non-interactive` | stale | `2.1.221` | [claude-sonnet-5.md](claude-code/prompts/claude-sonnet-5.md) |
-| `claude-code.prompt.agent.claude-sonnet-5.interactive` | agent prompt | `claude-sonnet-5` | `interactive` | current | `2.1.233` | [claude-sonnet-5-interactive.md](claude-code/prompts/claude-sonnet-5-interactive.md) |
+| `claude-code.prompt.agent.claude-fable-5.non-interactive` | agent prompt | `claude-fable-5` | `non-interactive` | current | `2.1.234` | [claude-fable-5.md](claude-code/prompts/claude-fable-5.md) |
+| `claude-code.prompt.agent.claude-haiku-4-5.non-interactive` | agent prompt | `claude-haiku-4-5-20251001` | `non-interactive` | current | `2.1.234` | [claude-haiku-4-5-20251001.md](claude-code/prompts/claude-haiku-4-5-20251001.md) |
+| `claude-code.prompt.agent.claude-opus-4-7.non-interactive` | agent prompt | `claude-opus-4-7` | `non-interactive` | current | `2.1.234` | [claude-opus-4-7.md](claude-code/prompts/claude-opus-4-7.md) |
+| `claude-code.prompt.agent.claude-opus-4-8.non-interactive` | agent prompt | `claude-opus-4-8` | `non-interactive` | current | `2.1.234` | [claude-opus-4-8.md](claude-code/prompts/claude-opus-4-8.md) |
+| `claude-code.prompt.agent.claude-opus-5.non-interactive` | agent prompt | `claude-opus-5` | `non-interactive` | current | `2.1.234` | [claude-opus-5.md](claude-code/prompts/claude-opus-5.md) |
+| `claude-code.prompt.agent.claude-sonnet-4-6.non-interactive` | agent prompt | `claude-sonnet-4-6` | `non-interactive` | current | `2.1.234` | [claude-sonnet-4-6.md](claude-code/prompts/claude-sonnet-4-6.md) |
+| `claude-code.prompt.agent.claude-sonnet-5.non-interactive` | agent prompt | `claude-sonnet-5` | `non-interactive` | current | `2.1.234` | [claude-sonnet-5.md](claude-code/prompts/claude-sonnet-5.md) |
+| `claude-code.prompt.agent.claude-sonnet-5.interactive` | agent prompt | `claude-sonnet-5` | `interactive` | current | `2.1.234` | [claude-sonnet-5-interactive.md](claude-code/prompts/claude-sonnet-5-interactive.md) |
 | `claude-code.prompt.special.session-title` | session title prompt | `claude-haiku-4-5-20251001` | `session-title` | stale | `2.1.220` | [claude-haiku-4-5-20251001-session-title.md](claude-code/prompts/claude-haiku-4-5-20251001-session-title.md) |
-| `claude-code.steering.non-interactive` | steering messages | `claude-fable-5` | `non-interactive` | stale | `2.1.228` | [claude-fable-5-steering.md](claude-code/misc/claude-fable-5-steering.md) |
-| `claude-code.steering.interactive` | steering messages | `claude-sonnet-5` | `interactive` | current | `2.1.233` | [claude-sonnet-5-interactive-steering.md](claude-code/misc/claude-sonnet-5-interactive-steering.md) |
-| `claude-code.tool.catalog` | tool schemas | `supported model catalog` | `non-interactive`, `interactive` | current | `2.1.233` | 36 files ([manifest](claude-code/SURFACES.json)) |
+| `claude-code.steering.non-interactive` | steering messages | `claude-fable-5` | `non-interactive` | current | `2.1.234` | [claude-fable-5-steering.md](claude-code/misc/claude-fable-5-steering.md) |
+| `claude-code.steering.interactive` | steering messages | `claude-sonnet-5` | `interactive` | current | `2.1.234` | [claude-sonnet-5-interactive-steering.md](claude-code/misc/claude-sonnet-5-interactive-steering.md) |
+| `claude-code.tool.catalog` | tool schemas | `supported model catalog` | `non-interactive`, `interactive` | current | `2.1.234` | 36 files ([manifest](claude-code/SURFACES.json)) |
 | `claude-code.agent.definitions` | bundled agent prompts | `all` | `agent invocation` | gap | — | — |
 | `claude-code.skill.definitions` | bundled skills | `all` | `skill invocation` | gap | — | — |
 | `claude-code.command.definitions` | slash commands | `all` | `command invocation` | gap | — | — |
@@ -77,15 +77,16 @@ Observed release: `0.149.1`
 
 ## grok
 
-Observed release: `1.0.3`
+Observed release: `1.0.4`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `grok.prompt.agent.grok-4-5.non-interactive` | agent prompt | `grok-4.5` | `non-interactive` | current | `1.0.3` | [grok-4.5.md](grok/prompts/grok-4.5.md) |
-| `grok.prompt.agent.grok-4-6.interactive` | agent prompt | `grok-4.5`, `grok-4.6` | `interactive` | current | `1.0.3` | [grok-4.6-interactive.md](grok/prompts/grok-4.6-interactive.md) |
-| `grok.prompt.special.session-title` | session title prompt | `grok-4.5` | `session-title` | current | `1.0.3` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
-| `grok.steering.catalog` | steering messages | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive` | current | `1.0.3` | [grok-4.5-steering.md](grok/misc/grok-4.5-steering.md), [grok-4.6-interactive-steering.md](grok/misc/grok-4.6-interactive-steering.md) |
-| `grok.tool.catalog` | tool schemas | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive`, `session-title` | current | `1.0.3` | 28 files ([manifest](grok/SURFACES.json)) |
+| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.4` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
+| `grok.prompt.agent.grok-4-5.non-interactive` | agent prompt | `grok-4.5` | `non-interactive` | stale | `1.0.3` | [grok-4.5.md](grok/prompts/grok-4.5.md) |
+| `grok.prompt.agent.grok-4-6.interactive` | agent prompt | `grok-4.5`, `grok-4.6` | `interactive` | current | `1.0.4` | [grok-4.6-interactive.md](grok/prompts/grok-4.6-interactive.md) |
+| `grok.prompt.special.session-title` | session title prompt | `grok-4.5` | `session-title` | current | `1.0.4` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
+| `grok.steering.catalog` | steering messages | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive` | current | `1.0.4` | [grok-4.5-steering.md](grok/misc/grok-4.5-steering.md), [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md), [grok-4.6-interactive-steering.md](grok/misc/grok-4.6-interactive-steering.md) |
+| `grok.tool.catalog` | tool schemas | `grok-4.5`, `grok-4.6` | `non-interactive`, `interactive`, `session-title` | current | `1.0.4` | 28 files ([manifest](grok/SURFACES.json)) |
 | `grok.agent.definitions` | bundled agent prompts | `grok-4.6` | `subagent invocation` | gap | — | — |
 | `grok.skill.definitions` | bundled skills and workflows | `grok-4.6` | `skill and workflow invocation` | gap | — | — |
 | `grok.event.catalog` | event prompts | `grok-4.6` | `plan`, `scheduler`, `workflow`, `monitor`, `completion` | gap | — | — |
