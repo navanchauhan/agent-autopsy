@@ -143,8 +143,15 @@ test("the Antigravity CLI cannot self-update past the pinned release", () => {
   // extractor's pin assertion and can never be captured.
   const capture = read("capture-antigravity.sh");
   const dockerfile = fs.readFileSync(path.join(scripts, "..", "..", "Dockerfile"), "utf8");
+  const workflow = fs.readFileSync(path.join(scripts, "..", "workflows", "daily-refresh.yml"), "utf8");
   assert.match(capture, /export AGY_CLI_DISABLE_AUTO_UPDATE=1/);
   assert.match(dockerfile, /capture-antigravity[\s\S]*?ENV AGY_CLI_DISABLE_AUTO_UPDATE=1/);
+  // The env var alone is not sufficient: the CLI also spawns a background
+  // updater, so the updater host has to be unreachable from the container.
+  assert.match(workflow, /--add-host/);
+  assert.match(workflow, /antigravity-cli-auto-updater-974169037036\.us-central1\.run\.app:127\.0\.0\.1/);
+  assert.match(workflow, /capture_hosts\+=\(--add-host/);
+  assert.match(workflow, /docker run[\s\S]{0,200}"\$\{capture_hosts\[@\]\}"/);
   // The pin is asserted before a capture is spent, not only by the extractor.
   assert.match(capture, /the plan pinned/);
   assert.match(capture, /--version/);
