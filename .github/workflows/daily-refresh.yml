@@ -51,6 +51,7 @@ jobs:
           node --test .github/scripts/test-prompt-contracts.cjs
           node --test .github/scripts/test-surface-registry.cjs
           node --test .github/scripts/test-validate-refresh.cjs
+          bash .github/scripts/test-claude-session-title.sh
           bash .github/scripts/test-credentials.sh
           bash .github/scripts/test-automation-state.sh
           bash -n .github/scripts/*.sh

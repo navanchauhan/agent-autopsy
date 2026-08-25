@@ -98,15 +98,31 @@ trace_record_matches() {
   ' "$file" >/dev/null 2>&1
 }
 
+# The session-title system prompt is product text and gets rewritten. Claude Code
+# 2.1.234 replaced "Generate a concise, sentence-case title ..." with "You are
+# naming a coding session ...", which silently stopped this detector matching:
+# the capture then waited out its whole timeout on every run and deferred, and
+# the archive stalled at 2.1.233 for twelve releases. Match every known wording,
+# because the pipeline replays one release at a time and still has to capture the
+# older ones. Keep this list in sync when a release changes the prompt again;
+# session_title_prompt_markers is reported verbatim when nothing matches.
+session_title_prompt_markers=(
+  "Generate a concise, sentence-case title"  # <= 2.1.233
+  "You are naming a coding session"          # >= 2.1.234
+)
+
 trace_has_session_title() {
   local file="$1"
-  jq -e '
+  local markers_json
+  markers_json="$(printf '%s\n' "${session_title_prompt_markers[@]}" | jq -R . | jq -s .)"
+  jq -e --argjson markers "$markers_json" '
     . as $record
     | ($record.request.body? | fromjson?) as $body
     | select(
-        ($body | tostring | contains("Generate a concise, sentence-case title"))
-        and (($body.tools // []) | length == 0)
+        ($body | tostring) as $text
+        | any($markers[]; . as $marker | $text | contains($marker))
       )
+    | select((($body.tools // []) | length == 0))
     | select(
         $record.response.ok == true
         and $record.response.completed == true
@@ -177,6 +193,15 @@ wait_for_session_title() {
     sleep 1
   done
   echo "capture-claude-code: no successful session-title request was captured" >&2
+  # Name the most likely cause. This detector matches product prompt text, so a
+  # reword upstream looks exactly like a transport failure unless it says so.
+  echo "capture-claude-code: no request matched a known session-title system prompt." >&2
+  echo "capture-claude-code: if this release reworded the prompt, add the new marker to" >&2
+  echo "capture-claude-code: session_title_prompt_markers. Known markers:" >&2
+  local marker
+  for marker in "${session_title_prompt_markers[@]}"; do
+    echo "capture-claude-code:   - $marker" >&2
+  done
   return 1
 }
 
