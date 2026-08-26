@@ -82,9 +82,11 @@ Each JSON object contains fields such as:
 - `source`: The source of the action (e.g., `USER_EXPLICIT`, `MODEL`, `SYSTEM`).
 - `type`: The type of the step. Particular steps of interest are `USER_INPUT`, which represents a user's prompt, and `PLANNER_RESPONSE`, which represents the agent's response and tool calls.
 - `status`: The status of the step (e.g., `DONE`, `ERROR`).
+- `created_at`: The ISO 8601 timestamp of when the step occurred.
 - `content`: The text content of the step (e.g., the user's request, the model's response, or tool responses).
+- `thinking`: The model's internal reasoning / chain-of-thought (for `PLANNER_RESPONSE` steps).
 - `tool_calls`: An array of tool calls made in this step, including their arguments.
-- `is_truncated`: A boolean indicating that the step's content or thinking was truncated. Only present in `transcript.jsonl` (never in `transcript_full.jsonl`). When true, read the corresponding line in `transcript_full.jsonl` for the complete content.
+- `truncated_fields`: An array of field names that were truncated (e.g., `["content"]`, `["thinking"]`, `["tool_calls"]`). Only present in `transcript.jsonl` when truncation occurred (never in `transcript_full.jsonl`). When present, read the corresponding line in `transcript_full.jsonl` for the complete content.
 
 # How to use transcripts
 Each conversation produces two types of transcripts:

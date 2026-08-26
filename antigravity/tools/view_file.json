@@ -26,10 +26,6 @@
               "type": "INTEGER",
               "description": "Optional. Endline to view, 1-indexed, inclusive. When specified, this value must be greater than or equal to StartLine."
             },
-            "IsSkillFile": {
-              "type": "BOOLEAN",
-              "description": "Optional. Set to true only when reading a file to execute its instructions for a task. Set to false if the purpose is to edit, preview, or manage the file."
-            },
             "StartLine": {
               "type": "INTEGER",
               "description": "Optional. Startline to view, 1-indexed, inclusive. When specified, this value must be less than or equal to EndLine."
