@@ -1,30 +1,30 @@
 {
   "schema_version": 1,
   "tools": {
-    "claude-code": {
-      "plan_hash": "063e198e1a4ec8e2ff816d28dc0c4d0148641d203a423393df1c518b52cf621f",
-      "state": "suppress_positive",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260826",
-      "last_reviewer_input_hash": "1b56eaa6128e13de53c4b45c03de3aa52cc094b2ac9868e1ad2e9ddea212d91c",
-      "reason": "reviewer"
-    },
-    "grok": {
-      "plan_hash": "6151c73e8bfde3c9586c8c5abc07507ac334259a39610f76ce97e91fb7baed76",
+    "codex": {
+      "plan_hash": "13c2c929e7c9249ed3157938d8cb9a902950186a7aba76b4601cb1183146b5ed",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260826",
+      "last_fresh_bucket": "20260828",
       "last_reviewer_input_hash": null,
       "reason": null
     },
-    "antigravity": {
-      "plan_hash": "065dd5c7e50f38da6bbe9f8ee05b90f9950aab841efede1a6d4811523848a44e",
+    "claude-code": {
+      "plan_hash": "063e198e1a4ec8e2ff816d28dc0c4d0148641d203a423393df1c518b52cf621f",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260826",
+      "last_fresh_bucket": "20260828",
+      "last_reviewer_input_hash": "1b56eaa6128e13de53c4b45c03de3aa52cc094b2ac9868e1ad2e9ddea212d91c",
+      "reason": null
+    },
+    "antigravity": {
+      "plan_hash": "d1cc3f22221324d482d5d0cdf8a5d2cc535a7463f62de579606162cba20864ab",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260828",
       "last_reviewer_input_hash": null,
       "reason": null
     },
