@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.234",
+  "observed_release": "2.1.235",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -15,7 +15,7 @@
     {
       "id": "claude-code.prompt.agent.claude-fable-5.non-interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "models": [
@@ -31,12 +31,12 @@
       "artifact_sha256": "1eeb0ce12dc048c8e5a10feca68602dc01162475c96d79dee8deaf3ddf4ad799",
       "notes": "The stored artifact's embedded billing header proves version 2.1.234.",
       "verified_release": "2.1.234",
-      "evidence_sha256": "725bd24b43abfd47cbcc176efc301e14f42476b45bf86b3279c61551386b0896"
+      "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
     },
     {
       "id": "claude-code.prompt.agent.claude-haiku-4-5.non-interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "models": [
@@ -52,12 +52,12 @@
       "artifact_sha256": "602fcec5d6d284ead42674663b01117ce4f47456a444bdccc18928e9dc677e70",
       "notes": "The stored artifact's embedded billing header proves version 2.1.234.",
       "verified_release": "2.1.234",
-      "evidence_sha256": "725bd24b43abfd47cbcc176efc301e14f42476b45bf86b3279c61551386b0896"
+      "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
     },
     {
       "id": "claude-code.prompt.agent.claude-opus-4-7.non-interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "models": [
@@ -73,12 +73,12 @@
       "artifact_sha256": "7826f2211d90c3cc8a28417416f23db2604530a26e554a453ebd1111220b75a9",
       "notes": "The stored artifact's embedded billing header proves version 2.1.234.",
       "verified_release": "2.1.234",
-      "evidence_sha256": "725bd24b43abfd47cbcc176efc301e14f42476b45bf86b3279c61551386b0896"
+      "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
     },
     {
       "id": "claude-code.prompt.agent.claude-opus-4-8.non-interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "models": [
@@ -94,12 +94,12 @@
       "artifact_sha256": "bcf2a6c9c5ab527c718246f0136c2ed44e0f8c4c6b94632f0225237a3fbef8a6",
       "notes": "The stored artifact's embedded billing header proves version 2.1.234.",
       "verified_release": "2.1.234",
-      "evidence_sha256": "725bd24b43abfd47cbcc176efc301e14f42476b45bf86b3279c61551386b0896"
+      "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
     },
     {
       "id": "claude-code.prompt.agent.claude-opus-5.non-interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "models": [
@@ -115,12 +115,12 @@
       "artifact_sha256": "147642b81f9eb408eaf4b0f5116edf2f48b9afa178ec09a06f9866d9bf06bb5c",
       "notes": "The stored artifact's embedded billing header proves version 2.1.234.",
       "verified_release": "2.1.234",
-      "evidence_sha256": "725bd24b43abfd47cbcc176efc301e14f42476b45bf86b3279c61551386b0896"
+      "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
     },
     {
       "id": "claude-code.prompt.agent.claude-sonnet-4-6.non-interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "models": [
@@ -136,12 +136,12 @@
       "artifact_sha256": "aad366893a93f3104ccd985871ecb03f8e54aebab9a57d0c6b5ebb797e2e8c4a",
       "notes": "The stored artifact's embedded billing header proves version 2.1.234.",
       "verified_release": "2.1.234",
-      "evidence_sha256": "725bd24b43abfd47cbcc176efc301e14f42476b45bf86b3279c61551386b0896"
+      "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
     },
     {
       "id": "claude-code.prompt.agent.claude-sonnet-5.non-interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "models": [
@@ -157,15 +157,15 @@
       "artifact_sha256": "f0e185afbc3fa43b2ee973591eb69d520c98112c147dcb1f09217d940e775b25",
       "notes": "The stored artifact's embedded billing header proves version 2.1.234.",
       "verified_release": "2.1.234",
-      "evidence_sha256": "725bd24b43abfd47cbcc176efc301e14f42476b45bf86b3279c61551386b0896"
+      "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
     },
     {
       "id": "claude-code.prompt.agent.claude-sonnet-5.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.234",
-      "verified_release": "2.1.234",
+      "captured_release": "2.1.235",
+      "verified_release": "2.1.235",
       "models": [
         "claude-sonnet-5"
       ],
@@ -176,9 +176,9 @@
       "artifacts": [
         "prompts/claude-sonnet-5-interactive.md"
       ],
-      "artifact_sha256": "4613ab853e52da754d28c2265ffbd4a81fa5a517c3064cc9af215f6057916b41",
-      "notes": "The interactive prompt was normalized from the current 2.1.234 model-facing request.",
-      "evidence_sha256": "725bd24b43abfd47cbcc176efc301e14f42476b45bf86b3279c61551386b0896"
+      "artifact_sha256": "473e5cbeb26c2c4b5332d18514d08c5e449e91304d8167069a950d718156da1f",
+      "notes": "The interactive prompt was normalized from the current 2.1.235 model-facing request.",
+      "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
     },
     {
       "id": "claude-code.prompt.special.session-title",
@@ -202,7 +202,7 @@
     {
       "id": "claude-code.steering.non-interactive",
       "category": "steering messages",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "verified_release": "2.1.234",
@@ -225,7 +225,7 @@
     {
       "id": "claude-code.steering.interactive",
       "category": "steering messages",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "verified_release": "2.1.234",
@@ -250,7 +250,7 @@
     {
       "id": "claude-code.tool.catalog",
       "category": "tool schemas",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "2.1.234",
       "verified_release": "2.1.234",

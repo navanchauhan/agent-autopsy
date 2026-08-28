@@ -1,9 +1,0 @@
-{
-  "name": "computer_use__get_recording_state",
-  "description": "Report the current trajectory recorder state: whether recording is enabled, the output directory (when enabled), and the 1-based counter for the next turn folder that will be written. Counter increments on every recorded action tool call and resets to 1 each time recording is (re-)enabled.\n\nPure read-only.",
-  "parametersJsonSchema": {
-    "additionalProperties": false,
-    "properties": {},
-    "type": "object"
-  }
-}

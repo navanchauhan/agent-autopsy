@@ -1,11 +1,11 @@
 source = anthropic-ai/claude-code
 distribution = native Bun binary
-version = 2.1.234
-installed_version_at_extract = 2.1.234 (Claude Code)
+version = 2.1.235
+installed_version_at_extract = 2.1.235 (Claude Code)
 platform = linux-x64
 binary_path = /Users/example/.local/bin/claude
-sha256 = 3473601ea695d5bf769c5b202844d4cb4fbf723ae995450fcb6973204775c84a
-capture_user_agent = claude-cli/2.1.234 (external, cli)
+sha256 = bfcf0ae2dbf94b2b6a106074aabf3938b9a10889c3b678e4cb5a00c03274d5d5
+capture_user_agent = claude-cli/2.1.235 (external, cli)
 auth_source = local Claude Code Anthropic auth/keychain; ANTHROPIC_API_KEY was unset
 trace_script = claude-code/misc/scripts/trace-claude-messages.cjs
 extract_script = claude-code/misc/scripts/extract-claude-trace.cjs

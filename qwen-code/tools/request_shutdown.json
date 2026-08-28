@@ -1,0 +1,16 @@
+{
+  "name": "request_shutdown",
+  "description": "Ask a teammate to finish its current work and wind down. The teammate replies \"shutdown_approved\" or \"shutdown_rejected: <reason>\". Once a shutdown is pending the teammate is excluded from automatic task assignment. Leader-only. To send a teammate ordinary text, use send_message instead.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "to": {
+        "type": "string",
+        "description": "Teammate name to wind down (bare name, no @)."
+      }
+    },
+    "required": ["to"],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+}

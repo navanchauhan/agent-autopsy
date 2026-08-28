@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.1.16",
+  "observed_release": "1.1.17",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.16",
-      "verified_release": "1.1.16",
+      "captured_release": "1.1.17",
+      "verified_release": "1.1.17",
       "models": [
         "gemini-3.7-flash-high"
       ],
@@ -29,16 +29,16 @@
       "artifacts": [
         "prompts/gemini-3.7-flash-high.md"
       ],
-      "artifact_sha256": "0300ac51096f67dda3608533d61522395b1d034252be1cc09134101173a91698",
-      "evidence_sha256": "7240a74841b325bc6c0f5bf1febae6d98ffadb488fea3dc849390dd2ed6f5458"
+      "artifact_sha256": "e6fa16332b512a4a44659f333beb9cb01fa4364f72ba3a381ac19f7a4d3f9f6d",
+      "evidence_sha256": "a43d73bbdd3fdfc763c6d7d345225b3b2820f9449fedbea034fd430e87e27725"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-6-flash-high.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.16",
-      "verified_release": "1.1.16",
+      "captured_release": "1.1.17",
+      "verified_release": "1.1.17",
       "models": [
         "gemini-3.7-flash-high"
       ],
@@ -49,16 +49,16 @@
       "artifacts": [
         "prompts/gemini-3.7-flash-high-interactive.md"
       ],
-      "artifact_sha256": "a74c2e733578ca4bee7dbc55d3278af6ba8b1e2bbb645ffe94b9e5a96a060329",
-      "evidence_sha256": "7240a74841b325bc6c0f5bf1febae6d98ffadb488fea3dc849390dd2ed6f5458"
+      "artifact_sha256": "ae44932c86fb88b74aca8cd31a1d7bc99b2fe7434afdfe71238b05f03f173614",
+      "evidence_sha256": "a43d73bbdd3fdfc763c6d7d345225b3b2820f9449fedbea034fd430e87e27725"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.16",
-      "verified_release": "1.1.16",
+      "captured_release": "1.1.17",
+      "verified_release": "1.1.17",
       "models": [
         "gemini-3.7-flash-high"
       ],
@@ -87,7 +87,7 @@
         "tools/write_to_file.json"
       ],
       "artifact_sha256": "6636bda3580fdc07845178506d9c5a7a81a87bb7d1434bbe41699016d3fb5eaf",
-      "evidence_sha256": "7240a74841b325bc6c0f5bf1febae6d98ffadb488fea3dc849390dd2ed6f5458"
+      "evidence_sha256": "a43d73bbdd3fdfc763c6d7d345225b3b2820f9449fedbea034fd430e87e27725"
     },
     {
       "id": "antigravity.agent.definitions",

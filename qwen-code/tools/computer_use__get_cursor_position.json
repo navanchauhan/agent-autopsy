@@ -1,9 +1,0 @@
-{
-  "name": "computer_use__get_cursor_position",
-  "description": "Return the current mouse cursor position in screen points (origin top-left).",
-  "parametersJsonSchema": {
-    "additionalProperties": false,
-    "properties": {},
-    "type": "object"
-  }
-}

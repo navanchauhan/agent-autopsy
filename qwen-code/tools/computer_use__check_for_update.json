@@ -1,9 +1,0 @@
-{
-  "name": "computer_use__check_for_update",
-  "description": "Check whether a newer cua-driver-rs release is available on GitHub. Returns the current and latest versions, an `update_available` boolean, the install one-liner, and the release notes URL. Read-only — never installs. Mirror of `cua-driver check-update --json`.",
-  "parametersJsonSchema": {
-    "additionalProperties": false,
-    "properties": {},
-    "type": "object"
-  }
-}

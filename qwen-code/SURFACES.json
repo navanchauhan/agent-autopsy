@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "qwen-code",
-  "observed_release": "0.22.0",
+  "observed_release": "0.22.2",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.22.0",
-      "verified_release": "0.22.0",
+      "captured_release": "0.22.2",
+      "verified_release": "0.22.2",
       "models": [
         "all"
       ],
@@ -34,15 +34,15 @@
         "prompts/core-interactive-qwen3-coder-plus.md"
       ],
       "artifact_sha256": "0d06d20cf7e52c78828075c71757046641b0001774ee8932354561be73d3cbd7",
-      "evidence_sha256": "5675fba9f11085127fe21d22ce0154040e0b0be250137333db5af6e37cf7b749"
+      "evidence_sha256": "f949aebdeaaab28231133b13b415b599053c78a66502e715bde6e9633998b050"
     },
     {
       "id": "qwen-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.22.0",
-      "verified_release": "0.22.0",
+      "captured_release": "0.22.2",
+      "verified_release": "0.22.2",
       "models": [
         "all"
       ],
@@ -55,42 +55,9 @@
         "tools/agent.json",
         "tools/artifact.json",
         "tools/ask_user_question.json",
-        "tools/computer_use__bring_to_front.json",
-        "tools/computer_use__check_for_update.json",
-        "tools/computer_use__check_permissions.json",
-        "tools/computer_use__click.json",
-        "tools/computer_use__double_click.json",
-        "tools/computer_use__drag.json",
-        "tools/computer_use__end_session.json",
-        "tools/computer_use__get_accessibility_tree.json",
-        "tools/computer_use__get_agent_cursor_state.json",
-        "tools/computer_use__get_config.json",
-        "tools/computer_use__get_cursor_position.json",
-        "tools/computer_use__get_recording_state.json",
-        "tools/computer_use__get_screen_size.json",
-        "tools/computer_use__get_window_state.json",
-        "tools/computer_use__hotkey.json",
-        "tools/computer_use__kill_app.json",
-        "tools/computer_use__launch_app.json",
-        "tools/computer_use__list_apps.json",
-        "tools/computer_use__list_windows.json",
-        "tools/computer_use__move_cursor.json",
-        "tools/computer_use__page.json",
-        "tools/computer_use__press_key.json",
-        "tools/computer_use__replay_trajectory.json",
-        "tools/computer_use__right_click.json",
-        "tools/computer_use__scroll.json",
-        "tools/computer_use__set_agent_cursor_enabled.json",
-        "tools/computer_use__set_agent_cursor_motion.json",
-        "tools/computer_use__set_agent_cursor_style.json",
-        "tools/computer_use__set_config.json",
-        "tools/computer_use__set_value.json",
-        "tools/computer_use__start_recording.json",
-        "tools/computer_use__start_session.json",
-        "tools/computer_use__stop_recording.json",
-        "tools/computer_use__type_text.json",
-        "tools/computer_use__zoom.json",
         "tools/create_sub_session.json",
+        "tools/report_findings.json",
+        "tools/request_shutdown.json",
         "tools/cron_create.json",
         "tools/cron_delete.json",
         "tools/cron_list.json",
@@ -132,16 +99,16 @@
         "tools/write_file.json",
         "tools/zoom_image.json"
       ],
-      "artifact_sha256": "3af83b99b301732985f4b6fae137d4bfbcb7628729b5ecc1628a817a8cb34b12",
-      "evidence_sha256": "5675fba9f11085127fe21d22ce0154040e0b0be250137333db5af6e37cf7b749"
+      "artifact_sha256": "244e6fe305f13f584cbafdac227100867cc3a902ce384a3f83932c65e04b6ad6",
+      "evidence_sha256": "f949aebdeaaab28231133b13b415b599053c78a66502e715bde6e9633998b050"
     },
     {
       "id": "qwen-code.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.22.0",
-      "verified_release": "0.22.0",
+      "captured_release": "0.22.2",
+      "verified_release": "0.22.2",
       "models": [
         "all"
       ],
@@ -169,7 +136,7 @@
         "misc/project-summary-prompt.md"
       ],
       "artifact_sha256": "c1c6de8460301d1feb2483c4a8bdada785ae2de561882b6db6ad16566498f259",
-      "evidence_sha256": "5675fba9f11085127fe21d22ce0154040e0b0be250137333db5af6e37cf7b749"
+      "evidence_sha256": "f949aebdeaaab28231133b13b415b599053c78a66502e715bde6e9633998b050"
     },
     {
       "id": "qwen-code.context.session",

@@ -20,13 +20,6 @@
       "summary": {
         "type": "string",
         "description": "Optional 5-10 word summary for UI display."
-      },
-      "type": {
-        "type": "string",
-        "enum": [
-          "shutdown_request"
-        ],
-        "description": "Structured message type for control flow. When set, routes through the mailbox instead of plain text delivery."
       }
     },
     "required": [
