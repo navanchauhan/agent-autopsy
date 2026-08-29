@@ -2,38 +2,47 @@
   "schema_version": 1,
   "tools": {
     "codex": {
-      "plan_hash": "13c2c929e7c9249ed3157938d8cb9a902950186a7aba76b4601cb1183146b5ed",
+      "plan_hash": "5d5f05b90164bd5a9668e235ae77a3e064cdbaeb5d8b6cb68081a45ce36f0548",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260828",
+      "last_fresh_bucket": "20260829",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "claude-code": {
-      "plan_hash": "063e198e1a4ec8e2ff816d28dc0c4d0148641d203a423393df1c518b52cf621f",
+      "plan_hash": "8d8426ae9cde7e33b171f2e505be0b798ca02b089cfdad9de174e4e5cb89178c",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260828",
-      "last_reviewer_input_hash": "1b56eaa6128e13de53c4b45c03de3aa52cc094b2ac9868e1ad2e9ddea212d91c",
+      "last_fresh_bucket": "20260829",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "grok": {
+      "plan_hash": "2d52f025c40af3ee5d235b84fd2bf223eb16bc271ffb984e37131d05d93e7892",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260829",
+      "last_reviewer_input_hash": null,
       "reason": null
     },
     "antigravity": {
-      "plan_hash": "d1cc3f22221324d482d5d0cdf8a5d2cc535a7463f62de579606162cba20864ab",
+      "plan_hash": "f352170ee128f0e40caa18442d6487a870e17f65ec82ea54044f1954210e82c4",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260828",
+      "last_fresh_bucket": "20260829",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "qwen-code": {
-      "plan_hash": "c4ecfe294d4b417eb322c2d2ead3768e81c668ebc6a8aee4ec1286b902f9815b",
+      "plan_hash": "3e339f4fc00130b96a5bc8917b6b5acb9d0cac11aed4436b18ea27af3e4a7a57",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260826",
+      "last_fresh_bucket": "20260829",
       "last_reviewer_input_hash": null,
       "reason": null
     }
