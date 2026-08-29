@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.235",
+  "observed_release": "2.1.236",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -164,8 +164,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.235",
-      "verified_release": "2.1.235",
+      "captured_release": "2.1.236",
+      "verified_release": "2.1.236",
       "models": [
         "claude-sonnet-5"
       ],
@@ -176,9 +176,9 @@
       "artifacts": [
         "prompts/claude-sonnet-5-interactive.md"
       ],
-      "artifact_sha256": "473e5cbeb26c2c4b5332d18514d08c5e449e91304d8167069a950d718156da1f",
+      "artifact_sha256": "011385fbb59ab43c2ae86711d6cbc9c344e6637a0f8c786e0a5c93020e3e7fd0",
       "notes": "The interactive prompt was normalized from the current 2.1.235 model-facing request.",
-      "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
+      "evidence_sha256": "27d31a33bf07a10064a4f6ba8faf4f9a6cfcdafee305e2269b33d17581e8b7e3"
     },
     {
       "id": "claude-code.prompt.special.session-title",
@@ -300,7 +300,7 @@
         "tools/Workflow.json",
         "tools/Write.json"
       ],
-      "artifact_sha256": "aa144cb313e4b8e1394556e6f5b7bf5685fa9f6e2b220687f45f9c272e6312c1",
+      "artifact_sha256": "2838963b5fdb8442fb4e53d9db22494cdba7e7ca8de6bc726385f60bf3bfef1b",
       "evidence_sha256": "725bd24b43abfd47cbcc176efc301e14f42476b45bf86b3279c61551386b0896",
       "notes": "Expanded deferred-tool schemas were present in raw model-facing requests; the catalog includes the supported current 2.1.234 interactive variants."
     },

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "grok",
-  "observed_release": "1.0.5",
+  "observed_release": "1.0.6",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.5",
-      "verified_release": "1.0.5",
+      "captured_release": "1.0.6",
+      "verified_release": "1.0.6",
       "models": [
         "grok-4.6"
       ],
@@ -30,7 +30,7 @@
         "prompts/grok-4.6.md"
       ],
       "artifact_sha256": "230b494376e4eb767e487235f99d6cd8dae4e6c6ef3a05eb868a1d8318e0bd12",
-      "evidence_sha256": "13ce509ebd231a6a83a7713b6c9cd4a969d799bc305408d785c4cc8ab892b114"
+      "evidence_sha256": "f5e191e35ebeac7b732ab0827bfc391ba25a56b6c01041c7f99ea57f7e4d2472"
     },
     {
       "id": "grok.prompt.agent.grok-4-5.non-interactive",
@@ -56,8 +56,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.5",
-      "verified_release": "1.0.5",
+      "captured_release": "1.0.6",
+      "verified_release": "1.0.6",
       "models": [
         "grok-4.5",
         "grok-4.6"
@@ -70,15 +70,15 @@
         "prompts/grok-4.6-interactive.md"
       ],
       "artifact_sha256": "e3601af073ffe241c4d071de435df7b9ba3096a36340ff4813d9d858a8c33dfe",
-      "evidence_sha256": "13ce509ebd231a6a83a7713b6c9cd4a969d799bc305408d785c4cc8ab892b114"
+      "evidence_sha256": "f5e191e35ebeac7b732ab0827bfc391ba25a56b6c01041c7f99ea57f7e4d2472"
     },
     {
       "id": "grok.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.5",
-      "verified_release": "1.0.5",
+      "captured_release": "1.0.6",
+      "verified_release": "1.0.6",
       "models": [
         "grok-4.5"
       ],
@@ -90,15 +90,15 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "13ce509ebd231a6a83a7713b6c9cd4a969d799bc305408d785c4cc8ab892b114"
+      "evidence_sha256": "f5e191e35ebeac7b732ab0827bfc391ba25a56b6c01041c7f99ea57f7e4d2472"
     },
     {
       "id": "grok.steering.catalog",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.5",
-      "verified_release": "1.0.5",
+      "captured_release": "1.0.6",
+      "verified_release": "1.0.6",
       "models": [
         "grok-4.5",
         "grok-4.6"
@@ -119,16 +119,15 @@
         "misc/grok-4.6-interactive-steering.md"
       ],
       "artifact_sha256": "6f3b0aa98ed0d04c0f341adf73acc5a45b6941fbbd15497eebcb66145a35756f",
-      "evidence_sha256": "13ce509ebd231a6a83a7713b6c9cd4a969d799bc305408d785c4cc8ab892b114",
-      "notes": "Interactive steering includes the captured dashboard instruction appended after the interactive turn."
+      "evidence_sha256": "f5e191e35ebeac7b732ab0827bfc391ba25a56b6c01041c7f99ea57f7e4d2472"
     },
     {
       "id": "grok.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.5",
-      "verified_release": "1.0.5",
+      "captured_release": "1.0.6",
+      "verified_release": "1.0.6",
       "models": [
         "grok-4.5",
         "grok-4.6"
@@ -169,8 +168,8 @@
         "tools/write.json",
         "tools/x_search.json"
       ],
-      "artifact_sha256": "e2fd450329f082d5c8811247afe204cf2036cdd5f58caa82c826e851f4b4c85f",
-      "evidence_sha256": "13ce509ebd231a6a83a7713b6c9cd4a969d799bc305408d785c4cc8ab892b114"
+      "artifact_sha256": "085f696e5e95323612aedabbc97834652d7712004c39fad388557cd10c6c96d9",
+      "evidence_sha256": "f5e191e35ebeac7b732ab0827bfc391ba25a56b6c01041c7f99ea57f7e4d2472"
     },
     {
       "id": "grok.agent.definitions",

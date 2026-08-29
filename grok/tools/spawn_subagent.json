@@ -28,21 +28,6 @@
           "type": "boolean",
           "default": true
         },
-        "capability_mode": {
-          "description": "Capability mode: \"read-only\", \"read-write\", \"execute\", or \"all\". Controls which tool classes the child can use. Default is determined by the role.",
-          "type": [
-            "string",
-            "null"
-          ],
-          "enum": [
-            "read-only",
-            "read-write",
-            "execute",
-            "all",
-            null
-          ],
-          "default": null
-        },
         "isolation": {
           "description": "Isolation mode: \"none\" (default, shared workspace) or \"worktree\" (isolated git worktree). Worktree mode prevents the child's edits from affecting the parent workspace until explicitly merged.",
           "type": [
