@@ -4,17 +4,11 @@
     "codex": [
       {
         "tool": "codex",
-        "new_version": "0.150.1",
-        "new_revision": "90854393966b21e9ebfd21b122334eb09a20c93d"
+        "new_version": "0.151.0",
+        "new_revision": "78c290807ce710180111df227df3b7a4fe845452"
       }
     ],
     "claude-code": [
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.236",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.236/linux-x64/claude",
-        "artifact_sha256": "6c8818fa22187aa555c242be4abbacc44d6b71a32ac9631ee7b2b5d12f51f752"
-      },
       {
         "tool": "claude-code",
         "new_version": "2.1.237",
@@ -97,14 +91,6 @@
     "grok": [
       {
         "tool": "grok",
-        "new_version": "1.0.6",
-        "new_revision": "7d67deacbeb1c1093fdb4f9bcbfab2630e18a6aa",
-        "mirror_revision": "19d42e35c07a9c9244f03f6df0c4c353f970d4f9",
-        "artifact_url": "https://x.ai/cli/grok-1.0.6-linux-x86_64",
-        "artifact_sha256": "6234206f9769c01429a5dca387730bdd117ed4ba16b4d1d54ef979b858474694"
-      },
-      {
-        "tool": "grok",
         "new_version": "1.0.7",
         "new_revision": "956313d459bee15ae8f17bf73e0633605e18dddd",
         "mirror_revision": "07b2f7144fd5c5c9d3dd1966937a87852d2dbdb8",
@@ -155,12 +141,6 @@
     "antigravity": [
       {
         "tool": "antigravity",
-        "new_version": "1.1.18",
-        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.18-6435547766456320/linux-x64/cli_linux_x64.tar.gz",
-        "artifact_sha512": "26e93eed64aa543d421a6ae9908e52ad406e8bc69f0ad9cfb7d7d14160f28841ecbb9ec07747299eea271581ab6065eee4d8e082b8144cdfa0df454044107632"
-      },
-      {
-        "tool": "antigravity",
         "new_version": "1.1.19",
         "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.19-4894004681244672/linux-x64/cli_linux_x64.tar.gz",
         "artifact_sha512": "7c3b310c80685adcba714994207eb870fb4817403975da46555b7d9fade446487da3d8f897aa220dfbc30f602ab461a0147a6f7b3c8228fdebd35951e3f250fd"
@@ -184,12 +164,6 @@
         "artifact_sha512": "40225d4b1f009412e905f0a234ba3d51487038d1ad1b8fa19331c84be55610a01f5b0ad9916fb871151cc45456c6bc30cc0b1ea5dab6c0616bc8fb262bcdd7a9"
       }
     ],
-    "qwen-code": [
-      {
-        "tool": "qwen-code",
-        "new_version": "0.22.3",
-        "new_revision": "09825973e7d3c3fd07e17909c396aa62f48ce51f"
-      }
-    ]
+    "qwen-code": []
   }
 }
