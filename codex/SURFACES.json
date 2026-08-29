@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "codex",
-  "observed_release": "0.150.1",
+  "observed_release": "0.151.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.150.1",
-      "verified_release": "0.150.1",
+      "captured_release": "0.151.0",
+      "verified_release": "0.151.0",
       "models": [
         "gpt-5",
         "gpt-5.1",
@@ -50,15 +50,15 @@
         "prompts/review.md"
       ],
       "artifact_sha256": "e3c3b5bd4ae6a15ff140dcd7533dee6efd8968f35f0322aafc4df82b8240c96a",
-      "evidence_sha256": "4099f6c19768836dccddd07f200a32315d4e1795385fc874b2206a37faf41a4f"
+      "evidence_sha256": "98af5fc69b65ffe7df76c77136abc9117a01515d1369ef345172fe934b96cac6"
     },
     {
       "id": "codex.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.150.1",
-      "verified_release": "0.150.1",
+      "captured_release": "0.151.0",
+      "verified_release": "0.151.0",
       "models": [
         "all"
       ],
@@ -94,15 +94,15 @@
         "tools/write_stdin.json"
       ],
       "artifact_sha256": "6cd72b18550827fee3601a55ad5726bd02c61b9241b115ad6c9384ceefd276bf",
-      "evidence_sha256": "4099f6c19768836dccddd07f200a32315d4e1795385fc874b2206a37faf41a4f"
+      "evidence_sha256": "98af5fc69b65ffe7df76c77136abc9117a01515d1369ef345172fe934b96cac6"
     },
     {
       "id": "codex.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.150.1",
-      "verified_release": "0.150.1",
+      "captured_release": "0.151.0",
+      "verified_release": "0.151.0",
       "models": [
         "all"
       ],
@@ -144,8 +144,8 @@
         "misc/review-exit-interrupted.xml",
         "misc/review-exit-success.xml"
       ],
-      "artifact_sha256": "27166f45b501cd8e93d6dc78ad65429c0ff9d37716ed474903dfbfaebd30d77b",
-      "evidence_sha256": "4099f6c19768836dccddd07f200a32315d4e1795385fc874b2206a37faf41a4f"
+      "artifact_sha256": "b1b587dd39020f93430cf32f2cffd0f0e76e34756b4ed06a8d16b1b4da3668fe",
+      "evidence_sha256": "98af5fc69b65ffe7df76c77136abc9117a01515d1369ef345172fe934b96cac6"
     },
     {
       "id": "codex.assembly.model-mode",

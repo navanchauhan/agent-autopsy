@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.236",
+  "observed_release": "2.1.237",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -164,8 +164,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.236",
-      "verified_release": "2.1.236",
+      "captured_release": "2.1.237",
+      "verified_release": "2.1.237",
       "models": [
         "claude-sonnet-5"
       ],
@@ -176,9 +176,9 @@
       "artifacts": [
         "prompts/claude-sonnet-5-interactive.md"
       ],
-      "artifact_sha256": "011385fbb59ab43c2ae86711d6cbc9c344e6637a0f8c786e0a5c93020e3e7fd0",
-      "notes": "The interactive prompt was normalized from the current 2.1.235 model-facing request.",
-      "evidence_sha256": "27d31a33bf07a10064a4f6ba8faf4f9a6cfcdafee305e2269b33d17581e8b7e3"
+      "artifact_sha256": "96255728d9483447a560e6321cfb4cfb55acb2248225b3c52543481e9ef7c219",
+      "notes": "The interactive prompt was normalized from the current 2.1.237 model-facing request.",
+      "evidence_sha256": "5904663336b506940608b9119137e59edd868abda91b575f9000e93122d5c1e2"
     },
     {
       "id": "claude-code.prompt.special.session-title",

@@ -1,13 +1,13 @@
 source = anthropic-ai/claude-code
 distribution = native Bun binary
-version = 2.1.236
+version = 2.1.237
 platform = linux-x64
-sha256 = 6c8818fa22187aa555c242be4abbacc44d6b71a32ac9631ee7b2b5d12f51f752
+sha256 = 73975167f0108693cf6fd6614994781657ebb8456ebef5d247458734abfb3916
 endpoint = /v1/messages
 capture_modes = non-interactive, interactive, session-title
-latest_non_interactive_request_version = 2.1.236
+latest_non_interactive_request_version = 2.1.237
 non_interactive_artifact_version = 2.1.234
-interactive_capture_version = 2.1.236
+interactive_capture_version = 2.1.237
 latest_session_title_request_version = 2.1.233
 session_title_artifact_version = 2.1.220
 surface_registry = SURFACES.json
