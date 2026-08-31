@@ -11,7 +11,8 @@ The rules section has a number of possible rules/memories/context that you shoul
 
 
 <user_rules description="These are rules set by the user that you should follow if appropriate.">
-<user_rule>When implementing or fixing anything in a web application (UI, layout, styling, routing, client state, or rendered data), verify your work in the browser before declaring the task complete.
+<user_rule>
+When implementing or fixing anything in a web application (UI, layout, styling, routing, client state, or rendered data), verify your work in the browser before declaring the task complete.
 
 **Use this verification workflow:**
 - Open the app with the available browser tools and exercise the changed feature end to end the way a real user would: click, type, submit, navigate.
@@ -22,9 +23,20 @@ The rules section has a number of possible rules/memories/context that you shoul
 - When layout or styling changed, check both desktop and mobile viewports.
 - If verification finds a problem, fix it and re-verify. Do not finish with unverified UI work.
 
-If no browser tools are available, verify through the closest available substitute (tests, curl against the dev server, rendering scripts) and say what you could not verify.</user_rule>
+If no browser tools are available, verify through the closest available substitute (tests, curl against the dev server, rendering scripts) and say what you could not verify.
+</user_rule>
 </user_rules>
 </rules>
+
+---
+
+<system-reminder>
+The following workflows are available:
+
+- deep-research: Research a query with bounded parallelism, cross-check the evidence, and write a cited report
+  Use when: Compare, investigate, or research a question that needs sourced claims. /deep-research, research this, write a cited report.
+  Absolute path: /example/_work/xai/xai/crates/codegen/xai-grok-shell/src/session/workflows/deep_research.rhai
+</system-reminder>
 
 ---
 

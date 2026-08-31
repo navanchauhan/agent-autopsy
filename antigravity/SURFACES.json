@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.1.20",
+  "observed_release": "1.1.21",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.20",
-      "verified_release": "1.1.20",
+      "captured_release": "1.1.21",
+      "verified_release": "1.1.21",
       "models": [
         "gemini-3.7-flash-high"
       ],
@@ -30,15 +30,15 @@
         "prompts/gemini-3.7-flash-high.md"
       ],
       "artifact_sha256": "c5db7c34b1b61bf98319410c206204ad4355d4952d633f94cde6b970422c391a",
-      "evidence_sha256": "71cf37b6bea9a9bcdce290ee262e74b5b225132a5f9f80b2633d73b48dd54817"
+      "evidence_sha256": "cda1819984fad051f96df2be13c925d8f63cb2fec17d8c2cace3c94816b02661"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-6-flash-high.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.20",
-      "verified_release": "1.1.20",
+      "captured_release": "1.1.21",
+      "verified_release": "1.1.21",
       "models": [
         "gemini-3.7-flash-high"
       ],
@@ -50,15 +50,15 @@
         "prompts/gemini-3.7-flash-high-interactive.md"
       ],
       "artifact_sha256": "4e02bc83c9fc83f6a48c73b05d8c52ab977d9daf68fb0b48ceed8ec69e17d115",
-      "evidence_sha256": "71cf37b6bea9a9bcdce290ee262e74b5b225132a5f9f80b2633d73b48dd54817"
+      "evidence_sha256": "cda1819984fad051f96df2be13c925d8f63cb2fec17d8c2cace3c94816b02661"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.20",
-      "verified_release": "1.1.20",
+      "captured_release": "1.1.21",
+      "verified_release": "1.1.21",
       "models": [
         "gemini-3.7-flash-high"
       ],
@@ -87,7 +87,7 @@
         "tools/write_to_file.json"
       ],
       "artifact_sha256": "6636bda3580fdc07845178506d9c5a7a81a87bb7d1434bbe41699016d3fb5eaf",
-      "evidence_sha256": "71cf37b6bea9a9bcdce290ee262e74b5b225132a5f9f80b2633d73b48dd54817"
+      "evidence_sha256": "cda1819984fad051f96df2be13c925d8f63cb2fec17d8c2cace3c94816b02661"
     },
     {
       "id": "antigravity.agent.definitions",
