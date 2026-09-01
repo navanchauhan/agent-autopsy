@@ -2,7 +2,7 @@
   "schema_version": 1,
   "tools": {
     "claude-code": {
-      "plan_hash": "ef546dded1a74e7bf350012d3d36f4e9172707f35f795b0dd9e07441a66f5cee",
+      "plan_hash": "f430f8ee6889e182cb324fe955eb3945fd7e238a0625f45bdcd74d75137a4fb1",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
@@ -11,7 +11,7 @@
       "reason": null
     },
     "grok": {
-      "plan_hash": "6574ad995153d5ab6273b93c9062a0f81016b4c2922d33a1522de1937c29cf22",
+      "plan_hash": "1e9dca987226e1c8fc60f0f78e2c12c2dedf8235ff0128d3e718eae5822d8d61",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
