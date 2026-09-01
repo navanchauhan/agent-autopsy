@@ -1,20 +1,8 @@
 {
   "schema_version": 1,
   "queues": {
-    "codex": [
-      {
-        "tool": "codex",
-        "new_version": "0.152.0",
-        "new_revision": "316795b3cf2a45e90d121d9f46499d4658b2645c"
-      }
-    ],
+    "codex": [],
     "claude-code": [
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.240",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.240/linux-x64/claude",
-        "artifact_sha256": "1386169da77de19a655f07a86ab80f5775983a50eb0c9c27a7daf16e7320322d"
-      },
       {
         "tool": "claude-code",
         "new_version": "2.1.241",
@@ -79,14 +67,6 @@
     "grok": [
       {
         "tool": "grok",
-        "new_version": "1.0.10",
-        "new_revision": "28439e8a8712c363321cf6ff0c2d70cd058d2a7d",
-        "mirror_revision": "77cd7eb675ba911c225c3aaeeece3a20cbccc426",
-        "artifact_url": "https://x.ai/cli/grok-1.0.10-linux-x86_64",
-        "artifact_sha256": "d698a2dfa7ea37043f1c70cdca7da12ca51a5e124ffb4fc9a7b12bd26d0e2752"
-      },
-      {
-        "tool": "grok",
         "new_version": "1.0.11",
         "new_revision": "d5a0335a47221e8c9519936cb693e9b6450227ec",
         "mirror_revision": "bc7f02eddd3d84085849dc19ed216f11c23b0571",
@@ -113,9 +93,9 @@
     "antigravity": [
       {
         "tool": "antigravity",
-        "new_version": "1.1.22",
-        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.22-5711547746615296/linux-x64/cli_linux_x64.tar.gz",
-        "artifact_sha512": "40225d4b1f009412e905f0a234ba3d51487038d1ad1b8fa19331c84be55610a01f5b0ad9916fb871151cc45456c6bc30cc0b1ea5dab6c0616bc8fb262bcdd7a9"
+        "new_version": "1.1.23",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.23-6260551186251776/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "89257bbc755f4c97bdc018e5ee1280ba4285f3b6bc1e4a186c43790a7859d2d005816b5e22f7c85de3290e59f8bac30e87187e29cb93ce53bc5ea3e7dbc87445"
       }
     ],
     "qwen-code": []
