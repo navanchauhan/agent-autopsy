@@ -5,7 +5,88 @@
     "name": "workflow",
     "parameters": {
       "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "source"
+      ],
+      "type": "object",
       "properties": {
+        "source": {
+          "description": "Exactly one workflow source. The `type` tag selects a registered name, inline script, script path, or same-process resume.",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Name of a registered workflow (built-in, or discovered from the project `.grok/workflows/` or user `~/.grok/workflows/`).",
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "const": "name"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "name"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "script": {
+                  "description": "Inline Rhai workflow script. It must start with a pure-literal `let meta = #{ name: ..., description: ... };` map. Before authoring, read the `create-workflow` skill's SKILL.md. Run the path-specific `validate_only` smoke check with representative args.",
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "const": "script"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "script"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "script_path": {
+                  "description": "Path to a .rhai workflow script on disk.",
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "const": "script_path"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "script_path"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "resume_from_run_id": {
+                  "description": "Resume a same-process paused run, continuing its original immutable source and args. A budget-limited run resumes only when `agent_budget` is passed with a higher cap. Process-restart interruptions are terminal.",
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "const": "resume"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "resume_from_run_id"
+              ]
+            }
+          ]
+        },
         "agent_budget": {
           "description": "Absolute cumulative cap on logical child-agent calls for this run. Every agent() and every parallel() item consumes one slot; schema retries do not. Defaults to 128 and may be set from 1 through 1,024. A panel that would exceed the remaining budget is rejected before any of its children launch.",
           "type": [
@@ -17,40 +98,8 @@
           "maximum": 1024,
           "default": null
         },
-        "name": {
-          "description": "Name of a registered workflow (built-in, or discovered from the project `.grok/workflows/` or user `~/.grok/workflows/`). Exactly one of `name`, `script`, or `script_path` must be set.",
-          "type": [
-            "string",
-            "null"
-          ],
-          "default": null
-        },
-        "script": {
-          "description": "Inline Rhai workflow script. It must start with a pure-literal `let meta = #{ name: ..., description: ... };` map. Before authoring, read the `create-workflow` skill's SKILL.md. Run the path-specific `validate_only` smoke check with representative args.",
-          "type": [
-            "string",
-            "null"
-          ],
-          "default": null
-        },
-        "script_path": {
-          "description": "Path to a .rhai workflow script on disk.",
-          "type": [
-            "string",
-            "null"
-          ],
-          "default": null
-        },
         "args": {
           "description": "JSON value bound to the script's `args` global. Use an object for named arguments.",
-          "default": null
-        },
-        "resume_from_run_id": {
-          "description": "Resume a same-process paused run, continuing its original immutable script and args; do not also pass name, script, script_path, or args. A budget-limited run resumes only when agent_budget is passed with a higher cap. Process-restart interruptions are terminal.",
-          "type": [
-            "string",
-            "null"
-          ],
           "default": null
         },
         "validate_only": {
@@ -58,10 +107,8 @@
           "type": "boolean",
           "default": false
         }
-      },
-      "type": "object",
-      "required": []
+      }
     },
-    "description": "Launch a workflow: a Rhai script that orchestrates subagents as one background run. Provide exactly one source: `name` (a registered workflow — built-in, or from the project `.grok/workflows/` or user `~/.grok/workflows/`), an inline `script`, or a `script_path`. Optionally pass `args` (bound to the script's `args`) and `agent_budget`, an absolute cap on cumulative child-agent calls: every agent() and parallel() item consumes one slot (schema retries do not); default 128. The host also caps live children per run (32 by default, host-configured) — larger parallel() panels are queued and still act as a barrier. The call returns immediately; progress appears in `/workflow runs` and completion is reported automatically — do not poll or sleep-wait.\n\nPrefer a registered workflow when one fits; author a script for bounded fan-out over a known work list, staged research and verification, or several independent perspectives. Before writing or editing a script, read the `create-workflow` skill's SKILL.md. `validate_only: true` runs a path-specific smoke check (metadata, compile, one canned-host path) — not proof that every branch or live tool works.\n\nA started run gets a session-unique display name (e.g. `review-changes`, `review-changes-2`) — the handle to show the user and use with `/workflow pause|resume|stop <name>`; keep run IDs internal. Each launch persists an editable `script_path`; edit it and launch as a new run to iterate. Use `resume_from_run_id` only for a same-process paused run (process restarts are terminal); a budget-limited run resumes only with a higher `agent_budget`. Save reusable scripts to `.grok/workflows/<name>.rhai`."
+    "description": "Launch a workflow: a Rhai script that orchestrates subagents as one background run. Provide exactly one `source`: a registered workflow `name`, an inline `script`, a `script_path`, or a same-process `resume`. Optionally pass `args` (bound to the script's `args`) and `agent_budget`, an absolute cap on cumulative child-agent calls: every agent() and parallel() item consumes one slot (schema retries do not); default 128. The host also caps live children per run (32 by default, host-configured) — larger parallel() panels are queued and still act as a barrier. The call returns immediately; progress appears in `/workflow runs` and completion is reported automatically — do not poll or sleep-wait.\n\nPrefer a registered workflow when one fits; author a script for bounded fan-out over a known work list, staged research and verification, or several independent perspectives. Before writing or editing a script, read the `create-workflow` skill's SKILL.md. `validate_only: true` runs a path-specific smoke check (metadata, compile, one canned-host path) — not proof that every branch or live tool works.\n\nA started run gets a session-unique display name (e.g. `review-changes`, `review-changes-2`) — the handle to show the user and use with `/workflow pause|resume|stop <name>`; keep run IDs internal. Each launch persists an editable `script_path`; edit it and launch as a new run to iterate. Use the `resume` source only for a same-process paused run (process restarts are terminal); it reuses the run's original immutable source and args, and a budget-limited run resumes only with a higher `agent_budget`. Save reusable scripts to `.grok/workflows/<name>.rhai`."
   }
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.239",
+  "observed_release": "2.1.240",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -164,8 +164,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.239",
-      "verified_release": "2.1.239",
+      "captured_release": "2.1.240",
+      "verified_release": "2.1.240",
       "models": [
         "claude-sonnet-5"
       ],
@@ -176,9 +176,9 @@
       "artifacts": [
         "prompts/claude-sonnet-5-interactive.md"
       ],
-      "artifact_sha256": "77022e1af4b8e10ebd43d3f0b6e3ffaeebc279ed0845e9d690c10d82b702f2d1",
-      "notes": "The interactive prompt was normalized from the current 2.1.239 model-facing request.",
-      "evidence_sha256": "aa2eb25b35d75ca0a89cbd77e7c5a3e0f18001d846198a1fcc969442e36b8237"
+      "artifact_sha256": "ea2f5b68e0fa328f849db51c3f4aad64ad03ff096dc4c114945ad85aba73b04a",
+      "notes": "The interactive prompt was normalized from the current 2.1.240 model-facing request.",
+      "evidence_sha256": "c3692c81419061a61a10086eb72d94059c035b7ba63b42014840418cbd092042"
     },
     {
       "id": "claude-code.prompt.special.session-title",
@@ -252,8 +252,8 @@
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.239",
-      "verified_release": "2.1.239",
+      "captured_release": "2.1.240",
+      "verified_release": "2.1.240",
       "models": [
         "supported model catalog"
       ],
@@ -302,8 +302,8 @@
         "tools/SendFeedback.json"
       ],
       "artifact_sha256": "6407a7497730a4a42f07644eef90e90d007bb350f24cd99f59c87bb662107505",
-      "evidence_sha256": "aa2eb25b35d75ca0a89cbd77e7c5a3e0f18001d846198a1fcc969442e36b8237",
-      "notes": "Expanded deferred-tool schemas were present in the current 2.1.239 model-facing requests; the catalog includes the supported current variants."
+      "evidence_sha256": "c3692c81419061a61a10086eb72d94059c035b7ba63b42014840418cbd092042",
+      "notes": "Expanded deferred-tool schemas were present in the current 2.1.240 model-facing requests; the catalog includes the supported current variants."
     },
     {
       "id": "claude-code.agent.definitions",
