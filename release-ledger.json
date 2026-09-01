@@ -5,12 +5,6 @@
     "claude-code": [
       {
         "tool": "claude-code",
-        "new_version": "2.1.241",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.241/linux-x64/claude",
-        "artifact_sha256": "0771bd866cff82b76581fc0499f6529e1a36845078f144f8c81dccb3bc7037b8"
-      },
-      {
-        "tool": "claude-code",
         "new_version": "2.1.242",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.242/linux-x64/claude",
         "artifact_sha256": "528ef039aa7d64d7b3fbc06925132755a516b4dcaad784cf0b51fe03167360d4"
@@ -62,17 +56,15 @@
         "new_version": "2.1.252",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.252/linux-x64/claude",
         "artifact_sha256": "a715a45105e593fc9808d035d77781f88480b9897975a9df41837f0c591bd4b3"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.257",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.257/linux-x64/claude",
+        "artifact_sha256": "9a64bda9d8722a1fa05bef9a5961d07e0331b99597eda9e2f6a732f3a0ff7f05"
       }
     ],
     "grok": [
-      {
-        "tool": "grok",
-        "new_version": "1.0.11",
-        "new_revision": "d5a0335a47221e8c9519936cb693e9b6450227ec",
-        "mirror_revision": "bc7f02eddd3d84085849dc19ed216f11c23b0571",
-        "artifact_url": "https://x.ai/cli/grok-1.0.11-linux-x86_64",
-        "artifact_sha256": "4fc1bf5a9d634ff276627c0381eb6aaca34d1b73a5c0df5869703e648dcaa323"
-      },
       {
         "tool": "grok",
         "new_version": "1.0.12",
@@ -90,14 +82,7 @@
         "artifact_sha256": "edf79521581bb5e6b95abef848491a6a742e860da3e237ebe86a280d30dce4c1"
       }
     ],
-    "antigravity": [
-      {
-        "tool": "antigravity",
-        "new_version": "1.1.23",
-        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.23-6260551186251776/linux-x64/cli_linux_x64.tar.gz",
-        "artifact_sha512": "89257bbc755f4c97bdc018e5ee1280ba4285f3b6bc1e4a186c43790a7859d2d005816b5e22f7c85de3290e59f8bac30e87187e29cb93ce53bc5ea3e7dbc87445"
-      }
-    ],
+    "antigravity": [],
     "qwen-code": []
   }
 }
