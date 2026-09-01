@@ -52,7 +52,7 @@ Example:
 
 <system-reminder>
 MCP server connected:
-- tasks (9 tools)
+- tasks (10 tools)
 
 To use MCP tools, you MUST call `search_tool` first to retrieve the tool's input schema before calling `use_tool`. NEVER guess parameter names — always use the exact schema returned by `search_tool`.
 </system-reminder>

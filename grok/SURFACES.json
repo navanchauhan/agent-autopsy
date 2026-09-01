@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "grok",
-  "observed_release": "1.0.11",
+  "observed_release": "1.0.12",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.11",
-      "verified_release": "1.0.11",
+      "captured_release": "1.0.12",
+      "verified_release": "1.0.12",
       "models": [
         "grok-4.6"
       ],
@@ -30,15 +30,15 @@
         "prompts/grok-4.6.md"
       ],
       "artifact_sha256": "230b494376e4eb767e487235f99d6cd8dae4e6c6ef3a05eb868a1d8318e0bd12",
-      "evidence_sha256": "da6b1c39ecb4f0ce79d89a27f986c702e202b89fb1f94a1a26aa4bd8df9068b0"
+      "evidence_sha256": "aea56ecb888e6ae841a91aaf96aa2290c3d7e6355516a47567c73a68606cded8"
     },
     {
       "id": "grok.prompt.agent.grok-4-6.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.11",
-      "verified_release": "1.0.11",
+      "captured_release": "1.0.12",
+      "verified_release": "1.0.12",
       "models": [
         "grok-4.5",
         "grok-4.6"
@@ -51,15 +51,15 @@
         "prompts/grok-4.6-interactive.md"
       ],
       "artifact_sha256": "e3601af073ffe241c4d071de435df7b9ba3096a36340ff4813d9d858a8c33dfe",
-      "evidence_sha256": "da6b1c39ecb4f0ce79d89a27f986c702e202b89fb1f94a1a26aa4bd8df9068b0"
+      "evidence_sha256": "aea56ecb888e6ae841a91aaf96aa2290c3d7e6355516a47567c73a68606cded8"
     },
     {
       "id": "grok.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.11",
-      "verified_release": "1.0.11",
+      "captured_release": "1.0.12",
+      "verified_release": "1.0.12",
       "models": [
         "grok-4.5"
       ],
@@ -71,15 +71,15 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "da6b1c39ecb4f0ce79d89a27f986c702e202b89fb1f94a1a26aa4bd8df9068b0"
+      "evidence_sha256": "aea56ecb888e6ae841a91aaf96aa2290c3d7e6355516a47567c73a68606cded8"
     },
     {
       "id": "grok.steering.catalog",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.11",
-      "verified_release": "1.0.11",
+      "captured_release": "1.0.12",
+      "verified_release": "1.0.12",
       "models": [
         "grok-4.5",
         "grok-4.6"
@@ -98,16 +98,16 @@
         "misc/grok-4.6-steering.md",
         "misc/grok-4.6-interactive-steering.md"
       ],
-      "artifact_sha256": "f1949e21a5798c10c0c393dbb2cd90cb1853e08d0b3aa45a1c5feeb8a7964123",
-      "evidence_sha256": "da6b1c39ecb4f0ce79d89a27f986c702e202b89fb1f94a1a26aa4bd8df9068b0"
+      "artifact_sha256": "9e7eb852fff59f725fab29841e1be2afa939e739619e9a697bfcbeb281ab48cc",
+      "evidence_sha256": "aea56ecb888e6ae841a91aaf96aa2290c3d7e6355516a47567c73a68606cded8"
     },
     {
       "id": "grok.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.11",
-      "verified_release": "1.0.11",
+      "captured_release": "1.0.12",
+      "verified_release": "1.0.12",
       "models": [
         "grok-4.5",
         "grok-4.6"
@@ -148,8 +148,8 @@
         "tools/write.json",
         "tools/x_search.json"
       ],
-      "artifact_sha256": "e6c05c473e3288ecd58c1f159f17723282655e9b759383707d45c134e06ee7ba",
-      "evidence_sha256": "da6b1c39ecb4f0ce79d89a27f986c702e202b89fb1f94a1a26aa4bd8df9068b0"
+      "artifact_sha256": "878d7f0b1fc235dbde3719ad92992a44f010638b75f5091f7bb22dd60e40bc43",
+      "evidence_sha256": "aea56ecb888e6ae841a91aaf96aa2290c3d7e6355516a47567c73a68606cded8"
     },
     {
       "id": "grok.agent.definitions",
