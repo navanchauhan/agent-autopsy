@@ -93,6 +93,9 @@ for (const provider of providers) {
     }
     text = setField(text, "manifest_version", entry.new_version);
   }
+  if (provider === "grok" && typeof entry.mirror_revision === "string" && /^[0-9a-f]{40}$/.test(entry.mirror_revision)) {
+    text = setField(text, "mirror_revision", entry.mirror_revision);
+  }
   if (text === before) continue;
 
   fs.writeFileSync(versionPath, text);

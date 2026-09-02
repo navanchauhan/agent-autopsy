@@ -21,6 +21,7 @@ The wrapper:
 
 - stops immediately if a no-tools authentication probe fails;
 - proves the interactive login and first-run state before spending headless model turns;
+- discovers the accepted model aliases from the captured tool schemas and resolves each alias through a successful request, so a new exact model ID does not depend on an embedded list;
 - captures the base and deferred-tool requests for every supported headless model, with three models in flight by default;
 - discovers deferred tool names from the actual base request's deferred-tool `<system-reminder>` and merges them with the bounded baseline inventory before requesting expansion;
 - gives incomplete headless model work two bounded attempts by default (at most three), while revalidating and reusing successful base or deferred traces within the same run;
@@ -31,7 +32,7 @@ The wrapper:
 
 Raw evidence is written only below `$CAPTURE_SCRATCH_DIR/claude-code/raw/`. The merged interactive candidate is written to `$CAPTURE_SCRATCH_DIR/claude-code/candidate/`.
 
-The supported model list and deferred-tool inventories live in the wrapper. For focused troubleshooting, the following bounded overrides are available:
+The model and deferred-tool inventories come from current request evidence. For focused troubleshooting, the following bounded overrides are available:
 
 ```bash
 CLAUDE_CAPTURE_MODELS="claude-sonnet-5" \
@@ -52,8 +53,6 @@ Some Claude Code versions still require the normal interactive login state befor
 
 ## Active limitations
 
-- `extract-claude-trace.cjs` is interactive-only and labels its output accordingly; never point it at a non-interactive trace.
-- There is no checked-in non-interactive extractor. Normalize the headless records using the same harness-variable and exact-schema variant rules as the interactive extractor, without replacing interactive artifacts.
 - The bounded retry is local to one capture run; durable exact-plan capture and retry caches decide whether a later workflow run needs another fresh capture.
 - Steering blocks can include locally configured agents, skills, Git state, and other host context. Retain representative product-owned structure and normalize or exclude machine-specific entries.
 

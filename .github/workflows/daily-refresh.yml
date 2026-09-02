@@ -52,6 +52,8 @@ jobs:
           node --test .github/scripts/test-version-artifacts.cjs
           node --test .github/scripts/test-codex-artifact-map.cjs
           node --test .github/scripts/test-source-surface-inventory.cjs
+          node --test .github/scripts/test-append-runtime-refreshes.cjs
+          node --test .github/scripts/test-discover-claude-model-aliases.cjs
           node --test .github/scripts/test-discover-claude-models.cjs
           node --test .github/scripts/test-extract-claude-trace.cjs
           node --test .github/scripts/test-extract-grok-capture.cjs
@@ -186,7 +188,7 @@ jobs:
             '${{ needs.check.outputs.capture_bucket }}'
 
       - name: Restore durable validated capture for the exact plan
-        if: inputs.force_capture != true && steps.recapture-state.outputs.state == 'clear'
+        if: inputs.force_capture != true && matrix.runtime_refresh != true && steps.recapture-state.outputs.state == 'clear'
         id: capture-positive-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
@@ -197,7 +199,7 @@ jobs:
             capture-positive-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.plan_hash }}-
 
       - name: Restore bounded capture retry cooldown
-        if: inputs.force_capture != true && steps.recapture-state.outputs.force != 'true' && github.run_attempt == 1 && steps.capture-positive-cache.outputs.cache-matched-key == ''
+        if: inputs.force_capture != true && matrix.runtime_refresh != true && steps.recapture-state.outputs.force != 'true' && github.run_attempt == 1 && steps.capture-positive-cache.outputs.cache-matched-key == ''
         id: capture-retry-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
@@ -229,7 +231,7 @@ jobs:
           printf '%s\n' "$TOOL_JSON" | jq -e '[.]' >"$RUNNER_TEMP/capture-plan.json"
 
       - name: Early-stop a repeated rejected capture in the same cooldown bucket
-        if: inputs.force_capture != true && steps.recapture-state.outputs.same_bucket == 'true' && steps.capture-cache.outputs.cache_restored != 'true'
+        if: inputs.force_capture != true && matrix.runtime_refresh != true && steps.recapture-state.outputs.same_bucket == 'true' && steps.capture-cache.outputs.cache_restored != 'true'
         id: cooldown-result
         run: |
           "$RUNNER_TEMP/write-safe-capture-result.cjs" \
@@ -412,7 +414,7 @@ jobs:
           printf '%s: %s\n' '${{ matrix.tool }}' "$status" >>"$GITHUB_STEP_SUMMARY"
 
       - name: Cache this durable validated capture generation
-        if: steps.trusted-verification.outcome == 'success' && steps.trusted-verification.outputs.status == 'captured' && (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true)
+        if: matrix.runtime_refresh != true && steps.trusted-verification.outcome == 'success' && steps.trusted-verification.outputs.status == 'captured' && (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true)
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
@@ -420,7 +422,7 @@ jobs:
           key: capture-positive-${{ runner.os }}-${{ matrix.tool }}-${{ matrix.plan_hash }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Cache this bounded safe retry generation
-        if: steps.trusted-verification.outcome == 'success' && steps.trusted-verification.outputs.status == 'retry_capture' && (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true)
+        if: matrix.runtime_refresh != true && steps.trusted-verification.outcome == 'success' && steps.trusted-verification.outputs.status == 'retry_capture' && (steps.capture-cache.outputs.cache_restored != 'true' || inputs.force_capture == true)
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
         with:
@@ -657,7 +659,7 @@ jobs:
         run: node .github/scripts/compute-driver-input.cjs
 
       - name: Restore newest approved Codex decision
-        if: steps.source-sync.outputs.has_ready == 'true' && inputs.force_capture != true
+        if: steps.source-sync.outputs.has_ready == 'true' && inputs.force_capture != true && !contains(needs.check.outputs.changed_tools, '"runtime_refresh":true')
         id: driver-positive-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true
@@ -668,7 +670,7 @@ jobs:
             driver-positive-${{ runner.os }}-${{ steps.driver-input.outputs.input_hash }}-
 
       - name: Restore current retry cooldown
-        if: steps.source-sync.outputs.has_ready == 'true' && inputs.force_capture != true && github.run_attempt == 1 && steps.driver-positive-cache.outputs.cache-matched-key == ''
+        if: steps.source-sync.outputs.has_ready == 'true' && inputs.force_capture != true && !contains(needs.check.outputs.changed_tools, '"runtime_refresh":true') && github.run_attempt == 1 && steps.driver-positive-cache.outputs.cache-matched-key == ''
         id: driver-retry-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         continue-on-error: true

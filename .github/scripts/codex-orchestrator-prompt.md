@@ -16,6 +16,11 @@ parallel and passed its mechanical completeness gate. Do not spend model calls
 by repeating live captures; normalize the supplied evidence into the tracked
 archive and stop if it is insufficient.
 
+An entry with `runtime_refresh: true` intentionally keeps `old_version` and
+`new_version` equal. It is a fresh check for model-facing changes that can occur
+without a CLI release. Do not require a version increase; update tracked
+artifacts only when the new request evidence supports a difference.
+
 Read `$CAPTURE_SCRATCH_DIR/evidence-index.json` first. It is a compact inventory
 with hashes and sizes; use it to open only evidence relevant to an observed
 artifact delta instead of scanning every raw request.

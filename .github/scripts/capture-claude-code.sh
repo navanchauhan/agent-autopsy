@@ -14,6 +14,7 @@ trace_script="$repo_root/claude-code/misc/scripts/trace-claude-messages.cjs"
 extract_script="$repo_root/claude-code/misc/scripts/extract-claude-trace.cjs"
 discover_deferred_script="$repo_root/claude-code/misc/scripts/discover-claude-deferred-tools.cjs"
 discover_models_script="$repo_root/claude-code/misc/scripts/discover-claude-models.cjs"
+discover_aliases_script="$repo_root/claude-code/misc/scripts/discover-claude-model-aliases.cjs"
 
 headless_timeout="${CLAUDE_HEADLESS_TIMEOUT_SECONDS:-120}"
 interactive_timeout="${CLAUDE_INTERACTIVE_TIMEOUT_SECONDS:-180}"
@@ -285,9 +286,24 @@ wait_for_trace_marker \
 if [ -n "${CLAUDE_CAPTURE_MODELS:-}" ]; then
   read -r -a models <<<"$CLAUDE_CAPTURE_MODELS"
 else
+  model_aliases=()
+  while IFS= read -r alias; do
+    [ -n "$alias" ] && model_aliases+=("$alias")
+  done < <(node "$discover_aliases_script" "$interactive_trace_dir")
+  [ "${#model_aliases[@]}" -gt 0 ] || die "Claude model alias discovery returned no probe targets"
+
+  echo "Resolving ${#model_aliases[@]} Claude model alias(es) from successful requests..."
+  for alias in "${model_aliases[@]}"; do
+    safe_alias="${alias//[^A-Za-z0-9_.-]/_}"
+    alias_marker="CLAUDE_MODEL_DISCOVERY_${safe_alias}"
+    capture_headless_request \
+      "$alias" discovery "Reply exactly: $alias_marker" "$alias_marker"
+  done
+
   while IFS= read -r model; do
     [ -n "$model" ] && models+=("$model")
-  done < <(node "$discover_models_script" "$interactive_trace_dir" "$repo_root/claude-code/SURFACES.json")
+  done < <(node "$discover_models_script" "$interactive_trace_dir" \
+    "$repo_root/claude-code/SURFACES.json" "$headless_trace_dir")
 fi
 [ "${#models[@]}" -gt 0 ] || die "Claude model discovery returned no capture targets"
 echo "Discovered ${#models[@]} Claude model capture target(s) from current request evidence."

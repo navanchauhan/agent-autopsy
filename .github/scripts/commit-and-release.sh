@@ -56,7 +56,11 @@ while IFS= read -r entry; do
   file_notes="$(git diff --cached --name-status --no-renames HEAD -- "$dir" | awk 'NR <= 40')"
   [ -n "$file_notes" ] || { echo "$tool has no staged reviewed files." >&2; exit 1; }
   release_notes+=$'\n\n'"## $tool"$'\n'
-  release_notes+="Updated the normalized archive from $old_version to $new_version. Reviewed file changes:"$'\n\n```text\n'
+  if [ "$old_version" = "$new_version" ]; then
+    release_notes+="Refreshed model-facing surfaces for $new_version. Reviewed file changes:"$'\n\n```text\n'
+  else
+    release_notes+="Updated the normalized archive from $old_version to $new_version. Reviewed file changes:"$'\n\n```text\n'
+  fi
   release_notes+="$file_notes"$'\n```'
 done < <(jq -c '.[]' "$changed_file")
 

@@ -16,6 +16,39 @@ function runValidator(root, plan, summary) {
   });
 }
 
+test("same-version plans require an explicit request-backed runtime refresh", () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), "validate-runtime-refresh-"));
+  const root = path.join(temp, "repo");
+  const provider = path.join(root, "codex");
+  fs.mkdirSync(provider, { recursive: true });
+  fs.writeFileSync(path.join(provider, "VERSION"), "codex_cli_package_version = 1.0.0\n");
+  fs.writeFileSync(path.join(provider, "SURFACES.json"), JSON.stringify({
+    surfaces: [{ status: "current", capture_method: "direct-source" }],
+  }));
+  childProcess.execFileSync("git", ["init", "-q"], { cwd: root });
+  childProcess.execFileSync("git", ["config", "user.email", "test@example.invalid"], { cwd: root });
+  childProcess.execFileSync("git", ["config", "user.name", "Validation Test"], { cwd: root });
+  childProcess.execFileSync("git", ["add", "."], { cwd: root });
+  childProcess.execFileSync("git", ["commit", "-qm", "baseline"], { cwd: root });
+  const plan = path.join(temp, "plan.json");
+  const summary = path.join(temp, "summary.md");
+  fs.writeFileSync(summary, "## codex\n\nChecked Codex.\n");
+
+  fs.writeFileSync(plan, JSON.stringify([{
+    tool: "codex", dir: "codex", old_version: "1.0.0", new_version: "1.0.0",
+  }]));
+  const implicit = runValidator(root, plan, summary);
+  assert.notEqual(implicit.status, 0);
+  assert.match(implicit.stderr, /same-version plan must be an explicit runtime_refresh/);
+
+  fs.writeFileSync(plan, JSON.stringify([{
+    tool: "codex", dir: "codex", old_version: "1.0.0", new_version: "1.0.0", runtime_refresh: true,
+  }]));
+  const sourceOnly = runValidator(root, plan, summary);
+  assert.notEqual(sourceOnly.status, 0);
+  assert.match(sourceOnly.stderr, /runtime_refresh requires a current model-request surface/);
+});
+
 test("Grok VERSION model tool field follows prompt_models", () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), "validate-refresh-grok-"));
   const root = path.join(temp, "repo");

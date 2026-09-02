@@ -3,9 +3,11 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-const [traceArg, registryArg] = process.argv.slice(2);
+const [traceArg, registryArg, probeTraceArg] = process.argv.slice(2);
 if (!traceArg) {
-  console.error("Usage: discover-claude-models.cjs <interactive-trace-dir> [SURFACES.json]");
+  console.error(
+    "Usage: discover-claude-models.cjs <interactive-trace-dir> [SURFACES.json] [model-probe-trace-dir]",
+  );
   process.exit(2);
 }
 
@@ -67,6 +69,27 @@ const hasAdvertisedInventory = advertised.size > 0;
 const models = new Set(advertised);
 for (const body of markerRecords) {
   if (validModel(body.model)) models.add(body.model);
+}
+
+// Tool schemas publish the model aliases that the installed harness accepts.
+// The capture wrapper probes those aliases, and the outbound requests provide
+// the exact IDs they resolve to for this release and account. This catches a
+// new model even when an older default model still advertises a stale list.
+if (probeTraceArg) {
+  const probeTraceDir = path.resolve(probeTraceArg);
+  for (const entry of fs.readdirSync(probeTraceDir).sort()) {
+    if (!entry.endsWith(".json")) continue;
+    const record = JSON.parse(fs.readFileSync(path.join(probeTraceDir, entry), "utf8"));
+    if (!record.request?.body || !successful(record)) continue;
+    let body;
+    try {
+      body = JSON.parse(record.request.body);
+    } catch {
+      continue;
+    }
+    if (!JSON.stringify(body.messages || []).includes("CLAUDE_MODEL_DISCOVERY_")) continue;
+    if (validModel(body.model)) models.add(body.model);
+  }
 }
 
 // Older releases did not always publish an explicit quoted list. In that case,

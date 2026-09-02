@@ -99,13 +99,34 @@ function validateChangedTools(value) {
       fail(`${label}: dir must be a single repository-root directory name`);
       entryValid = false;
     }
-    if (
+    const sameVersion =
       typeof entry.old_version === "string" &&
       typeof entry.new_version === "string" &&
-      entry.old_version === entry.new_version
-    ) {
-      fail(`${label}: old_version and new_version must differ`);
+      entry.old_version === entry.new_version;
+    if (sameVersion && entry.runtime_refresh !== true) {
+      fail(`${label}: a same-version plan must be an explicit runtime_refresh`);
       entryValid = false;
+    }
+    if (!sameVersion && Object.hasOwn(entry, "runtime_refresh")) {
+      fail(`${label}: runtime_refresh is valid only for a same-version plan`);
+      entryValid = false;
+    }
+    if (entry.runtime_refresh === true && typeof entry.dir === "string") {
+      const registryPath = path.join(repoRoot, entry.dir, "SURFACES.json");
+      try {
+        const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
+        const requestBacked = (registry.surfaces || []).some((surface) =>
+          ["current", "verified-unchanged"].includes(surface?.status) &&
+          typeof surface.capture_method === "string" &&
+          surface.capture_method.includes("model-request"));
+        if (!requestBacked) {
+          fail(`${label}: runtime_refresh requires a current model-request surface`);
+          entryValid = false;
+        }
+      } catch (error) {
+        fail(`${label}: runtime_refresh cannot read ${entry.dir}/SURFACES.json (${error.message})`);
+        entryValid = false;
+      }
     }
     if (typeof entry.tool === "string" && seenTools.has(entry.tool)) {
       fail(`${label}: duplicate tool ${JSON.stringify(entry.tool)}`);

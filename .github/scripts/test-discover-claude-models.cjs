@@ -14,8 +14,10 @@ function traceRecord(body) {
   };
 }
 
-function run(records, registry = null) {
+function run(records, registry = null, probeRecords = []) {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), "discover-claude-models-"));
+  const probeDir = path.join(temp, "probes");
+  fs.mkdirSync(probeDir);
   records.forEach((record, index) => {
     fs.writeFileSync(path.join(temp, `${index}.json`), JSON.stringify(record));
   });
@@ -24,7 +26,13 @@ function run(records, registry = null) {
     registryPath = path.join(temp, "SURFACES.json");
     fs.writeFileSync(registryPath, JSON.stringify(registry));
   }
-  const result = childProcess.spawnSync(process.execPath, [script, temp, ...(registryPath ? [registryPath] : [])], {
+  probeRecords.forEach((record, index) => {
+    fs.writeFileSync(path.join(probeDir, `${index}.json`), JSON.stringify(record));
+  });
+  const args = [script, temp];
+  if (registryPath || probeRecords.length > 0) args.push(registryPath || path.join(temp, "missing-registry.json"));
+  if (probeRecords.length > 0) args.push(probeDir);
+  const result = childProcess.spawnSync(process.execPath, args, {
     encoding: "utf8",
   });
   fs.rmSync(temp, { recursive: true, force: true });
@@ -61,6 +69,26 @@ test("falls back to prior evidence-backed surfaces when the release has no quote
   });
   assert.equal(result.status, 0, result.stderr);
   assert.deepEqual(result.stdout.trim().split("\n"), ["claude-opus-4-8", "claude-sonnet-4-6"]);
+});
+
+test("adds exact IDs resolved by model alias probes", () => {
+  const result = run([traceRecord({
+    model: "claude-sonnet-5",
+    tools: [{ name: "Read" }],
+    messages: [{ role: "user", content: "CLAUDE_INTERACTIVE_TRACE_OK" }],
+    system: "Current model: 'claude-fable-5'.",
+  })], null, [traceRecord({
+    model: "claude-fable-5-1",
+    tools: [{ name: "Read" }],
+    messages: [{ role: "user", content: "CLAUDE_MODEL_DISCOVERY_fable" }],
+    system: "You are Claude Code.",
+  })]);
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(result.stdout.trim().split("\n"), [
+    "claude-fable-5",
+    "claude-fable-5-1",
+    "claude-sonnet-5",
+  ]);
 });
 
 test("rejects incomplete marker evidence", () => {

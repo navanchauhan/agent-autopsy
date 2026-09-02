@@ -21,6 +21,10 @@ If a problem cannot be resolved with trustworthy evidence, revert the unsupporte
 candidate edits for that tool and report it blocked. Do not fabricate prompts,
 schemas, versions, or validation evidence. Do not run publishing commands.
 
+For `runtime_refresh: true`, equal old and new versions are intentional. Repair
+the request-backed artifacts against the fresh evidence without inventing a
+release transition.
+
 Repair `SURFACES.json` with the true per-surface capture release and status for
 each affected surface. Trusted post-processing supplies artifact and evidence
 hashes. Raw evidence can be analyzed, but do not publish raw requests, secrets,

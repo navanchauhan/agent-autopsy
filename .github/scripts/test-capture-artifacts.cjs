@@ -192,6 +192,8 @@ try {
       "Claude capture must discover its model inventory from current request evidence",
     );
     assert.match(claudeWrapper, /discover-claude-models\.cjs/);
+    assert.match(claudeWrapper, /discover-claude-model-aliases\.cjs/);
+    assert.match(claudeWrapper, /CLAUDE_MODEL_DISCOVERY_/);
     assert.match(claudeWrapper, /"\$headless_trace_dir" "\$preview_dir" non-interactive/);
     assert.match(claudeWrapper, /"\$interactive_trace_dir" "\$preview_dir" interactive/);
     assert.doesNotMatch(claudeWrapper, /session_title_prompt_markers/);
@@ -216,6 +218,14 @@ try {
     assert.doesNotMatch(qwen, /packages\/core\/src\/core\/prompts\.ts/);
     const captureTool = fs.readFileSync(path.join(scripts, "capture-tool.sh"), "utf8");
     assert.match(captureTool, /source-surface-inventory\.cjs[\s\S]+codex-rs/);
+    const versionCheck = fs.readFileSync(path.join(scripts, "check-versions.sh"), "utf8");
+    assert.match(versionCheck, /append-runtime-refreshes\.cjs/);
+    assert.match(versionCheck, /runtime-refresh-candidates\.json/);
+    assert.match(
+      fs.readFileSync(path.join(scripts, "../workflows/daily-refresh.yml"), "utf8"),
+      /matrix\.runtime_refresh != true/,
+      "runtime surface refreshes must bypass stale capture caches",
+    );
   }
 
   {

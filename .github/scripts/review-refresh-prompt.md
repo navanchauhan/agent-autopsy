@@ -17,6 +17,10 @@ Inputs are available at:
 - referenced upstream source trees already present in the workspace
 - candidate changes: the Git diff from `$REFRESH_BASE_REF` (or `HEAD` when unset)
 
+A `runtime_refresh: true` entry is a same-version refresh for model-facing
+surfaces. Do not reject it because the release number did not change. Require
+fresh request evidence and approve only evidence-backed artifact changes.
+
 Start by reading the changed-tools manifest and primary-agent summary from those
 environment-variable paths. The paths refer to the current live workspace; do
 not report evidence unavailable until you have attempted to read them. Inspect

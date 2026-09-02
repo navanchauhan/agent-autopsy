@@ -37,6 +37,7 @@ capture_contract_hash() {
     "$repo_root/.github/scripts/seed-credentials.sh"
     "$repo_root/.github/scripts/docker-entrypoint.sh"
     "$repo_root/.github/scripts/surface-observations.cjs"
+    "$repo_root/.github/scripts/append-runtime-refreshes.cjs"
   )
   case "$tool" in
     codex)
@@ -436,6 +437,39 @@ if [ "$ledger_input" != "$ledger_file" ]; then
   rm -f -- "$ledger_input"
 fi
 mv -f "$ledger_next" "$ledger_file"
+
+# Model-facing surfaces can change while a CLI release stays fixed. Build
+# current-release candidates from the same pinned artifact metadata used above,
+# then let the surface registries select only request-backed harnesses that do
+# not already have a release queued in this run.
+runtime_candidates="$scratch_dir/runtime-refresh-candidates.json"
+jq -n \
+  --arg claude_version "$claude_recorded" \
+  --arg claude_sha256 "$(current_version_field "$repo_root/claude-code/VERSION" sha256)" \
+  --arg claude_contract "$(capture_contract_hash claude-code)" \
+  --arg grok_version "$grok_recorded" \
+  --arg grok_revision "$(current_version_field "$repo_root/grok/VERSION" revision)" \
+  --arg grok_mirror_revision "$(current_version_field "$repo_root/grok/VERSION" mirror_revision)" \
+  --arg grok_sha256 "$(current_version_field "$repo_root/grok/VERSION" sha256)" \
+  --arg grok_contract "$(capture_contract_hash grok)" \
+  --arg antigravity_version "$antigravity_recorded" \
+  --arg antigravity_url "$(current_version_field "$repo_root/antigravity/VERSION" manifest_tarball_url)" \
+  --arg antigravity_sha512 "$(current_version_field "$repo_root/antigravity/VERSION" manifest_tarball_sha512)" \
+  --arg antigravity_contract "$(capture_contract_hash antigravity)" \
+  '[
+    {tool:"claude-code",dir:"claude-code",old_version:$claude_version,new_version:$claude_version,
+     version_field:"version",artifact_url:("https://downloads.claude.ai/claude-code-releases/"+$claude_version+"/linux-x64/claude"),
+     artifact_sha256:$claude_sha256,capture_contract_hash:$claude_contract},
+    {tool:"grok",dir:"grok",old_version:$grok_version,new_version:$grok_version,version_field:"version",
+     old_revision:$grok_revision,new_revision:$grok_revision,mirror_revision:$grok_mirror_revision,
+     artifact_url:("https://x.ai/cli/grok-"+$grok_version+"-linux-x86_64"),artifact_sha256:$grok_sha256,
+     capture_contract_hash:$grok_contract},
+    {tool:"antigravity",dir:"antigravity",old_version:$antigravity_version,new_version:$antigravity_version,
+     version_field:"version",artifact_url:$antigravity_url,artifact_sha512:$antigravity_sha512,
+     capture_contract_hash:$antigravity_contract}
+  ]' >"$runtime_candidates"
+node "$repo_root/.github/scripts/append-runtime-refreshes.cjs" \
+  "$changed_file" "$runtime_candidates" "$repo_root"
 if [ "$grok_refresh_enabled" = false ]; then
   disabled_plan="$(mktemp "$scratch_dir/.changed-tools.without-grok.XXXXXX")"
   jq -S 'map(select(.tool != "grok"))' "$changed_file" >"$disabled_plan"

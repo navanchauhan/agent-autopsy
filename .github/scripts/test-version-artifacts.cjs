@@ -79,6 +79,19 @@ test("an existing digest is replaced rather than duplicated", () => {
   );
 });
 
+test("Grok records the exact public mirror revision", () => {
+  const mirror = "f".repeat(40);
+  withFixture(
+    "grok",
+    `source = xai-org/grok-build\nversion = 0.2.119\nrevision = ${"e".repeat(40)}\nsha256 = ${sha256}\n`,
+    grokPlan({ mirror_revision: mirror }),
+    (result, text) => {
+      assert.equal(result.status, 0, result.stderr);
+      assert.match(text, new RegExp(`^mirror_revision = ${mirror}$`, "m"));
+    },
+  );
+});
+
 test("a provider held at the old release keeps its old digest", () => {
   // A held tool must never receive the digest of a release it did not capture.
   const heldDigest = "d".repeat(64);
