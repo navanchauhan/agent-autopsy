@@ -2,117 +2,17 @@
   "name": "RemoteTrigger",
   "variants": [
     {
-      "runs": [
-        "non-interactive"
-      ],
-      "request_kind": "agent",
-      "capture_modes": [
-        "non-interactive"
-      ],
-      "schema": {
-        "name": "RemoteTrigger",
-        "description": "Call the claude.ai remote-trigger API. Use this instead of curl — the OAuth token is added automatically in-process and never exposed.\n\nActions:\n- list: GET /v1/code/triggers\n- get: GET /v1/code/triggers/{trigger_id}\n- create: POST /v1/code/triggers (requires body)\n- update: POST /v1/code/triggers/{trigger_id} (requires body, partial update)\n- run: POST /v1/code/triggers/{trigger_id}/run (optional body)\n\nThe response is the raw JSON from the API. For create/update, a summary line is appended with the server-parsed run time and the routine's claude.ai URL — relay both to the user so they can confirm the time is right and know where the result will appear.",
-        "input_schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "type": "object",
-          "properties": {
-            "action": {
-              "type": "string",
-              "enum": [
-                "list",
-                "get",
-                "create",
-                "update",
-                "run"
-              ]
-            },
-            "trigger_id": {
-              "description": "Required for get, update, and run",
-              "type": "string",
-              "pattern": "^[\\w-]+$"
-            },
-            "body": {
-              "description": "Required for create and update; optional for run",
-              "type": "object",
-              "propertyNames": {
-                "type": "string"
-              },
-              "additionalProperties": {}
-            }
-          },
-          "required": [
-            "action"
-          ],
-          "additionalProperties": false
-        },
-        "eager_input_streaming": true,
-        "defer_loading": true
-      }
-    },
-    {
       "models": [
+        "claude-haiku-4-5-20251001",
         "claude-sonnet-5"
       ],
       "runs": [
+        "non-interactive",
         "interactive"
       ],
       "request_kind": "agent",
       "capture_modes": [
-        "interactive"
-      ],
-      "schema": {
-        "name": "RemoteTrigger",
-        "description": "Call the claude.ai remote-trigger API. Use this instead of curl — the OAuth token is added automatically in-process and never exposed.\n\nActions:\n- list: GET /v1/code/triggers\n- get: GET /v1/code/triggers/{trigger_id}\n- create: POST /v1/code/triggers (requires body)\n- update: POST /v1/code/triggers/{trigger_id} (requires body, partial update)\n- run: POST /v1/code/triggers/{trigger_id}/run (optional body)\n- create_webhook_trigger: POST /v1/code/webhook-triggers (requires body) — attaches an event source to an existing routine, e.g. a GitHub event that fires it. The body names the source and scope (such as a repository), the event list, a structured filter, and the routine_trigger_id to fire; the server validates the shape and rejects worker credentials.\n\nThe response is the raw JSON from the API. For create/update, a summary line is appended with the server-parsed run time and the routine's claude.ai URL — relay both to the user so they can confirm the time is right and know where the result will appear. For create_webhook_trigger, the appended summary line is the claude.ai link of the routine the trigger fires (no run time — a webhook trigger has no schedule); relay it so the user knows which routine is now wired.",
-        "input_schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "type": "object",
-          "properties": {
-            "action": {
-              "type": "string",
-              "enum": [
-                "list",
-                "get",
-                "create",
-                "update",
-                "run",
-                "create_webhook_trigger"
-              ]
-            },
-            "trigger_id": {
-              "description": "Required for get, update, and run",
-              "type": "string",
-              "pattern": "^[\\w-]+$"
-            },
-            "body": {
-              "description": "Required for create and update; optional for run",
-              "type": "object",
-              "propertyNames": {
-                "type": "string"
-              },
-              "additionalProperties": {}
-            }
-          },
-          "required": [
-            "action"
-          ],
-          "additionalProperties": false
-        },
-        "eager_input_streaming": true,
-        "defer_loading": true
-      }
-    },
-    {
-      "models": [
-        "claude-sonnet-5",
-        "claude-haiku-4-5-20251001",
-        "claude-opus-4-7",
-        "claude-sonnet-4-6"
-      ],
-      "runs": [
-        "interactive"
-      ],
-      "request_kind": "agent",
-      "capture_modes": [
+        "non-interactive",
         "interactive"
       ],
       "schema": {

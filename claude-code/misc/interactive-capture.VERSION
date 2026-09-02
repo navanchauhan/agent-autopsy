@@ -10,4 +10,4 @@ extract_script = claude-code/misc/scripts/extract-claude-trace.cjs
 capture = tmux interactive session with `BUN_OPTIONS=--preload=claude-code/misc/scripts/trace-claude-messages.cjs claude --permission-mode dontAsk --strict-mcp-config --tools default` and prompt `Reply exactly: CLAUDE_INTERACTIVE_TRACE_OK`
 interactive_prompt_models = claude-sonnet-5
 interactive_prompt_artifacts = 1
-interactive_tool_schemas = 15
+interactive_tool_schemas = 33

@@ -1,20 +1,40 @@
 {
   "name": "CronDelete",
-  "description": "Cancel a cron job previously scheduled with CronCreate. Removes it from the in-memory session store.",
-  "input_schema": {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "properties": {
-      "id": {
-        "description": "Job ID returned by CronCreate.",
-        "type": "string"
+  "variants": [
+    {
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "runs": [
+        "non-interactive",
+        "interactive"
+      ],
+      "request_kind": "agent",
+      "capture_modes": [
+        "non-interactive",
+        "interactive"
+      ],
+      "schema": {
+        "name": "CronDelete",
+        "description": "Cancel a cron job previously scheduled with CronCreate. Removes it from the in-memory session store.",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "Job ID returned by CronCreate.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "eager_input_streaming": true,
+        "defer_loading": true
       }
-    },
-    "required": [
-      "id"
-    ],
-    "additionalProperties": false
-  },
-  "eager_input_streaming": true,
-  "defer_loading": true
+    }
+  ]
 }

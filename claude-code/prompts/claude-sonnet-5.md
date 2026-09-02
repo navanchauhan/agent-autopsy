@@ -1,4 +1,4 @@
-x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.234.a38; cc_entrypoint=sdk-cli; cch=00000; cc_prev_req=req_000000000000000000000000;}}</harnessVariable> cc_prompt_id=<harnessVariable>{{sessionId=0b885393-228c-453e-a62f-b36dee7cff0c}}</harnessVariable>;
+x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.258.a79; cc_entrypoint=sdk-cli; cch=00000; cc_prev_req=req_000000000000000000000000;}}</harnessVariable> cc_prompt_id=<harnessVariable>{{sessionId=9c36f9ef-3ae4-4a5e-8d00-cc2c2f036ab8}}</harnessVariable>;
 
 You are a Claude agent, built on Anthropic's Claude Agent SDK.
 
@@ -210,7 +210,7 @@ When you use a pronoun for someone — the user or anyone else you mention — a
 # Environment
  - You are powered by the model named <harnessVariable>{{modelDisplayName=Sonnet 5}}</harnessVariable>. The exact model ID is <harnessVariable>{{modelId=claude-sonnet-5}}</harnessVariable>.
  - Assistant knowledge cutoff is <harnessVariable>{{knowledgeCutoff=January 2026}}</harnessVariable>.
- - The most recent Claude models are the Claude 5 family and Haiku 4.5. Model IDs — Fable 5: 'claude-fable-5', Opus 5: 'claude-opus-5', Sonnet 5: 'claude-sonnet-5', Haiku 4.5: 'claude-haiku-4-5-20251001'. When building AI applications, default to the latest and most capable Claude models.
+ - The most recent Claude models are the Claude 5 family and Haiku 4.5. Model IDs — Fable 5.1: 'claude-fable-5-1', Opus 5: 'claude-opus-5', Sonnet 5: 'claude-sonnet-5', Haiku 4.5: 'claude-haiku-4-5-20251001'. When building AI applications, default to the latest and most capable Claude models.
  - Claude Code is available as a CLI in the terminal, desktop app (Mac/Windows), web app (claude.ai/code), and IDE extensions (VS Code, JetBrains).
 
 # Context management

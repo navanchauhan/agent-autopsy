@@ -3,20 +3,15 @@
   "variants": [
     {
       "models": [
-        "claude-fable-5",
-        "claude-opus-4-8",
+        "claude-fable-5-1",
         "claude-opus-5"
       ],
       "runs": [
-        "fable",
-        "opus",
-        "opus-5",
-        "interactive"
+        "non-interactive"
       ],
       "request_kind": "agent",
       "capture_modes": [
-        "non-interactive",
-        "interactive"
+        "non-interactive"
       ],
       "schema": {
         "name": "Edit",
@@ -56,15 +51,10 @@
     {
       "models": [
         "claude-haiku-4-5-20251001",
-        "claude-opus-4-7",
-        "claude-sonnet-4-6",
         "claude-sonnet-5"
       ],
       "runs": [
-        "haiku",
-        "opus-4-7",
-        "sonnet-4-6",
-        "sonnet",
+        "non-interactive",
         "interactive"
       ],
       "request_kind": "agent",

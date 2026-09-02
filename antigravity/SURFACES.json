@@ -15,7 +15,7 @@
     {
       "id": "antigravity.prompt.agent.gemini-3-7-flash-high.non-interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "1.1.24",
       "verified_release": "1.1.24",
@@ -29,13 +29,14 @@
       "artifacts": [
         "prompts/gemini-3.7-flash-high.md"
       ],
+      "notes": "Retained as stale because the current capture supports gemini-3.8-flash-high instead.",
       "artifact_sha256": "ea655b7e0ed611f0903ffd57a7bc3ead6f794c42a4c05c796aeb07ad5eb9bc66",
       "evidence_sha256": "4cb93b043a5644069f7e1224c1365dc877f9bf9df6ec9db89a104461250a0ef8"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-7-flash-high.interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "stale",
       "capture_method": "model-request",
       "captured_release": "1.1.24",
       "verified_release": "1.1.24",
@@ -49,6 +50,7 @@
       "artifacts": [
         "prompts/gemini-3.7-flash-high-interactive.md"
       ],
+      "notes": "Retained as stale because the current capture supports gemini-3.8-flash-high instead.",
       "artifact_sha256": "ab8071b5a98a093f3901997a2048b32f5de52a73bb9220b88bbdd058bab177bd",
       "evidence_sha256": "4cb93b043a5644069f7e1224c1365dc877f9bf9df6ec9db89a104461250a0ef8"
     },
@@ -60,18 +62,18 @@
       "captured_release": "1.1.24",
       "verified_release": "1.1.24",
       "models": [
-        "gemini-3.7-flash-high"
+        "gemini-3.8-flash-high"
       ],
       "modes": [
-        "non-interactive",
-        "interactive"
+        "interactive",
+        "non-interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
         "tools/ask_question.json",
         "tools/define_subagent.json",
-        "tools/generate_image.json",
         "tools/find_by_name.json",
+        "tools/generate_image.json",
         "tools/grep_search.json",
         "tools/invoke_subagent.json",
         "tools/list_dir.json",
@@ -86,8 +88,9 @@
         "tools/view_file.json",
         "tools/write_to_file.json"
       ],
-      "artifact_sha256": "6636bda3580fdc07845178506d9c5a7a81a87bb7d1434bbe41699016d3fb5eaf",
-      "evidence_sha256": "4cb93b043a5644069f7e1224c1365dc877f9bf9df6ec9db89a104461250a0ef8"
+      "notes": "The tool catalog was captured from the current 1.1.24 model-facing request.",
+      "artifact_sha256": "248ebfab9fe33df8af6aba179e5c967650219930774cc7eab86f7435ded06fab",
+      "evidence_sha256": "91fe7602abc733e2defa367d3341fe9a841fbae375c78742bc42a7dc7d5e5de5"
     },
     {
       "id": "antigravity.agent.definitions",
@@ -222,6 +225,48 @@
       "dynamic_inputs": [],
       "artifacts": [],
       "notes": "Only gemini-3.7-flash-high is currently captured."
+    },
+    {
+      "id": "antigravity.prompt.agent.gemini-3-8-flash-high.interactive",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "1.1.24",
+      "verified_release": "1.1.24",
+      "models": [
+        "gemini-3.8-flash-high"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/gemini-3.8-flash-high-interactive.md"
+      ],
+      "notes": "The prompt was captured from the current 1.1.24 model-facing request.",
+      "artifact_sha256": "c09961d7186e241fc4d00e9adaaa23c0cc98f9c5519f26b7fbf51a716b063709",
+      "evidence_sha256": "91fe7602abc733e2defa367d3341fe9a841fbae375c78742bc42a7dc7d5e5de5"
+    },
+    {
+      "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "1.1.24",
+      "verified_release": "1.1.24",
+      "models": [
+        "gemini-3.8-flash-high"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/gemini-3.8-flash-high.md"
+      ],
+      "notes": "The prompt was captured from the current 1.1.24 model-facing request.",
+      "artifact_sha256": "087c6da36bac1e02024e5b18fb0f66a84a1502573abba2c77afad7c03561a139",
+      "evidence_sha256": "91fe7602abc733e2defa367d3341fe9a841fbae375c78742bc42a7dc7d5e5de5"
     }
   ]
 }

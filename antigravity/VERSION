@@ -12,8 +12,8 @@ capture_script = antigravity/misc/scripts/extract-antigravity-log.cjs
 network_capture_script = antigravity/misc/scripts/mitm-capture-antigravity.py
 endpoint = https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse
 response_model_versions = unknown
-prompt_models = gemini-3.7-flash-high
-prompts = 2
+prompt_models = gemini-3.8-flash-high
+prompts = 4
 tools = 17
 misc = 0
 interactive_tools = 17

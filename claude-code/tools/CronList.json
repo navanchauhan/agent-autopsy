@@ -1,12 +1,32 @@
 {
   "name": "CronList",
-  "description": "List all cron jobs scheduled via CronCreate in this session.",
-  "input_schema": {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "properties": {},
-    "additionalProperties": false
-  },
-  "eager_input_streaming": true,
-  "defer_loading": true
+  "variants": [
+    {
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "runs": [
+        "non-interactive",
+        "interactive"
+      ],
+      "request_kind": "agent",
+      "capture_modes": [
+        "non-interactive",
+        "interactive"
+      ],
+      "schema": {
+        "name": "CronList",
+        "description": "List all cron jobs scheduled via CronCreate in this session.",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "eager_input_streaming": true,
+        "defer_loading": true
+      }
+    }
+  ]
 }
