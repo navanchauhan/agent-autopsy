@@ -13,6 +13,12 @@ const knownDirectories = new Map([
   ["antigravity", "antigravity"],
   ["qwen-code", "qwen-code"],
 ]);
+const validationEvidenceNames = new Set([
+  "artifact-source-map.json",
+  "direct-source-manifest.json",
+  "source-surface-inventory.json",
+  "surface-observations.json",
+]);
 
 function readJson(name) {
   return JSON.parse(readSafeText(name, 1024 * 1024));
@@ -46,7 +52,7 @@ function readSafeText(name, maxBytes = 256 * 1024) {
 
 const expectedEntries = [
   "base-sha.txt", "candidate.patch", "capture-retries.json", "changed-tools.json",
-  "codex-summary.md", "result.json", "retry-report.json", "review-result.json",
+  "codex-summary.md", "result.json", "retry-report.json", "review-result.json", "validation-evidence",
 ];
 const bundleStat = fs.lstatSync(bundleDir);
 if (!bundleStat.isDirectory() || bundleStat.isSymbolicLink()) throw new Error("driver bundle must be a real directory");
@@ -91,6 +97,61 @@ for (const entry of changed) {
   }
   tools.add(entry.tool);
   dirs.add(entry.dir);
+}
+
+const validationEvidenceDir = path.join(bundleDir, "validation-evidence");
+const validationEvidenceStat = fs.lstatSync(validationEvidenceDir);
+if (!validationEvidenceStat.isDirectory() || validationEvidenceStat.isSymbolicLink()) {
+  throw new Error("validation-evidence must be a real directory");
+}
+const validationEvidenceManifest = readJson("validation-evidence/manifest.json");
+if (
+  !validationEvidenceManifest || validationEvidenceManifest.schema_version !== 1 ||
+  Object.keys(validationEvidenceManifest).sort().join(",") !== "files,schema_version" ||
+  !Array.isArray(validationEvidenceManifest.files) ||
+  validationEvidenceManifest.files.some((name) => typeof name !== "string")
+) {
+  throw new Error("validation evidence manifest has an invalid schema");
+}
+const actualValidationEvidenceFiles = [];
+for (const tool of fs.readdirSync(validationEvidenceDir).filter((name) => name !== "manifest.json")) {
+  if (!tools.has(tool)) throw new Error(`validation evidence belongs to an unapproved tool: ${tool}`);
+  const toolDir = path.join(validationEvidenceDir, tool);
+  const toolStat = fs.lstatSync(toolDir);
+  if (!toolStat.isDirectory() || toolStat.isSymbolicLink()) {
+    throw new Error(`validation-evidence/${tool} must be a real directory`);
+  }
+  const toolEntries = fs.readdirSync(toolDir);
+  if (toolEntries.length !== 1 || toolEntries[0] !== "evidence") {
+    throw new Error(`validation-evidence/${tool} must contain only evidence`);
+  }
+  const evidenceDir = path.join(toolDir, "evidence");
+  const evidenceStat = fs.lstatSync(evidenceDir);
+  if (!evidenceStat.isDirectory() || evidenceStat.isSymbolicLink()) {
+    throw new Error(`validation-evidence/${tool}/evidence must be a real directory`);
+  }
+  const evidenceFiles = fs.readdirSync(evidenceDir);
+  if (evidenceFiles.length === 0) throw new Error(`validation-evidence/${tool}/evidence is empty`);
+  for (const name of evidenceFiles) {
+    if (!validationEvidenceNames.has(name)) {
+      throw new Error(`validation evidence is not allowlisted: ${tool}/evidence/${name}`);
+    }
+    const relative = `validation-evidence/${tool}/evidence/${name}`;
+    const text = readSafeText(relative, 1024 * 1024);
+    try {
+      JSON.parse(text);
+    } catch (error) {
+      throw new Error(`${relative} must contain valid JSON: ${error.message}`);
+    }
+    actualValidationEvidenceFiles.push(`${tool}/evidence/${name}`);
+  }
+}
+actualValidationEvidenceFiles.sort();
+if (
+  actualValidationEvidenceFiles.length !== validationEvidenceManifest.files.length ||
+  actualValidationEvidenceFiles.some((name, index) => name !== validationEvidenceManifest.files[index])
+) {
+  throw new Error("validation evidence files do not match manifest.json");
 }
 
 if (result.has_publishable !== true || !Array.isArray(result.approved_tools)) {

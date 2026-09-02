@@ -231,6 +231,11 @@ try {
       /name: Package reviewed patch[\s\S]*?CAPTURE_SCRATCH_DIR: \$\{\{ github\.workspace \}\}\/capture-output/,
       "the packaging validator must read the verified capture evidence tree",
     );
+    assert.match(
+      fs.readFileSync(path.join(scripts, "../workflows/daily-refresh.yml"), "utf8"),
+      /name: Apply, revalidate, commit, and release[\s\S]*?VALIDATION_EVIDENCE_DIR: \$\{\{ github\.workspace \}\}\/driver-output\/validation-evidence[\s\S]*?CAPTURE_SCRATCH_DIR="\$VALIDATION_EVIDENCE_DIR"/,
+      "the publish validator must read only the reviewed validation evidence sub-bundle",
+    );
   }
 
   {

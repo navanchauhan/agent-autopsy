@@ -7,6 +7,7 @@ set -euo pipefail
 repo_root="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
 script_dir="${TRUSTED_SCRIPT_DIR:-$repo_root/.github/scripts}"
 scratch_dir="${CAPTURE_SCRATCH_DIR:-$repo_root/.capture-scratch}"
+validation_evidence_dir="${VALIDATION_EVIDENCE_DIR:-$scratch_dir}"
 bundle_dir="${DRIVER_OUTPUT_DIR:-$repo_root/driver-output}"
 changed_file="${CHANGED_TOOLS_FILE:-$scratch_dir/changed-tools.json}"
 summary_file="${CODEX_SUMMARY_FILE:-$scratch_dir/codex-summary.md}"
@@ -16,7 +17,8 @@ cd "$repo_root"
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-node "$script_dir/validate-refresh.cjs" "$changed_file" "$summary_file"
+CAPTURE_SCRATCH_DIR="$validation_evidence_dir" \
+  node "$script_dir/validate-refresh.cjs" "$changed_file" "$summary_file"
 node "$script_dir/validate-review.cjs" "$changed_file" "$review_file"
 
 dirs=()

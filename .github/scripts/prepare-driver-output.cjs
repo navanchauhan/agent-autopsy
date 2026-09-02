@@ -11,6 +11,13 @@ const summaryPath = path.resolve(process.argv[4] || ".capture-scratch/codex-summ
 const outputDir = path.resolve(process.argv[5] || "driver-output");
 const captureRetriesPath = path.resolve(process.argv[6] || ".capture-scratch/capture-retries.json");
 const driverInputPath = path.resolve(process.env.DRIVER_INPUT_MANIFEST || ".capture-scratch/driver-input.json");
+const captureScratchDir = path.resolve(process.env.CAPTURE_SCRATCH_DIR || ".capture-scratch");
+const validationEvidenceNames = [
+  "artifact-source-map.json",
+  "direct-source-manifest.json",
+  "source-surface-inventory.json",
+  "surface-observations.json",
+];
 
 const maxTextBytes = 256 * 1024;
 const secretPatterns = [
@@ -121,6 +128,30 @@ if (!/^[0-9a-f]{40}$/.test(baseSha)) throw new Error("could not resolve an exact
 
 fs.rmSync(outputDir, { recursive: true, force: true });
 fs.mkdirSync(outputDir, { recursive: true });
+const validationEvidenceDir = path.join(outputDir, "validation-evidence");
+fs.mkdirSync(validationEvidenceDir);
+const validationEvidenceFiles = [];
+for (const entry of approved) {
+  const sourceDir = path.join(captureScratchDir, entry.tool, "evidence");
+  const targetDir = path.join(validationEvidenceDir, entry.tool, "evidence");
+  for (const name of validationEvidenceNames) {
+    const sourcePath = path.join(sourceDir, name);
+    if (!fs.existsSync(sourcePath)) continue;
+    const text = readSafeText(sourcePath, `${entry.tool} ${name}`, 1024 * 1024);
+    try {
+      JSON.parse(text);
+    } catch (error) {
+      throw new Error(`${entry.tool} ${name} must contain valid JSON: ${error.message}`);
+    }
+    fs.mkdirSync(targetDir, { recursive: true });
+    fs.writeFileSync(path.join(targetDir, name), text);
+    validationEvidenceFiles.push(`${entry.tool}/evidence/${name}`);
+  }
+}
+fs.writeFileSync(
+  path.join(validationEvidenceDir, "manifest.json"),
+  `${JSON.stringify({ schema_version: 1, files: validationEvidenceFiles.sort() }, null, 2)}\n`,
+);
 fs.writeFileSync(path.join(outputDir, "changed-tools.json"), `${JSON.stringify(approved, null, 2)}\n`);
 fs.writeFileSync(path.join(outputDir, "review-result.json"), `${JSON.stringify(publishReview, null, 2)}\n`);
 fs.writeFileSync(path.join(outputDir, "codex-summary.md"), `${approvedSummary}\n`);

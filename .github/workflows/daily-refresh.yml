@@ -1093,6 +1093,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           REPO_ROOT: ${{ github.workspace }}
           TRUSTED_SCRIPT_DIR: ${{ runner.temp }}/publish-gate
+          VALIDATION_EVIDENCE_DIR: ${{ github.workspace }}/driver-output/validation-evidence
         run: |
           trusted="$RUNNER_TEMP/publish-gate"
           node "$trusted/validate-publish-bundle.cjs" driver-output
@@ -1110,7 +1111,9 @@ jobs:
           cp driver-output/changed-tools.json .capture-scratch/changed-tools.json
           cp driver-output/codex-summary.md .capture-scratch/codex-summary.md
           cp driver-output/review-result.json .capture-scratch/review-result.json
-          node "$trusted/validate-refresh.cjs"
+          CAPTURE_SCRATCH_DIR="$VALIDATION_EVIDENCE_DIR" \
+            node "$trusted/validate-refresh.cjs" \
+              .capture-scratch/changed-tools.json .capture-scratch/codex-summary.md
           node "$trusted/validate-review.cjs"
           gh auth setup-git
           bash "$TRUSTED_SCRIPT_DIR/commit-and-release.sh"

@@ -168,8 +168,20 @@ try {
       { tool: "grok", outcome: "retry_capture", issues: [] },
     ],
   }));
+  fs.writeFileSync(
+    path.join(captureRoot, "codex", "evidence", "surface-observations.json"),
+    JSON.stringify({ schema_version: 1, provider: "codex", authority: "model-request" }),
+  );
+  fs.writeFileSync(
+    path.join(captureRoot, "codex", "evidence", "raw-request.json"),
+    JSON.stringify({ request: "must not enter the publish bundle" }),
+  );
   const prepared = run("prepare-driver-output.cjs", [planPath, reviewPath, summaryPath, driverOutput, captureRetriesPath], {
-    env: { ...process.env, DRIVER_INPUT_MANIFEST: driverInputPath },
+    env: {
+      ...process.env,
+      DRIVER_INPUT_MANIFEST: driverInputPath,
+      CAPTURE_SCRATCH_DIR: captureRoot,
+    },
   });
   assert.equal(prepared.status, 0, prepared.stderr);
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(driverOutput, "changed-tools.json"))), [plan[0]]);
@@ -177,6 +189,16 @@ try {
   assert.doesNotMatch(fs.readFileSync(path.join(driverOutput, "codex-summary.md"), "utf8"), /Grok deferred/);
   assert.equal(JSON.parse(fs.readFileSync(path.join(driverOutput, "retry-report.json")))[0].review_input_hash, "8".repeat(64));
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(driverOutput, "result.json"))).retry_tools, ["grok"]);
+  assert.ok(fs.existsSync(path.join(
+    driverOutput, "validation-evidence", "codex", "evidence", "surface-observations.json",
+  )));
+  assert.equal(fs.existsSync(path.join(
+    driverOutput, "validation-evidence", "codex", "evidence", "raw-request.json",
+  )), false);
+  assert.deepEqual(
+    JSON.parse(fs.readFileSync(path.join(driverOutput, "validation-evidence", "manifest.json"))).files,
+    ["codex/evidence/surface-observations.json"],
+  );
 
   // A held tool is reported alongside retries but never asks for a new capture,
   // so it must stay out of `retry_tools`.
@@ -194,7 +216,11 @@ try {
   const preparedHold = run(
     "prepare-driver-output.cjs",
     [planPath, heldReviewPath, summaryPath, heldOutput, captureRetriesPath],
-    { env: { ...process.env, DRIVER_INPUT_MANIFEST: driverInputPath } },
+    { env: {
+      ...process.env,
+      DRIVER_INPUT_MANIFEST: driverInputPath,
+      CAPTURE_SCRATCH_DIR: captureRoot,
+    } },
   );
   assert.equal(preparedHold.status, 0, preparedHold.stderr);
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(heldOutput, "result.json"))).retry_tools, []);
@@ -367,6 +393,15 @@ try {
   fs.writeFileSync(path.join(publishBundle, "retry-report.json"), "[]\n");
   fs.writeFileSync(path.join(publishBundle, "capture-retries.json"), "[]\n");
   fs.writeFileSync(path.join(publishBundle, "candidate.patch"), safePublishPatch);
+  fs.mkdirSync(path.join(publishBundle, "validation-evidence", "codex", "evidence"), { recursive: true });
+  fs.writeFileSync(
+    path.join(publishBundle, "validation-evidence", "codex", "evidence", "surface-observations.json"),
+    JSON.stringify({ schema_version: 1, provider: "codex", authority: "model-request" }),
+  );
+  fs.writeFileSync(
+    path.join(publishBundle, "validation-evidence", "manifest.json"),
+    JSON.stringify({ schema_version: 1, files: ["codex/evidence/surface-observations.json"] }),
+  );
   const safePublish = run("validate-publish-bundle.cjs", [publishBundle], { cwd: publishRepo });
   assert.equal(safePublish.status, 0, safePublish.stderr);
 

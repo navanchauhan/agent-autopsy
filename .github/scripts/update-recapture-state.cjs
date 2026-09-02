@@ -420,7 +420,8 @@ function driverEvents(planByTool) {
         ? ["capture-retries.json", "result.json", metadataName]
         : [
           "base-sha.txt", "candidate.patch", "capture-retries.json", "changed-tools.json",
-          "codex-summary.md", "result.json", "retry-report.json", "review-result.json", metadataName,
+          "codex-summary.md", "result.json", "retry-report.json", "review-result.json",
+          "validation-evidence", metadataName,
         ],
       `driver artifact ${artifact.name}`,
     );

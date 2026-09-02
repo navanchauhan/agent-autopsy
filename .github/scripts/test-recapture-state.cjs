@@ -155,6 +155,8 @@ function driverArtifact(root, options = {}) {
     writeJson(path.join(directory, "changed-tools.json"), approved);
     fs.writeFileSync(path.join(directory, "codex-summary.md"), "## codex\nreviewed\n");
     writeJson(path.join(directory, "review-result.json"), { decision: approved.length ? "approve" : "retry_capture" });
+    fs.mkdirSync(path.join(directory, "validation-evidence"));
+    writeJson(path.join(directory, "validation-evidence", "manifest.json"), { schema_version: 1, files: [] });
   }
   pass(driverMetadataWriter, [
     directory,
