@@ -10,11 +10,16 @@ changed_file="${CHANGED_TOOLS_FILE:-$scratch_dir/changed-tools.json}"
 automation_state_dir="${AUTOMATION_STATE_DIR:-$scratch_dir/automation-state}"
 ledger_file="${RELEASE_LEDGER_FILE:-$automation_state_dir/release-ledger.json}"
 grok_refresh_enabled="${GROK_REFRESH_ENABLED:-true}"
+claude_fast_forward="${CLAUDE_FAST_FORWARD:-false}"
 mkdir -p "$scratch_dir"
 
 case "$grok_refresh_enabled" in
   true|false) ;;
   *) echo "GROK_REFRESH_ENABLED must be true or false" >&2; exit 2 ;;
+esac
+case "$claude_fast_forward" in
+  true|false) ;;
+  *) echo "CLAUDE_FAST_FORWARD must be true or false" >&2; exit 2 ;;
 esac
 
 current_version_field() {
@@ -110,11 +115,19 @@ claude_recorded="$(current_version_field "$repo_root/claude-code/VERSION" versio
 claude_latest="$(curl -fsSL --connect-timeout 10 --max-time 30 \
   https://downloads.claude.ai/claude-code-releases/latest 2>/dev/null | tr -d '[:space:]' || true)"
 claude_versions_json="$(timeout 30s npm view @anthropic-ai/claude-code versions --json 2>/dev/null || true)"
-claude_candidates="$({
-  jq -r '.[]? | select(test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))' \
-    <<<"$claude_versions_json" 2>/dev/null || true
-  is_release_version "$claude_latest" && printf '%s\n' "$claude_latest"
-} | sort -Vu)"
+if [ "$claude_fast_forward" = true ]; then
+  claude_candidates="$(
+    if is_release_version "$claude_latest"; then
+      printf '%s\n' "$claude_latest"
+    fi
+  )"
+else
+  claude_candidates="$({
+    jq -r '.[]? | select(test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))' \
+      <<<"$claude_versions_json" 2>/dev/null || true
+    is_release_version "$claude_latest" && printf '%s\n' "$claude_latest"
+  } | sort -Vu)"
+fi
 claude_version="$claude_recorded"
 while IFS= read -r observed_version; do
   [ -n "$observed_version" ] || continue
@@ -403,8 +416,17 @@ jq -n \
     "qwen-code":{version:$qwen_version,revision:$qwen_revision,capture_contract_hash:$qwen_contract}}' \
   >"$current_state_file"
 mkdir -p "$(dirname "$ledger_file")"
+ledger_input="$ledger_file"
+if [ "$claude_fast_forward" = true ] && [ -s "$ledger_file" ]; then
+  ledger_input="$scratch_dir/release-ledger.claude-fast-forward.json"
+  jq -S '.queues["claude-code"] = []' "$ledger_file" >"$ledger_input"
+  echo "claude-code: discarded older queued releases for this manual fast-forward" >&2
+fi
 node "$repo_root/.github/scripts/release-ledger.cjs" \
-  "$ledger_file" "$fresh_file" "$current_state_file" "$ledger_next" "$changed_file"
+  "$ledger_input" "$fresh_file" "$current_state_file" "$ledger_next" "$changed_file"
+if [ "$ledger_input" != "$ledger_file" ]; then
+  rm -f -- "$ledger_input"
+fi
 mv -f "$ledger_next" "$ledger_file"
 if [ "$grok_refresh_enabled" = false ]; then
   disabled_plan="$(mktemp "$scratch_dir/.changed-tools.without-grok.XXXXXX")"

@@ -132,6 +132,26 @@ try {
       /preserved in the durable queue but omitted from the active plan/,
       "disabling Grok must preserve its pending release for later re-enable",
     );
+    assert.match(
+      workflow,
+      /fast_forward_claude:[\s\S]*?type: boolean[\s\S]*?default: false/,
+      "Claude fast-forward must be an explicit manual boolean input",
+    );
+    assert.match(
+      workflow,
+      /CLAUDE_FAST_FORWARD: \$\{\{ github\.event_name == 'workflow_dispatch' && inputs\.fast_forward_claude/,
+      "scheduled runs must not enable Claude fast-forward",
+    );
+    assert.match(
+      versionCheck,
+      /CLAUDE_FAST_FORWARD:-false/,
+      "Claude fast-forward must default to disabled",
+    );
+    assert.match(
+      versionCheck,
+      /release-ledger\.claude-fast-forward\.json[\s\S]*?\.queues\["claude-code"\] = \[\]/,
+      "manual Claude fast-forward must discard only the older Claude queue",
+    );
   }
 
   {

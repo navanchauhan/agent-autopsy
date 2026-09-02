@@ -8,6 +8,11 @@ on:
         required: false
         type: boolean
         default: false
+      fast_forward_claude:
+        description: Capture only the latest Claude Code release and discard its older queued releases
+        required: false
+        type: boolean
+        default: false
   schedule:
     # Check once daily at 17:17 UTC (09:17 PST / 10:17 PDT).
     - cron: "17 17 * * *"
@@ -63,6 +68,7 @@ jobs:
         id: check
         env:
           AUTOMATION_STATE_DIR: ${{ github.workspace }}/.capture-scratch/automation-state
+          CLAUDE_FAST_FORWARD: ${{ github.event_name == 'workflow_dispatch' && inputs.fast_forward_claude && 'true' || 'false' }}
         run: bash .github/scripts/check-versions.sh
 
       - name: Persist every observed target before capture begins
