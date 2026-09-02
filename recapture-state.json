@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "tools": {
-    "codex": {
-      "plan_hash": "5360ff871cc5cc122abb25a8122e1bfc8607b76c36e6429ffb8431204878c773",
+    "claude-code": {
+      "plan_hash": "baa1c88f1d26bed0743be649d894e469b48d8056a1313442becfe09c1a33830d",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
@@ -10,8 +10,8 @@
       "last_reviewer_input_hash": null,
       "reason": null
     },
-    "claude-code": {
-      "plan_hash": "e1cc8a02931f6ef2b5f4646031100de7de77110a853f6eb32615464db087d6f7",
+    "grok": {
+      "plan_hash": "d18df3257be6be3dd2300ab4fe34f226eb2951a47b99ae04d52078eacccf8b00",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
@@ -20,7 +20,7 @@
       "reason": null
     },
     "antigravity": {
-      "plan_hash": "a7e9922bd91a6024eaf62abd67f93b854ff472d28ba6c1c238c0ee694365e4f7",
+      "plan_hash": "f3e0d0fed4fc18de77bb2e5a177e56c3a7e0e6c65c414c29bce186c506cf11b1",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
