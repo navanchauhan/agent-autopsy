@@ -27,7 +27,11 @@ if [ ! -d "$ref_dir/.git" ]; then
 fi
 git -C "$ref_dir" remote set-url origin https://github.com/xai-org/grok-build.git
 if ! git -C "$ref_dir" cat-file -e "${mirror_revision}^{commit}" 2>/dev/null; then
-  git -C "$ref_dir" -c core.hooksPath=/dev/null fetch --quiet --depth 1 origin "$mirror_revision"
+  git -C "$ref_dir" -c core.hooksPath=/dev/null fetch --quiet --depth 2 origin "$mirror_revision"
+elif ! git -C "$ref_dir" cat-file -e "${mirror_revision}^" 2>/dev/null; then
+  # The semantic source inventory compares the release snapshot with its
+  # parent. A prior depth-one cache contains the release but hides that delta.
+  git -C "$ref_dir" -c core.hooksPath=/dev/null fetch --quiet --depth 2 origin "$mirror_revision"
 fi
 git -C "$ref_dir" -c core.hooksPath=/dev/null checkout --quiet --detach --force "$mirror_revision"
 git -C "$ref_dir" -c core.hooksPath=/dev/null reset --quiet --hard "$mirror_revision"

@@ -24,7 +24,7 @@ test("Claude embedded release cannot be mislabeled current", () => {
   fs.writeFileSync(path.join(root, provider, "VERSION"), "version = 2.1.226\n");
   fs.writeFileSync(path.join(root, provider, "prompts", "prompt.md"), "<env>cc_version=2.1.221</env>\n");
   const surface = {
-    id: "claude-code.prompt.agent.test",
+    id: "claude-code.prompt.agent.test.non-interactive",
     category: "agent prompt",
     models: ["test"], modes: ["non-interactive"], status: "current",
     capture_method: "model-request", captured_release: "2.1.226",
@@ -43,6 +43,21 @@ test("Claude embedded release cannot be mislabeled current", () => {
   }));
   const result = validateManifest(root, provider);
   assert.ok(result.errors.some((error) => error.includes("embedded cc_version 2.1.221")), result.errors.join("\n"));
+  assert.ok(!result.errors.some((error) => error.includes("id must be derived")), result.errors.join("\n"));
+
+  surface.id = "claude-code.prompt.agent.stale-name.non-interactive";
+  fs.writeFileSync(path.join(root, provider, "SURFACES.json"), JSON.stringify({
+    schema_version: 1, provider, observed_release: "2.1.226",
+    privacy: {
+      tracked_content: "derived-normalized-only", tracked_raw_requests: false,
+      tracked_request_headers: false, tracked_user_messages: false,
+      tracked_model_responses: false, tracked_machine_state: true,
+      unknown_fields: "reject",
+    },
+    surfaces: [surface],
+  }));
+  const staleId = validateManifest(root, provider);
+  assert.ok(staleId.errors.some((error) => error.includes("id must be derived from its model and mode")));
 });
 
 test("fresh evidence hashes do not alter surfaces retained at an older release", () => {

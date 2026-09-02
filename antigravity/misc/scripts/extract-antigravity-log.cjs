@@ -4,6 +4,7 @@ const childProcess = require("child_process");
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
+const { writeSurfaceObservations } = require("../../../.github/scripts/surface-observations.cjs");
 
 const MARKER = "Cortex API Request: ";
 const DEFAULT_OUT_DIR = process.env.CAPTURE_SCRATCH_DIR
@@ -60,6 +61,10 @@ function readJsonRequests(logPath) {
 
 function safeFileName(name) {
   return name.replace(/[^A-Za-z0-9_.-]+/g, "_");
+}
+
+function surfaceSlug(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
 function resolveExecutable(command) {
@@ -673,6 +678,33 @@ function main() {
   } else {
     fs.writeFileSync(path.join(outDir, "VERSION"), versionLines.join("\n"));
   }
+
+  writeSurfaceObservations(
+    path.resolve(
+      process.env.CAPTURE_SURFACE_INVENTORY || path.join(outDir, "..", "surface-observations.json"),
+    ),
+    "antigravity",
+    version,
+    [
+      ...modelNames.map((model) => ({
+        id: `antigravity.prompt.agent.${surfaceSlug(model)}.${captureMode}`,
+        category: "agent prompt",
+        models: [model],
+        modes: [captureMode],
+        artifacts: [
+          `prompts/${safeFileName(model)}${captureMode === "interactive" ? "-interactive" : ""}.md`,
+        ],
+      })),
+      {
+        id: "antigravity.tool.catalog",
+        category: "tool schemas",
+        models: modelNames,
+        modes: [captureMode],
+        artifacts: toolNames.map((name) => `tools/${safeFileName(name)}.json`),
+      },
+    ],
+    { merge: captureMode === "interactive" },
+  );
 
   console.log(
     JSON.stringify(

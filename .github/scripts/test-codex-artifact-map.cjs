@@ -105,7 +105,7 @@ const tracked = buildTracked();
 const outputPath = path.join(temp, "artifact-source-map.json");
 const result = childProcess.spawnSync(
   process.execPath,
-  [mapper, source, oldRevision, newRevision, tracked, outputPath],
+  [mapper, source, oldRevision, newRevision, tracked, outputPath, "codex-rs"],
   { encoding: "utf8" },
 );
 

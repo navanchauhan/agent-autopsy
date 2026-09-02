@@ -4,6 +4,7 @@ const childProcess = require("child_process");
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
+const { writeSurfaceObservations } = require("../../../.github/scripts/surface-observations.cjs");
 
 const DEFAULT_OUT_DIR = process.env.CAPTURE_SCRATCH_DIR
   ? path.resolve(process.env.CAPTURE_SCRATCH_DIR, "claude-code", "candidate")
@@ -11,7 +12,7 @@ const DEFAULT_OUT_DIR = process.env.CAPTURE_SCRATCH_DIR
 
 function usage() {
   console.error(
-    "Usage: node claude-code/misc/scripts/extract-claude-trace.cjs <trace-dir> [out-dir]",
+    "Usage: node claude-code/misc/scripts/extract-claude-trace.cjs <trace-dir> [out-dir] [non-interactive|interactive]",
   );
   process.exit(2);
 }
@@ -416,14 +417,41 @@ function groupTools(records) {
   return groups;
 }
 
+function successfulRecord(record) {
+  const response = record.record.response || {};
+  return response.ok === true && response.completed === true && response.error_event !== true &&
+    Number.isInteger(response.status) && response.status >= 200 && response.status < 300;
+}
+
+function surfaceSlug(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function writeNonInteractiveTool(toolPath, name, variants) {
+  writeJson(toolPath, {
+    name,
+    variants: variants.map((variant) => ({
+      models: variant.models,
+      runs: ["non-interactive"],
+      request_kind: "agent",
+      capture_modes: ["non-interactive"],
+      schema: variant.schema,
+    })),
+  });
+}
+
 function main() {
   const traceDir = process.argv[2] ? path.resolve(process.argv[2]) : "";
   if (!traceDir) usage();
 
   const outDir = process.argv[3] ? path.resolve(process.argv[3]) : DEFAULT_OUT_DIR;
-  const records = readRecords(traceDir).filter((record) => systemText(record.body));
+  const captureMode = process.argv[4] || "interactive";
+  if (!["non-interactive", "interactive"].includes(captureMode)) usage();
+  const records = readRecords(traceDir).filter(
+    (record) => successfulRecord(record) && systemText(record.body),
+  );
   if (records.length === 0) {
-    throw new Error(`No Claude /v1/messages records with system prompts found in ${traceDir}`);
+    throw new Error(`No completed Claude /v1/messages records with system prompts found in ${traceDir}`);
   }
 
   const promptsDir = path.join(outDir, "prompts");
@@ -432,30 +460,77 @@ function main() {
   fs.mkdirSync(promptsDir, { recursive: true });
   fs.mkdirSync(toolsDir, { recursive: true });
   fs.mkdirSync(miscDir, { recursive: true });
-  removeMatchingFiles(promptsDir, (name) => name.endsWith("-interactive.md"));
-  removeMatchingFiles(miscDir, (name) => name.endsWith("-interactive-steering.md"));
+  if (captureMode === "interactive") {
+    removeMatchingFiles(promptsDir, (name) => name.endsWith("-interactive.md"));
+    removeMatchingFiles(promptsDir, (name) => name.endsWith("-session-title.md"));
+    removeMatchingFiles(miscDir, (name) => name.endsWith("-interactive-steering.md"));
+  } else {
+    removeGeneratedFiles(toolsDir, ".json");
+  }
 
   const agentRecords = records.filter((record) => (record.body.tools || []).length > 0);
-  const promptRecords = agentRecords.length > 0 ? agentRecords : records;
+  if (agentRecords.length === 0) {
+    throw new Error(`Completed Claude ${captureMode} capture omitted an agent request`);
+  }
   const byModel = new Map();
-  for (const record of promptRecords) {
+  for (const record of agentRecords) {
     const model = record.body.model || "unknown";
     if (!byModel.has(model)) byModel.set(model, []);
     byModel.get(model).push(record);
   }
 
+  const promptSurfaces = [];
+  const steeringArtifacts = [];
   for (const [model, modelRecords] of byModel.entries()) {
+    const promptName = captureMode === "interactive"
+      ? `${safeFileName(model)}-interactive.md`
+      : `${safeFileName(model)}.md`;
     fs.writeFileSync(
-      path.join(promptsDir, `${safeFileName(model)}-interactive.md`),
+      path.join(promptsDir, promptName),
       renderPrompt(modelRecords),
     );
+    promptSurfaces.push({
+      id: `claude-code.prompt.agent.${surfaceSlug(model)}.${captureMode}`,
+      category: "agent prompt",
+      models: [model],
+      modes: [captureMode],
+      artifacts: [`prompts/${promptName}`],
+    });
     const steering = renderSteering(modelRecords);
     if (steering.trim()) {
+      const steeringName = captureMode === "interactive"
+        ? `${safeFileName(model)}-interactive-steering.md`
+        : `${safeFileName(model)}-steering.md`;
       fs.writeFileSync(
-        path.join(miscDir, `${safeFileName(model)}-interactive-steering.md`),
+        path.join(miscDir, steeringName),
         steering,
       );
+      steeringArtifacts.push({ model, artifact: `misc/${steeringName}` });
     }
+  }
+
+  const sessionRecords = captureMode === "interactive"
+    ? records.filter(
+      (record) =>
+        (record.body.tools || []).length === 0 &&
+        JSON.stringify(record.body.messages || []).includes("CLAUDE_INTERACTIVE_TRACE_OK"),
+    )
+    : [];
+  const sessionSurfaces = [];
+  if (sessionRecords.length > 0) {
+    const selected = sessionRecords.at(-1);
+    const model = selected.body.model || "unknown";
+    const sessionName = `${safeFileName(model)}-session-title.md`;
+    fs.writeFileSync(path.join(promptsDir, sessionName), renderPrompt([selected]));
+    sessionSurfaces.push({
+      id: "claude-code.prompt.special.session-title",
+      category: "session title prompt",
+      models: [model],
+      modes: ["session-title"],
+      artifacts: [`prompts/${sessionName}`],
+    });
+  } else if (captureMode === "interactive") {
+    throw new Error("Completed Claude interactive capture omitted the session-title request");
   }
 
   const toolGroups = groupTools(agentRecords);
@@ -464,7 +539,9 @@ function main() {
       models: [...variant.models].sort(),
       schema: variant.schema,
     }));
-    mergeInteractiveTool(path.join(toolsDir, `${safeFileName(name)}.json`), name, variants);
+    const toolPath = path.join(toolsDir, `${safeFileName(name)}.json`);
+    if (captureMode === "interactive") mergeInteractiveTool(toolPath, name, variants);
+    else writeNonInteractiveTool(toolPath, name, variants);
   }
 
   const claudePath = execOrUnknown("command -v claude");
@@ -476,10 +553,20 @@ function main() {
         .filter(Boolean),
     ),
   ].sort();
-  const capturedVersion =
+  const capturedVersionFromEvidence =
     userAgents
       .map((userAgent) => userAgent.match(/claude-cli\/([0-9.]+)/)?.[1])
       .find(Boolean) || installedVersion.replace(/\s+\(Claude Code\)$/, "");
+  const capturedVersion = process.env.CAPTURE_TARGET_VERSION || capturedVersionFromEvidence;
+  if (
+    process.env.CAPTURE_TARGET_VERSION &&
+    capturedVersionFromEvidence !== "unknown" &&
+    capturedVersionFromEvidence !== process.env.CAPTURE_TARGET_VERSION
+  ) {
+    throw new Error(
+      `Claude request version ${capturedVersionFromEvidence} does not match target ${process.env.CAPTURE_TARGET_VERSION}`,
+    );
+  }
   const capturedBinaryPath = path.join(
     process.env.HOME || "",
     ".local",
@@ -505,12 +592,44 @@ function main() {
     "trace_script = claude-code/misc/scripts/trace-claude-messages.cjs",
     "extract_script = claude-code/misc/scripts/extract-claude-trace.cjs",
     "trace_source = local Bun preload /v1/messages trace retained as redacted capture evidence",
-    "capture = tmux interactive session with `BUN_OPTIONS=--preload=claude-code/misc/scripts/trace-claude-messages.cjs claude --permission-mode dontAsk --strict-mcp-config --tools default` and prompt `Reply exactly: CLAUDE_INTERACTIVE_TRACE_OK`",
+    `capture_mode = ${captureMode}`,
+    "capture = documented Claude Code request capture",
     `interactive_prompt_models = ${modelNames.join(", ")}`,
     `interactive_prompt_artifacts = ${modelNames.length}`,
     `interactive_tool_schemas = ${toolNames.length}`,
   ];
-  fs.writeFileSync(path.join(miscDir, "interactive-capture.VERSION"), `${versionLines.join("\n")}\n`);
+  if (captureMode === "interactive") {
+    fs.writeFileSync(path.join(miscDir, "interactive-capture.VERSION"), `${versionLines.join("\n")}\n`);
+  }
+
+  const observedSurfaces = [
+    ...promptSurfaces,
+    ...sessionSurfaces,
+    ...(steeringArtifacts.length > 0 ? [{
+      id: `claude-code.steering.${captureMode}`,
+      category: "steering messages",
+      models: steeringArtifacts.map((entry) => entry.model),
+      modes: [captureMode],
+      artifacts: steeringArtifacts.map((entry) => entry.artifact),
+    }] : []),
+    {
+      id: "claude-code.tool.catalog",
+      category: "tool schemas",
+      models: modelNames,
+      modes: [captureMode],
+      artifacts: toolNames.map((name) => `tools/${safeFileName(name)}.json`),
+    },
+  ];
+  const observationPath = path.resolve(
+    process.env.CAPTURE_SURFACE_INVENTORY || path.join(outDir, "..", "surface-observations.json"),
+  );
+  writeSurfaceObservations(
+    observationPath,
+    "claude-code",
+    capturedVersion,
+    observedSurfaces,
+    { merge: captureMode === "interactive" },
+  );
 }
 
 main();

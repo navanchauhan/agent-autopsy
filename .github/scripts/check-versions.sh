@@ -36,6 +36,7 @@ capture_contract_hash() {
     "$repo_root/.github/scripts/select-capture-results.cjs"
     "$repo_root/.github/scripts/seed-credentials.sh"
     "$repo_root/.github/scripts/docker-entrypoint.sh"
+    "$repo_root/.github/scripts/surface-observations.cjs"
   )
   case "$tool" in
     codex)
@@ -43,9 +44,16 @@ capture_contract_hash() {
       # The artifact source map is part of the Codex capture output, so a change
       # to it must invalidate cached Codex bundles.
       files+=("$repo_root/.github/scripts/codex-artifact-map.cjs")
+      files+=("$repo_root/.github/scripts/source-surface-inventory.cjs")
       ;;
-    qwen-code) files+=("$repo_root/.github/scripts/sync-qwen-code-reference.sh") ;;
-    grok) files+=("$repo_root/.github/scripts/sync-grok-reference.sh") ;;
+    qwen-code)
+      files+=("$repo_root/.github/scripts/sync-qwen-code-reference.sh")
+      files+=("$repo_root/.github/scripts/source-surface-inventory.cjs")
+      ;;
+    grok)
+      files+=("$repo_root/.github/scripts/sync-grok-reference.sh")
+      files+=("$repo_root/.github/scripts/source-surface-inventory.cjs")
+      ;;
   esac
   if [ -d "$repo_root/$tool/misc/scripts" ]; then
     while IFS= read -r -d '' file; do files+=("$file"); done < <(

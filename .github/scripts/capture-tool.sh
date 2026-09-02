@@ -138,7 +138,10 @@ case "$tool" in
       # the author has a named, bounded read list instead of only a path index.
       node "$repo_root/.github/scripts/codex-artifact-map.cjs" \
         "$repo_root/references/codex" "$old_revision" "$new_revision" \
-        "$repo_root/codex" "$tool_scratch/artifact-source-map.json"
+        "$repo_root/codex" "$tool_scratch/artifact-source-map.json" codex-rs
+      node "$repo_root/.github/scripts/source-surface-inventory.cjs" \
+        codex "$repo_root/references/codex" "$old_revision" "$new_revision" \
+        "$tool_scratch/source-surface-inventory.json" codex-rs
     fi
     ;;
   qwen-code)

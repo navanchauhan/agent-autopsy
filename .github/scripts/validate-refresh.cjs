@@ -391,6 +391,157 @@ function sameList(left, right) {
   return left.length === right.length && left.every((value, index) => value === right[index]);
 }
 
+function sortedStrings(value) {
+  return Array.isArray(value) ? [...value].filter((item) => typeof item === "string").sort() : [];
+}
+
+function validateSourceSurfaceInventory(tool) {
+  if (!tool.new_revision && !tool.mirror_revision) return;
+  if (!fs.existsSync(path.join(repoRoot, tool.dir, "SURFACES.json"))) return;
+  const inventoryPath = path.join(scratchDir, tool.tool, "evidence", "source-surface-inventory.json");
+  const inventory = parseJsonFile(inventoryPath, `${tool.tool} source surface inventory`);
+  if (!inventory) return;
+  if (inventory.schema_version !== 1) fail(`${tool.tool} source surface inventory: schema_version must be 1`);
+  if (inventory.provider !== tool.tool) fail(`${tool.tool} source surface inventory: provider mismatch`);
+  if (inventory.authority !== "direct-source") {
+    fail(`${tool.tool} source surface inventory: authority must be direct-source`);
+  }
+  const expectedRevision = tool.mirror_revision || tool.new_revision;
+  if (inventory.new_revision !== expectedRevision) {
+    fail(
+      `${tool.tool} source surface inventory: expected revision ${expectedRevision}, found ${inventory.new_revision}`,
+    );
+  }
+  if (!Array.isArray(inventory.search_roots) || inventory.search_roots.length === 0) {
+    fail(`${tool.tool} source surface inventory: search_roots must not be empty`);
+  }
+  if (!Array.isArray(inventory.candidates) || inventory.candidates.length === 0) {
+    fail(`${tool.tool} source surface inventory: candidates must not be empty`);
+  }
+  for (const [index, candidate] of (inventory.candidates || []).entries()) {
+    if (typeof candidate?.path !== "string" || candidate.path === "") {
+      fail(`${tool.tool} source surface inventory: candidate ${index + 1} has no path`);
+    }
+    if (typeof candidate?.blob !== "string" || !/^[0-9a-f]{40,64}$/.test(candidate.blob)) {
+      fail(`${tool.tool} source surface inventory: candidate ${index + 1} has no source blob identity`);
+    }
+    if (!Array.isArray(candidate?.roles)) {
+      fail(`${tool.tool} source surface inventory: candidate ${index + 1} roles must be an array`);
+    }
+  }
+
+  if (tool.tool === "qwen-code") {
+    const directPath = path.join(scratchDir, tool.tool, "evidence", "direct-source-manifest.json");
+    const direct = parseJsonFile(directPath, "Qwen direct source manifest");
+    if (direct) {
+      if (direct.surface_inventory !== "source-surface-inventory.json") {
+        fail("Qwen direct source manifest must name source-surface-inventory.json");
+      }
+      if (Object.hasOwn(direct, "authoritative_entrypoints")) {
+        fail("Qwen direct source manifest must not fix authoritative source entrypoints");
+      }
+      if (direct.candidate_count !== inventory.candidates.length) {
+        fail("Qwen direct source manifest candidate_count does not match the source surface inventory");
+      }
+    }
+  }
+}
+
+function validateCapturedSurfaceObservations(tool, versionFields) {
+  const manifestPath = path.join(repoRoot, tool.dir, "SURFACES.json");
+  if (!fs.existsSync(manifestPath)) return;
+
+  const releaseField = tool.version_field || "version";
+  if (versionFields.get(releaseField) !== tool.new_version) return;
+
+  const manifest = parseJsonFile(manifestPath, `${tool.tool} surface registry`);
+  if (!manifest) return;
+  const requiresObservations = (manifest.surfaces || []).some(
+    (surface) =>
+      ["current", "verified-unchanged"].includes(surface.status) &&
+      surface.verified_release === tool.new_version &&
+      typeof surface.capture_method === "string" &&
+      surface.capture_method.includes("model-request"),
+  );
+  if (!requiresObservations) return;
+  const inventoryPath = path.join(scratchDir, tool.tool, "evidence", "surface-observations.json");
+  const inventory = parseJsonFile(inventoryPath, `${tool.tool} captured surface observations`);
+  if (!inventory) return;
+  if (inventory.schema_version !== 1) fail(`${tool.tool} captured surface observations: schema_version must be 1`);
+  if (inventory.provider !== tool.tool) fail(`${tool.tool} captured surface observations: provider mismatch`);
+  if (inventory.authority !== "model-request") {
+    fail(`${tool.tool} captured surface observations: authority must be model-request`);
+  }
+  if (inventory.complete !== true) fail(`${tool.tool} captured surface observations: complete must be true`);
+  if (inventory.observed_release !== tool.new_version) {
+    fail(
+      `${tool.tool} captured surface observations: expected release ${tool.new_version}, found ${inventory.observed_release}`,
+    );
+  }
+  if (!Array.isArray(inventory.surfaces) || inventory.surfaces.length === 0) {
+    fail(`${tool.tool} captured surface observations: surfaces must not be empty`);
+    return;
+  }
+
+  const observedById = new Map();
+  for (const observed of inventory.surfaces) {
+    if (typeof observed?.id !== "string" || observed.id === "") {
+      fail(`${tool.tool} captured surface observations: every surface must have an id`);
+      continue;
+    }
+    if (observedById.has(observed.id)) {
+      fail(`${tool.tool} captured surface observations: duplicate surface ${observed.id}`);
+      continue;
+    }
+    for (const field of ["models", "modes", "artifacts"]) {
+      if (
+        !Array.isArray(observed[field]) || observed[field].length === 0 ||
+        observed[field].some((value) => typeof value !== "string" || value === "")
+      ) {
+        fail(`${tool.tool} captured surface observations: ${observed.id} ${field} must be nonempty strings`);
+      }
+    }
+    observedById.set(observed.id, observed);
+  }
+
+  const finalById = new Map((manifest.surfaces || []).map((surface) => [surface.id, surface]));
+  for (const [id, observed] of observedById) {
+    const final = finalById.get(id);
+    if (!final) {
+      fail(`${tool.tool} surface freshness: observed surface ${id} is absent from SURFACES.json`);
+      continue;
+    }
+    if (!["current", "verified-unchanged"].includes(final.status)) {
+      fail(`${tool.tool} surface freshness: observed surface ${id} is ${final.status}, not current`);
+    }
+    if (final.captured_release !== tool.new_version || final.verified_release !== tool.new_version) {
+      fail(`${tool.tool} surface freshness: observed surface ${id} does not record release ${tool.new_version}`);
+    }
+    if (final.category !== observed.category) {
+      fail(`${tool.tool} surface freshness: ${id} category does not match captured evidence`);
+    }
+    for (const field of ["models", "modes", "artifacts"]) {
+      const expected = sortedStrings(observed[field]);
+      const actual = sortedStrings(final[field]);
+      if (!sameList(expected, actual)) {
+        fail(
+          `${tool.tool} surface freshness: ${id} ${field} do not match captured evidence ` +
+          `(expected ${JSON.stringify(expected)}, found ${JSON.stringify(actual)})`,
+        );
+      }
+    }
+  }
+
+  for (const final of manifest.surfaces || []) {
+    if (!["current", "verified-unchanged"].includes(final.status)) continue;
+    if (final.verified_release !== tool.new_version) continue;
+    if (typeof final.capture_method !== "string" || !final.capture_method.includes("model-request")) continue;
+    if (!observedById.has(final.id)) {
+      fail(`${tool.tool} surface freshness: current model-request surface ${final.id} has no captured observation`);
+    }
+  }
+}
+
 function validateCount(label, declaredValue, actual, versionPath) {
   if (declaredValue === undefined) return;
   const declared = leadingInteger(declaredValue);
@@ -422,6 +573,8 @@ function validateVersionInventory(tool) {
   const versionPath = path.join(dirPath, "VERSION");
   const fields = parseVersion(versionPath);
   validateVersionMetadata(tool, versionPath);
+  validateSourceSurfaceInventory(tool);
+  validateCapturedSurfaceObservations(tool, fields);
 
   const allPrompts = immediateFiles(path.join(dirPath, "prompts"), (name) => name.endsWith(".md"));
   const declaredPromptFiles = listedFiles(fields.get("prompt_files"));

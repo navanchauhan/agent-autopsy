@@ -311,6 +311,7 @@ stop_proxy
 
 AGY_CAPTURE_BINARY="$agy_executable" AGY_CAPTURE_WORKSPACE="$capture_workspace" \
   AGY_VERBOSE_LOG="$noninteractive_log" \
+  CAPTURE_SURFACE_INVENTORY="$tool_scratch/surface-observations.json" \
   CAPTURE_SCRATCH_DIR="$scratch_root" \
   timeout --foreground --signal=TERM --kill-after=10s "${extraction_timeout}s" \
   node "$repo_root/antigravity/misc/scripts/extract-antigravity-log.cjs" \
@@ -334,6 +335,7 @@ stop_proxy
 
 AGY_CAPTURE_MODE=interactive AGY_CAPTURE_BINARY="$agy_executable" \
   AGY_CAPTURE_WORKSPACE="$capture_workspace" AGY_VERBOSE_LOG="$interactive_log" \
+  CAPTURE_SURFACE_INVENTORY="$tool_scratch/surface-observations.json" \
   CAPTURE_SCRATCH_DIR="$scratch_root" \
   timeout --foreground --signal=TERM --kill-after=10s "${extraction_timeout}s" \
   node "$repo_root/antigravity/misc/scripts/extract-antigravity-log.cjs" \

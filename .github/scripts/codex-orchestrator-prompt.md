@@ -24,9 +24,11 @@ For Codex, the exact tagged `references/codex` source checkout is the complete,
 authoritative capture. Codex intentionally has no proxy trace or live model
 request: do not require one and do not mark its capture incomplete merely because
 prompts or schemas are assembled dynamically. Use `source-revisions.json` to
-bind the comparison and treat `source-changes.txt` only as a navigation index.
-`artifact-source-map.json` is the authoritative read list: a trusted step already
-located the source file behind each tracked artifact at the pinned revision and
+bind the comparison and treat `source-changes.txt` only as a summary.
+`source-surface-inventory.json` is the complete revision-pinned discovery index.
+Inspect each added, modified, or removed entry. Use the role labels to trace its
+surface type, so new surfaces are not limited to artifacts that the repository already knows.
+`artifact-source-map.json` separately located the source file behind each tracked artifact at the pinned revision and
 recorded whether that file changed between the two revisions. Open the
 `source_paths` of every entry whose `changed` is true, and leave the rest alone.
 `match_confidence` says how far to trust each binding: `exact` is a single
@@ -43,10 +45,10 @@ in `codex/README.md` is not a missing fixed schema.
 For Qwen Code, the exact tagged `references/qwen-code` source checkout is also
 the complete, authoritative capture. There is intentionally no proxy trace,
 live model request, artifact attestation, or provider credential. Read
-`direct-source-manifest.json` and `source-revisions.json`, then trace prompt
-assembly from `packages/core/src/core/prompts.ts`, prompt registration from
-`packages/core/src/prompts/prompt-registry.ts`, and built-in declarations from
-`packages/core/src/tools/tool-registry.ts`. Extract normalized prompt, tool, and
+`direct-source-manifest.json`, `source-revisions.json`, and the complete
+`source-surface-inventory.json`. Trace each changed or removed candidate
+into prompt assembly, registration, built-in declarations, and runtime messages.
+Do not depend on a fixed entrypoint list. Extract normalized prompt, tool, and
 runtime-message artifacts directly from that exact revision. Dynamic workspace,
 memory, settings, extension, hook, and MCP layers belong in `dynamic_inputs`;
 do not invent concrete values for them. A Qwen version advance is invalid unless
@@ -56,8 +58,9 @@ surface with explicit artifact paths. Do not merely update VERSION or reformat
 SURFACES.json.
 
 For Grok, inspect `references/grok-build` before live capture. Its source is
-authoritative for bundled prompt and tool construction; use capture only to
-verify server-provided request material. Record `references/grok-build/SOURCE_REV`
+authoritative for bundled prompt and tool construction. Use
+`source-surface-inventory.json` to discover changed and new bundled surfaces,
+and use capture to verify server-provided request material. Record `references/grok-build/SOURCE_REV`
 in `grok/VERSION`, never the checkout's mirror commit. Never add, edit, or delete
 the root `VERSION` `sha256` field: a trusted post-processing step writes the
 pinned release digest that the capture container already verified at download.
@@ -84,6 +87,13 @@ copied into the model workspace or retained as text evidence.
 If a required deferred tool cannot be expanded, revert all candidate changes for
 Claude Code, leave its last successful version intact, and report the capture as
 blocked for a later retry.
+
+For Claude Code, Grok, and Antigravity, `surface-observations.json` is the
+trusted inventory derived from successful model-facing requests. Every observed
+surface must have the exact ID, model set, mode set, and artifact set in the
+final `SURFACES.json`, and it must be current at the planned release. Do not keep
+an observed surface stale. Do not add a current request-backed surface that is
+absent from this inventory.
 
 The capture evidence and source checkouts are immutable. If an extraction script
 needs working storage, write only under `$CODEX_WORK_DIR`; never alter the
@@ -112,13 +122,14 @@ source research:
 
 1. Read the changed-tools manifest, the compact evidence index, and the existing
    `VERSION` and `SURFACES.json` files for all listed tools.
-2. List and compare only each listed tool's `evidence/candidate/` or
+2. Read `surface-observations.json` for live harnesses and
+   `source-surface-inventory.json` for source-backed harnesses. Then list and
+   compare only each listed tool's `evidence/candidate/` or
    `interactive-preview/` files against its immediate tracked artifact paths.
    Use these previews as navigation and as a normalization starting point, while
    correcting their known metadata or provenance defects. Codex has no preview by
-   design; its equivalent starting point is `artifact-source-map.json`, whose
-   changed entries name exactly which artifacts need work and where their text
-   now lives.
+   design; its starting points are `source-surface-inventory.json` for discovery
+   and `artifact-source-map.json` for existing artifact provenance.
 3. Update each listed tool's allowed tracked artifacts from that bounded delta.
    Finish one tool before moving to the next so useful work is not deferred.
 4. Semantically inspect the complete resulting tracked candidate for actual PII
@@ -144,7 +155,8 @@ reads consume the execution window and are a task failure.
 For each changed tool:
 
 - Establish the current installed version or source revision.
-- Cover every model and capture mode required for a current snapshot.
+- Cover every model and capture mode in the trusted surface observations and
+  every source surface found in the revision-pinned semantic inventory.
 - Preserve exact prompt and tool-schema content.
 - Support every addition, modification, and removal with raw or source evidence.
 - Exclude transport-only timestamps, trace paths, and trace line numbers.

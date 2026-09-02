@@ -13,6 +13,7 @@ preview_dir="${CLAUDE_PREVIEW_DIR:-$tool_scratch/interactive-preview}"
 trace_script="$repo_root/claude-code/misc/scripts/trace-claude-messages.cjs"
 extract_script="$repo_root/claude-code/misc/scripts/extract-claude-trace.cjs"
 discover_deferred_script="$repo_root/claude-code/misc/scripts/discover-claude-deferred-tools.cjs"
+discover_models_script="$repo_root/claude-code/misc/scripts/discover-claude-models.cjs"
 
 headless_timeout="${CLAUDE_HEADLESS_TIMEOUT_SECONDS:-120}"
 interactive_timeout="${CLAUDE_INTERACTIVE_TIMEOUT_SECONDS:-180}"
@@ -20,21 +21,7 @@ parallelism="${CLAUDE_CAPTURE_PARALLELISM:-3}"
 headless_attempts="${CLAUDE_HEADLESS_ATTEMPTS:-2}"
 export DISABLE_AUTOUPDATER=1
 
-default_models=(
-  claude-fable-5
-  claude-haiku-4-5-20251001
-  claude-opus-4-7
-  claude-opus-4-8
-  claude-opus-5
-  claude-sonnet-4-6
-  claude-sonnet-5
-)
-
-if [ -n "${CLAUDE_CAPTURE_MODELS:-}" ]; then
-  read -r -a models <<<"$CLAUDE_CAPTURE_MODELS"
-else
-  models=("${default_models[@]}")
-fi
+models=()
 
 deferred_names_to_csv() {
   local discovered="$1"
@@ -65,7 +52,6 @@ require_positive_integer CLAUDE_INTERACTIVE_TIMEOUT_SECONDS "$interactive_timeou
 require_positive_integer CLAUDE_CAPTURE_PARALLELISM "$parallelism"
 require_positive_integer CLAUDE_HEADLESS_ATTEMPTS "$headless_attempts"
 [ "$headless_attempts" -le 3 ] || die "CLAUDE_HEADLESS_ATTEMPTS must not exceed 3"
-[ "${#models[@]}" -gt 0 ] || die "no Claude models were selected"
 
 if [ -z "${CLAUDE_CODE_OAUTH_TOKEN:-}" ] && [ ! -s "${HOME:?HOME must be set}/.claude/.credentials.json" ]; then
   die "no seeded Claude credential found (set CLAUDE_CODE_OAUTH_TOKEN or restore ~/.claude/.credentials.json)"
@@ -82,6 +68,7 @@ trace_record_matches() {
     . as $record
     | ($record.request.body? | fromjson?) as $body
     | select(($body | tostring | contains($marker)))
+    | select((($body.tools // []) | length) > 0)
     | select(
         $record.response.ok == true
         and $record.response.completed == true
@@ -98,30 +85,15 @@ trace_record_matches() {
   ' "$file" >/dev/null 2>&1
 }
 
-# The session-title system prompt is product text and gets rewritten. Claude Code
-# 2.1.234 replaced "Generate a concise, sentence-case title ..." with "You are
-# naming a coding session ...", which silently stopped this detector matching:
-# the capture then waited out its whole timeout on every run and deferred, and
-# the archive stalled at 2.1.233 for twelve releases. Match every known wording,
-# because the pipeline replays one release at a time and still has to capture the
-# older ones. Keep this list in sync when a release changes the prompt again;
-# session_title_prompt_markers is reported verbatim when nothing matches.
-session_title_prompt_markers=(
-  "Generate a concise, sentence-case title"  # <= 2.1.233
-  "You are naming a coding session"          # >= 2.1.234
-)
-
 trace_has_session_title() {
-  local file="$1"
-  local markers_json
-  markers_json="$(printf '%s\n' "${session_title_prompt_markers[@]}" | jq -R . | jq -s .)"
-  jq -e --argjson markers "$markers_json" '
+  local file="$1" marker="$2"
+  jq -e --arg marker "$marker" '
     . as $record
     | ($record.request.body? | fromjson?) as $body
     | select(
-        ($body | tostring) as $text
-        | any($markers[]; . as $marker | $text | contains($marker))
+        (($body.messages // []) | tostring | contains($marker))
       )
+    | select((($body.system // []) | tostring | length) > 0)
     | select((($body.tools // []) | length == 0))
     | select(
         $record.response.ok == true
@@ -180,28 +152,20 @@ trace_marker_available() {
 }
 
 wait_for_session_title() {
-  local trace_dir="$1" timeout_seconds="${2:-15}"
+  local trace_dir="$1" marker="$2" timeout_seconds="${3:-15}"
   local deadline=$((SECONDS + timeout_seconds))
   while [ "$SECONDS" -lt "$deadline" ]; do
     local file
     for file in "$trace_dir"/*.json; do
       [ -f "$file" ] || continue
-      if trace_has_session_title "$file"; then
+      if trace_has_session_title "$file" "$marker"; then
         return 0
       fi
     done
     sleep 1
   done
   echo "capture-claude-code: no successful session-title request was captured" >&2
-  # Name the most likely cause. This detector matches product prompt text, so a
-  # reword upstream looks exactly like a transport failure unless it says so.
-  echo "capture-claude-code: no request matched a known session-title system prompt." >&2
-  echo "capture-claude-code: if this release reworded the prompt, add the new marker to" >&2
-  echo "capture-claude-code: session_title_prompt_markers. Known markers:" >&2
-  local marker
-  for marker in "${session_title_prompt_markers[@]}"; do
-    echo "capture-claude-code:   - $marker" >&2
-  done
+  echo "capture-claude-code: no completed no-tool request summarized the captured session marker" >&2
   return 1
 }
 
@@ -318,6 +282,16 @@ wait_for_trace_marker \
   "$interactive_timeout" "$interactive_exit_file" "$tmux_session" || \
   die "interactive base capture is incomplete"
 
+if [ -n "${CLAUDE_CAPTURE_MODELS:-}" ]; then
+  read -r -a models <<<"$CLAUDE_CAPTURE_MODELS"
+else
+  while IFS= read -r model; do
+    [ -n "$model" ] && models+=("$model")
+  done < <(node "$discover_models_script" "$interactive_trace_dir" "$repo_root/claude-code/SURFACES.json")
+fi
+[ "${#models[@]}" -gt 0 ] || die "Claude model discovery returned no capture targets"
+echo "Discovered ${#models[@]} Claude model capture target(s) from current request evidence."
+
 interactive_discovered="$(node "$discover_deferred_script" "$interactive_trace_dir" "$interactive_base_marker" --allow-none)"
 interactive_deferred_csv="$(deferred_names_to_csv "$interactive_discovered")"
 if [ -n "$interactive_deferred_csv" ]; then
@@ -335,7 +309,7 @@ if [ -n "$interactive_deferred_csv" ]; then
 else
   echo "Claude interactive mode advertised no deferred tools; skipping the expansion turn."
 fi
-wait_for_session_title "$interactive_trace_dir" "$interactive_timeout" || \
+wait_for_session_title "$interactive_trace_dir" "$interactive_base_marker" "$interactive_timeout" || \
   die "interactive session-title capture is incomplete"
 
 send_interactive_prompt "/exit"
@@ -393,9 +367,14 @@ mkdir -p "$preview_dir"
 for archive_dir in prompts tools misc; do
   cp -a "$repo_root/claude-code/$archive_dir" "$preview_dir/$archive_dir"
 done
-node "$extract_script" "$interactive_trace_dir" "$preview_dir"
 base_version="$(awk -F' = ' '$1 == "version" { print $2; exit }' "$repo_root/claude-code/VERSION")"
 captured_version="$(claude --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1)"
+CAPTURE_TARGET_VERSION="$captured_version" \
+  CAPTURE_SURFACE_INVENTORY="$tool_scratch/surface-observations.json" \
+  node "$extract_script" "$headless_trace_dir" "$preview_dir" non-interactive
+CAPTURE_TARGET_VERSION="$captured_version" \
+  CAPTURE_SURFACE_INVENTORY="$tool_scratch/surface-observations.json" \
+  node "$extract_script" "$interactive_trace_dir" "$preview_dir" interactive
 jq -n \
   --arg seed_version "$base_version" \
   --arg captured_version "$captured_version" \

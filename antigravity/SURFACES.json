@@ -13,7 +13,7 @@
   },
   "surfaces": [
     {
-      "id": "antigravity.prompt.agent.gemini-3-6-flash-high.non-interactive",
+      "id": "antigravity.prompt.agent.gemini-3-7-flash-high.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
@@ -33,7 +33,7 @@
       "evidence_sha256": "4cb93b043a5644069f7e1224c1365dc877f9bf9df6ec9db89a104461250a0ef8"
     },
     {
-      "id": "antigravity.prompt.agent.gemini-3-6-flash-high.interactive",
+      "id": "antigravity.prompt.agent.gemini-3-7-flash-high.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",

@@ -4,6 +4,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { writeSurfaceObservations } = require("../../../.github/scripts/surface-observations.cjs");
 
 function usage() {
   console.error(
@@ -32,6 +33,10 @@ function readJsonl(filePath) {
 
 function sameJson(a, b) {
   return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function surfaceSlug(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
 function removeMatchingFiles(dir, predicate) {
@@ -266,8 +271,14 @@ function extractRunInfo(body) {
   };
 }
 
+const promptSurfaces = [];
+const steeringEntries = [];
 for (const [runKind, entries] of byRunKind) {
   const { body } = entries[entries.length - 1];
+  const model = body.model;
+  const mode = runKind === "grok-session-title"
+    ? "session-title"
+    : runKind.endsWith("-interactive") ? "interactive" : "non-interactive";
   const info = extractRunInfo(body);
   const messages = body.input || [];
   const systemMsg = messages.find((m) => m.role === "system");
@@ -277,6 +288,15 @@ for (const [runKind, entries] of byRunKind) {
     let systemText = genericizeHome(systemMsg.content);
     systemText = templateCommonFields(systemText, info);
     fs.writeFileSync(path.join(outDir, "prompts", `${runKind}.md`), `${systemText}\n`);
+    promptSurfaces.push({
+      id: mode === "session-title"
+        ? "grok.prompt.special.session-title"
+        : `grok.prompt.agent.${surfaceSlug(model)}.${mode}`,
+      category: mode === "session-title" ? "session title prompt" : "agent prompt",
+      models: [model],
+      modes: [mode],
+      artifacts: [`prompts/${runKind}.md`],
+    });
   }
 
   // Skip emitting a steering file when the only non-system input is the bare
@@ -297,6 +317,7 @@ for (const [runKind, entries] of byRunKind) {
     steering = templateSkillListing(steering);
     steering = templateUserQuery(steering);
     fs.writeFileSync(path.join(outDir, "misc", `${runKind}-steering.md`), `${steering}\n`);
+    steeringEntries.push({ model, mode, artifact: `misc/${runKind}-steering.md` });
   }
 }
 
@@ -329,6 +350,7 @@ for (const [runKind, entries] of byRunKind) {
 // silently clobber each other on disk. Disambiguate any such collision by
 // suffixing the later name with its owning run kind(s).
 const usedLowerNames = new Map(); // lowercase filename stem -> original tool name
+const toolArtifacts = [];
 
 for (const [name, variants] of toolVariants) {
   let safeName = name.replace(/[^A-Za-z0-9_.-]+/g, "_");
@@ -339,6 +361,7 @@ for (const [name, variants] of toolVariants) {
   }
   usedLowerNames.set(lower, safeName);
   const filePath = path.join(outDir, "tools", `${safeName}.json`);
+  toolArtifacts.push(`tools/${safeName}.json`);
   if (variants.length === 1) {
     fs.writeFileSync(
       filePath,
@@ -365,5 +388,40 @@ for (const [name, variants] of toolVariants) {
     );
   }
 }
+
+const observedRelease = process.env.CAPTURE_TARGET_VERSION;
+if (!observedRelease) throw new Error("CAPTURE_TARGET_VERSION is required for Grok extraction");
+const runModels = [...new Set(
+  [...byRunKind.values()].flat().map(({ body }) => body.model).filter(Boolean),
+)].sort();
+const runModes = [...new Set(
+  [...byRunKind.keys()].map((runKind) => runKind === "grok-session-title"
+    ? "session-title"
+    : runKind.endsWith("-interactive") ? "interactive" : "non-interactive"),
+)].sort();
+writeSurfaceObservations(
+  path.resolve(
+    process.env.CAPTURE_SURFACE_INVENTORY || path.join(outDir, "..", "surface-observations.json"),
+  ),
+  "grok",
+  observedRelease,
+  [
+    ...promptSurfaces,
+    ...(steeringEntries.length > 0 ? [{
+      id: "grok.steering.catalog",
+      category: "steering messages",
+      models: steeringEntries.map((entry) => entry.model),
+      modes: steeringEntries.map((entry) => entry.mode),
+      artifacts: steeringEntries.map((entry) => entry.artifact),
+    }] : []),
+    {
+      id: "grok.tool.catalog",
+      category: "tool schemas",
+      models: runModels,
+      modes: runModes,
+      artifacts: toolArtifacts,
+    },
+  ],
+);
 
 console.log(`Wrote ${byRunKind.size} prompt file(s) and ${toolVariants.size} tool file(s) to ${outDir}`);

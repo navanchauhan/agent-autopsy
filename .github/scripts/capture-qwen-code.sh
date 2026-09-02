@@ -25,17 +25,19 @@ jq -n --arg old "$old_revision" --arg new "$new_revision" \
 {
   echo '# Full release diff summary'
   git -c safe.directory="$source_dir" -C "$source_dir" diff --shortstat "$old_revision" "$new_revision"
-  echo
-  echo '# Model-facing source paths'
-  git -c safe.directory="$source_dir" -C "$source_dir" ls-tree -r --name-only "$new_revision" -- packages/core/src packages/cli/src \
-    | grep -Ei '(^|/)(prompt|prompts|tool|tools|agent|agents|memory|hook|review|instruction|message|policy|permission)' \
-    | awk 'NR <= 400'
 } >"$tool_scratch/source-changes.txt"
 
+node "$repo_root/.github/scripts/source-surface-inventory.cjs" \
+  qwen-code "$source_dir" "$old_revision" "$new_revision" \
+  "$tool_scratch/source-surface-inventory.json" packages/core/src packages/cli/src
+
+candidate_count="$(jq -r '.candidates | length' "$tool_scratch/source-surface-inventory.json")"
+changed_candidate_count="$(jq -r '[.candidates[] | select(.changed)] | length' "$tool_scratch/source-surface-inventory.json")"
 jq -n \
   --arg revision "$new_revision" \
-  --arg core_prompt 'packages/core/src/core/prompts.ts' \
-  --arg prompt_registry 'packages/core/src/prompts/prompt-registry.ts' \
-  --arg tool_registry 'packages/core/src/tools/tool-registry.ts' \
-  '{source_revision:$revision,authoritative_entrypoints:{core_prompt:$core_prompt,prompt_registry:$prompt_registry,tool_registry:$tool_registry},network_capture_required:false}' \
+  --argjson candidate_count "$candidate_count" \
+  --argjson changed_candidate_count "$changed_candidate_count" \
+  '{source_revision:$revision,surface_inventory:"source-surface-inventory.json",
+    candidate_count:$candidate_count,changed_candidate_count:$changed_candidate_count,
+    network_capture_required:false}' \
   >"$tool_scratch/direct-source-manifest.json"

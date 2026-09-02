@@ -137,6 +137,23 @@ test("Codex artifacts carry a per-artifact source index", () => {
   assert.match(read("capture-tool.sh"), /codex-artifact-map\.cjs/);
 });
 
+test("all harnesses use evidence-driven surface inventories", () => {
+  for (const name of [
+    "codex-orchestrator-prompt.md",
+    "codex-revise-prompt.md",
+    "review-refresh-prompt.md",
+  ]) {
+    const prompt = read(name);
+    assert.match(prompt, /surface-observations\.json/);
+    assert.match(prompt, /source-surface-inventory\.json/);
+  }
+  const author = read("codex-orchestrator-prompt.md");
+  assert.match(author, /exact ID, model set, mode set, and artifact set/);
+  assert.match(author, /Do not depend on a fixed entrypoint list/);
+  const reviewer = read("review-refresh-prompt.md");
+  assert.match(reviewer, /marks an unobserved request-backed surface current/);
+});
+
 test("the Antigravity CLI cannot self-update past the pinned release", () => {
   // The CLI replaces its own binary with whatever its auto-updater manifest
   // serves, so without this every target older than the manifest head fails the

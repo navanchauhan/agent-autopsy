@@ -14,22 +14,18 @@
 // that contain them, and records whether those files changed between the two
 // revisions. The author then has an explicitly named, bounded read list.
 //
-// Usage: codex-artifact-map.cjs <source-checkout> <old-rev> <new-rev> <tracked-dir> <output>
+// Usage: codex-artifact-map.cjs <source-checkout> <old-rev> <new-rev> <tracked-dir> <output> <search-root>...
 
 const childProcess = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const [sourceDir, oldRevision, newRevision, trackedDir, outputPath] = process.argv.slice(2);
-if (!sourceDir || !oldRevision || !newRevision || !trackedDir || !outputPath) {
+const [sourceDir, oldRevision, newRevision, trackedDir, outputPath, ...searchRoots] = process.argv.slice(2);
+if (!sourceDir || !oldRevision || !newRevision || !trackedDir || !outputPath || searchRoots.length === 0) {
   throw new Error(
-    "Usage: codex-artifact-map.cjs <source-checkout> <old-rev> <new-rev> <tracked-dir> <output>",
+    "Usage: codex-artifact-map.cjs <source-checkout> <old-rev> <new-rev> <tracked-dir> <output> <search-root>...",
   );
 }
-
-// Search only the Rust workspace that assembles prompts and schemas. Everything
-// else in the upstream tree is noise for this index.
-const searchRoots = ["codex-rs"];
 const maxSourcePathsPerArtifact = 6;
 const maxProbesPerArtifact = 4;
 const probeMinLength = 24;

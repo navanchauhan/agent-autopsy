@@ -34,7 +34,7 @@
       "evidence_sha256": "d8e3f1b76223c0f3b04de7cafa0d800862e278f4b299bb4bc5df7b1719acad99"
     },
     {
-      "id": "claude-code.prompt.agent.claude-haiku-4-5.non-interactive",
+      "id": "claude-code.prompt.agent.claude-haiku-4-5-20251001.non-interactive",
       "category": "agent prompt",
       "status": "stale",
       "capture_method": "model-request",

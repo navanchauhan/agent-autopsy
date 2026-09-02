@@ -29,6 +29,11 @@ model-facing machine, repository, MCP, skills, tenant, staging, request/session,
 and user-content context when it contains no actual PII. Synthetic placeholder
 paths such as `/Users/example` are safe.
 
+For Claude Code, Grok, and Antigravity, reconcile `SURFACES.json` exactly with
+the IDs, models, modes, and artifacts in `surface-observations.json`. Every
+observed surface must be current at the planned release. Do not mark an
+unobserved request-backed surface current.
+
 Remove `generated_at` and `trace_source` from normalized `VERSION` artifacts.
 Durable repository script fields such as `trace_script`, `extract_script`,
 `capture_script`, and `network_capture_script` are allowed. For Antigravity,
@@ -60,7 +65,8 @@ Grok 4.5, keep that surface's model as `grok-4.5`.
 For Codex, repair directly against the exact `references/codex` revision recorded
 in `source-revisions.json`. Codex is source-authoritative: the absence of a proxy
 trace or live response is expected and is not a reason to revert or request
-recapture. `artifact-source-map.json` already names the source file behind each
+recapture. Use `source-surface-inventory.json` to find changed, removed, and new
+surfaces without depending on the current artifact list. `artifact-source-map.json` names the source file behind each
 tracked artifact and marks which of those files changed between the two
 revisions. Read the `source_paths` of the changed entries and resolve each
 `unresolved` entry; those are targeted reads, not a prohibited source scan. Do
@@ -70,6 +76,7 @@ For Qwen Code, repair directly against the exact `references/qwen-code`
 revision recorded in `source-revisions.json`. Qwen Code is source-authoritative:
 the absence of a proxy trace, live response, or artifact attestation is expected
 and is not a reason to revert or request recapture.
+Use `source-surface-inventory.json` instead of a fixed list of source entrypoints.
 Qwen cannot pass with zero prompt/tool files or any remaining `gap` surface;
 materialize the source-derived artifacts before returning.
 

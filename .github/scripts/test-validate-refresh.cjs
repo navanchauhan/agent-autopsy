@@ -1,5 +1,6 @@
 const assert = require("node:assert/strict");
 const childProcess = require("node:child_process");
+const crypto = require("node:crypto");
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
@@ -189,4 +190,121 @@ test("a Codex advance cannot ignore an unresolved artifact source map entry", ()
   );
   const held = run();
   assert.equal(held.status, 0, held.stderr);
+});
+
+test("a live release cannot omit or rename a captured surface", () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), "validate-refresh-observed-surfaces-"));
+  const root = path.join(temp, "repo");
+  const provider = path.join(root, "antigravity");
+  fs.mkdirSync(path.join(provider, "prompts"), { recursive: true });
+  fs.mkdirSync(path.join(provider, "tools"), { recursive: true });
+  fs.writeFileSync(path.join(provider, "VERSION"), "version = 1.0.1\nprompts = 1\ntools = 1\nmisc = 0\n");
+  fs.writeFileSync(path.join(provider, "prompts", "gemini-new.md"), "current prompt\n");
+  fs.writeFileSync(path.join(provider, "tools", "read.json"), "{}\n");
+
+  function artifactDigest(artifacts) {
+    const hash = crypto.createHash("sha256");
+    for (const relative of artifacts) {
+      hash.update(relative);
+      hash.update("\0");
+      hash.update(fs.readFileSync(path.join(provider, relative)));
+      hash.update("\0");
+    }
+    return hash.digest("hex");
+  }
+
+  const privacy = {
+    tracked_content: "derived-normalized-only",
+    tracked_raw_requests: false,
+    tracked_request_headers: false,
+    tracked_user_messages: false,
+    tracked_model_responses: false,
+    tracked_machine_state: true,
+    unknown_fields: "reject",
+  };
+  fs.writeFileSync(path.join(provider, "SURFACES.json"), JSON.stringify({
+    schema_version: 1,
+    provider: "antigravity",
+    observed_release: "1.0.1",
+    privacy,
+    surfaces: [
+      {
+        id: "antigravity.prompt.agent.gemini-old.non-interactive",
+        category: "agent prompt",
+        status: "current",
+        capture_method: "model-request",
+        captured_release: "1.0.1",
+        verified_release: "1.0.1",
+        models: ["gemini-new"],
+        modes: ["non-interactive"],
+        dynamic_inputs: [],
+        artifacts: ["prompts/gemini-new.md"],
+        artifact_sha256: artifactDigest(["prompts/gemini-new.md"]),
+        evidence_sha256: "a".repeat(64),
+      },
+      {
+        id: "antigravity.tool.catalog",
+        category: "tool schemas",
+        status: "current",
+        capture_method: "model-request",
+        captured_release: "1.0.1",
+        verified_release: "1.0.1",
+        models: ["gemini-new"],
+        modes: ["non-interactive"],
+        dynamic_inputs: [],
+        artifacts: ["tools/read.json"],
+        artifact_sha256: artifactDigest(["tools/read.json"]),
+        evidence_sha256: "a".repeat(64),
+      },
+    ],
+  }, null, 2));
+  childProcess.execFileSync("git", ["init", "-q"], { cwd: root });
+  childProcess.execFileSync("git", ["config", "user.email", "test@example.invalid"], { cwd: root });
+  childProcess.execFileSync("git", ["config", "user.name", "Validation Test"], { cwd: root });
+  childProcess.execFileSync("git", ["add", "."], { cwd: root });
+  childProcess.execFileSync("git", ["commit", "-qm", "baseline"], { cwd: root });
+
+  const scratch = path.join(temp, "scratch");
+  fs.mkdirSync(path.join(scratch, "antigravity", "evidence"), { recursive: true });
+  fs.writeFileSync(
+    path.join(scratch, "antigravity", "evidence", "surface-observations.json"),
+    JSON.stringify({
+      schema_version: 1,
+      provider: "antigravity",
+      observed_release: "1.0.1",
+      authority: "model-request",
+      complete: true,
+      surfaces: [
+        {
+          id: "antigravity.prompt.agent.gemini-new.non-interactive",
+          category: "agent prompt",
+          models: ["gemini-new"],
+          modes: ["non-interactive"],
+          artifacts: ["prompts/gemini-new.md"],
+        },
+        {
+          id: "antigravity.tool.catalog",
+          category: "tool schemas",
+          models: ["gemini-new"],
+          modes: ["non-interactive"],
+          artifacts: ["tools/read.json"],
+        },
+      ],
+    }),
+  );
+  const plan = path.join(temp, "plan.json");
+  const summary = path.join(temp, "summary.md");
+  fs.writeFileSync(plan, JSON.stringify([{
+    tool: "antigravity", dir: "antigravity", old_version: "1.0.0", new_version: "1.0.1",
+  }]));
+  fs.writeFileSync(summary, "## antigravity\n\nUpdated Antigravity.\n");
+
+  const result = childProcess.spawnSync(process.execPath, [validator, plan, summary], {
+    cwd: root,
+    encoding: "utf8",
+    env: { ...process.env, CAPTURE_SCRATCH_DIR: scratch },
+  });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /observed surface antigravity\.prompt\.agent\.gemini-new\.non-interactive is absent/);
+  assert.match(result.stderr, /current model-request surface antigravity\.prompt\.agent\.gemini-old\.non-interactive has no captured observation/);
 });

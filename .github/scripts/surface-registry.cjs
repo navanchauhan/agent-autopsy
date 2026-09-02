@@ -100,6 +100,10 @@ function expectStringArray(value, label, errors) {
   }
 }
 
+function surfaceSlug(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
 function validatePrivacy(provider, privacy, errors) {
   const expected = {
     tracked_content: "derived-normalized-only",
@@ -179,6 +183,17 @@ function validateManifest(repoRoot, provider, options = {}) {
     expectStringArray(surface.modes, `${label}.modes`, errors);
     expectStringArray(surface.dynamic_inputs, `${label}.dynamic_inputs`, errors);
     if (!Array.isArray(surface.artifacts)) errors.push(`${label}.artifacts must be an array`);
+
+    if (
+      surface.category === "agent prompt" &&
+      Array.isArray(surface.models) && surface.models.length === 1 &&
+      Array.isArray(surface.modes) && surface.modes.length === 1
+    ) {
+      const expectedId = `${provider}.prompt.agent.${surfaceSlug(surface.models[0])}.${surfaceSlug(surface.modes[0])}`;
+      if (surface.id !== expectedId) {
+        errors.push(`${label}.id must be derived from its model and mode: ${expectedId}`);
+      }
+    }
 
     const artifacts = Array.isArray(surface.artifacts) ? surface.artifacts : [];
     if (["current", "verified-unchanged", "stale", "frozen"].includes(surface.status) && artifacts.length === 0) {

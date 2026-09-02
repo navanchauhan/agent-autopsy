@@ -51,6 +51,11 @@ jobs:
           node --test .github/scripts/test-capture-artifacts.cjs
           node --test .github/scripts/test-version-artifacts.cjs
           node --test .github/scripts/test-codex-artifact-map.cjs
+          node --test .github/scripts/test-source-surface-inventory.cjs
+          node --test .github/scripts/test-discover-claude-models.cjs
+          node --test .github/scripts/test-extract-claude-trace.cjs
+          node --test .github/scripts/test-extract-grok-capture.cjs
+          node --test .github/scripts/test-extract-antigravity-log.cjs
           node --test .github/scripts/test-discover-claude-deferred-tools.cjs
           node --test .github/scripts/test-trace-claude-messages.cjs
           node --test .github/scripts/test-prompt-contracts.cjs

@@ -10,6 +10,9 @@ scratch_root="${CAPTURE_SCRATCH_DIR:-$repo_root/.capture-scratch}"
 tool_scratch="$scratch_root/grok"
 raw_root="$tool_scratch/raw"
 candidate_dir="$tool_scratch/candidate"
+changed_file="${CHANGED_TOOLS_FILE:-$scratch_root/changed-tools.json}"
+target_version="$(jq -er '.[] | select(.tool == "grok") | .new_version' "$changed_file")"
+mirror_revision="$(jq -er '.[] | select(.tool == "grok") | .mirror_revision' "$changed_file")"
 
 grok_bin="${GROK_BIN:-grok}"
 proxy_port="${GROK_CAPTURE_PORT:-8899}"
@@ -290,6 +293,10 @@ wait_for_tmux_startup() {
 }
 
 reset_candidate_dir
+previous_mirror_revision="$(git -C "$repo_root/references/grok-build" rev-parse "${mirror_revision}^" 2>/dev/null || printf '%s' "$mirror_revision")"
+node "$repo_root/.github/scripts/source-surface-inventory.cjs" \
+  grok "$repo_root/references/grok-build" "$previous_mirror_revision" "$mirror_revision" \
+  "$tool_scratch/source-surface-inventory.json" crates/codegen/xai-grok-shell
 start_proxy
 
 proxy_url="http://127.0.0.1:$proxy_port"
@@ -330,6 +337,8 @@ stop_tmux
 stop_proxy
 
 CAPTURE_SCRATCH_DIR="$scratch_root" \
+  CAPTURE_TARGET_VERSION="$target_version" \
+  CAPTURE_SURFACE_INVENTORY="$tool_scratch/surface-observations.json" \
   timeout --foreground --signal=TERM --kill-after=10s "${extraction_timeout}s" \
   node "$repo_root/grok/misc/scripts/extract-grok-capture.cjs" \
   "$capture_file" "$candidate_dir"

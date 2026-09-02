@@ -186,6 +186,36 @@ try {
       /send_interactive_prompt "Reply exactly: \$interactive_base_marker"/,
       "Claude base capture must not depend on post-startup terminal keystroke injection",
     );
+    assert.doesNotMatch(
+      claudeWrapper,
+      /default_models=\(/,
+      "Claude capture must discover its model inventory from current request evidence",
+    );
+    assert.match(claudeWrapper, /discover-claude-models\.cjs/);
+    assert.match(claudeWrapper, /"\$headless_trace_dir" "\$preview_dir" non-interactive/);
+    assert.match(claudeWrapper, /"\$interactive_trace_dir" "\$preview_dir" interactive/);
+    assert.doesNotMatch(claudeWrapper, /session_title_prompt_markers/);
+    assert.match(claudeWrapper, /CAPTURE_SURFACE_INVENTORY/);
+  }
+
+  {
+    for (const name of ["capture-grok.sh", "capture-antigravity.sh"]) {
+      assert.match(
+        fs.readFileSync(path.join(scripts, name), "utf8"),
+        /CAPTURE_SURFACE_INVENTORY/,
+        `${name} must emit trusted captured-surface observations`,
+      );
+    }
+    assert.match(
+      fs.readFileSync(path.join(scripts, "capture-grok.sh"), "utf8"),
+      /source-surface-inventory\.cjs/,
+      "Grok must inventory its public source surfaces as well as live requests",
+    );
+    const qwen = fs.readFileSync(path.join(scripts, "capture-qwen-code.sh"), "utf8");
+    assert.match(qwen, /source-surface-inventory\.cjs/);
+    assert.doesNotMatch(qwen, /packages\/core\/src\/core\/prompts\.ts/);
+    const captureTool = fs.readFileSync(path.join(scripts, "capture-tool.sh"), "utf8");
+    assert.match(captureTool, /source-surface-inventory\.cjs[\s\S]+codex-rs/);
   }
 
   {
