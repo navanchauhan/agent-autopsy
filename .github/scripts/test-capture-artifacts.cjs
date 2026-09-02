@@ -226,6 +226,11 @@ try {
       /matrix\.runtime_refresh != true/,
       "runtime surface refreshes must bypass stale capture caches",
     );
+    assert.match(
+      fs.readFileSync(path.join(scripts, "../workflows/daily-refresh.yml"), "utf8"),
+      /name: Package reviewed patch[\s\S]*?CAPTURE_SCRATCH_DIR: \$\{\{ github\.workspace \}\}\/capture-output/,
+      "the packaging validator must read the verified capture evidence tree",
+    );
   }
 
   {

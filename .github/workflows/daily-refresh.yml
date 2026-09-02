@@ -899,6 +899,7 @@ jobs:
           REPO_ROOT: ${{ github.workspace }}
           TRUSTED_SCRIPT_DIR: ${{ runner.temp }}/driver-gate
           DRIVER_INPUT_MANIFEST: ${{ runner.temp }}/driver-gate/driver-input.json
+          CAPTURE_SCRATCH_DIR: ${{ github.workspace }}/capture-output
         run: |
           bash "$TRUSTED_SCRIPT_DIR/package-driver-output.sh" \
             "$TRUSTED_SCRIPT_DIR/ready-tools.json" \
