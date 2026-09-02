@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "codex",
-  "observed_release": "0.152.0",
+  "observed_release": "0.152.1",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.152.0",
-      "verified_release": "0.152.0",
+      "captured_release": "0.152.1",
+      "verified_release": "0.152.1",
       "models": [
         "gpt-5",
         "gpt-5.1",
@@ -50,15 +50,15 @@
         "prompts/review.md"
       ],
       "artifact_sha256": "e3c3b5bd4ae6a15ff140dcd7533dee6efd8968f35f0322aafc4df82b8240c96a",
-      "evidence_sha256": "31c205badc892bd1ff55d44b6adab7df535ace3a306e705efb40db23c549de3b"
+      "evidence_sha256": "f1aa34319cdd818bf18182fc260d2ebc0be61fca65521d18379d8635db255ea8"
     },
     {
       "id": "codex.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.152.0",
-      "verified_release": "0.152.0",
+      "captured_release": "0.152.1",
+      "verified_release": "0.152.1",
       "models": [
         "all"
       ],
@@ -94,15 +94,15 @@
         "tools/write_stdin.json"
       ],
       "artifact_sha256": "6cd72b18550827fee3601a55ad5726bd02c61b9241b115ad6c9384ceefd276bf",
-      "evidence_sha256": "31c205badc892bd1ff55d44b6adab7df535ace3a306e705efb40db23c549de3b"
+      "evidence_sha256": "f1aa34319cdd818bf18182fc260d2ebc0be61fca65521d18379d8635db255ea8"
     },
     {
       "id": "codex.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.152.0",
-      "verified_release": "0.152.0",
+      "captured_release": "0.152.1",
+      "verified_release": "0.152.1",
       "models": [
         "all"
       ],
@@ -145,7 +145,7 @@
         "misc/review-exit-success.xml"
       ],
       "artifact_sha256": "b1b587dd39020f93430cf32f2cffd0f0e76e34756b4ed06a8d16b1b4da3668fe",
-      "evidence_sha256": "31c205badc892bd1ff55d44b6adab7df535ace3a306e705efb40db23c549de3b"
+      "evidence_sha256": "f1aa34319cdd818bf18182fc260d2ebc0be61fca65521d18379d8635db255ea8"
     },
     {
       "id": "codex.assembly.model-mode",

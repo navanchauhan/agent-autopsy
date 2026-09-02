@@ -126,6 +126,59 @@
         },
         "eager_input_streaming": true
       }
+    },
+    {
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "runs": [
+        "interactive"
+      ],
+      "request_kind": "agent",
+      "capture_modes": [
+        "interactive"
+      ],
+      "schema": {
+        "name": "Workflow",
+        "description": "Execute a workflow script that orchestrates multiple subagents deterministically. Workflows run in the background — this tool returns immediately with a task ID, and a <task-notification> arrives when the workflow completes. Use /workflows to watch live progress.\n\nONLY call this tool when the user has explicitly opted into multi-agent orchestration. Workflows can spawn dozens of agents and consume a large amount of tokens; the user must request that scale, not have it inferred. Explicit opt-in means one of:\n- The user included the keyword \"ultracode\" in their prompt (you'll see a system-reminder confirming it).\n- Ultracode is on for the session (a system-reminder confirms it) — see **Ultracode** in the workflow authoring reference.\n- The user directly asked you to run a workflow or use multi-agent orchestration in their own words (\"use a workflow\", \"run a workflow\", \"fan out agents\", \"orchestrate this with subagents\"). The ask must be in the user's words — a task that would merely benefit from a workflow does not count.\n- The user invoked a skill or slash command whose instructions tell you to call Workflow.\n- The user asked you to run a specific named or saved workflow.\n\nFor any other task — even one that would clearly benefit from parallelism — do NOT call this tool. Use the Agent tool (if available) for individual subagents, or briefly describe what a multi-agent workflow could do and how much it would roughly cost, and ask the user whether to run it. Mention they can ask for one with \"use a workflow\" in a future message to skip the ask.\n\nEvery script must begin with `export const meta = {...}`: a PURE LITERAL (no variables, calls or interpolation) giving the workflow's `name`, a one-line `description` (shown in the permission dialog) and optionally `phases` — one `{ title, detail? }` per phase() call, titles matched exactly. Pass the script inline via `script` — do not Write it to a file first, and do not also set the tool's `name` input (that selects a saved workflow); it is plain JavaScript, not TypeScript.\n\nThe canonical multi-stage pattern — pipeline by default, each dimension verifies as soon as its review completes:\n  export const meta = {\n    name: 'review-changes',\n    description: 'Review changed files across dimensions, verify each finding',\n    phases: [{ title: 'Review' }, { title: 'Verify' }],\n  }\n  const DIMENSIONS = [{key: 'bugs', prompt: '...'}, {key: 'perf', prompt: '...'}]\n  const results = await pipeline(\n    DIMENSIONS,\n    d => agent(d.prompt, {label: `review:${d.key}`, phase: 'Review', schema: FINDINGS_SCHEMA}),\n    review => parallel(review.findings.map(f => () =>\n      agent(`Adversarially verify: ${f.title}`, {label: `verify:${f.file}`, phase: 'Verify', schema: VERDICT_SCHEMA})\n        .then(v => ({...f, verdict: v}))\n    ))\n  )\n  const confirmed = results.flat().filter(Boolean).filter(f => f.verdict?.isReal)\n  return { confirmed }\n  // Dimension 'bugs' findings verify while dimension 'perf' is still reviewing. No wasted wall-clock.\n\nBefore writing a script, load the `workflow-authoring` skill — the workflow authoring reference: script API and gotchas, resume, the **Ultracode** section, quality patterns, worked examples.\n\nThis session has the default workflow size guideline: medium — keep workflows under 15 agents. This is a guideline, not a hard limit — follow it unless the user's prompt calls for a different scale. The user can raise or remove it with \"Dynamic workflow size\" in /config.",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "script": {
+              "description": "Self-contained workflow script. Must begin with `export const meta = { name, description, phases }` (pure literal, no computed values) followed by the script body using agent()/parallel()/pipeline()/phase().",
+              "type": "string",
+              "maxLength": 524288
+            },
+            "name": {
+              "description": "Name of a predefined workflow (built-in or from .claude/workflows/). Resolves to a self-contained script.",
+              "type": "string"
+            },
+            "description": {
+              "description": "Ignored — set the workflow description in the script's `meta` block.",
+              "type": "string"
+            },
+            "title": {
+              "description": "Ignored — set the workflow title in the script's `meta` block.",
+              "type": "string"
+            },
+            "args": {
+              "description": "Optional input value exposed to the script as the global `args`, verbatim. Pass arrays/objects as actual JSON values, NOT as a JSON-encoded string — a stringified list breaks `args.filter`/`args.map` in the script. Use for parameterized named workflows (e.g. a research question)."
+            },
+            "scriptPath": {
+              "description": "Path to a workflow script file on disk. Every Workflow invocation persists its script under the session directory and returns the path in the tool result. To iterate, edit that file with Write/Edit and re-invoke Workflow with the same `scriptPath` instead of re-sending the full script. Takes precedence over `script` and `name`.",
+              "type": "string"
+            },
+            "resumeFromRunId": {
+              "description": "Run ID of a prior Workflow invocation to resume from. Completed agent() calls with unchanged (prompt, opts) return their cached results instantly; only edited or new calls re-run. Same-session only. Stop the prior run first (TaskStop) before resuming.",
+              "type": "string",
+              "pattern": "^wf_[a-z0-9-]{6,}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "eager_input_streaming": true
+      }
     }
   ]
 }

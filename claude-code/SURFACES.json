@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.243",
+  "observed_release": "2.1.258",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -164,8 +164,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.243",
-      "verified_release": "2.1.243",
+      "captured_release": "2.1.258",
+      "verified_release": "2.1.258",
       "models": [
         "claude-sonnet-5"
       ],
@@ -176,9 +176,9 @@
       "artifacts": [
         "prompts/claude-sonnet-5-interactive.md"
       ],
-      "artifact_sha256": "4c7025705bf1872f037e574b66fa475cc3f863ca5e2abebd2a43247ff95ac220",
-      "notes": "The interactive prompt was normalized from the current 2.1.243 model-facing request.",
-      "evidence_sha256": "7c0baadd11681337c6522c67750d74ac0a50458a6ce4fd4a671ab295fc528756"
+      "artifact_sha256": "aa6bc76034d169068a1f046288cb97cbf47f8caee1a254b879b9c5b50aaa60e8",
+      "notes": "The interactive prompt was normalized from the current 2.1.258 model-facing request.",
+      "evidence_sha256": "0c4018467ea22759b0e53c04eca3ddb8743f0116e1efaf5f00b6202e8d0ebdd4"
     },
     {
       "id": "claude-code.prompt.special.session-title",
@@ -227,8 +227,8 @@
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.243",
-      "verified_release": "2.1.243",
+      "captured_release": "2.1.258",
+      "verified_release": "2.1.258",
       "models": [
         "claude-sonnet-5"
       ],
@@ -243,17 +243,17 @@
       "artifacts": [
         "misc/claude-sonnet-5-interactive-steering.md"
       ],
-      "artifact_sha256": "ba9fb3d871c2b04eea912f991bd93b0750c7fd650fa6f2dc05a80d547fff6e10",
-      "notes": "The interactive steering message was normalized from the current 2.1.243 model-facing request.",
-      "evidence_sha256": "7c0baadd11681337c6522c67750d74ac0a50458a6ce4fd4a671ab295fc528756"
+      "artifact_sha256": "467be70bd081d45a35ede18b08e89c233a098e3a1caf8d830b30d7e279116744",
+      "notes": "The interactive steering message was normalized from the current 2.1.258 model-facing request.",
+      "evidence_sha256": "0c4018467ea22759b0e53c04eca3ddb8743f0116e1efaf5f00b6202e8d0ebdd4"
     },
     {
       "id": "claude-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.243",
-      "verified_release": "2.1.243",
+      "captured_release": "2.1.258",
+      "verified_release": "2.1.258",
       "models": [
         "supported model catalog"
       ],
@@ -301,9 +301,9 @@
         "tools/Write.json",
         "tools/SendFeedback.json"
       ],
-      "artifact_sha256": "221b6e48953f7c98f8b0b883f2f080aa6876493d0226b47e94d84aa3da083f33",
-      "evidence_sha256": "7c0baadd11681337c6522c67750d74ac0a50458a6ce4fd4a671ab295fc528756",
-      "notes": "Expanded deferred-tool schemas were present in the current 2.1.243 model-facing requests; the catalog includes the supported current variants."
+      "artifact_sha256": "2a6a18860111dd2bc203987cfc20a634c4c2c74decf54ad0911ff6778ed6ab30",
+      "evidence_sha256": "0c4018467ea22759b0e53c04eca3ddb8743f0116e1efaf5f00b6202e8d0ebdd4",
+      "notes": "Expanded deferred-tool schemas were present in the current 2.1.258 model-facing requests; the catalog includes the supported current variants."
     },
     {
       "id": "claude-code.agent.definitions",
