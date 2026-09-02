@@ -1,74 +1,30 @@
 {
   "schema_version": 1,
   "queues": {
-    "codex": [],
+    "codex": [
+      {
+        "tool": "codex",
+        "new_version": "0.152.1",
+        "new_revision": "5adb68a49933ae446bf11935662c83dba55a0804"
+      }
+    ],
     "claude-code": [
       {
         "tool": "claude-code",
-        "new_version": "2.1.243",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.243/linux-x64/claude",
-        "artifact_sha256": "4b0dafeedd0b469c41988e200036fd773e7553ba960349c9f02a82c6d1f2ba27"
-      },
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.245",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.245/linux-x64/claude",
-        "artifact_sha256": "16ad2b94deaf7b29abed966d981c9991a47af0420f5be8ed4a3f83bea9f678bc"
-      },
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.246",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.246/linux-x64/claude",
-        "artifact_sha256": "1a0a662dc1bb938eaec38545abce9a4a69113d7d7f7c5e1a553ea276617b906a"
-      },
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.247",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.247/linux-x64/claude",
-        "artifact_sha256": "5fb321bf417ffc5cd4e3f36e7c9c7e029bf47aaa36d5621db979fcc5e6eabe15"
-      },
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.248",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.248/linux-x64/claude",
-        "artifact_sha256": "3edee3cb054bd6823674fd60d5c0e442825b28ee8fbf815af2d16bf0de072e16"
-      },
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.250",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.250/linux-x64/claude",
-        "artifact_sha256": "2be252a00ac56e704d7fbf7e5e9ef1243584093334a861945238a0c27e84bdac"
-      },
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.251",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.251/linux-x64/claude",
-        "artifact_sha256": "fd5f10ff0eb58daec04900466b143ea98aab50abf208a422bc008eaec13f61f7"
-      },
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.252",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.252/linux-x64/claude",
-        "artifact_sha256": "a715a45105e593fc9808d035d77781f88480b9897975a9df41837f0c591bd4b3"
-      },
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.257",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.257/linux-x64/claude",
-        "artifact_sha256": "9a64bda9d8722a1fa05bef9a5961d07e0331b99597eda9e2f6a732f3a0ff7f05"
+        "new_version": "2.1.258",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.258/linux-x64/claude",
+        "artifact_sha256": "704f1334ac65d3e89e1c6c1d7663293ad786a6166afdb71b5075337df630f976"
       }
     ],
-    "grok": [
+    "grok": [],
+    "antigravity": [
       {
-        "tool": "grok",
-        "new_version": "1.0.13",
-        "new_revision": "d761e8ba538084df023de79d26892eaf73ed7411",
-        "mirror_revision": "bb7f39d5858cbf5e00de639367f59debbdcb0138",
-        "artifact_url": "https://x.ai/cli/grok-1.0.13-linux-x86_64",
-        "artifact_sha256": "edf79521581bb5e6b95abef848491a6a742e860da3e237ebe86a280d30dce4c1"
+        "tool": "antigravity",
+        "new_version": "1.1.24",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.24-6130423206641664/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "ed4df91ea7ced986aa14507a0ab8225d92985190f7d551010eba0c46c569587e602cb36af81c9cde7af0d6b380e8dd3a82131361806cd96012d44a3e47fb369a"
       }
     ],
-    "antigravity": [],
     "qwen-code": []
   }
 }
