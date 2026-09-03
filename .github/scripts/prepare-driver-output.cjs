@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const childProcess = require("child_process");
+const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 
@@ -18,6 +19,10 @@ const validationEvidenceNames = [
   "source-surface-inventory.json",
   "surface-observations.json",
 ];
+// Keep this equal to the per-file bound enforced by prepare-capture-output.cjs
+// and select-capture-results.cjs. The capture manifest supplies the exact size
+// and digest for each file that crosses into the publication bundle.
+const maxCaptureEvidenceFileBytes = 64 * 1024 * 1024;
 
 const maxTextBytes = 256 * 1024;
 const secretPatterns = [
@@ -134,10 +139,31 @@ const validationEvidenceFiles = [];
 for (const entry of approved) {
   const sourceDir = path.join(captureScratchDir, entry.tool, "evidence");
   const targetDir = path.join(validationEvidenceDir, entry.tool, "evidence");
+  const sourceManifest = JSON.parse(readSafeText(
+    path.join(sourceDir, "evidence-manifest.json"),
+    `${entry.tool} evidence manifest`,
+    4 * 1024 * 1024,
+  ));
+  if (sourceManifest?.tool !== entry.tool || !Array.isArray(sourceManifest.files)) {
+    throw new Error(`${entry.tool} evidence manifest has an invalid schema`);
+  }
   for (const name of validationEvidenceNames) {
     const sourcePath = path.join(sourceDir, name);
     if (!fs.existsSync(sourcePath)) continue;
-    const text = readSafeText(sourcePath, `${entry.tool} ${name}`, 1024 * 1024);
+    const records = sourceManifest.files.filter((record) => record?.path === name);
+    if (
+      records.length !== 1 || !Number.isSafeInteger(records[0].bytes) || records[0].bytes < 1 ||
+      records[0].bytes > maxCaptureEvidenceFileBytes ||
+      typeof records[0].sha256 !== "string" || !/^[0-9a-f]{64}$/.test(records[0].sha256)
+    ) {
+      throw new Error(`${entry.tool} ${name} has no valid capture-manifest record`);
+    }
+    const text = readSafeText(sourcePath, `${entry.tool} ${name}`, maxCaptureEvidenceFileBytes);
+    const bytes = Buffer.from(text, "utf8");
+    const sha256 = crypto.createHash("sha256").update(bytes).digest("hex");
+    if (bytes.length !== records[0].bytes || sha256 !== records[0].sha256) {
+      throw new Error(`${entry.tool} ${name} does not match its capture-manifest record`);
+    }
     try {
       JSON.parse(text);
     } catch (error) {
@@ -145,12 +171,15 @@ for (const entry of approved) {
     }
     fs.mkdirSync(targetDir, { recursive: true });
     fs.writeFileSync(path.join(targetDir, name), text);
-    validationEvidenceFiles.push(`${entry.tool}/evidence/${name}`);
+    validationEvidenceFiles.push({ path: `${entry.tool}/evidence/${name}`, bytes: bytes.length, sha256 });
   }
 }
 fs.writeFileSync(
   path.join(validationEvidenceDir, "manifest.json"),
-  `${JSON.stringify({ schema_version: 1, files: validationEvidenceFiles.sort() }, null, 2)}\n`,
+  `${JSON.stringify({
+    schema_version: 1,
+    files: validationEvidenceFiles.sort((left, right) => left.path.localeCompare(right.path)),
+  }, null, 2)}\n`,
 );
 fs.writeFileSync(path.join(outputDir, "changed-tools.json"), `${JSON.stringify(approved, null, 2)}\n`);
 fs.writeFileSync(path.join(outputDir, "review-result.json"), `${JSON.stringify(publishReview, null, 2)}\n`);

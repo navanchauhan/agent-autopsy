@@ -168,14 +168,34 @@ try {
       { tool: "grok", outcome: "retry_capture", issues: [] },
     ],
   }));
+  const largeSurfaceObservations = Buffer.from(JSON.stringify({
+    schema_version: 1,
+    provider: "codex",
+    authority: "model-request",
+    padding: "x".repeat(1024 * 1024),
+  }));
   fs.writeFileSync(
     path.join(captureRoot, "codex", "evidence", "surface-observations.json"),
-    JSON.stringify({ schema_version: 1, provider: "codex", authority: "model-request" }),
+    largeSurfaceObservations,
   );
+  const rawRequest = Buffer.from(JSON.stringify({ request: "must not enter the publish bundle" }));
   fs.writeFileSync(
     path.join(captureRoot, "codex", "evidence", "raw-request.json"),
-    JSON.stringify({ request: "must not enter the publish bundle" }),
+    rawRequest,
   );
+  fs.writeFileSync(codexManifestPath, JSON.stringify({
+    tool: "codex",
+    total_bytes: codexEvidence.length + largeSurfaceObservations.length + rawRequest.length,
+    files: [
+      { path: "source.txt", bytes: codexEvidence.length, sha256: sha256(codexEvidence) },
+      {
+        path: "surface-observations.json",
+        bytes: largeSurfaceObservations.length,
+        sha256: sha256(largeSurfaceObservations),
+      },
+      { path: "raw-request.json", bytes: rawRequest.length, sha256: sha256(rawRequest) },
+    ],
+  }));
   const prepared = run("prepare-driver-output.cjs", [planPath, reviewPath, summaryPath, driverOutput, captureRetriesPath], {
     env: {
       ...process.env,
@@ -197,7 +217,11 @@ try {
   )), false);
   assert.deepEqual(
     JSON.parse(fs.readFileSync(path.join(driverOutput, "validation-evidence", "manifest.json"))).files,
-    ["codex/evidence/surface-observations.json"],
+    [{
+      path: "codex/evidence/surface-observations.json",
+      bytes: largeSurfaceObservations.length,
+      sha256: sha256(largeSurfaceObservations),
+    }],
   );
 
   // A held tool is reported alongside retries but never asks for a new capture,
@@ -398,12 +422,33 @@ try {
     path.join(publishBundle, "validation-evidence", "codex", "evidence", "surface-observations.json"),
     JSON.stringify({ schema_version: 1, provider: "codex", authority: "model-request" }),
   );
+  const publishEvidence = fs.readFileSync(
+    path.join(publishBundle, "validation-evidence", "codex", "evidence", "surface-observations.json"),
+  );
   fs.writeFileSync(
     path.join(publishBundle, "validation-evidence", "manifest.json"),
-    JSON.stringify({ schema_version: 1, files: ["codex/evidence/surface-observations.json"] }),
+    JSON.stringify({
+      schema_version: 1,
+      files: [{
+        path: "codex/evidence/surface-observations.json",
+        bytes: publishEvidence.length,
+        sha256: sha256(publishEvidence),
+      }],
+    }),
   );
   const safePublish = run("validate-publish-bundle.cjs", [publishBundle], { cwd: publishRepo });
   assert.equal(safePublish.status, 0, safePublish.stderr);
+
+  fs.appendFileSync(
+    path.join(publishBundle, "validation-evidence", "codex", "evidence", "surface-observations.json"),
+    " ",
+  );
+  const changedPublishEvidence = run("validate-publish-bundle.cjs", [publishBundle], { cwd: publishRepo });
+  assert.notEqual(changedPublishEvidence.status, 0, "publication evidence must match its exact manifest digest");
+  fs.writeFileSync(
+    path.join(publishBundle, "validation-evidence", "codex", "evidence", "surface-observations.json"),
+    publishEvidence,
+  );
 
   fs.writeFileSync(path.join(publishBundle, "review-result.json"), JSON.stringify({
     decision: "approve",

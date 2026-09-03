@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const childProcess = require("node:child_process");
+const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 
@@ -19,6 +20,7 @@ const validationEvidenceNames = new Set([
   "source-surface-inventory.json",
   "surface-observations.json",
 ]);
+const maxCaptureEvidenceFileBytes = 64 * 1024 * 1024;
 
 function readJson(name) {
   return JSON.parse(readSafeText(name, 1024 * 1024));
@@ -109,7 +111,11 @@ if (
   !validationEvidenceManifest || validationEvidenceManifest.schema_version !== 1 ||
   Object.keys(validationEvidenceManifest).sort().join(",") !== "files,schema_version" ||
   !Array.isArray(validationEvidenceManifest.files) ||
-  validationEvidenceManifest.files.some((name) => typeof name !== "string")
+  validationEvidenceManifest.files.some((record) =>
+    !record || Object.keys(record).sort().join(",") !== "bytes,path,sha256" ||
+    typeof record.path !== "string" || !Number.isSafeInteger(record.bytes) || record.bytes < 1 ||
+    record.bytes > maxCaptureEvidenceFileBytes ||
+    typeof record.sha256 !== "string" || !/^[0-9a-f]{64}$/.test(record.sha256))
 ) {
   throw new Error("validation evidence manifest has an invalid schema");
 }
@@ -137,19 +143,27 @@ for (const tool of fs.readdirSync(validationEvidenceDir).filter((name) => name !
       throw new Error(`validation evidence is not allowlisted: ${tool}/evidence/${name}`);
     }
     const relative = `validation-evidence/${tool}/evidence/${name}`;
-    const text = readSafeText(relative, 1024 * 1024);
+    const text = readSafeText(relative, maxCaptureEvidenceFileBytes);
     try {
       JSON.parse(text);
     } catch (error) {
       throw new Error(`${relative} must contain valid JSON: ${error.message}`);
     }
-    actualValidationEvidenceFiles.push(`${tool}/evidence/${name}`);
+    const bytes = Buffer.from(text, "utf8");
+    actualValidationEvidenceFiles.push({
+      path: `${tool}/evidence/${name}`,
+      bytes: bytes.length,
+      sha256: crypto.createHash("sha256").update(bytes).digest("hex"),
+    });
   }
 }
-actualValidationEvidenceFiles.sort();
+actualValidationEvidenceFiles.sort((left, right) => left.path.localeCompare(right.path));
 if (
   actualValidationEvidenceFiles.length !== validationEvidenceManifest.files.length ||
-  actualValidationEvidenceFiles.some((name, index) => name !== validationEvidenceManifest.files[index])
+  actualValidationEvidenceFiles.some((record, index) =>
+    record.path !== validationEvidenceManifest.files[index].path ||
+    record.bytes !== validationEvidenceManifest.files[index].bytes ||
+    record.sha256 !== validationEvidenceManifest.files[index].sha256)
 ) {
   throw new Error("validation evidence files do not match manifest.json");
 }
