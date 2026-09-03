@@ -264,3 +264,4 @@ The current local time is: <harnessVariable>{{currentLocalTime=2026-01-02T15:04:
 <USER_SETTINGS_CHANGE>
 The user changed setting `Model Selection` from <harnessVariable>{{previousModelSelection=None}}</harnessVariable> to <harnessVariable>{{newModelSelection=Gemini 3.8 Flash (High)}}</harnessVariable>. No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
 </USER_SETTINGS_CHANGE>
+

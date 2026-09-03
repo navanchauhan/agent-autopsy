@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.1.24",
+  "observed_release": "1.1.25",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -13,54 +13,54 @@
   },
   "surfaces": [
     {
-      "id": "antigravity.prompt.agent.gemini-3-7-flash-high.non-interactive",
+      "id": "antigravity.prompt.agent.gemini-3-8-flash-high.interactive",
       "category": "agent prompt",
-      "status": "stale",
+      "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.24",
-      "verified_release": "1.1.24",
+      "captured_release": "1.1.25",
+      "verified_release": "1.1.25",
       "models": [
-        "gemini-3.7-flash-high"
-      ],
-      "modes": [
-        "non-interactive"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [
-        "prompts/gemini-3.7-flash-high.md"
-      ],
-      "notes": "Retained as stale because the current capture supports gemini-3.8-flash-high instead.",
-      "artifact_sha256": "ea655b7e0ed611f0903ffd57a7bc3ead6f794c42a4c05c796aeb07ad5eb9bc66",
-      "evidence_sha256": "4cb93b043a5644069f7e1224c1365dc877f9bf9df6ec9db89a104461250a0ef8"
-    },
-    {
-      "id": "antigravity.prompt.agent.gemini-3-7-flash-high.interactive",
-      "category": "agent prompt",
-      "status": "stale",
-      "capture_method": "model-request",
-      "captured_release": "1.1.24",
-      "verified_release": "1.1.24",
-      "models": [
-        "gemini-3.7-flash-high"
+        "gemini-3.8-flash-high"
       ],
       "modes": [
         "interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/gemini-3.7-flash-high-interactive.md"
+        "prompts/gemini-3.8-flash-high-interactive.md"
       ],
-      "notes": "Retained as stale because the current capture supports gemini-3.8-flash-high instead.",
-      "artifact_sha256": "ab8071b5a98a093f3901997a2048b32f5de52a73bb9220b88bbdd058bab177bd",
-      "evidence_sha256": "4cb93b043a5644069f7e1224c1365dc877f9bf9df6ec9db89a104461250a0ef8"
+      "notes": "The prompt was captured from the current 1.1.25 model-facing request.",
+      "artifact_sha256": "263a24dd42ad8c46e4e52743c12d010e6ea0c6687eb8fd1eac5e7157ed0f514a",
+      "evidence_sha256": "d1b5714e66f9552a1b3e8eee5616c98b32353621c598df653e0c9c2b60fe91f2"
+    },
+    {
+      "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "1.1.25",
+      "verified_release": "1.1.25",
+      "models": [
+        "gemini-3.8-flash-high"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/gemini-3.8-flash-high.md"
+      ],
+      "notes": "The prompt was captured from the current 1.1.25 model-facing request.",
+      "artifact_sha256": "09a36044f428a50c46271a1bbbbbb157d98eada96c4fe77165bbe051ac9cab10",
+      "evidence_sha256": "d1b5714e66f9552a1b3e8eee5616c98b32353621c598df653e0c9c2b60fe91f2"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.24",
-      "verified_release": "1.1.24",
+      "captured_release": "1.1.25",
+      "verified_release": "1.1.25",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -88,185 +88,9 @@
         "tools/view_file.json",
         "tools/write_to_file.json"
       ],
-      "notes": "The tool catalog was captured from the current 1.1.24 model-facing request.",
+      "notes": "The tool catalog was captured from the current 1.1.25 model-facing request.",
       "artifact_sha256": "248ebfab9fe33df8af6aba179e5c967650219930774cc7eab86f7435ded06fab",
-      "evidence_sha256": "91fe7602abc733e2defa367d3341fe9a841fbae375c78742bc42a7dc7d5e5de5"
-    },
-    {
-      "id": "antigravity.agent.definitions",
-      "category": "bundled agent prompts",
-      "status": "gap",
-      "capture_method": "model-request",
-      "models": [
-        "gemini-3.7-flash-high"
-      ],
-      "modes": [
-        "research and self subagents"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [],
-      "notes": "Agent catalog entries are present in the base prompt, but agent prompt bodies are absent."
-    },
-    {
-      "id": "antigravity.skill.definitions",
-      "category": "bundled skills",
-      "status": "gap",
-      "capture_method": "model-request",
-      "models": [
-        "gemini-3.7-flash-high"
-      ],
-      "modes": [
-        "skill invocation"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [],
-      "notes": "Built-in skill catalog text is present, but skill bodies are absent."
-    },
-    {
-      "id": "antigravity.command.definitions",
-      "category": "slash commands",
-      "status": "gap",
-      "capture_method": "model-request",
-      "models": [
-        "gemini-3.7-flash-high"
-      ],
-      "modes": [
-        "command invocation"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [],
-      "notes": "Command recommendations are present, but execution definitions are absent."
-    },
-    {
-      "id": "antigravity.event.catalog",
-      "category": "event prompts",
-      "status": "gap",
-      "capture_method": "model-request",
-      "models": [
-        "gemini-3.7-flash-high"
-      ],
-      "modes": [
-        "task",
-        "schedule",
-        "background result",
-        "subagent result",
-        "peer message",
-        "plan"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [],
-      "notes": "Event paths are not captured as separate surfaces."
-    },
-    {
-      "id": "antigravity.mcp.instructions",
-      "category": "MCP and rules prompts",
-      "status": "gap",
-      "capture_method": "model-request",
-      "models": [
-        "gemini-3.7-flash-high"
-      ],
-      "modes": [
-        "MCP and rules enabled"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [],
-      "notes": "Product MCP, rules, and user-instruction wrappers are not isolated."
-    },
-    {
-      "id": "antigravity.context.session",
-      "category": "dynamic context",
-      "status": "dynamic",
-      "capture_method": "model-request",
-      "models": [
-        "gemini-3.7-flash-high"
-      ],
-      "modes": [
-        "all"
-      ],
-      "dynamic_inputs": [
-        "workspace",
-        "open files",
-        "cursor",
-        "conversation ID",
-        "user skills",
-        "rules",
-        "MCP state"
-      ],
-      "artifacts": [],
-      "notes": "Only fixed wrappers and typed placeholders may be stored. Captured values are excluded."
-    },
-    {
-      "id": "antigravity.assembly.model-mode",
-      "category": "assembly recipe",
-      "status": "gap",
-      "capture_method": "model-request",
-      "models": [
-        "gemini-3.7-flash-high"
-      ],
-      "modes": [
-        "non-interactive",
-        "interactive"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [],
-      "notes": "The monolithic prompt loses message-role and conditional assembly boundaries."
-    },
-    {
-      "id": "antigravity.prompt.model-variants",
-      "category": "model and reasoning variants",
-      "status": "gap",
-      "capture_method": "model-request",
-      "models": [
-        "other response models"
-      ],
-      "modes": [
-        "reasoning variants"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [],
-      "notes": "Only gemini-3.7-flash-high is currently captured."
-    },
-    {
-      "id": "antigravity.prompt.agent.gemini-3-8-flash-high.interactive",
-      "category": "agent prompt",
-      "status": "current",
-      "capture_method": "model-request",
-      "captured_release": "1.1.24",
-      "verified_release": "1.1.24",
-      "models": [
-        "gemini-3.8-flash-high"
-      ],
-      "modes": [
-        "interactive"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [
-        "prompts/gemini-3.8-flash-high-interactive.md"
-      ],
-      "notes": "The prompt was captured from the current 1.1.24 model-facing request.",
-      "artifact_sha256": "c09961d7186e241fc4d00e9adaaa23c0cc98f9c5519f26b7fbf51a716b063709",
-      "evidence_sha256": "91fe7602abc733e2defa367d3341fe9a841fbae375c78742bc42a7dc7d5e5de5"
-    },
-    {
-      "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
-      "category": "agent prompt",
-      "status": "current",
-      "capture_method": "model-request",
-      "captured_release": "1.1.24",
-      "verified_release": "1.1.24",
-      "models": [
-        "gemini-3.8-flash-high"
-      ],
-      "modes": [
-        "non-interactive"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [
-        "prompts/gemini-3.8-flash-high.md"
-      ],
-      "notes": "The prompt was captured from the current 1.1.24 model-facing request.",
-      "artifact_sha256": "087c6da36bac1e02024e5b18fb0f66a84a1502573abba2c77afad7c03561a139",
-      "evidence_sha256": "91fe7602abc733e2defa367d3341fe9a841fbae375c78742bc42a7dc7d5e5de5"
+      "evidence_sha256": "d1b5714e66f9552a1b3e8eee5616c98b32353621c598df653e0c9c2b60fe91f2"
     }
   ]
 }
