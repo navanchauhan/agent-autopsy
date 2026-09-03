@@ -6,6 +6,11 @@
         "tool": "codex",
         "new_version": "0.153.0",
         "new_revision": "41e22fee981a63b3698df7ed36bad393cda24715"
+      },
+      {
+        "tool": "codex",
+        "new_version": "0.153.1",
+        "new_revision": "985641272869835d01d025ed2a218fbbce35fa9f"
       }
     ],
     "claude-code": [
