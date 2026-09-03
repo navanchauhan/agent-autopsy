@@ -30,12 +30,12 @@
     },
     "qwen-code": {
       "plan_hash": "950955f5b91069a3ac4b15aa833e3368738eb9c73840ba9cd5f10749d6ed2ac1",
-      "state": "clear",
+      "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
       "last_fresh_bucket": "20260903",
-      "last_reviewer_input_hash": null,
-      "reason": null
+      "last_reviewer_input_hash": "1cf9846f60cbaf6097cea88a008299c153093a3ba58fa9c6aea0d0190df7c8e6",
+      "reason": "reviewer"
     },
     "grok": {
       "plan_hash": "d18df3257be6be3dd2300ab4fe34f226eb2951a47b99ae04d52078eacccf8b00",
