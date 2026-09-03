@@ -1,12 +1,39 @@
 {
   "schema_version": 1,
   "tools": {
-    "claude-code": {
-      "plan_hash": "baa1c88f1d26bed0743be649d894e469b48d8056a1313442becfe09c1a33830d",
+    "codex": {
+      "plan_hash": "55d070b733fc52aa3ea45d6a8d4a0073e33de49732decf86ce749262ad37951a",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260902",
+      "last_fresh_bucket": "20260903",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "claude-code": {
+      "plan_hash": "7222f953bb32cc47cc87aa6cc91e910aeba9624eac705eb8c7209c900dfc0f8e",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260903",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "antigravity": {
+      "plan_hash": "f788174f75ebaa44a150ee3061fc86f40eb5fac8f8b74e741857d9a589e5df21",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260903",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "qwen-code": {
+      "plan_hash": "950955f5b91069a3ac4b15aa833e3368738eb9c73840ba9cd5f10749d6ed2ac1",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260903",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -15,16 +42,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260902",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
-    "antigravity": {
-      "plan_hash": "f3e0d0fed4fc18de77bb2e5a177e56c3a7e0e6c65c414c29bce186c506cf11b1",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260902",
+      "last_fresh_bucket": "20260903",
       "last_reviewer_input_hash": null,
       "reason": null
     }
