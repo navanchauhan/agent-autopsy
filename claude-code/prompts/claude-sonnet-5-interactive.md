@@ -1,4 +1,4 @@
-x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.259.6d8; cc_entrypoint=cli; cch=00000; cc_prev_req=req_000000000000000000000000;}}</harnessVariable> cc_prompt_id=<harnessVariable>{{sessionId=0edfe393-8d78-45da-92a2-d720c2b6614c}}</harnessVariable>;
+x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.260.672; cc_entrypoint=cli; cch=00000; cc_prev_req=req_000000000000000000000000;}}</harnessVariable> cc_prompt_id=<harnessVariable>{{sessionId=ec86641b-e965-492f-8b77-94a5286d553b}}</harnessVariable>;
 
 You are Claude Code, Anthropic's official CLI for Claude.
 

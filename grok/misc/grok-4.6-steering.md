@@ -35,7 +35,7 @@ The following workflows are available:
 
 - deep-research: Research a query with bounded parallelism, cross-check the evidence, and write a cited report
   Use when: Compare, investigate, or research a question that needs sourced claims. /deep-research, research this, write a cited report.
- Absolute path: /Users/example/.grok/bundled/workflows/deep-research.rhai
+  Absolute path: /example/_work/xai/xai/crates/codegen/xai-grok-shell/src/session/workflows/deep_research.rhai
 </system-reminder>
 
 ---

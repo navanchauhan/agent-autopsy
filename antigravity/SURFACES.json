@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.1.25",
+  "observed_release": "1.1.26",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.25",
-      "verified_release": "1.1.25",
+      "captured_release": "1.1.26",
+      "verified_release": "1.1.26",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -29,17 +29,17 @@
       "artifacts": [
         "prompts/gemini-3.8-flash-high-interactive.md"
       ],
-      "notes": "The prompt was captured from the current 1.1.25 model-facing request.",
-      "artifact_sha256": "263a24dd42ad8c46e4e52743c12d010e6ea0c6687eb8fd1eac5e7157ed0f514a",
-      "evidence_sha256": "d1b5714e66f9552a1b3e8eee5616c98b32353621c598df653e0c9c2b60fe91f2"
+      "notes": "The prompt was captured from the current 1.1.26 model-facing request.",
+      "artifact_sha256": "c09961d7186e241fc4d00e9adaaa23c0cc98f9c5519f26b7fbf51a716b063709",
+      "evidence_sha256": "4940da2c07650fce289a1bdfe5b126ec3bdeacfc994f431e43caaa38d226876b"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.25",
-      "verified_release": "1.1.25",
+      "captured_release": "1.1.26",
+      "verified_release": "1.1.26",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -50,17 +50,17 @@
       "artifacts": [
         "prompts/gemini-3.8-flash-high.md"
       ],
-      "notes": "The prompt was captured from the current 1.1.25 model-facing request.",
-      "artifact_sha256": "09a36044f428a50c46271a1bbbbbb157d98eada96c4fe77165bbe051ac9cab10",
-      "evidence_sha256": "d1b5714e66f9552a1b3e8eee5616c98b32353621c598df653e0c9c2b60fe91f2"
+      "notes": "The prompt was captured from the current 1.1.26 model-facing request.",
+      "artifact_sha256": "087c6da36bac1e02024e5b18fb0f66a84a1502573abba2c77afad7c03561a139",
+      "evidence_sha256": "4940da2c07650fce289a1bdfe5b126ec3bdeacfc994f431e43caaa38d226876b"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.1.25",
-      "verified_release": "1.1.25",
+      "captured_release": "1.1.26",
+      "verified_release": "1.1.26",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -88,9 +88,9 @@
         "tools/view_file.json",
         "tools/write_to_file.json"
       ],
-      "notes": "The tool catalog was captured from the current 1.1.25 model-facing request.",
+      "notes": "The tool catalog was captured from the current 1.1.26 model-facing request.",
       "artifact_sha256": "248ebfab9fe33df8af6aba179e5c967650219930774cc7eab86f7435ded06fab",
-      "evidence_sha256": "d1b5714e66f9552a1b3e8eee5616c98b32353621c598df653e0c9c2b60fe91f2"
+      "evidence_sha256": "4940da2c07650fce289a1bdfe5b126ec3bdeacfc994f431e43caaa38d226876b"
     }
   ]
 }
