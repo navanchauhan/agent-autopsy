@@ -19,39 +19,39 @@ Observed release: `0.0.1783542413-gb55c7a`
 
 ## antigravity
 
-Observed release: `1.1.26`
+Observed release: `1.1.27`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.1.26` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.1.26` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
-| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.1.26` | 17 files ([manifest](antigravity/SURFACES.json)) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.1.27` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.1.27` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
+| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.1.27` | 17 files ([manifest](antigravity/SURFACES.json)) |
 
 ## claude-code
 
-Observed release: `2.1.260`
+Observed release: `2.1.261`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `claude-code.prompt.agent.claude-fable-5-1.non-interactive` | agent prompt | `claude-fable-5-1` | `non-interactive` | current | `2.1.260` | [claude-fable-5-1.md](claude-code/prompts/claude-fable-5-1.md) |
-| `claude-code.prompt.agent.claude-haiku-4-5-20251001.non-interactive` | agent prompt | `claude-haiku-4-5-20251001` | `non-interactive` | current | `2.1.260` | [claude-haiku-4-5-20251001.md](claude-code/prompts/claude-haiku-4-5-20251001.md) |
-| `claude-code.prompt.agent.claude-opus-5.non-interactive` | agent prompt | `claude-opus-5` | `non-interactive` | current | `2.1.260` | [claude-opus-5.md](claude-code/prompts/claude-opus-5.md) |
-| `claude-code.prompt.agent.claude-sonnet-5.interactive` | agent prompt | `claude-sonnet-5` | `interactive` | current | `2.1.260` | [claude-sonnet-5-interactive.md](claude-code/prompts/claude-sonnet-5-interactive.md) |
-| `claude-code.prompt.agent.claude-sonnet-5.non-interactive` | agent prompt | `claude-sonnet-5` | `non-interactive` | current | `2.1.260` | [claude-sonnet-5.md](claude-code/prompts/claude-sonnet-5.md) |
-| `claude-code.prompt.special.session-title` | session title prompt | `claude-haiku-4-5-20251001` | `session-title` | current | `2.1.260` | [claude-haiku-4-5-20251001-session-title.md](claude-code/prompts/claude-haiku-4-5-20251001-session-title.md) |
-| `claude-code.steering.interactive` | steering messages | `claude-sonnet-5` | `interactive` | current | `2.1.260` | [claude-sonnet-5-interactive-steering.md](claude-code/misc/claude-sonnet-5-interactive-steering.md) |
-| `claude-code.steering.non-interactive` | steering messages | `claude-fable-5-1`, `claude-haiku-4-5-20251001`, `claude-opus-5`, `claude-sonnet-5` | `non-interactive` | current | `2.1.260` | [claude-fable-5-1-steering.md](claude-code/misc/claude-fable-5-1-steering.md), [claude-haiku-4-5-20251001-steering.md](claude-code/misc/claude-haiku-4-5-20251001-steering.md), [claude-opus-5-steering.md](claude-code/misc/claude-opus-5-steering.md), [claude-sonnet-5-steering.md](claude-code/misc/claude-sonnet-5-steering.md) |
-| `claude-code.tool.catalog` | tool schemas | `claude-fable-5-1`, `claude-haiku-4-5-20251001`, `claude-opus-5`, `claude-sonnet-5` | `interactive`, `non-interactive` | current | `2.1.260` | 37 files ([manifest](claude-code/SURFACES.json)) |
+| `claude-code.prompt.agent.claude-fable-5-1.non-interactive` | agent prompt | `claude-fable-5-1` | `non-interactive` | current | `2.1.261` | [claude-fable-5-1.md](claude-code/prompts/claude-fable-5-1.md) |
+| `claude-code.prompt.agent.claude-haiku-4-5-20251001.non-interactive` | agent prompt | `claude-haiku-4-5-20251001` | `non-interactive` | current | `2.1.261` | [claude-haiku-4-5-20251001.md](claude-code/prompts/claude-haiku-4-5-20251001.md) |
+| `claude-code.prompt.agent.claude-opus-5.non-interactive` | agent prompt | `claude-opus-5` | `non-interactive` | current | `2.1.261` | [claude-opus-5.md](claude-code/prompts/claude-opus-5.md) |
+| `claude-code.prompt.agent.claude-sonnet-5.interactive` | agent prompt | `claude-sonnet-5` | `interactive` | current | `2.1.261` | [claude-sonnet-5-interactive.md](claude-code/prompts/claude-sonnet-5-interactive.md) |
+| `claude-code.prompt.agent.claude-sonnet-5.non-interactive` | agent prompt | `claude-sonnet-5` | `non-interactive` | current | `2.1.261` | [claude-sonnet-5.md](claude-code/prompts/claude-sonnet-5.md) |
+| `claude-code.prompt.special.session-title` | session title prompt | `claude-haiku-4-5-20251001` | `session-title` | current | `2.1.261` | [claude-haiku-4-5-20251001-session-title.md](claude-code/prompts/claude-haiku-4-5-20251001-session-title.md) |
+| `claude-code.steering.interactive` | steering messages | `claude-sonnet-5` | `interactive` | current | `2.1.261` | [claude-sonnet-5-interactive-steering.md](claude-code/misc/claude-sonnet-5-interactive-steering.md) |
+| `claude-code.steering.non-interactive` | steering messages | `claude-fable-5-1`, `claude-haiku-4-5-20251001`, `claude-opus-5`, `claude-sonnet-5` | `non-interactive` | current | `2.1.261` | [claude-fable-5-1-steering.md](claude-code/misc/claude-fable-5-1-steering.md), [claude-haiku-4-5-20251001-steering.md](claude-code/misc/claude-haiku-4-5-20251001-steering.md), [claude-opus-5-steering.md](claude-code/misc/claude-opus-5-steering.md), [claude-sonnet-5-steering.md](claude-code/misc/claude-sonnet-5-steering.md) |
+| `claude-code.tool.catalog` | tool schemas | `claude-fable-5-1`, `claude-haiku-4-5-20251001`, `claude-opus-5`, `claude-sonnet-5` | `interactive`, `non-interactive` | current | `2.1.261` | 37 files ([manifest](claude-code/SURFACES.json)) |
 
 ## codex
 
-Observed release: `0.153.1`
+Observed release: `0.153.2`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `codex.prompt.agent.catalog` | agent prompts | `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.4`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | current | `0.153.1` | 15 files ([manifest](codex/SURFACES.json)) |
-| `codex.tool.catalog` | tool schemas | `all` | `configured` | current | `0.153.1` | 25 files ([manifest](codex/SURFACES.json)) |
-| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | current | `0.153.1` | 29 files ([manifest](codex/SURFACES.json)) |
+| `codex.prompt.agent.catalog` | agent prompts | `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.4`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | current | `0.153.2` | 15 files ([manifest](codex/SURFACES.json)) |
+| `codex.tool.catalog` | tool schemas | `all` | `configured` | current | `0.153.2` | 25 files ([manifest](codex/SURFACES.json)) |
+| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | current | `0.153.2` | 29 files ([manifest](codex/SURFACES.json)) |
 | `codex.assembly.model-mode` | assembly recipe | `all` | `all` | gap | — | — |
 | `codex.context.session` | dynamic context | `all` | `all` | dynamic | — | — |
 | `codex.tool.code-mode-listing` | dynamic tool catalog | `gpt-5.6` | `code-mode-only` | dynamic | — | — |

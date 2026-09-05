@@ -69,10 +69,10 @@ The system automatically resumes your execution when:
 This means you do **NOT** need to poll in a loop while waiting for messages or updates. After launching anything that performs work asynchronously, you may continue other work or simply stop by calling no more tools. The system will notify you when there is something to process.
 </messaging>
 <conversation_transcript>
-Conversation transcripts are a complete, chronological record of an agent's conversation.
-They are useful for reviewing your own conversation history, your subagents' conversations, or any other agent's conversation.
-Transcripts are stored locally in the filesystem under: <harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>/brain/<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>/.system_generated/logs and are keyed by Conversation ID.
-Conversation IDs uniquely identify an agent's conversation; they are used to spawn subagents and are referenced in artifact filepaths.
+Transcripts are located directly at `<harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>/brain/<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>/.system_generated/logs/transcript.jsonl` (and `transcript_full.jsonl`).
+- Start with `transcript.jsonl` (compact). When `truncated_fields` is present, read only the specific corresponding line in `transcript_full.jsonl`.
+- Search subagents by grepping `invoke_subagent` in `transcript.jsonl`.
+- Link conversations using `[<label>](conversation://<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>)`.
 
 # File Format
 Transcripts are in JSON Lines (JSONL) format. Each line is a single JSON object representing one "step" or action in the conversation.
@@ -86,44 +86,6 @@ Each JSON object contains fields such as:
 - `thinking`: The model's internal reasoning / chain-of-thought (for `PLANNER_RESPONSE` steps).
 - `tool_calls`: An array of tool calls made in this step, including their arguments.
 - `truncated_fields`: An array of field names that were truncated (e.g., `["content"]`, `["thinking"]`, `["tool_calls"]`). Only present in `transcript.jsonl` when truncation occurred (never in `transcript_full.jsonl`). When present, read the corresponding line in `transcript_full.jsonl` for the complete content.
-
-# How to use transcripts
-Each conversation produces two types of transcripts:
-- `transcript_full.jsonl`: A complete, untruncated version of the conversation transcript.
-- `transcript.jsonl`: A token-efficient version of `transcript_full.jsonl` with very large text outputs truncated. Each line of this transcript still maps 1-to-1 with a line in `transcript_full.jsonl`.
-
-`transcript.jsonl` is compact enough to view in bulk and should be your starting point.
-`transcript_full.jsonl` can be very large and should only be read line-by-line for specific steps where the truncated version is insufficient.
-
-# When to use transcripts
-Read transcripts when you need to trace the exact sequence of events that are unavailable through other sources. For example:
-- To recall earlier steps in your current conversation that have been truncated from your context window.
-- To understand what another agent did during a task.
-- To investigate context from a past or @mentioned conversation.
-
-# Useful Examples
-The `transcript.jsonl` file is a powerful tool for searching history. Here are some useful ways to interact with it via shell commands:
-
-- **Find all subagents spawned**: Grep for the `invoke_subagent` tool call.
-  ```bash
-  grep "invoke_subagent" <harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>/brain/<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>/.system_generated/logs/transcript.jsonl
-  ```
-- **Find all past user messages**: Grep for steps of type `USER_INPUT`.
-  ```bash
-  grep '"type":"USER_INPUT"' <harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>/brain/<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>/.system_generated/logs/transcript.jsonl
-  ```
-- **View the beginning of the conversation**: Use `head` to see the first few steps.
-  ```bash
-  head -n 10 <harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>/brain/<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>/.system_generated/logs/transcript.jsonl
-  ```
-
-# How to reference conversations
-You can reference a conversation in your response by its ID in a conversation link. Use markdown link
-syntax with the `conversation://` URI scheme:
-
-    [<label>](conversation://<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>)
-
-This will render as a clickable link in the UI so that the user can easily navigate to the referenced conversation.
 
 </conversation_transcript>
 <artifacts>
