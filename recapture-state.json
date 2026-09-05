@@ -2,39 +2,30 @@
   "schema_version": 1,
   "tools": {
     "codex": {
-      "plan_hash": "202ffd96ed852731c42e447690cbae4a25046e1001e083900a29a068a76da6a7",
+      "plan_hash": "286e81ec6527d70cb33083a0a64782f210889278ee50250dcb952ea74cb52ca2",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260904",
+      "last_fresh_bucket": "20260905",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "claude-code": {
-      "plan_hash": "798ff520658729abc5e07d4682096824e4772bbea7e5d8261f13ebcec59c8b95",
+      "plan_hash": "dec47fe8a0aa9f7225cfc4beeb3a1c1b9b292229a6b5699cabba784e456aa01b",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260904",
+      "last_fresh_bucket": "20260905",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "antigravity": {
-      "plan_hash": "bc5982253cbdec4f9e7a8ac817a6ecf9c2d54f2c470c0e63d4b72102026cd7fd",
+      "plan_hash": "38b8bd8207f1a2ace1671f4c2c38c0d672665b40f3685305f8f9d638b5bde30d",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260904",
+      "last_fresh_bucket": "20260905",
       "last_reviewer_input_hash": null,
-      "reason": null
-    },
-    "qwen-code": {
-      "plan_hash": "950955f5b91069a3ac4b15aa833e3368738eb9c73840ba9cd5f10749d6ed2ac1",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260904",
-      "last_reviewer_input_hash": "1cf9846f60cbaf6097cea88a008299c153093a3ba58fa9c6aea0d0190df7c8e6",
       "reason": null
     },
     "grok": {
@@ -42,7 +33,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260904",
+      "last_fresh_bucket": "20260905",
       "last_reviewer_input_hash": null,
       "reason": null
     }
