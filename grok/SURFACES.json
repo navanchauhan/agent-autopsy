@@ -30,7 +30,7 @@
         "prompts/grok-4.6-interactive.md"
       ],
       "artifact_sha256": "e3601af073ffe241c4d071de435df7b9ba3096a36340ff4813d9d858a8c33dfe",
-      "evidence_sha256": "01370a2aec2deb5d6c0a656f1cc5535c9cd8720feee30d8be3bf08b3e4155903"
+      "evidence_sha256": "503ebef2b9d06cb89ad7460f14e76582112644e24cf16416ea1cbcaf5dc18cb4"
     },
     {
       "id": "grok.prompt.agent.grok-4-6.non-interactive",
@@ -50,7 +50,7 @@
         "prompts/grok-4.6.md"
       ],
       "artifact_sha256": "230b494376e4eb767e487235f99d6cd8dae4e6c6ef3a05eb868a1d8318e0bd12",
-      "evidence_sha256": "01370a2aec2deb5d6c0a656f1cc5535c9cd8720feee30d8be3bf08b3e4155903"
+      "evidence_sha256": "503ebef2b9d06cb89ad7460f14e76582112644e24cf16416ea1cbcaf5dc18cb4"
     },
     {
       "id": "grok.prompt.special.session-title",
@@ -70,7 +70,7 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "01370a2aec2deb5d6c0a656f1cc5535c9cd8720feee30d8be3bf08b3e4155903"
+      "evidence_sha256": "503ebef2b9d06cb89ad7460f14e76582112644e24cf16416ea1cbcaf5dc18cb4"
     },
     {
       "id": "grok.steering.catalog",
@@ -97,7 +97,7 @@
         "misc/grok-4.6-steering.md"
       ],
       "artifact_sha256": "9e7eb852fff59f725fab29841e1be2afa939e739619e9a697bfcbeb281ab48cc",
-      "evidence_sha256": "01370a2aec2deb5d6c0a656f1cc5535c9cd8720feee30d8be3bf08b3e4155903"
+      "evidence_sha256": "503ebef2b9d06cb89ad7460f14e76582112644e24cf16416ea1cbcaf5dc18cb4"
     },
     {
       "id": "grok.tool.catalog",
@@ -146,7 +146,7 @@
         "tools/x_search.json"
       ],
       "artifact_sha256": "878d7f0b1fc235dbde3719ad92992a44f010638b75f5091f7bb22dd60e40bc43",
-      "evidence_sha256": "01370a2aec2deb5d6c0a656f1cc5535c9cd8720feee30d8be3bf08b3e4155903"
+      "evidence_sha256": "503ebef2b9d06cb89ad7460f14e76582112644e24cf16416ea1cbcaf5dc18cb4"
     },
     {
       "id": "grok.agent.definitions",

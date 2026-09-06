@@ -31,7 +31,7 @@
       ],
       "notes": "The prompt was captured from the current 1.1.27 model-facing request.",
       "artifact_sha256": "1f2ab052a4c6d031336477ed8cb35443a867ca0cbcdf69ddfb72b980cbe8153b",
-      "evidence_sha256": "328676de672998626f8f7909cf95ae441b9a843cac676324ade9614abda094f6"
+      "evidence_sha256": "aad53d5734514c9ecc08b0c4220761e4327edfbb9723746777c729bfc618bb1f"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
@@ -52,7 +52,7 @@
       ],
       "notes": "The prompt was captured from the current 1.1.27 model-facing request.",
       "artifact_sha256": "a83844e5e5e2f56febcab45e88f2ac7139e64d0cb556b369a509a0a5e5ada7a3",
-      "evidence_sha256": "328676de672998626f8f7909cf95ae441b9a843cac676324ade9614abda094f6"
+      "evidence_sha256": "aad53d5734514c9ecc08b0c4220761e4327edfbb9723746777c729bfc618bb1f"
     },
     {
       "id": "antigravity.tool.catalog",
@@ -90,7 +90,7 @@
       ],
       "notes": "The tool catalog was captured from the current 1.1.27 model-facing request.",
       "artifact_sha256": "248ebfab9fe33df8af6aba179e5c967650219930774cc7eab86f7435ded06fab",
-      "evidence_sha256": "328676de672998626f8f7909cf95ae441b9a843cac676324ade9614abda094f6"
+      "evidence_sha256": "aad53d5734514c9ecc08b0c4220761e4327edfbb9723746777c729bfc618bb1f"
     }
   ]
 }

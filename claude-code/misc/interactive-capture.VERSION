@@ -1,10 +1,10 @@
 source = anthropic-ai/claude-code
 distribution = native Bun binary
-version = 2.1.261
-installed_version_at_extract = 2.1.261
+version = 2.1.263
+installed_version_at_extract = 2.1.263
 platform = linux-x64
-sha256 = 4ae40dd1784e85753e742e09f267d29ecbb82890361ad3817d27560866d364a6
-capture_user_agent = claude-cli/2.1.261 (external, cli)
+sha256 = 26d020351e8112f4006790f3cfce43b4c9df0c1bb1d0e542364d64151b81d5ba
+capture_user_agent = claude-cli/2.1.263 (external, cli)
 trace_script = claude-code/misc/scripts/trace-claude-messages.cjs
 extract_script = claude-code/misc/scripts/extract-claude-trace.cjs
 capture = tmux interactive session with `BUN_OPTIONS=--preload=claude-code/misc/scripts/trace-claude-messages.cjs claude --permission-mode dontAsk --strict-mcp-config --tools default` and prompt `Reply exactly: CLAUDE_INTERACTIVE_TRACE_OK`

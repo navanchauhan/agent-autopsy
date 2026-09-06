@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.261",
+  "observed_release": "2.1.263",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.261",
-      "verified_release": "2.1.261",
+      "captured_release": "2.1.263",
+      "verified_release": "2.1.263",
       "models": [
         "claude-fable-5-1"
       ],
@@ -29,16 +29,16 @@
       "artifacts": [
         "prompts/claude-fable-5-1.md"
       ],
-      "notes": "The prompt was captured from the current 2.1.261 model-facing request.",
-      "artifact_sha256": "1e0e4baa80b0281ea894a2eefeb60a499568cb616324848892761223facfe746",
-      "evidence_sha256": "832c3b930b5c2bdc096fa46313caa277add3ed1b47a9557679bf0b2a8f9aa7be"
+      "notes": "The prompt was captured from the current 2.1.263 model-facing request.",
+      "artifact_sha256": "abc69ed09acc46269f936ae1f030ed0fb8f7ebd3c518520811237a23c9c4efe5",
+      "evidence_sha256": "c2d730a0bbfc5abe5608047a362b340a2896853ffe36f18d7c344e5688d4b281"
     },
     {
       "id": "claude-code.prompt.agent.claude-haiku-4-5-20251001.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.261",
+      "captured_release": "2.1.263",
       "models": [
         "claude-haiku-4-5-20251001"
       ],
@@ -50,16 +50,16 @@
         "prompts/claude-haiku-4-5-20251001.md"
       ],
       "notes": "The stored artifact's embedded billing header records the model-request build variant.",
-      "verified_release": "2.1.261",
-      "artifact_sha256": "986c6bfcedb99eaa9f12c77a49bb0139ba2aa525df49a8d007093593561d370e",
-      "evidence_sha256": "832c3b930b5c2bdc096fa46313caa277add3ed1b47a9557679bf0b2a8f9aa7be"
+      "verified_release": "2.1.263",
+      "artifact_sha256": "03390f47bc681f9a7263ed5cd4ed8d01b444d5f6704f7f6c7bedf376cb92ee51",
+      "evidence_sha256": "c2d730a0bbfc5abe5608047a362b340a2896853ffe36f18d7c344e5688d4b281"
     },
     {
       "id": "claude-code.prompt.agent.claude-opus-5.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.261",
+      "captured_release": "2.1.263",
       "models": [
         "claude-opus-5"
       ],
@@ -71,17 +71,17 @@
         "prompts/claude-opus-5.md"
       ],
       "notes": "The stored artifact's embedded billing header records the model-request build variant.",
-      "verified_release": "2.1.261",
-      "artifact_sha256": "7b6a150ffec272068a69ed49fcaddca962e60ee8167f40ff86f5e84a8ccb4b56",
-      "evidence_sha256": "832c3b930b5c2bdc096fa46313caa277add3ed1b47a9557679bf0b2a8f9aa7be"
+      "verified_release": "2.1.263",
+      "artifact_sha256": "6de932cc5d7f17144a35b6377bbcd3c03942b992ea183c385fe1c0b71483c7b0",
+      "evidence_sha256": "c2d730a0bbfc5abe5608047a362b340a2896853ffe36f18d7c344e5688d4b281"
     },
     {
       "id": "claude-code.prompt.agent.claude-sonnet-5.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.261",
-      "verified_release": "2.1.261",
+      "captured_release": "2.1.263",
+      "verified_release": "2.1.263",
       "models": [
         "claude-sonnet-5"
       ],
@@ -92,16 +92,16 @@
       "artifacts": [
         "prompts/claude-sonnet-5-interactive.md"
       ],
-      "notes": "The interactive prompt was normalized from the current 2.1.261 model-facing request.",
-      "artifact_sha256": "73027cc8510ba0ce84374b4c9355b6c06b0a6b9f830ce3535239b1d158fc8e4f",
-      "evidence_sha256": "832c3b930b5c2bdc096fa46313caa277add3ed1b47a9557679bf0b2a8f9aa7be"
+      "notes": "The interactive prompt was normalized from the current 2.1.263 model-facing request.",
+      "artifact_sha256": "c92152b99ce1e7af8626a38a6a2adc454c2961ad4a31e8dda73f2e332e5ddfba",
+      "evidence_sha256": "c2d730a0bbfc5abe5608047a362b340a2896853ffe36f18d7c344e5688d4b281"
     },
     {
       "id": "claude-code.prompt.agent.claude-sonnet-5.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.261",
+      "captured_release": "2.1.263",
       "models": [
         "claude-sonnet-5"
       ],
@@ -113,16 +113,16 @@
         "prompts/claude-sonnet-5.md"
       ],
       "notes": "The stored artifact's embedded billing header records the model-request build variant.",
-      "verified_release": "2.1.261",
-      "artifact_sha256": "50b38d55ad56f80783ebe6a59bf971ea48155eb2bf0349ab5ea524372bff61b3",
-      "evidence_sha256": "832c3b930b5c2bdc096fa46313caa277add3ed1b47a9557679bf0b2a8f9aa7be"
+      "verified_release": "2.1.263",
+      "artifact_sha256": "0fb2d7425913134f6d27f8a3f9c478b7524e4d23e6f5e6885c4419f69f169bad",
+      "evidence_sha256": "c2d730a0bbfc5abe5608047a362b340a2896853ffe36f18d7c344e5688d4b281"
     },
     {
       "id": "claude-code.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.261",
+      "captured_release": "2.1.263",
       "models": [
         "claude-haiku-4-5-20251001"
       ],
@@ -133,18 +133,18 @@
       "artifacts": [
         "prompts/claude-haiku-4-5-20251001-session-title.md"
       ],
-      "notes": "The session-title prompt was captured from the current 2.1.261 model-facing request.",
-      "verified_release": "2.1.261",
-      "artifact_sha256": "57cab9814d46b446017df6701ee5b9afeb9da12292e715bfb949ff77bf8721fc",
-      "evidence_sha256": "832c3b930b5c2bdc096fa46313caa277add3ed1b47a9557679bf0b2a8f9aa7be"
+      "notes": "The session-title prompt was captured from the current 2.1.263 model-facing request.",
+      "verified_release": "2.1.263",
+      "artifact_sha256": "068d9e4fa5541cf263e9509b5c01607a693c90448d342711faa1fa5ef53301ad",
+      "evidence_sha256": "c2d730a0bbfc5abe5608047a362b340a2896853ffe36f18d7c344e5688d4b281"
     },
     {
       "id": "claude-code.steering.interactive",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.261",
-      "verified_release": "2.1.261",
+      "captured_release": "2.1.263",
+      "verified_release": "2.1.263",
       "models": [
         "claude-sonnet-5"
       ],
@@ -159,17 +159,17 @@
       "artifacts": [
         "misc/claude-sonnet-5-interactive-steering.md"
       ],
-      "notes": "The interactive steering message was normalized from the current 2.1.261 model-facing request.",
+      "notes": "The interactive steering message was normalized from the current 2.1.263 model-facing request.",
       "artifact_sha256": "801c791715d7421672be9c738b06e2cf92bfa00bb2d88462fe6889be9695a7a0",
-      "evidence_sha256": "832c3b930b5c2bdc096fa46313caa277add3ed1b47a9557679bf0b2a8f9aa7be"
+      "evidence_sha256": "c2d730a0bbfc5abe5608047a362b340a2896853ffe36f18d7c344e5688d4b281"
     },
     {
       "id": "claude-code.steering.non-interactive",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.261",
-      "verified_release": "2.1.261",
+      "captured_release": "2.1.263",
+      "verified_release": "2.1.263",
       "models": [
         "claude-fable-5-1",
         "claude-haiku-4-5-20251001",
@@ -190,15 +190,15 @@
       ],
       "notes": "Only one model has a stored non-interactive steering surface.",
       "artifact_sha256": "7d9ef1673c7c5691dc19209f31243779a7c0f650ed23239c5f77ddf257b4375a",
-      "evidence_sha256": "832c3b930b5c2bdc096fa46313caa277add3ed1b47a9557679bf0b2a8f9aa7be"
+      "evidence_sha256": "c2d730a0bbfc5abe5608047a362b340a2896853ffe36f18d7c344e5688d4b281"
     },
     {
       "id": "claude-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.261",
-      "verified_release": "2.1.261",
+      "captured_release": "2.1.263",
+      "verified_release": "2.1.263",
       "models": [
         "claude-fable-5-1",
         "claude-haiku-4-5-20251001",
@@ -249,9 +249,9 @@
         "tools/Workflow.json",
         "tools/Write.json"
       ],
-      "notes": "Expanded deferred-tool schemas were present in the current 2.1.261 model-facing requests; the catalog includes the supported current variants.",
+      "notes": "Expanded deferred-tool schemas were present in the current 2.1.263 model-facing requests; the catalog includes the supported current variants.",
       "artifact_sha256": "d1aeb1fc0d9346b34b78eb2106d62a5ea92a8b8313b10259d9bdfb876ca37b4b",
-      "evidence_sha256": "832c3b930b5c2bdc096fa46313caa277add3ed1b47a9557679bf0b2a8f9aa7be"
+      "evidence_sha256": "c2d730a0bbfc5abe5608047a362b340a2896853ffe36f18d7c344e5688d4b281"
     }
   ]
 }
