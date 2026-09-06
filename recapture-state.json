@@ -2,29 +2,20 @@
   "schema_version": 1,
   "tools": {
     "codex": {
-      "plan_hash": "286e81ec6527d70cb33083a0a64782f210889278ee50250dcb952ea74cb52ca2",
+      "plan_hash": "c01ee93a4c1baa4c93f0b916109c319a1ddf3b3f8c46340af36d49dfc2960843",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260905",
+      "last_fresh_bucket": "20260906",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "claude-code": {
-      "plan_hash": "dec47fe8a0aa9f7225cfc4beeb3a1c1b9b292229a6b5699cabba784e456aa01b",
+      "plan_hash": "b2d82847fdd71005c6b278e9833b6487351e8da23b5be59bbe5ee651534331a2",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260905",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
-    "antigravity": {
-      "plan_hash": "38b8bd8207f1a2ace1671f4c2c38c0d672665b40f3685305f8f9d638b5bde30d",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260905",
+      "last_fresh_bucket": "20260906",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -33,7 +24,16 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260905",
+      "last_fresh_bucket": "20260906",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "antigravity": {
+      "plan_hash": "6a89f71b74ceb288bf252e066947f94fc9d6be4e06a82a18e3bd39090cf7acde",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260906",
       "last_reviewer_input_hash": null,
       "reason": null
     }
