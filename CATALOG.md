@@ -45,13 +45,13 @@ Observed release: `2.1.263`
 
 ## codex
 
-Observed release: `0.153.3`
+Observed release: `0.153.4`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `codex.prompt.agent.catalog` | agent prompts | `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.4`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | current | `0.153.3` | 15 files ([manifest](codex/SURFACES.json)) |
-| `codex.tool.catalog` | tool schemas | `all` | `configured` | current | `0.153.3` | 25 files ([manifest](codex/SURFACES.json)) |
-| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | current | `0.153.3` | 29 files ([manifest](codex/SURFACES.json)) |
+| `codex.prompt.agent.catalog` | agent prompts | `gpt-6-astra`, `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.4`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | current | `0.153.4` | 16 files ([manifest](codex/SURFACES.json)) |
+| `codex.tool.catalog` | tool schemas | `all` | `configured` | current | `0.153.4` | 25 files ([manifest](codex/SURFACES.json)) |
+| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | current | `0.153.4` | 29 files ([manifest](codex/SURFACES.json)) |
 | `codex.assembly.model-mode` | assembly recipe | `all` | `all` | gap | — | — |
 | `codex.context.session` | dynamic context | `all` | `all` | dynamic | — | — |
 | `codex.tool.code-mode-listing` | dynamic tool catalog | `gpt-5.6` | `code-mode-only` | dynamic | — | — |

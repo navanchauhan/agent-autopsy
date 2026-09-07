@@ -1,10 +1,10 @@
 source = openai/codex
-revision = b1a547b1f73ce86205d9222ac19cff334b3b7a2e
-describe = b1a547b1
-codex_cli_package_version = 0.153.3
+revision = 3d2ee51ca2d5db578f328aa75e20aa22c0197c9a
+describe = 3d2ee51c
+codex_cli_package_version = 0.153.4
 reference_path = references/codex
 capture_mode = direct source extraction
-prompts = 15
+prompts = 16
 tools = 25
 misc = 29
 gpt_5_6_tool_modes = sol: code_mode_only; terra: code_mode_only; luna: code_mode_only
