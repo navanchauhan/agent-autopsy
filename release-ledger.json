@@ -4,23 +4,11 @@
     "codex": [
       {
         "tool": "codex",
-        "new_version": "0.153.3",
-        "new_revision": "b1a547b1f73ce86205d9222ac19cff334b3b7a2e"
-      },
-      {
-        "tool": "codex",
         "new_version": "0.153.4",
         "new_revision": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a"
       }
     ],
-    "claude-code": [
-      {
-        "tool": "claude-code",
-        "new_version": "2.1.263",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.263/linux-x64/claude",
-        "artifact_sha256": "26d020351e8112f4006790f3cfce43b4c9df0c1bb1d0e542364d64151b81d5ba"
-      }
-    ],
+    "claude-code": [],
     "grok": [],
     "antigravity": [],
     "qwen-code": []
