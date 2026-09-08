@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "tools": {
-    "codex": {
-      "plan_hash": "a66efaaaf2e9c931941042fc6444fb7dfe48bf21fbcf9e936919c3f1d410a237",
+    "qwen-code": {
+      "plan_hash": "f805718ed975169d87332209307b98f0c88259d65fde09be36a49b7e9ccb9e9d",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260907",
+      "last_fresh_bucket": "20260908",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -15,7 +15,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260907",
+      "last_fresh_bucket": "20260908",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -24,7 +24,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260907",
+      "last_fresh_bucket": "20260908",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -33,7 +33,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260907",
+      "last_fresh_bucket": "20260908",
       "last_reviewer_input_hash": null,
       "reason": null
     }
