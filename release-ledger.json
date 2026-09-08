@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "queues": {
-    "codex": [
-      {
-        "tool": "codex",
-        "new_version": "0.153.4",
-        "new_revision": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a"
-      }
-    ],
+    "codex": [],
     "claude-code": [],
     "grok": [],
     "antigravity": [],
-    "qwen-code": []
+    "qwen-code": [
+      {
+        "tool": "qwen-code",
+        "new_version": "0.23.1",
+        "new_revision": "d9331e6fcf7f8f8225a16a9ec6973f8f38f56747"
+      }
+    ]
   }
 }
