@@ -1,3 +1,17 @@
+<system-reminder>
+# Environment
+You have been invoked in the following environment:
+ - Primary working directory: <harnessVariable>{{primaryWorkingDirectory=/Users/example/Developer/example-repo}}</harnessVariable>
+ - Is a git repository: <harnessVariable>{{isGitRepository=true}}</harnessVariable>
+ - Platform: <harnessVariable>{{platform=linux}}</harnessVariable>
+ - Shell: <harnessVariable>{{shell=unknown}}</harnessVariable>
+ - OS Version: <harnessVariable>{{osVersion=Linux 6.17.0-1022-azure}}</harnessVariable>
+</system-reminder>
+
+<system-reminder>
+You are powered by the model named Haiku 4.5. The exact model ID is claude-haiku-4-5-20251001. Assistant knowledge cutoff is February 2025.
+</system-reminder>
+
 <harnessVariable>
 <system-reminder>
 The following deferred tools are now available via ToolSearch. Their schemas are NOT loaded — calling them directly will fail with InputValidationError. Use ToolSearch with query "select:<name>[,<name>...]" to load tool schemas before calling them:
@@ -38,7 +52,6 @@ Example:
 <system-reminder>
 <total_tokens>15000000 tokens left</total_tokens>
 </system-reminder>
-
 
 <system-reminder>
 As you answer the user's questions, you can use the following context:

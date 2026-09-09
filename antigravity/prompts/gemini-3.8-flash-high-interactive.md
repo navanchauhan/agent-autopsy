@@ -132,9 +132,17 @@ Use GitHub-style alerts strategically to emphasize critical information. They wi
 
 ## Mermaid Diagrams
 Create mermaid diagrams using fenced code blocks with language `mermaid` to visualize complex relationships, workflows, and architectures.
-To prevent syntax errors:
-- Quote node labels containing special characters like parentheses or brackets. For example, `id["Label (Extra Info)"]` instead of `id[Label (Extra Info)]`.
-- Avoid HTML tags in labels.
+- Only use supported diagram types:
+  - Flowcharts / Graphs: `flowchart TD` / `flowchart LR` / `graph TD` / `graph LR`
+  - Sequence Diagrams: `sequenceDiagram`
+  - State Diagrams: `stateDiagram-v2` or `stateDiagram`
+  - Class Diagrams: `classDiagram`
+  - Entity-Relationship Diagrams: `erDiagram`
+  - XY Charts: `xychart-beta`
+- All other diagram types are unsupported. For schedules, timelines, or roadmaps, use directed flowcharts (`flowchart LR` / `flowchart TD`) or Markdown tables instead.
+- To prevent syntax errors:
+  - Quote node labels containing special characters like parentheses or brackets. For example, `id["Label (Extra Info)"]` instead of `id[Label (Extra Info)]`.
+  - Avoid HTML tags in labels.
 
 ## File Links and Media
 - Link to specific line ranges using [link text](file:///absolute/path/to/file#L123-L145) format. Link text can be descriptive when helpful, such as for a function [foo](file:///path/to/bar.py#L127-L143) or for a line range [bar.py:L127-143](file:///path/to/bar.py#L127-L143)
