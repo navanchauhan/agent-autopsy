@@ -2,14 +2,128 @@
   "schema_version": 1,
   "queues": {
     "codex": [],
-    "claude-code": [],
-    "grok": [],
-    "antigravity": [],
+    "claude-code": [
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.265",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.265/linux-x64/claude",
+        "artifact_sha256": "e14738e3a58d1fc6ccc23b9c919451b4846bc27074a3fb48db976a7d595bdeeb"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.266",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.266/linux-x64/claude",
+        "artifact_sha256": "19842705e989393fce936804df6d2ab034860e24b8f8880357981d87ffd83fac"
+      }
+    ],
+    "grok": [
+      {
+        "tool": "grok",
+        "new_version": "1.0.14",
+        "new_revision": "a549186d9d39311f2d3ee4208db62af8c65aa476",
+        "mirror_revision": "72a61251fcffb464bcc687aeb5a998e5a98ec0c9",
+        "artifact_url": "https://x.ai/cli/grok-1.0.14-linux-x86_64",
+        "artifact_sha256": "fbc010151c522e073f97f00fe20fe2bb531b3bd64ec60cd595c96f2fe392b880"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.15",
+        "new_revision": "a549186d9d39311f2d3ee4208db62af8c65aa476",
+        "mirror_revision": "72a61251fcffb464bcc687aeb5a998e5a98ec0c9",
+        "artifact_url": "https://x.ai/cli/grok-1.0.15-linux-x86_64",
+        "artifact_sha256": "530d9bb951171f8358861297a8c9157ce8a97b0414f14cb7cf38eccd2c9ce567"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.16",
+        "new_revision": "a549186d9d39311f2d3ee4208db62af8c65aa476",
+        "mirror_revision": "72a61251fcffb464bcc687aeb5a998e5a98ec0c9",
+        "artifact_url": "https://x.ai/cli/grok-1.0.16-linux-x86_64",
+        "artifact_sha256": "12058498506e52db50815a90fd37dd44b9d0e1e21d508d1124879dd1144f971f"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.17",
+        "new_revision": "eb4a894da8fb7bcd8d8f398a9d909a7868a4fcf1",
+        "mirror_revision": "75810042ca2762aa0b0fa17864f3f68823ccbea5",
+        "artifact_url": "https://x.ai/cli/grok-1.0.17-linux-x86_64",
+        "artifact_sha256": "82595e26cab8f5bab470415e69a6b3d58f99b71cbcc831440b416212e3c14568"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.18",
+        "new_revision": "eb4a894da8fb7bcd8d8f398a9d909a7868a4fcf1",
+        "mirror_revision": "75810042ca2762aa0b0fa17864f3f68823ccbea5",
+        "artifact_url": "https://x.ai/cli/grok-1.0.18-linux-x86_64",
+        "artifact_sha256": "42f6efb496feafea3e8807b75852cc1f792cba0bd0be8ecbd1c9f7ed5816a7f0"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.19",
+        "new_revision": "eb4a894da8fb7bcd8d8f398a9d909a7868a4fcf1",
+        "mirror_revision": "75810042ca2762aa0b0fa17864f3f68823ccbea5",
+        "artifact_url": "https://x.ai/cli/grok-1.0.19-linux-x86_64",
+        "artifact_sha256": "590c703b504b30fa8d22860c645ce89dd706812866f62d2c372f5295bd4d1f83"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.20",
+        "new_revision": "eb4a894da8fb7bcd8d8f398a9d909a7868a4fcf1",
+        "mirror_revision": "75810042ca2762aa0b0fa17864f3f68823ccbea5",
+        "artifact_url": "https://x.ai/cli/grok-1.0.20-linux-x86_64",
+        "artifact_sha256": "b561c5f7bd3caf3dc4106d8697c864f406847718e5a60fc68c1a1bd8b6dc12fb"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.21",
+        "new_revision": "eb4a894da8fb7bcd8d8f398a9d909a7868a4fcf1",
+        "mirror_revision": "75810042ca2762aa0b0fa17864f3f68823ccbea5",
+        "artifact_url": "https://x.ai/cli/grok-1.0.21-linux-x86_64",
+        "artifact_sha256": "3a0bd1111628768b91c4ac550034565448309fe9ec2cb13b71dea90910dc9d98"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.22",
+        "new_revision": "eb4a894da8fb7bcd8d8f398a9d909a7868a4fcf1",
+        "mirror_revision": "75810042ca2762aa0b0fa17864f3f68823ccbea5",
+        "artifact_url": "https://x.ai/cli/grok-1.0.22-linux-x86_64",
+        "artifact_sha256": "ad2510e8d7edcfe04fbdd25fa0f19dd1fb5babc8b238532b06e4bf3548d210ad"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.23",
+        "new_revision": "eb4a894da8fb7bcd8d8f398a9d909a7868a4fcf1",
+        "mirror_revision": "75810042ca2762aa0b0fa17864f3f68823ccbea5",
+        "artifact_url": "https://x.ai/cli/grok-1.0.23-linux-x86_64",
+        "artifact_sha256": "e7de856e77ef366ddb96ec042355b89a69d2fffd1311d364798e045da5c56037"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.24",
+        "new_revision": "eb4a894da8fb7bcd8d8f398a9d909a7868a4fcf1",
+        "mirror_revision": "75810042ca2762aa0b0fa17864f3f68823ccbea5",
+        "artifact_url": "https://x.ai/cli/grok-1.0.24-linux-x86_64",
+        "artifact_sha256": "a31a1c270246beb8e18f1fce91121a5e83d9ba8f51a8b24346bbc75fe727bdf5"
+      }
+    ],
+    "antigravity": [
+      {
+        "tool": "antigravity",
+        "new_version": "1.1.28",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.28-5576113066475520/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "a855c623426fe901088bfe2b4d559b01f5b479a7c5ec0e41acfe129d4fe7deee9fbd9057072cc8e8c19ed65474cafa4f1d10fcdc14fbb85f82f20c3ec94295d4"
+      }
+    ],
     "qwen-code": [
       {
         "tool": "qwen-code",
         "new_version": "0.23.1",
         "new_revision": "d9331e6fcf7f8f8225a16a9ec6973f8f38f56747"
+      },
+      {
+        "tool": "qwen-code",
+        "new_version": "0.23.2",
+        "new_revision": "f56de980b316cd5410f067fbb62357481ebd66b8"
       }
     ]
   }
