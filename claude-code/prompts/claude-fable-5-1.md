@@ -1,4 +1,4 @@
-x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.266.bb2; cc_entrypoint=sdk-cli; cch=00000;}}</harnessVariable> cc_prompt_id=<harnessVariable>{{sessionId=db3cd1ba-d8ad-4b5b-a02f-9eae7d0738c2}}</harnessVariable>;
+x-anthropic-billing-header: <harnessVariable>{{anthropicBillingHeader=cc_version=2.1.267.69d; cc_entrypoint=sdk-cli; cch=00000;}}</harnessVariable> cc_prompt_id=<harnessVariable>{{sessionId=9479ec0c-4f2a-435c-a17e-fb5e91e8d006}}</harnessVariable>;
 
 You are a Claude agent, built on Anthropic's Claude Agent SDK.
 

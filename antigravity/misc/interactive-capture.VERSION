@@ -1,12 +1,12 @@
 source = antigravity.google/cli
 distribution = native Go binary
-version = 1.2.0
+version = 1.2.1
 platform = linux-x64
 installer_url = https://antigravity.google/cli/install.sh
 manifest_url = https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json
-manifest_version = 1.2.0
-manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.0-5210873191596032/linux-x64/cli_linux_x64.tar.gz
-manifest_tarball_sha512 = d190b25a04ed2a03b0587838476494ae59d0d324ee6373263cabe584352c254f9051f3689c79ac4add8817ff6eb34b11694acd77002c55e91bd1d28b6dfdae22
+manifest_version = 1.2.1
+manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.1-5123043593420800/linux-x64/cli_linux_x64.tar.gz
+manifest_tarball_sha512 = 0629fe69e6949b35707935ef35da016074ea29a5d989a05f740713e0a9e927bf52ff1eada0204d3338779a469c938b6b7c5c44de2d296e5e8db255d26568de38
 trace_script = antigravity/misc/scripts/extract-antigravity-log.cjs
 capture_mode = interactive
 capture = tmux new-session with `CODEIUM_VMODULE='*=5' agy --add-dir "$PWD" --dangerously-skip-permissions --log-file <trace>/agy.log`, then send `Reply exactly: ANTIGRAVITY_INTERACTIVE_TRACE_OK`

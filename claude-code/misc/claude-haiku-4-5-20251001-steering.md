@@ -1,6 +1,6 @@
 <system-reminder>
 # Environment
-You have been invoked in the following environment:
+You have been invoked in the following environment: 
  - Primary working directory: <harnessVariable>{{primaryWorkingDirectory=/Users/example/Developer/example-repo}}</harnessVariable>
  - Is a git repository: <harnessVariable>{{isGitRepository=true}}</harnessVariable>
  - Platform: <harnessVariable>{{platform=linux}}</harnessVariable>
