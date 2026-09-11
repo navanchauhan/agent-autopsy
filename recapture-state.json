@@ -1,50 +1,41 @@
 {
   "schema_version": 1,
   "tools": {
-    "codex": {
-      "plan_hash": "ad41f260d319b4faa361a9045571d7f4e3a44457589b8ff05a206c1b975dccf2",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260910",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
     "claude-code": {
-      "plan_hash": "c620b3983ded61920c3c9cb4aeb95177a56b231175cf6ce79b1055fc0a9a3ef7",
+      "plan_hash": "3d9a26cc33dc7b8cc6c48c4e11205920e24a3fe750be75a10189493ea2c4a1cd",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260910",
+      "last_fresh_bucket": "20260911",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "grok": {
-      "plan_hash": "10711ed239726fe0fc68557829332f342021f087ad36c44da279ce8d719d44c8",
+      "plan_hash": "23773cb8f2dcde42818e81bf9adae45c4212ef0907157906f18b3c3791e5e93a",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260910",
+      "last_fresh_bucket": "20260911",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "antigravity": {
-      "plan_hash": "91ea1c7e0c1af52ba6f83f6a07e8e3981784385c29431a6fa5af4ea60dafcc9b",
+      "plan_hash": "b402a3bd37de709f4519d8a607efeaeb51234e498cc7ec2a240050dda243f4be",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260910",
+      "last_fresh_bucket": "20260911",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "qwen-code": {
       "plan_hash": "f805718ed975169d87332209307b98f0c88259d65fde09be36a49b7e9ccb9e9d",
-      "state": "force_once",
-      "request_after_run_id": "34521818598",
-      "request_after_run_attempt": 1,
-      "last_fresh_bucket": "20260908",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260911",
       "last_reviewer_input_hash": "8842b4b5b56d23995eabe47b98d8c1fda03bea16fa1d67cced82c6a3ac10f249",
-      "reason": "reviewer"
+      "reason": null
     }
   }
 }
