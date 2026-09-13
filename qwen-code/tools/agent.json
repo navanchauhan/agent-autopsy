@@ -1,6 +1,6 @@
 {
   "name": "agent",
-  "description": "Launch a new agent to handle complex, multi-step tasks autonomously.\n\nThe Agent tool launches specialized agents (subprocesses) that autonomously handle complex tasks. Each agent type has specific capabilities and tools available to it.\n\nAvailable agent types and the tools they have access to:\n",
+  "description": "Launch a new agent to handle complex, multi-step tasks autonomously.\n\nThe Agent tool launches specialized agents (subprocesses) that autonomously handle complex tasks. Each agent type has specific capabilities and tools available to it.\n\nAvailable agent types and the tools they have access to:\n\nUsage notes:\n- When a user-visible todo plan exists, set `todo_id` to the ID of the plan node this top-level agent execution implements. Create the todo before launching the agent when practical. Omit `todo_id` for work that is not represented by the current plan.\n",
   "parametersJsonSchema": {
     "type": "object",
     "properties": {
