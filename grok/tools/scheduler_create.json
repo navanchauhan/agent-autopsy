@@ -38,14 +38,6 @@
           ],
           "default": null
         },
-        "foreground": {
-          "description": "Run each fire as a main-conversation turn instead of a background subagent; set true only when runs need the conversation's context. Default: false. Create-only: ignored with task_id",
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "default": null
-        },
         "fire_immediately": {
           "description": "Whether to fire immediately on creation (true) or wait for the first interval (false). Default: false. Create-only: ignored with task_id",
           "type": "boolean",

@@ -59,15 +59,14 @@ Observed release: `0.154.0`
 
 ## grok
 
-Observed release: `1.0.18`
+Observed release: `1.0.19`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.18` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
-| `grok.prompt.agent.grok-4-6.interactive` | agent prompt | `grok-4.6` | `interactive` | current | `1.0.18` | [grok-4.6-interactive.md](grok/prompts/grok-4.6-interactive.md) |
-| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.18` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
-| `grok.steering.catalog` | steering messages | `grok-4.6` | `interactive`, `non-interactive` | current | `1.0.18` | [grok-4.6-interactive-steering.md](grok/misc/grok-4.6-interactive-steering.md), [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md) |
-| `grok.tool.catalog` | tool schemas | `grok-4.6` | `interactive`, `non-interactive`, `session-title` | current | `1.0.18` | 29 files ([manifest](grok/SURFACES.json)) |
+| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.19` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
+| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.19` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
+| `grok.steering.catalog` | steering messages | `grok-4.6` | `non-interactive` | current | `1.0.19` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md) |
+| `grok.tool.catalog` | tool schemas | `grok-4.6` | `non-interactive`, `session-title` | current | `1.0.19` | 28 files ([manifest](grok/SURFACES.json)) |
 | `grok.agent.definitions` | bundled agent prompts | `grok-4.6` | `subagent invocation` | gap | — | — |
 | `grok.skill.definitions` | bundled skills and workflows | `grok-4.6` | `skill and workflow invocation` | gap | — | — |
 | `grok.event.catalog` | event prompts | `grok-4.6` | `plan`, `scheduler`, `workflow`, `monitor`, `completion` | gap | — | — |
@@ -77,11 +76,11 @@ Observed release: `1.0.18`
 
 ## qwen-code
 
-Observed release: `0.23.1`
+Observed release: `0.23.2`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `qwen-code.prompt.agent.catalog` | agent prompts | `all` | `interactive`, `headless`, `acp` | current | `0.23.1` | [core-acp-qwen3-coder-plus.md](qwen-code/prompts/core-acp-qwen3-coder-plus.md), [core-headless-qwen3-coder-plus.md](qwen-code/prompts/core-headless-qwen3-coder-plus.md), [core-interactive-qwen3-coder-plus.md](qwen-code/prompts/core-interactive-qwen3-coder-plus.md) |
-| `qwen-code.tool.catalog` | tool schemas | `all` | `configured`, `deferred` | current | `0.23.1` | 46 files ([manifest](qwen-code/SURFACES.json)) |
-| `qwen-code.steering.catalog` | runtime messages | `all` | `configured`, `planning`, `compression`, `insights` | current | `0.23.1` | 14 files ([manifest](qwen-code/SURFACES.json)) |
+| `qwen-code.prompt.agent.catalog` | agent prompts | `all` | `interactive`, `headless`, `acp` | current | `0.23.2` | [core-acp-qwen3-coder-plus.md](qwen-code/prompts/core-acp-qwen3-coder-plus.md), [core-headless-qwen3-coder-plus.md](qwen-code/prompts/core-headless-qwen3-coder-plus.md), [core-interactive-qwen3-coder-plus.md](qwen-code/prompts/core-interactive-qwen3-coder-plus.md) |
+| `qwen-code.tool.catalog` | tool schemas | `all` | `configured`, `deferred` | current | `0.23.2` | 46 files ([manifest](qwen-code/SURFACES.json)) |
+| `qwen-code.steering.catalog` | runtime messages | `all` | `configured`, `planning`, `compression`, `insights` | current | `0.23.2` | 14 files ([manifest](qwen-code/SURFACES.json)) |
 | `qwen-code.context.session` | dynamic context | `all` | `all` | dynamic | — | — |
