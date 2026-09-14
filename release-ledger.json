@@ -5,26 +5,12 @@
     "claude-code": [
       {
         "tool": "claude-code",
-        "new_version": "2.1.269",
-        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.269/linux-x64/claude",
-        "artifact_sha256": "25e44883f54419569a3d739f38cbbdaebe83b09895da0f343e1b003710a4775b"
-      },
-      {
-        "tool": "claude-code",
         "new_version": "2.1.270",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.270/linux-x64/claude",
         "artifact_sha256": "3a624a5a7cd79bbad4d32bd7db36f1197ecf458bc5bf1e2aed81834a01ad3ef0"
       }
     ],
     "grok": [
-      {
-        "tool": "grok",
-        "new_version": "1.0.18",
-        "new_revision": "eb4a894da8fb7bcd8d8f398a9d909a7868a4fcf1",
-        "mirror_revision": "75810042ca2762aa0b0fa17864f3f68823ccbea5",
-        "artifact_url": "https://x.ai/cli/grok-1.0.18-linux-x86_64",
-        "artifact_sha256": "42f6efb496feafea3e8807b75852cc1f792cba0bd0be8ecbd1c9f7ed5816a7f0"
-      },
       {
         "tool": "grok",
         "new_version": "1.0.19",
@@ -78,11 +64,6 @@
     "qwen-code": [
       {
         "tool": "qwen-code",
-        "new_version": "0.23.1",
-        "new_revision": "d9331e6fcf7f8f8225a16a9ec6973f8f38f56747"
-      },
-      {
-        "tool": "qwen-code",
         "new_version": "0.23.2",
         "new_revision": "f56de980b316cd5410f067fbb62357481ebd66b8"
       },
@@ -90,6 +71,11 @@
         "tool": "qwen-code",
         "new_version": "0.23.3",
         "new_revision": "b695664b8df06d06c625db3e30b97045d82092c7"
+      },
+      {
+        "tool": "qwen-code",
+        "new_version": "0.23.4",
+        "new_revision": "fdcd7c2761e4ae18d578cf1413ae8d43f58b3e2c"
       }
     ]
   }
