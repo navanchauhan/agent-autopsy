@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "grok",
-  "observed_release": "1.0.19",
+  "observed_release": "1.0.20",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.19",
-      "verified_release": "1.0.19",
+      "captured_release": "1.0.20",
+      "verified_release": "1.0.20",
       "models": [
         "grok-4.6"
       ],
@@ -30,15 +30,15 @@
         "prompts/grok-4.6.md"
       ],
       "artifact_sha256": "230b494376e4eb767e487235f99d6cd8dae4e6c6ef3a05eb868a1d8318e0bd12",
-      "evidence_sha256": "33d510889ab2c184f91bc7cca324cc591c59fc85ef0fe05ad61ae87e94608123"
+      "evidence_sha256": "dcb52a92efcb542b647cee4ceb868f581f1bcdb3c9b829ed3f50744406b3f340"
     },
     {
       "id": "grok.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.19",
-      "verified_release": "1.0.19",
+      "captured_release": "1.0.20",
+      "verified_release": "1.0.20",
       "models": [
         "grok-4.6"
       ],
@@ -50,19 +50,20 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "33d510889ab2c184f91bc7cca324cc591c59fc85ef0fe05ad61ae87e94608123"
+      "evidence_sha256": "dcb52a92efcb542b647cee4ceb868f581f1bcdb3c9b829ed3f50744406b3f340"
     },
     {
       "id": "grok.steering.catalog",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.19",
-      "verified_release": "1.0.19",
+      "captured_release": "1.0.20",
+      "verified_release": "1.0.20",
       "models": [
         "grok-4.6"
       ],
       "modes": [
+        "interactive",
         "non-interactive"
       ],
       "dynamic_inputs": [
@@ -72,22 +73,24 @@
         "AGENTS instructions"
       ],
       "artifacts": [
+        "misc/grok-4.6-interactive-steering.md",
         "misc/grok-4.6-steering.md"
       ],
-      "artifact_sha256": "efcc71ad2e479be1f181a182c07b03ea23b21ea21cb4bcbc729331a2dbc50420",
-      "evidence_sha256": "33d510889ab2c184f91bc7cca324cc591c59fc85ef0fe05ad61ae87e94608123"
+      "artifact_sha256": "102348d5631c6fdab6681198395c07c44cd5d5588c7a66a1687b769675410b48",
+      "evidence_sha256": "dcb52a92efcb542b647cee4ceb868f581f1bcdb3c9b829ed3f50744406b3f340"
     },
     {
       "id": "grok.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.19",
-      "verified_release": "1.0.19",
+      "captured_release": "1.0.20",
+      "verified_release": "1.0.20",
       "models": [
         "grok-4.6"
       ],
       "modes": [
+        "interactive",
         "non-interactive",
         "session-title"
       ],
@@ -120,10 +123,11 @@
         "tools/web_search.json",
         "tools/workflow.json",
         "tools/write.json",
-        "tools/x_search.json"
+        "tools/x_search.json",
+        "tools/web_fetch.json"
       ],
-      "artifact_sha256": "9078ff37a078256e567ddd918577952ff56cf0abd2cf7602448be2b1a835e380",
-      "evidence_sha256": "33d510889ab2c184f91bc7cca324cc591c59fc85ef0fe05ad61ae87e94608123"
+      "artifact_sha256": "58bf7a54328f10ca8d4d61d9b08f5df77bfbd343f56d1947e132c6aa46b09130",
+      "evidence_sha256": "dcb52a92efcb542b647cee4ceb868f581f1bcdb3c9b829ed3f50744406b3f340"
     },
     {
       "id": "grok.agent.definitions",
@@ -226,6 +230,26 @@
       "dynamic_inputs": [],
       "artifacts": [],
       "notes": "No machine-readable recipe maps prompts, steering, tools, agents, skills, and events by mode."
+    },
+    {
+      "id": "grok.prompt.agent.grok-4-6.interactive",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "1.0.20",
+      "verified_release": "1.0.20",
+      "models": [
+        "grok-4.6"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/grok-4.6-interactive.md"
+      ],
+      "artifact_sha256": "e3601af073ffe241c4d071de435df7b9ba3096a36340ff4813d9d858a8c33dfe",
+      "evidence_sha256": "dcb52a92efcb542b647cee4ceb868f581f1bcdb3c9b829ed3f50744406b3f340"
     }
   ]
 }
