@@ -3,39 +3,39 @@
   "tools": {
     "claude-code": {
       "plan_hash": "310a2055e32a5d9470e3379709c8ae1f61285e85834e2e104ef3ae1244a81877",
-      "state": "suppress_positive",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260914",
-      "last_reviewer_input_hash": null,
-      "reason": "capture_retry"
-    },
-    "grok": {
-      "plan_hash": "89ad352f9f73f4e5571cf931cea330219e1261ffb9a0575a29dee64ab7342605",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260914",
+      "last_fresh_bucket": "20260915",
       "last_reviewer_input_hash": null,
       "reason": null
     },
-    "qwen-code": {
-      "plan_hash": "f4de8c203785980624db86f2ba9d5fca6b25ae43994ab7931f89c0e6fbbacb79",
+    "grok": {
+      "plan_hash": "085b9dc2f6967651dca548631a6d4d3b180033afdadcd86caa658ac639f19b56",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260914",
+      "last_fresh_bucket": "20260915",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "antigravity": {
-      "plan_hash": "cf45b9a70a951a122e4a834baa180b3a11f64296f78a039c3b656169a8ae8198",
-      "state": "clear",
+      "plan_hash": "3a10086d2004feb0ce48544cb316f2f3e7a00ba05a1ee51a0fd1b6e6b7255bf1",
+      "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260914",
+      "last_fresh_bucket": "20260915",
       "last_reviewer_input_hash": null,
-      "reason": null
+      "reason": "capture_retry"
+    },
+    "qwen-code": {
+      "plan_hash": "e669a5e0b0986925a690b7809863f64a1551575105c04dde1badcbec17931517",
+      "state": "suppress_positive",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260915",
+      "last_reviewer_input_hash": "825bf68c6cb46ad0d2f74c5a7c3bb0768674b43ceb2a09c2b82639f083f3ba00",
+      "reason": "reviewer"
     }
   }
 }
