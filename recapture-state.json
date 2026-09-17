@@ -3,12 +3,12 @@
   "tools": {
     "claude-code": {
       "plan_hash": "8f2e04ba76e231c3b4fea04d2b9f562178be870d02e5af1b0fa397b60ff61165",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
+      "state": "force_once",
+      "request_after_run_id": "35270117013",
+      "request_after_run_attempt": 1,
       "last_fresh_bucket": "20260916",
-      "last_reviewer_input_hash": null,
-      "reason": null
+      "last_reviewer_input_hash": "0f9e9e7f37e59e62c5da7fe620682706ad741e32f73d0ca05cc7064e2002c65b",
+      "reason": "reviewer"
     },
     "grok": {
       "plan_hash": "1af2329da86bfbe135fabdaf99902ea3f4e4d228c18cc06e1223a2d5ba03c31b",
@@ -30,12 +30,12 @@
     },
     "qwen-code": {
       "plan_hash": "e669a5e0b0986925a690b7809863f64a1551575105c04dde1badcbec17931517",
-      "state": "suppress_positive",
+      "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260916",
+      "last_fresh_bucket": "20260917",
       "last_reviewer_input_hash": "825bf68c6cb46ad0d2f74c5a7c3bb0768674b43ceb2a09c2b82639f083f3ba00",
-      "reason": "reviewer"
+      "reason": null
     }
   }
 }
