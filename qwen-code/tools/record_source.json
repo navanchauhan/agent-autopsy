@@ -1,0 +1,19 @@
+{
+  "name": "record_source",
+  "description": "Adds a file or HTTP(S) link to this session reference list. Registration stores metadata only: it does not read or send resource contents, and does not prove the assistant used the reference. Use record_artifact for newly produced deliverables.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["title", "locator"],
+    "properties": {
+      "title": {"type": "string", "maxLength": 200},
+      "description": {"type": "string", "maxLength": 1000},
+      "locator": {
+        "oneOf": [
+          {"type": "object", "additionalProperties": false, "required": ["type", "workspacePath"], "properties": {"type": {"type": "string", "const": "workspace_file"}, "workspacePath": {"type": "string", "maxLength": 500}}},
+          {"type": "object", "additionalProperties": false, "required": ["type", "url"], "properties": {"type": {"type": "string", "const": "url"}, "url": {"type": "string", "maxLength": 2048}}}
+        ]
+      }
+    }
+  }
+}
