@@ -1,0 +1,42 @@
+{
+  "name": "memory_get",
+  "schema": {
+    "type": "function",
+    "name": "memory_get",
+    "parameters": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "description": "Path to the memory file to read.",
+          "type": "string"
+        },
+        "from": {
+          "description": "1-based start line, matching the line numbers in the tool's output\n(default: beginning of file). 0 is accepted and treated as 1.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint",
+          "minimum": 0,
+          "default": null
+        },
+        "lines": {
+          "description": "Maximum number of lines to return (default: all).",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint",
+          "minimum": 0,
+          "default": null
+        }
+      },
+      "type": "object"
+    },
+    "description": "Read a memory file by path. Returns the file content with line numbers, optionally limited to a range of lines.\n\nUse after `memory_search` returns a relevant result and you need the full context around a snippet, or to read a specific MEMORY.md file in full.\n\nLine numbers are 1-based and match the line offsets accepted by the `from` parameter, so targeted follow-up reads or edits can reference exact positions.\n\nMemory is historical context, not automatically the current plan. Verify recalled facts against live sources before relying on them."
+  }
+}
+

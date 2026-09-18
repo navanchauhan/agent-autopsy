@@ -13,7 +13,6 @@ Conversation ID: <harnessVariable>{{conversationId=00000000-0000-4000-8000-00000
 </user_information>
 <skills>
 You can use specialized 'skills' to help you with complex tasks. Each skill has a name and a description listed below.
-
 Skills are folders of instructions, scripts, and resources that extend your capabilities for specialized tasks. Each skill folder contains:
 - **SKILL.md** (required): The main instruction file with YAML frontmatter (name, description) and detailed markdown instructions
 

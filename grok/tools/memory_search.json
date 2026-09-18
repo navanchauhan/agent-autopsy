@@ -1,0 +1,41 @@
+{
+  "name": "memory_search",
+  "schema": {
+    "type": "function",
+    "name": "memory_search",
+    "parameters": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "query"
+      ],
+      "properties": {
+        "query": {
+          "description": "The search query string. Use specific technical terms rather than\nconversational language. Good: \"authentication middleware patterns\".\nBad: \"that thing we discussed about auth\".",
+          "type": "string"
+        },
+        "max_results": {
+          "description": "Maximum number of results to return. When omitted the backend-configured value is used\n(typically 6 from `[memory.search].max_results`), so leaving this unset is preferred for\nnormal queries.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint",
+          "minimum": 0,
+          "default": null
+        },
+        "min_score": {
+          "description": "Minimum relevance score threshold. When omitted the backend-configured value is used\n(typically 0.0 from `[memory.search].min_score`).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "default": null
+        }
+      },
+      "type": "object"
+    },
+    "description": "Search cross-session memory for relevant knowledge chunks. Returns ranked results from global, workspace, and session memory files.\n\nUse this proactively when:\n- A question references prior work, decisions, or context you don't have\n- You need project conventions, coding patterns, or user preferences\n- The user mentions something discussed or decided in a previous session\n- Starting work in an unfamiliar part of the codebase\n- After compaction when prior context may have been lost\n\nMemory is historical context, not automatically the current plan. Verify recalled facts against live sources before relying on them."
+  }
+}
+

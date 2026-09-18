@@ -1,96 +1,202 @@
 {
   "name": "send_feedback",
-  "schema": {
-    "type": "function",
-    "name": "send_feedback",
-    "parameters": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "required": [
-        "title",
-        "details",
-        "type"
+  "variants": [
+    {
+      "run_kinds": [
+        "grok-4.6"
       ],
-      "type": "object",
-      "properties": {
-        "title": {
-          "description": "Short summary for the draft.",
-          "type": "string"
-        },
-        "details": {
-          "description": "Short labeled bullets in this order: What happened, What the user said, Repro, optional Evidence, then optional verified Cause. Keep each to 1–3 lines; do not use narrative paragraphs.",
-          "type": "string"
-        },
-        "area": {
-          "description": "Optional product area; omit when unclear.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "type": {
-          "description": "Feedback classification.",
-          "type": "string",
-          "enum": [
-            "bug",
-            "idea",
-            "missing_capability"
-          ]
-        },
-        "task_category": {
-          "description": "Optional task category; omit when unclear.",
-          "type": [
-            "string",
-            "null"
+      "schema": {
+        "type": "function",
+        "name": "send_feedback",
+        "parameters": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "required": [
+            "title",
+            "details",
+            "type"
           ],
-          "enum": [
-            "code_edit",
-            "debug",
-            "explain",
-            "plan",
-            "shell",
-            "search",
-            "review",
-            "other",
-            null
-          ]
+          "type": "object",
+          "properties": {
+            "title": {
+              "description": "Short summary for the draft.",
+              "type": "string"
+            },
+            "details": {
+              "description": "Short labeled bullets in this order: What happened, What the user said, Repro, optional Evidence, then optional verified Cause. Keep each to 1–3 lines; do not use narrative paragraphs.",
+              "type": "string"
+            },
+            "area": {
+              "description": "Optional product area; omit when unclear.",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "type": {
+              "description": "Feedback classification.",
+              "type": "string",
+              "enum": [
+                "bug",
+                "idea",
+                "missing_capability"
+              ]
+            },
+            "task_category": {
+              "description": "Optional task category; omit when unclear.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "code_edit",
+                "debug",
+                "explain",
+                "plan",
+                "shell",
+                "search",
+                "review",
+                "other",
+                null
+              ]
+            },
+            "failure_mode": {
+              "description": "Optional model-behavior failure mode; omit for a pure product or tool bug.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "overeager",
+                "stopped_early",
+                "unwanted_scope",
+                "didnt_ask_for_help",
+                "excessive_questions",
+                "subagent_overspawn",
+                "over_correction",
+                "ignored_instructions",
+                "hallucinated",
+                "sloppy_code",
+                "destructive",
+                "lost_context",
+                "stuck_in_a_loop",
+                "model_regression",
+                "disputed",
+                "wrong_tone",
+                "unclear_output",
+                "other",
+                null
+              ]
+            },
+            "draft_id": {
+              "description": "Existing local draft to update. When set, this call does not append a second draft.",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
         },
-        "failure_mode": {
-          "description": "Optional model-behavior failure mode; omit for a pure product or tool bug.",
-          "type": [
-            "string",
-            "null"
-          ],
-          "enum": [
-            "overeager",
-            "stopped_early",
-            "unwanted_scope",
-            "didnt_ask_for_help",
-            "excessive_questions",
-            "subagent_overspawn",
-            "over_correction",
-            "ignored_instructions",
-            "hallucinated",
-            "sloppy_code",
-            "destructive",
-            "lost_context",
-            "stuck_in_a_loop",
-            "model_regression",
-            "disputed",
-            "wrong_tone",
-            "unclear_output",
-            "other",
-            null
-          ]
-        },
-        "draft_id": {
-          "description": "Existing local draft to update. When set, this call does not append a second draft.",
-          "type": [
-            "string",
-            "null"
-          ]
-        }
+        "description": "# Overview\n\nSave or update user feedback for later review. Feedback is stored as local drafts and is never sent without explicit approval through the `/feedback` modal. This tool opens no UI and does not stop the current turn.\n\n# Invocation\n\nWhen the user types `/feedback` bare into the prompt bar, the modal opens with the Write and Drafts tabs. The Write tab is only for the user to hand-write feedback.\nIf the user types `/feedback` with text inline, the system inserts it like a skill. Only when feedback is requested that way, or the user explicitly wants you to update an existing feedback draft, may you use the draft_id field.\nWhen draft_id is set, update that existing draft. Do not duplicate drafts. draft_id is only a tool argument. Never write it into title, details, or area.\n\nWhen the user wants to share feedback implicitly, draft it with this tool, whether it is a product or model-behavior issue.\n\n# Usage\n\nWrite details as short labeled bullets in this order: What happened, What the user said, Repro, optional Evidence, then optional verified Cause.\nSet failure_mode only for model-behavior feedback; omit it for a pure product or tool bug.\nIf mapping feedback is incredibly unclear, only then may you use ask_user_question to confirm ambiguity with the user. Use this sparingly.\n\n# Confirmation\n\nAfter drafting feedback and ending your turn, tell the user they can verify and send it to the team by typing `/feedback` to open the modal and going to the Drafts section.\n\n# Misc\nThis session's drafts file is <session>/feedback_drafts.json.\nIf the user's feedback can be answered from the docs (for example UI element locations or setup), read the Grok Build docs locally or online and answer alongside the created draft.\n\nDoing the wrong amount of work\n- Overeager: Did more than asked, acted before being told, jumped in without enough info\n- Stopping early: Quit early, handed back work that could have been finished\n- Unwanted scope: Not stopping\n- Didn't ask for help: Didn't ask the user for help when stuck\n- Excessive questions: Asked clarifying questions when there was enough to proceed\n- Subagent overspawn: Launched more subagents than the task warranted\n- Over correction: Fixed feedback by swinging too far the other way\n\nWrong outputs\n- Instruction following: Ignored or missed explicit instructions or constraints\n- Overconfidence and hallucination: Stated something confidently that was wrong or fabricated\n- Code quality: Buggy, sloppy, or poorly structured code\n- Destructive actions: Did or risked something hard to reverse\n- Context and memory: Lost earlier context, forgot established facts, contradicted itself\n- Repetition and looping: Repeated output or retried the same failing action\n- Model regression: Behavior noticeably worse than a previous model version\n\nStyle\n- Dispute or decline: Refused or argued against a reasonable request\n- Tone or preachiness: Wrong tone — moralizing, condescending, sycophantic, verbose\n- Unclear output: Output was hard to read or interpret\n- Other: Model-behavior issue fitting none of the above"
       }
     },
-    "description": "# Overview\n\nSave or update user feedback for later review. Feedback is stored as local drafts and is never sent without explicit approval through the `/feedback` modal. This tool opens no UI and does not stop the current turn.\n\n# Invocation\n\nWhen the user types `/feedback` bare into the prompt bar, the modal opens with the Write and Drafts tabs. The Write tab is only for the user to hand-write feedback.\nIf the user types `/feedback` with text inline, the system inserts it like a skill. Only when feedback is requested that way, or the user explicitly wants you to update an existing feedback draft, may you use the draft_id field.\nWhen draft_id is set, update that existing draft. Do not duplicate drafts. draft_id is only a tool argument. Never write it into title, details, or area.\n\nWhen the user wants to share feedback implicitly, draft it with this tool, whether it is a product or model-behavior issue.\n\n# Usage\n\nWrite details as short labeled bullets in this order: What happened, What the user said, Repro, optional Evidence, then optional verified Cause.\nSet failure_mode only for model-behavior feedback; omit it for a pure product or tool bug.\nIf mapping feedback is incredibly unclear, only then may you use ask_user_question to confirm ambiguity with the user. Use this sparingly.\n\n# Confirmation\n\nAfter drafting feedback and ending your turn, tell the user they can verify and send it to the team by typing `/feedback` to open the modal and going to the Drafts section.\n\n# Misc\nThis session's drafts file is <session-path>/feedback_drafts.json.\nIf the user's feedback can be answered from the docs (for example UI element locations or setup), read the Grok Build docs locally or online and answer alongside the created draft.\n\nDoing the wrong amount of work\n- Overeager: Did more than asked, acted before being told, jumped in without enough info\n- Stopping early: Quit early, handed back work that could have been finished\n- Unwanted scope: Not stopping\n- Didn't ask for help: Didn't ask the user for help when stuck\n- Excessive questions: Asked clarifying questions when there was enough to proceed\n- Subagent overspawn: Launched more subagents than the task warranted\n- Over correction: Fixed feedback by swinging too far the other way\n\nWrong outputs\n- Instruction following: Ignored or missed explicit instructions or constraints\n- Overconfidence and hallucination: Stated something confidently that was wrong or fabricated\n- Code quality: Buggy, sloppy, or poorly structured code\n- Destructive actions: Did or risked something hard to reverse\n- Context and memory: Lost earlier context, forgot established facts, contradicted itself\n- Repetition and looping: Repeated output or retried the same failing action\n- Model regression: Behavior noticeably worse than a previous model version\n\nStyle\n- Dispute or decline: Refused or argued against a reasonable request\n- Tone or preachiness: Wrong tone — moralizing, condescending, sycophantic, verbose\n- Unclear output: Output was hard to read or interpret\n- Other: Model-behavior issue fitting none of the above"
-  }
+    {
+      "run_kinds": [
+        "grok-4.6-interactive"
+      ],
+      "schema": {
+        "type": "function",
+        "name": "send_feedback",
+        "parameters": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "required": [
+            "title",
+            "details",
+            "type"
+          ],
+          "type": "object",
+          "properties": {
+            "title": {
+              "description": "Short summary for the draft.",
+              "type": "string"
+            },
+            "details": {
+              "description": "Short labeled bullets in this order: What happened, What the user said, Repro, optional Evidence, then optional verified Cause. Keep each to 1–3 lines; do not use narrative paragraphs.",
+              "type": "string"
+            },
+            "area": {
+              "description": "Optional product area; omit when unclear.",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "type": {
+              "description": "Feedback classification.",
+              "type": "string",
+              "enum": [
+                "bug",
+                "idea",
+                "missing_capability"
+              ]
+            },
+            "task_category": {
+              "description": "Optional task category; omit when unclear.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "code_edit",
+                "debug",
+                "explain",
+                "plan",
+                "shell",
+                "search",
+                "review",
+                "other",
+                null
+              ]
+            },
+            "failure_mode": {
+              "description": "Optional model-behavior failure mode; omit for a pure product or tool bug.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "overeager",
+                "stopped_early",
+                "unwanted_scope",
+                "didnt_ask_for_help",
+                "excessive_questions",
+                "subagent_overspawn",
+                "over_correction",
+                "ignored_instructions",
+                "hallucinated",
+                "sloppy_code",
+                "destructive",
+                "lost_context",
+                "stuck_in_a_loop",
+                "model_regression",
+                "disputed",
+                "wrong_tone",
+                "unclear_output",
+                "other",
+                null
+              ]
+            },
+            "draft_id": {
+              "description": "Existing local draft to update. When set, this call does not append a second draft.",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "description": "# Overview\n\nSave or update user feedback for later review. Feedback is stored as local drafts and is never sent without explicit approval through the `/feedback` modal. This tool opens no UI and does not stop the current turn.\n\n# Invocation\n\nWhen the user types `/feedback` bare into the prompt bar, the modal opens with the Write and Drafts tabs. The Write tab is only for the user to hand-write feedback.\nIf the user types `/feedback` with text inline, the system inserts it like a skill. Only when feedback is requested that way, or the user explicitly wants you to update an existing feedback draft, may you use the draft_id field.\nWhen draft_id is set, update that existing draft. Do not duplicate drafts. draft_id is only a tool argument. Never write it into title, details, or area.\n\nWhen the user wants to share feedback implicitly, draft it with this tool, whether it is a product or model-behavior issue.\n\n# Usage\n\nWrite details as short labeled bullets in this order: What happened, What the user said, Repro, optional Evidence, then optional verified Cause.\nSet failure_mode only for model-behavior feedback; omit it for a pure product or tool bug.\nIf mapping feedback is incredibly unclear, only then may you use ask_user_question to confirm ambiguity with the user. Use this sparingly.\n\n# Confirmation\n\nAfter drafting feedback and ending your turn, tell the user they can verify and send it to the team by typing `/feedback` to open the modal and going to the Drafts section.\n\n# Misc\nThis session's drafts file is <session>/feedback_drafts.json.\nIf the user's feedback can be answered from the docs (for example UI element locations or setup), read the Grok Build docs locally or online and answer alongside the created draft.\n\nDoing the wrong amount of work\n- Overeager: Did more than asked, acted before being told, jumped in without enough info\n- Stopping early: Quit early, handed back work that could have been finished\n- Unwanted scope: Not stopping\n- Didn't ask for help: Didn't ask the user for help when stuck\n- Excessive questions: Asked clarifying questions when there was enough to proceed\n- Subagent overspawn: Launched more subagents than the task warranted\n- Over correction: Fixed feedback by swinging too far the other way\n\nWrong outputs\n- Instruction following: Ignored or missed explicit instructions or constraints\n- Overconfidence and hallucination: Stated something confidently that was wrong or fabricated\n- Code quality: Buggy, sloppy, or poorly structured code\n- Destructive actions: Did or risked something hard to reverse\n- Context and memory: Lost earlier context, forgot established facts, contradicted itself\n- Repetition and looping: Repeated output or retried the same failing action\n- Model regression: Behavior noticeably worse than a previous model version\n\nStyle\n- Dispute or decline: Refused or argued against a reasonable request\n- Tone or preachiness: Wrong tone — moralizing, condescending, sycophantic, verbose\n- Unclear output: Output was hard to read or interpret\n- Other: Model-behavior issue fitting none of the above"
+      }
+    }
+  ]
 }
+
