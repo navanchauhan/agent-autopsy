@@ -1,40 +1,49 @@
 {
   "schema_version": 1,
   "tools": {
-    "claude-code": {
-      "plan_hash": "8f2e04ba76e231c3b4fea04d2b9f562178be870d02e5af1b0fa397b60ff61165",
-      "state": "force_once",
-      "request_after_run_id": "35270117013",
-      "request_after_run_attempt": 1,
-      "last_fresh_bucket": "20260916",
-      "last_reviewer_input_hash": "0f9e9e7f37e59e62c5da7fe620682706ad741e32f73d0ca05cc7064e2002c65b",
-      "reason": "reviewer"
-    },
-    "grok": {
-      "plan_hash": "1af2329da86bfbe135fabdaf99902ea3f4e4d228c18cc06e1223a2d5ba03c31b",
+    "codex": {
+      "plan_hash": "1dea7295b8be8de133750302eee503341f22b94aa45936d923d1f7862949fb35",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260916",
+      "last_fresh_bucket": "20260918",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "claude-code": {
+      "plan_hash": "8f2e04ba76e231c3b4fea04d2b9f562178be870d02e5af1b0fa397b60ff61165",
+      "state": "suppress_positive",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260918",
+      "last_reviewer_input_hash": "0f9e9e7f37e59e62c5da7fe620682706ad741e32f73d0ca05cc7064e2002c65b",
+      "reason": "capture_retry"
+    },
+    "grok": {
+      "plan_hash": "a04747bd16aee75e1c03129fe61dc53a73fc34120b3ad6ef10328827d4778861",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260918",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "antigravity": {
-      "plan_hash": "3a10086d2004feb0ce48544cb316f2f3e7a00ba05a1ee51a0fd1b6e6b7255bf1",
+      "plan_hash": "e60e02c303b2d7b086e2867c909b0c3eb6ed45e559ece3a56c6f6c4b8a2f0d89",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260916",
+      "last_fresh_bucket": "20260918",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "qwen-code": {
-      "plan_hash": "e669a5e0b0986925a690b7809863f64a1551575105c04dde1badcbec17931517",
+      "plan_hash": "4c30c479e12b11a75b98bf39fb981c0fc0ea82c3b93fcce015d322f5162a9173",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260917",
-      "last_reviewer_input_hash": "825bf68c6cb46ad0d2f74c5a7c3bb0768674b43ceb2a09c2b82639f083f3ba00",
+      "last_fresh_bucket": "20260918",
+      "last_reviewer_input_hash": null,
       "reason": null
     }
   }
