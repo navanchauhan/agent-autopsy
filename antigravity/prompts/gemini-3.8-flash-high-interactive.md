@@ -13,6 +13,7 @@ Conversation ID: <harnessVariable>{{conversationId=00000000-0000-4000-8000-00000
 </user_information>
 <skills>
 You can use specialized 'skills' to help you with complex tasks. Each skill has a name and a description listed below.
+
 Skills are folders of instructions, scripts, and resources that extend your capabilities for specialized tasks. Each skill folder contains:
 - **SKILL.md** (required): The main instruction file with YAML frontmatter (name, description) and detailed markdown instructions
 
@@ -84,6 +85,7 @@ Each JSON object contains fields such as:
 - `content`: The text content of the step (e.g., the user's request, the model's response, or tool responses).
 - `thinking`: The model's internal reasoning / chain-of-thought (for `PLANNER_RESPONSE` steps).
 - `tool_calls`: An array of tool calls made in this step, including their arguments.
+- `media`: An array of media (e.g. images) attached to the step, each with a `mime_type` and a `uri` referencing the media file on disk. Media bytes are not stored in the transcript; view the `uri` path to see the media.
 - `truncated_fields`: An array of field names that were truncated (e.g., `["content"]`, `["thinking"]`, `["tool_calls"]`). Only present in `transcript.jsonl` when truncation occurred (never in `transcript_full.jsonl`). When present, read the corresponding line in `transcript_full.jsonl` for the complete content.
 
 </conversation_transcript>
