@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "codex",
-  "observed_release": "0.154.0",
+  "observed_release": "0.155.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.154.0",
-      "verified_release": "0.154.0",
+      "captured_release": "0.155.0",
+      "verified_release": "0.155.0",
       "models": [
         "gpt-6-astra",
         "gpt-5",
@@ -51,16 +51,16 @@
         "prompts/prompt-with-apply-patch-instructions.md",
         "prompts/review.md"
       ],
-      "artifact_sha256": "92a0a54ede87df0c264dedac0cff2f674a2c52bebfb7afd849521e5618dae616",
-      "evidence_sha256": "f97000b3fe86974469a017895d4cc94e73d145baaeab90c356342b288623dfcb"
+      "artifact_sha256": "d0d2abad5a9822737865ef4f4d9a5aa13ff7022afadc0449ccff124684e02579",
+      "evidence_sha256": "c1f3bb0beab2c020470f1d842b48c44de22ee347fa4e93dd14106f1bdfc65d12"
     },
     {
       "id": "codex.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.154.0",
-      "verified_release": "0.154.0",
+      "captured_release": "0.155.0",
+      "verified_release": "0.155.0",
       "models": [
         "all"
       ],
@@ -95,16 +95,16 @@
         "tools/web_search_text_and_image.json",
         "tools/write_stdin.json"
       ],
-      "artifact_sha256": "6cd72b18550827fee3601a55ad5726bd02c61b9241b115ad6c9384ceefd276bf",
-      "evidence_sha256": "f97000b3fe86974469a017895d4cc94e73d145baaeab90c356342b288623dfcb"
+      "artifact_sha256": "45baa4ab90a462c56394cd2cc2088990e247158c5e7e87f9009d4415887436b6",
+      "evidence_sha256": "c1f3bb0beab2c020470f1d842b48c44de22ee347fa4e93dd14106f1bdfc65d12"
     },
     {
       "id": "codex.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.154.0",
-      "verified_release": "0.154.0",
+      "captured_release": "0.155.0",
+      "verified_release": "0.155.0",
       "models": [
         "all"
       ],
@@ -147,7 +147,7 @@
         "misc/review-exit-success.xml"
       ],
       "artifact_sha256": "2f19897cb7e07f7bccc17d48da2d4e36018254dbd84f0d8b3d6f387a4f148167",
-      "evidence_sha256": "f97000b3fe86974469a017895d4cc94e73d145baaeab90c356342b288623dfcb"
+      "evidence_sha256": "c1f3bb0beab2c020470f1d842b48c44de22ee347fa4e93dd14106f1bdfc65d12"
     },
     {
       "id": "codex.assembly.model-mode",

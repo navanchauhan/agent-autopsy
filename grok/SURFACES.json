@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "grok",
-  "observed_release": "1.0.23",
+  "observed_release": "1.0.24",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.23",
-      "verified_release": "1.0.23",
+      "captured_release": "1.0.24",
+      "verified_release": "1.0.24",
       "models": [
         "grok-4.6"
       ],
@@ -29,16 +29,16 @@
       "artifacts": [
         "prompts/grok-4.6-interactive.md"
       ],
-      "artifact_sha256": "551c4e66f10a93aa30b974fbfd96647bdffc3595b3376677cb0bdfbbeaf9efcb",
-      "evidence_sha256": "5d81aaccf157dd1f32b570793f1c9e5711f0dd8163849ff55dfb00e51e3210ee"
+      "artifact_sha256": "2ddb9cc2682cfe46a9d01e005c428e292081a20d3187893b71c4ea09b3132fa9",
+      "evidence_sha256": "343c59952f1e67136fb8d04a6dca0d386a583399c2737973724c4629879f9def"
     },
     {
       "id": "grok.prompt.agent.grok-4-6.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.23",
-      "verified_release": "1.0.23",
+      "captured_release": "1.0.24",
+      "verified_release": "1.0.24",
       "models": [
         "grok-4.6"
       ],
@@ -50,15 +50,15 @@
         "prompts/grok-4.6.md"
       ],
       "artifact_sha256": "17727cc3903c2a753303b33e865b6f6509de1af4de1d8115e485cba333255802",
-      "evidence_sha256": "5d81aaccf157dd1f32b570793f1c9e5711f0dd8163849ff55dfb00e51e3210ee"
+      "evidence_sha256": "343c59952f1e67136fb8d04a6dca0d386a583399c2737973724c4629879f9def"
     },
     {
       "id": "grok.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.23",
-      "verified_release": "1.0.23",
+      "captured_release": "1.0.24",
+      "verified_release": "1.0.24",
       "models": [
         "grok-4.6"
       ],
@@ -70,15 +70,15 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "5d81aaccf157dd1f32b570793f1c9e5711f0dd8163849ff55dfb00e51e3210ee"
+      "evidence_sha256": "343c59952f1e67136fb8d04a6dca0d386a583399c2737973724c4629879f9def"
     },
     {
       "id": "grok.steering.catalog",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.23",
-      "verified_release": "1.0.23",
+      "captured_release": "1.0.24",
+      "verified_release": "1.0.24",
       "models": [
         "grok-4.6"
       ],
@@ -96,16 +96,16 @@
         "misc/grok-4.6-interactive-steering.md",
         "misc/grok-4.6-steering.md"
       ],
-      "artifact_sha256": "fcebe09a2d3638e9eb570d24f4a3d0367b34369c56817ac0cb46efa1c85848b8",
-      "evidence_sha256": "5d81aaccf157dd1f32b570793f1c9e5711f0dd8163849ff55dfb00e51e3210ee"
+      "artifact_sha256": "102348d5631c6fdab6681198395c07c44cd5d5588c7a66a1687b769675410b48",
+      "evidence_sha256": "343c59952f1e67136fb8d04a6dca0d386a583399c2737973724c4629879f9def"
     },
     {
       "id": "grok.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.23",
-      "verified_release": "1.0.23",
+      "captured_release": "1.0.24",
+      "verified_release": "1.0.24",
       "models": [
         "grok-4.6"
       ],
@@ -148,8 +148,8 @@
         "tools/write.json",
         "tools/x_search.json"
       ],
-      "artifact_sha256": "a9e4132b60ba574ff73fca32a963b517c20f4992c0e5c5f549c982c8a8e1b861",
-      "evidence_sha256": "5d81aaccf157dd1f32b570793f1c9e5711f0dd8163849ff55dfb00e51e3210ee"
+      "artifact_sha256": "13548696a283fcc9566f74e9f98dc76df756d01f476d555b112c38d80667b353",
+      "evidence_sha256": "343c59952f1e67136fb8d04a6dca0d386a583399c2737973724c4629879f9def"
     }
   ]
 }

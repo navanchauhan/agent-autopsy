@@ -19,13 +19,13 @@ Observed release: `0.0.1783542413-gb55c7a`
 
 ## antigravity
 
-Observed release: `1.2.5`
+Observed release: `1.2.6`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.2.5` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.2.5` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
-| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.2.5` | 17 files ([manifest](antigravity/SURFACES.json)) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.2.6` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.2.6` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
+| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.2.6` | 17 files ([manifest](antigravity/SURFACES.json)) |
 
 ## claude-code
 
@@ -45,13 +45,13 @@ Observed release: `2.1.270`
 
 ## codex
 
-Observed release: `0.154.0`
+Observed release: `0.155.0`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `codex.prompt.agent.catalog` | agent prompts | `gpt-6-astra`, `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.4`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | current | `0.154.0` | 16 files ([manifest](codex/SURFACES.json)) |
-| `codex.tool.catalog` | tool schemas | `all` | `configured` | current | `0.154.0` | 25 files ([manifest](codex/SURFACES.json)) |
-| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | current | `0.154.0` | 29 files ([manifest](codex/SURFACES.json)) |
+| `codex.prompt.agent.catalog` | agent prompts | `gpt-6-astra`, `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.4`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | current | `0.155.0` | 16 files ([manifest](codex/SURFACES.json)) |
+| `codex.tool.catalog` | tool schemas | `all` | `configured` | current | `0.155.0` | 25 files ([manifest](codex/SURFACES.json)) |
+| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | current | `0.155.0` | 29 files ([manifest](codex/SURFACES.json)) |
 | `codex.assembly.model-mode` | assembly recipe | `all` | `all` | gap | — | — |
 | `codex.context.session` | dynamic context | `all` | `all` | dynamic | — | — |
 | `codex.tool.code-mode-listing` | dynamic tool catalog | `gpt-5.6` | `code-mode-only` | dynamic | — | — |
@@ -59,15 +59,15 @@ Observed release: `0.154.0`
 
 ## grok
 
-Observed release: `1.0.23`
+Observed release: `1.0.24`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `grok.prompt.agent.grok-4-6.interactive` | agent prompt | `grok-4.6` | `interactive` | current | `1.0.23` | [grok-4.6-interactive.md](grok/prompts/grok-4.6-interactive.md) |
-| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.23` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
-| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.23` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
-| `grok.steering.catalog` | steering messages | `grok-4.6` | `interactive`, `non-interactive` | current | `1.0.23` | [grok-4.6-interactive-steering.md](grok/misc/grok-4.6-interactive-steering.md), [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md) |
-| `grok.tool.catalog` | tool schemas | `grok-4.6` | `interactive`, `non-interactive`, `session-title` | current | `1.0.23` | 31 files ([manifest](grok/SURFACES.json)) |
+| `grok.prompt.agent.grok-4-6.interactive` | agent prompt | `grok-4.6` | `interactive` | current | `1.0.24` | [grok-4.6-interactive.md](grok/prompts/grok-4.6-interactive.md) |
+| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.24` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
+| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.24` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
+| `grok.steering.catalog` | steering messages | `grok-4.6` | `interactive`, `non-interactive` | current | `1.0.24` | [grok-4.6-interactive-steering.md](grok/misc/grok-4.6-interactive-steering.md), [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md) |
+| `grok.tool.catalog` | tool schemas | `grok-4.6` | `interactive`, `non-interactive`, `session-title` | current | `1.0.24` | 31 files ([manifest](grok/SURFACES.json)) |
 
 ## qwen-code
 

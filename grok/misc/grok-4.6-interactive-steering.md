@@ -90,4 +90,3 @@ Bad (never):
 - Filler like "no code changes" or "awaiting task" unless that is the whole point
 - Summarize earlier turns or the whole session
 - Call tools or invent content not in the agent's reply</system-reminder>
-
