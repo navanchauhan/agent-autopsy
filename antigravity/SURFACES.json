@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.2.6",
+  "observed_release": "1.2.7",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.6",
-      "verified_release": "1.2.6",
+      "captured_release": "1.2.7",
+      "verified_release": "1.2.7",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -30,15 +30,15 @@
         "prompts/gemini-3.8-flash-high-interactive.md"
       ],
       "artifact_sha256": "0fc841a3f6cc488bb7ee93e6462c6d4b5ab24a1b16d24706005ac739b8fc4808",
-      "evidence_sha256": "fd0403478e30a34ba2141daa4c3f26d32a11cfd91b3579940dc8dcd73fa18e32"
+      "evidence_sha256": "7a20c6bce9f415e0380967b4abadc81586d157a486d9608978398cc74cb9f195"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.6",
-      "verified_release": "1.2.6",
+      "captured_release": "1.2.7",
+      "verified_release": "1.2.7",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -49,16 +49,16 @@
       "artifacts": [
         "prompts/gemini-3.8-flash-high.md"
       ],
-      "artifact_sha256": "1ffb7f8d8610e6e62f0682fabc780423304500cb45d8cbc1983de905dbf20404",
-      "evidence_sha256": "fd0403478e30a34ba2141daa4c3f26d32a11cfd91b3579940dc8dcd73fa18e32"
+      "artifact_sha256": "78caa4510117d275fcf68e7c07194cf4e7f7cbf5bd4d617a90ae2f8dbef52b99",
+      "evidence_sha256": "7a20c6bce9f415e0380967b4abadc81586d157a486d9608978398cc74cb9f195"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.6",
-      "verified_release": "1.2.6",
+      "captured_release": "1.2.7",
+      "verified_release": "1.2.7",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -70,11 +70,8 @@
       "artifacts": [
         "tools/ask_question.json",
         "tools/define_subagent.json",
-        "tools/find_by_name.json",
         "tools/generate_image.json",
-        "tools/grep_search.json",
         "tools/invoke_subagent.json",
-        "tools/list_dir.json",
         "tools/manage_subagents.json",
         "tools/manage_task.json",
         "tools/read_url_content.json",
@@ -86,8 +83,8 @@
         "tools/view_file.json",
         "tools/write_to_file.json"
       ],
-      "artifact_sha256": "891e735234b8db082ceb5376594d5006fc3bc485c5441d34938d60fe23a1af8b",
-      "evidence_sha256": "fd0403478e30a34ba2141daa4c3f26d32a11cfd91b3579940dc8dcd73fa18e32"
+      "artifact_sha256": "6573dd26d28e7ae4eda0a64828e858c5e3139f84d9866300d2a2c7b1cce9fdc5",
+      "evidence_sha256": "7a20c6bce9f415e0380967b4abadc81586d157a486d9608978398cc74cb9f195"
     }
   ]
 }

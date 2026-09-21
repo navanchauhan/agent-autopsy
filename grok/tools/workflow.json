@@ -11,7 +11,7 @@
       "type": "object",
       "properties": {
         "source": {
-          "description": "Exactly one workflow source. The `type` tag selects a registered name, inline script, script path, or same-process resume.",
+          "description": "Exactly one workflow source. The `type` tag selects a registered name, inline script, script path, same-process resume, or a pause/stop of a run this session launched.",
           "oneOf": [
             {
               "type": "object",
@@ -84,6 +84,42 @@
                 "type",
                 "resume_from_run_id"
               ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "run_id": {
+                  "description": "Pause an active run this session launched, by its `run_id` or display name. Its child agents are cancelled and the run is marked paused; continue it with the `resume` source.",
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "const": "pause"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "run_id"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "run_id": {
+                  "description": "Stop a run this session launched, by its `run_id` or display name. Its child agents are cancelled and the run is marked cancelled (finished). It keeps its journal, so `resume` can still continue it later.",
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "const": "stop"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "run_id"
+              ]
             }
           ]
         },
@@ -109,6 +145,6 @@
         }
       }
     },
-    "description": "Launch a workflow: a Rhai script that orchestrates subagents as one background run. Provide exactly one `source`: a registered workflow `name`, an inline `script`, a `script_path`, or a same-process `resume`. Optionally pass `args` (bound to the script's `args`) and `agent_budget`, an absolute cap on cumulative child-agent calls: every agent() and parallel() item consumes one slot (schema retries do not); default 128. The host also caps live children per run (32 by default, host-configured) — larger parallel() panels are queued and still act as a barrier. The call returns immediately; progress appears in `/workflow runs` and completion is reported automatically — do not poll or sleep-wait.\n\nPrefer a registered workflow when one fits; author a script for bounded fan-out over a known work list, staged research and verification, or several independent perspectives. Before writing or editing a script, read the `create-workflow` skill's SKILL.md. `validate_only: true` runs a path-specific smoke check (metadata, compile, one canned-host path) — not proof that every branch or live tool works.\n\nA started run gets a session-unique display name (e.g. `review-changes`, `review-changes-2`) — the handle to show the user and use with `/workflow pause|resume|stop <name>`; keep run IDs internal. Each launch persists an editable `script_path`; edit it and launch as a new run to iterate. Use the `resume` source only for a same-process paused run (process restarts are terminal); it reuses the run's original immutable source and args, and a budget-limited run resumes only with a higher `agent_budget`. Save reusable scripts to `.grok/workflows/<name>.rhai`."
+    "description": "Launch or control a workflow: a Rhai script that orchestrates subagents as one background run. Provide exactly one `source`: a registered workflow `name`, an inline `script`, a `script_path`, a same-process `resume`, or a `pause` / `stop` of a run this session launched (by `run_id` or display name). Optionally pass `args` (bound to the script's `args`) and `agent_budget`, an absolute cap on cumulative child-agent calls: every agent() and parallel() item consumes one slot (schema retries do not); default 128. The host also caps live children per run (32 by default, host-configured) — larger parallel() panels are queued and still act as a barrier. The call returns immediately; progress appears in `/workflow runs` and completion is reported automatically — do not poll or sleep-wait.\n\nPrefer a registered workflow when one fits; author a script for bounded fan-out over a known work list, staged research and verification, or several independent perspectives. Before writing or editing a script, read the `create-workflow` skill's SKILL.md. `validate_only: true` runs a path-specific smoke check (metadata, compile, one canned-host path) — not proof that every branch or live tool works.\n\nA started run gets a session-unique display name (e.g. `review-changes`, `review-changes-2`) — the handle to show the user, who manages runs with `/workflow pause|resume|stop <name>`; keep run IDs internal. To stop or pause a run yourself, call this tool with `source: { type: \"stop\", run_id }` or `{ type: \"pause\", run_id }` (run id or display name); both cancel the run's child agents and keep its journal, so either can be continued later with `resume`. Pause only applies to an active run; stop applies to any run that has not finished or hit its agent budget (a budget-limited run is already stopped and needs `resume` with a higher `agent_budget`). Each launch persists an editable `script_path`; edit it and launch as a new run to iterate. Use the `resume` source only for a same-process paused run (process restarts are terminal); it reuses the run's original immutable source and args, and a budget-limited run resumes only with a higher `agent_budget`. Save reusable scripts to `.grok/workflows/<name>.rhai`."
   }
 }
