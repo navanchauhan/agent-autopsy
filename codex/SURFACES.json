@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "codex",
-  "observed_release": "0.155.1",
+  "observed_release": "0.156.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.155.1",
-      "verified_release": "0.155.1",
+      "captured_release": "0.156.0",
+      "verified_release": "0.156.0",
       "models": [
         "gpt-6-astra",
         "gpt-5",
@@ -51,16 +51,16 @@
         "prompts/prompt-with-apply-patch-instructions.md",
         "prompts/review.md"
       ],
-      "artifact_sha256": "d0d2abad5a9822737865ef4f4d9a5aa13ff7022afadc0449ccff124684e02579",
-      "evidence_sha256": "8ae98bc1013cb31f3c4f2b52f1eaf6040644a125334e74b298e64d68e44b97b4"
+      "artifact_sha256": "c524a0c56570c2c49fb6a29f6bf08e56ecad92563b2829dafd908c1a9d34f4ed",
+      "evidence_sha256": "8e70cc6ec6593305187c713ef0cc15832ef8c0afd3a056cdeb7a816b86fe269b"
     },
     {
       "id": "codex.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.155.1",
-      "verified_release": "0.155.1",
+      "captured_release": "0.156.0",
+      "verified_release": "0.156.0",
       "models": [
         "all"
       ],
@@ -96,15 +96,15 @@
         "tools/write_stdin.json"
       ],
       "artifact_sha256": "45baa4ab90a462c56394cd2cc2088990e247158c5e7e87f9009d4415887436b6",
-      "evidence_sha256": "8ae98bc1013cb31f3c4f2b52f1eaf6040644a125334e74b298e64d68e44b97b4"
+      "evidence_sha256": "8e70cc6ec6593305187c713ef0cc15832ef8c0afd3a056cdeb7a816b86fe269b"
     },
     {
       "id": "codex.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.155.1",
-      "verified_release": "0.155.1",
+      "captured_release": "0.156.0",
+      "verified_release": "0.156.0",
       "models": [
         "all"
       ],
@@ -147,7 +147,7 @@
         "misc/review-exit-success.xml"
       ],
       "artifact_sha256": "2f19897cb7e07f7bccc17d48da2d4e36018254dbd84f0d8b3d6f387a4f148167",
-      "evidence_sha256": "8ae98bc1013cb31f3c4f2b52f1eaf6040644a125334e74b298e64d68e44b97b4"
+      "evidence_sha256": "8e70cc6ec6593305187c713ef0cc15832ef8c0afd3a056cdeb7a816b86fe269b"
     },
     {
       "id": "codex.assembly.model-mode",

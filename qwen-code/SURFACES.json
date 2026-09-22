@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "qwen-code",
-  "observed_release": "0.23.3",
+  "observed_release": "0.23.4",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.23.3",
-      "verified_release": "0.23.3",
+      "captured_release": "0.23.4",
+      "verified_release": "0.23.4",
       "models": [
         "all"
       ],
@@ -33,16 +33,16 @@
         "prompts/core-headless-qwen3-coder-plus.md",
         "prompts/core-interactive-qwen3-coder-plus.md"
       ],
-      "artifact_sha256": "0d06d20cf7e52c78828075c71757046641b0001774ee8932354561be73d3cbd7",
-      "evidence_sha256": "825bf68c6cb46ad0d2f74c5a7c3bb0768674b43ceb2a09c2b82639f083f3ba00"
+      "artifact_sha256": "200834d9cf0a8c3ac2800ff1fde352a5273ee5eb194c4750bb5e382bbfeea66e",
+      "evidence_sha256": "9ee726d924cf393a5dd60ad01ff7838e0d08b8ef04ca8e1f3a773b5b8e4fb3e8"
     },
     {
       "id": "qwen-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.23.3",
-      "verified_release": "0.23.3",
+      "captured_release": "0.23.4",
+      "verified_release": "0.23.4",
       "models": [
         "all"
       ],
@@ -98,18 +98,20 @@
         "tools/web_search.json",
         "tools/workflow.json",
         "tools/write_file.json",
-        "tools/zoom_image.json"
+        "tools/zoom_image.json",
+        "tools/exec.json",
+        "tools/propose_goal.json"
       ],
-      "artifact_sha256": "507dca03f4988037a3a8f0cd6b9f0d581aea825105a0217efbfc9b797141d1d4",
-      "evidence_sha256": "825bf68c6cb46ad0d2f74c5a7c3bb0768674b43ceb2a09c2b82639f083f3ba00"
+      "artifact_sha256": "c4f00c07c70f829e19aa4088c246bc369fbaa1fe170426c3f734cd512f71ab9f",
+      "evidence_sha256": "9ee726d924cf393a5dd60ad01ff7838e0d08b8ef04ca8e1f3a773b5b8e4fb3e8"
     },
     {
       "id": "qwen-code.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.23.3",
-      "verified_release": "0.23.3",
+      "captured_release": "0.23.4",
+      "verified_release": "0.23.4",
       "models": [
         "all"
       ],
@@ -134,10 +136,11 @@
         "misc/insight-project_areas.md",
         "misc/manual-plan-exit-system-reminder.template.md",
         "misc/plan-mode-system-reminder.md",
-        "misc/project-summary-prompt.md"
+        "misc/project-summary-prompt.md",
+        "misc/workflow-authoring.md"
       ],
-      "artifact_sha256": "c1c6de8460301d1feb2483c4a8bdada785ae2de561882b6db6ad16566498f259",
-      "evidence_sha256": "825bf68c6cb46ad0d2f74c5a7c3bb0768674b43ceb2a09c2b82639f083f3ba00"
+      "artifact_sha256": "a46919d6ead2a58953d1b9db1dd938932c086ef0fc79a7c09883a5663bec7744",
+      "evidence_sha256": "9ee726d924cf393a5dd60ad01ff7838e0d08b8ef04ca8e1f3a773b5b8e4fb3e8"
     },
     {
       "id": "qwen-code.context.session",

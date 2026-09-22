@@ -1,0 +1,15 @@
+{
+  "name": "exec",
+  "description": "Execute JavaScript in an isolated runtime.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "source": {
+        "type": "string",
+        "description": "JavaScript source to execute."
+      }
+    },
+    "required": ["source"],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "propose_goal",
+  "description": "Propose a session Goal for the user to approve. The user sees the objective in an approval dialog and decides; only their approval sets the Goal. This tool never sets one on its own. Unavailable in plan mode, in subagents, and in headless runs.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "objective": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1500,
+        "description": "The objective to propose, written so the Goal verifier can judge it from the transcript. At most 1500 characters; the user reads all of it in the approval dialog."
+      }
+    },
+    "required": ["objective"],
+    "additionalProperties": false
+  }
+}
