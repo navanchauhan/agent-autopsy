@@ -4,8 +4,8 @@
     "codex": [
       {
         "tool": "codex",
-        "new_version": "0.156.0",
-        "new_revision": "fe74a774532af67b5a4a3dec03ce9469e17f89af"
+        "new_version": "0.156.1",
+        "new_revision": "b412ff32c417f855c2b2d1581b77058eed87c84b"
       }
     ],
     "claude-code": [
@@ -62,17 +62,15 @@
         "new_version": "2.1.280",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.280/linux-x64/claude",
         "artifact_sha256": "1e08503dbdf3c2cb0d706d32f3408277388d1c76ef108673e8fe42c1b322925b"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.281",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.281/linux-x64/claude",
+        "artifact_sha256": "56fe3da88458465fb27d7e9299dddb3fead55750fb9c2de795f233b5eea6dce1"
       }
     ],
     "grok": [
-      {
-        "tool": "grok",
-        "new_version": "1.0.26",
-        "new_revision": "be7ce6e8cffe46d20bef9834b211616082ee866b",
-        "mirror_revision": "482711333c7195dc16a272777f86086d615e2afb",
-        "artifact_url": "https://x.ai/cli/grok-1.0.26-linux-x86_64",
-        "artifact_sha256": "0409460794095616efbbe9ec33a991fa6fd907825052ffe1306f7e74dbc36334"
-      },
       {
         "tool": "grok",
         "new_version": "1.0.27",
@@ -184,22 +182,25 @@
         "mirror_revision": "07e35a3dfeed2f200d319ef6c893b5ea286d9a51",
         "artifact_url": "https://x.ai/cli/grok-1.0.40-linux-x86_64",
         "artifact_sha256": "92c997dfd109c0672d40d5ae6fbd15835d53ffaf12cf9ea124d22aaef3ff23fc"
+      },
+      {
+        "tool": "grok",
+        "new_version": "1.0.41",
+        "new_revision": "84745de98b3d3996729aefcefd518890ffb73930",
+        "mirror_revision": "07e35a3dfeed2f200d319ef6c893b5ea286d9a51",
+        "artifact_url": "https://x.ai/cli/grok-1.0.41-linux-x86_64",
+        "artifact_sha256": "9ce03ed23e16ea01072b4496263d6213a27899e1e3e107f008d36edf82e70407"
       }
     ],
     "antigravity": [
       {
         "tool": "antigravity",
-        "new_version": "1.2.8",
-        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.8-4907747922280448/linux-x64/cli_linux_x64.tar.gz",
-        "artifact_sha512": "28d0f8661316850d1e1ff541dc5f7727e5df6ea9f2d28a0c9b5567aa638a778b21d9229123c65ee5b5c646d4390b589245b1fdc0004e98f0cd1774aa38147762"
+        "new_version": "1.2.9",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.9-5905287731871744/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "75e83d46cb1632da4aca29b785017753c8c2dfb0320166da6b2c8007678982943515e64c8824ff2d8510d9b52eb2b3c27f306aeec58c4a4f4f8aa5550cb0cb12"
       }
     ],
     "qwen-code": [
-      {
-        "tool": "qwen-code",
-        "new_version": "0.23.4",
-        "new_revision": "fdcd7c2761e4ae18d578cf1413ae8d43f58b3e2c"
-      },
       {
         "tool": "qwen-code",
         "new_version": "0.24.0",
