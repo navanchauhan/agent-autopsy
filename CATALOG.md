@@ -19,13 +19,13 @@ Observed release: `0.0.1783542413-gb55c7a`
 
 ## antigravity
 
-Observed release: `1.2.8`
+Observed release: `1.2.9`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.2.8` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.2.8` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
-| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.2.8` | 14 files ([manifest](antigravity/SURFACES.json)) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.2.9` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.2.9` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
+| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.2.9` | 14 files ([manifest](antigravity/SURFACES.json)) |
 
 ## claude-code
 
@@ -59,15 +59,15 @@ Observed release: `0.156.1`
 
 ## grok
 
-Observed release: `1.0.27`
+Observed release: `1.0.28`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.27` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
-| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.27` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
-| `grok.prompt.agent.grok-4-7.interactive` | agent prompt | `grok-4.7` | `interactive` | current | `1.0.27` | [grok-4.7-interactive.md](grok/prompts/grok-4.7-interactive.md) |
-| `grok.steering.catalog` | steering messages | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive` | current | `1.0.27` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md), [grok-4.7-interactive-steering.md](grok/misc/grok-4.7-interactive-steering.md) |
-| `grok.tool.catalog` | tool schemas | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive`, `session-title` | current | `1.0.27` | 31 files ([manifest](grok/SURFACES.json)) |
+| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.28` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
+| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.28` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
+| `grok.prompt.agent.grok-4-7.interactive` | agent prompt | `grok-4.7` | `interactive` | current | `1.0.28` | [grok-4.7-interactive.md](grok/prompts/grok-4.7-interactive.md) |
+| `grok.steering.catalog` | steering messages | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive` | current | `1.0.28` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md), [grok-4.7-interactive-steering.md](grok/misc/grok-4.7-interactive-steering.md) |
+| `grok.tool.catalog` | tool schemas | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive`, `session-title` | current | `1.0.28` | 31 files ([manifest](grok/SURFACES.json)) |
 
 ## qwen-code
 
