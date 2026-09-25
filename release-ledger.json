@@ -1,7 +1,13 @@
 {
   "schema_version": 1,
   "queues": {
-    "codex": [],
+    "codex": [
+      {
+        "tool": "codex",
+        "new_version": "0.157.0",
+        "new_revision": "00c972ed5d6ff6499317fd41b7f23605b8e6850d"
+      }
+    ],
     "claude-code": [
       {
         "tool": "claude-code",
@@ -71,14 +77,6 @@
       }
     ],
     "grok": [
-      {
-        "tool": "grok",
-        "new_version": "1.0.28",
-        "new_revision": "be7ce6e8cffe46d20bef9834b211616082ee866b",
-        "mirror_revision": "482711333c7195dc16a272777f86086d615e2afb",
-        "artifact_url": "https://x.ai/cli/grok-1.0.28-linux-x86_64",
-        "artifact_sha256": "cc37546cc728e62036bbf7dd7720d2870461c04cb0358a26a42417c62ab9f196"
-      },
       {
         "tool": "grok",
         "new_version": "1.0.29",
@@ -187,15 +185,15 @@
     "antigravity": [
       {
         "tool": "antigravity",
-        "new_version": "1.2.9",
-        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.9-5905287731871744/linux-x64/cli_linux_x64.tar.gz",
-        "artifact_sha512": "75e83d46cb1632da4aca29b785017753c8c2dfb0320166da6b2c8007678982943515e64c8824ff2d8510d9b52eb2b3c27f306aeec58c4a4f4f8aa5550cb0cb12"
-      },
-      {
-        "tool": "antigravity",
         "new_version": "1.2.10",
         "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.10-4751581200121856/linux-x64/cli_linux_x64.tar.gz",
         "artifact_sha512": "e19aef599aaf47a9225e72f2cd420d5f97d6dd974e698685950557ca23a8bda63effe666773178c82912b98e9c197da29829b92e771eb6f66c82236f17864fee"
+      },
+      {
+        "tool": "antigravity",
+        "new_version": "1.2.11",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.11-6016716732497920/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "ca12c262343f29a2b87423d1ff1e4244989e936e37fe1f8e56056b0f91cd02f93f133321229ce35c86c2d84b977e919937a3fd9430cfd769a16d6b03ede25081"
       }
     ],
     "qwen-code": [
