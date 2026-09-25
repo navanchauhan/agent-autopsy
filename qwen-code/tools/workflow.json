@@ -10,7 +10,7 @@
       },
       "scriptPath": {
         "type": "string",
-        "description": "Optional. Absolute path to a saved workflow `.js` file to load and run instead of inline `script`. Primarily set by the `/<name>` saved-workflow slash command. Provide exactly ONE of `script` or `scriptPath`. The file is read at execution time, so edits to a saved workflow take effect on the next run."
+        "description": "Optional. Absolute path to a workflow `.js` file to load and run instead of inline `script`. Primarily set by the `/<name>` saved-workflow slash command; a tool that generated a script for this run hands you its path the same way. Provide exactly ONE of `script`, `scriptPath` or `name`. The file is read once per call, before approval, so edits to a saved workflow take effect on the next call."
       },
       "args": {
         "description": "Optional structured value bound to the `args` global. Pass actual JSON, not a stringified value."
@@ -23,6 +23,31 @@
         "type": "boolean",
         "default": false,
         "description": "Optional. When true, start the workflow under the interactive session and return a run handle immediately. The Background Tasks view can observe, cooperatively pause/resume, or stop it, and completion is delivered to the conversation when the run settles. Interactive TUI only. Defaults to false."
+      },
+      "sourceRef": {
+        "type": "object",
+        "description": "Optional caller-supplied definition id and revision for run correlation. Requires a writable journal; omit for ordinary workflows.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "id",
+          "revision"
+        ],
+        "additionalProperties": false
+      },
+      "name": {
+        "type": "string",
+        "description": "Optional. Name of a saved workflow to run instead of inline `script`: `<name>` for one in `.qwen/workflows` or `~/.qwen/workflows`, or `<extension>:<name>` for one an active extension ships. Provide exactly ONE of `script`, `scriptPath` or `name`."
       }
     }
   }

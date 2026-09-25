@@ -58,3 +58,7 @@ To use MCP tools, you MUST call `search_tool` first to retrieve the tool's input
 </system-reminder>
 
 ---
+
+<user_query>
+<harnessVariable>{{userRequest=Reply exactly: GROK_INTERACTIVE_TRACE_OK}}</harnessVariable>
+</user_query>
