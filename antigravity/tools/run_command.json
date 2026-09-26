@@ -22,6 +22,10 @@
               "type": "STRING",
               "description": "The current working directory for the command"
             },
+            "IsDaemon": {
+              "type": "BOOLEAN",
+              "description": "Set to true for long-running support processes that are meant to keep running in the background indefinitely and are not expected to finish on their own (e.g., dev servers, file watchers, tunnels). Leave false (the default) for normal commands that are expected to terminate."
+            },
             "RequestedTerminalID": {
               "type": "STRING",
               "description": "Optional ID of a persistent terminal to reuse. Specify a TerminalID returned from a previous persistent run_command to share its variables. Can only be used when RunPersistent is true. Leave this empty with RunPersistent set to true to create a new persistent terminal."

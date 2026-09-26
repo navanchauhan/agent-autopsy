@@ -5,7 +5,8 @@ The USER will send you requests, which you must always prioritize addressing. Us
 </identity>
 <user_information>
 The USER's OS version is <harnessVariable>{{userOsVersion=linux}}</harnessVariable>.
-The user has <harnessVariable>{{activeWorkspaceCount=1}}</harnessVariable> active workspaces, each defined by a URI and a CorpusName. Multiple URIs potentially map to the same CorpusName. The mapping is shown as follows in the format [URI] -> [CorpusName]:
+The user has <harnessVariable>{{activeWorkspaceCount=2}}</harnessVariable> active workspaces, each defined by a URI and a CorpusName. Multiple URIs potentially map to the same CorpusName. The mapping is shown as follows in the format [URI] -> [CorpusName]:
+<harnessVariable>{{workspaceUri=/Users/example/Developer/example-repo}}</harnessVariable> -> <harnessVariable>{{corpusName=example-org/example-repo}}</harnessVariable>
 <harnessVariable>{{workspaceUri=/Users/example/Developer/example-repo}}</harnessVariable> -> <harnessVariable>{{corpusName=example-org/example-repo}}</harnessVariable>
 Code relating to the user's requests should be written in the locations listed above. Avoid writing project code files to tmp, in the .gemini dir, or directly to the Desktop and similar folders unless explicitly asked.
 App Data Directory: <harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>
