@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "grok",
-  "observed_release": "1.0.30",
+  "observed_release": "1.0.31",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.30",
-      "verified_release": "1.0.30",
+      "captured_release": "1.0.31",
+      "verified_release": "1.0.31",
       "models": [
         "grok-4.6"
       ],
@@ -30,15 +30,15 @@
         "prompts/grok-4.6.md"
       ],
       "artifact_sha256": "17727cc3903c2a753303b33e865b6f6509de1af4de1d8115e485cba333255802",
-      "evidence_sha256": "b884ace8782874efea45a46acf6d4ada5e65a2b7071d0dfe7fdbfdbe8fcd6008"
+      "evidence_sha256": "5944d95fed5a40cfbeb65c74971a605c90c9e4ddfb7b713ab9d5af673fc82e2d"
     },
     {
       "id": "grok.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.30",
-      "verified_release": "1.0.30",
+      "captured_release": "1.0.31",
+      "verified_release": "1.0.31",
       "models": [
         "grok-4.6"
       ],
@@ -50,15 +50,15 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "b884ace8782874efea45a46acf6d4ada5e65a2b7071d0dfe7fdbfdbe8fcd6008"
+      "evidence_sha256": "5944d95fed5a40cfbeb65c74971a605c90c9e4ddfb7b713ab9d5af673fc82e2d"
     },
     {
       "id": "grok.prompt.agent.grok-4-7.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.30",
-      "verified_release": "1.0.30",
+      "captured_release": "1.0.31",
+      "verified_release": "1.0.31",
       "models": [
         "grok-4.7"
       ],
@@ -70,15 +70,15 @@
         "prompts/grok-4.7-interactive.md"
       ],
       "artifact_sha256": "c4088a31edf21498e604a1ba042b41963beb6d07a532c07b96402a0aa0fd9c1b",
-      "evidence_sha256": "b884ace8782874efea45a46acf6d4ada5e65a2b7071d0dfe7fdbfdbe8fcd6008"
+      "evidence_sha256": "5944d95fed5a40cfbeb65c74971a605c90c9e4ddfb7b713ab9d5af673fc82e2d"
     },
     {
       "id": "grok.steering.catalog",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.30",
-      "verified_release": "1.0.30",
+      "captured_release": "1.0.31",
+      "verified_release": "1.0.31",
       "models": [
         "grok-4.6",
         "grok-4.7"
@@ -98,15 +98,15 @@
         "misc/grok-4.7-interactive-steering.md"
       ],
       "artifact_sha256": "a20946e3ea3de686bb2c7affd2bce2745dcd55e020bcd4d75b9566541053247b",
-      "evidence_sha256": "b884ace8782874efea45a46acf6d4ada5e65a2b7071d0dfe7fdbfdbe8fcd6008"
+      "evidence_sha256": "5944d95fed5a40cfbeb65c74971a605c90c9e4ddfb7b713ab9d5af673fc82e2d"
     },
     {
       "id": "grok.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.30",
-      "verified_release": "1.0.30",
+      "captured_release": "1.0.31",
+      "verified_release": "1.0.31",
       "models": [
         "grok-4.6",
         "grok-4.7"
@@ -150,8 +150,8 @@
         "tools/write.json",
         "tools/x_search.json"
       ],
-      "artifact_sha256": "d508c3c0df5628664279730249e13c1d185fa0da7fa320a1a64e790b9694f1e9",
-      "evidence_sha256": "b884ace8782874efea45a46acf6d4ada5e65a2b7071d0dfe7fdbfdbe8fcd6008"
+      "artifact_sha256": "57e69b937c3e01622b26fb9faeef9a1c50c75f2c69f90db53472cc22e949b7aa",
+      "evidence_sha256": "5944d95fed5a40cfbeb65c74971a605c90c9e4ddfb7b713ab9d5af673fc82e2d"
     }
   ]
 }

@@ -16,10 +16,46 @@
           "type": "string"
         },
         "images": {
-          "description": "Reference images, up to 7 entries; the images are used as style/content references for the generated video (people, objects, clothing, settings). Each entry may be an absolute filesystem path, HTTPS URL, or `data:image/...;base64,...` URL. Reference them in the prompt as `<IMAGE_0>`, `<IMAGE_1>`, ... May be empty when `voices` is provided.",
+          "description": "Reference images, up to 14 entries; the images are used as style/content references for the generated video (people, objects, clothing, settings). Each entry may be an absolute filesystem path, HTTPS URL, or `data:image/...;base64,...` URL. Reference them in the prompt as `<IMAGE_0>`, `<IMAGE_1>`, ... May be empty when `voices`, `first_frame`, `last_frame`, or `keyframes` is provided.",
           "type": "array",
           "items": {
             "type": "string"
+          }
+        },
+        "first_frame": {
+          "description": "Optional image pinned as the video's exact FIRST frame — it appears literally at the start (unlike `images`, which condition the video and appear re-rendered). Absolute filesystem path, HTTPS URL, or `data:image/...;base64,...` URL. Combine with `last_frame` to interpolate between two exact frames.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "last_frame": {
+          "description": "Optional image pinned as the video's exact LAST frame — the clip ends arriving on it. Same formats as `first_frame`. Set `first_frame` and `last_frame` to the same image for a perfect loop.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "keyframes": {
+          "description": "Mid-video keyframe anchors, up to 4 entries; each pins an image to appear literally at a timestamp strictly inside the clip (use `first_frame` / `last_frame` for the endpoints). Timestamps snap to the engine's 1/3-second grid, so anchors closer than 1/3 s to each other are rejected.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "image": {
+                "description": "Image that appears literally at `timestamp_s`. Absolute filesystem path, HTTPS URL, or `data:image/...;base64,...` URL.",
+                "type": "string"
+              },
+              "timestamp_s": {
+                "description": "Time in seconds at which the image appears, strictly inside the clip (0 < t < duration). Snapped server-side to the engine's 1/3-second keyframe grid; two anchors closer than 1/3 s are rejected.",
+                "type": "number",
+                "format": "float"
+              }
+            },
+            "required": [
+              "image",
+              "timestamp_s"
+            ]
           }
         },
         "voices": {
@@ -49,6 +85,6 @@
         }
       }
     },
-    "description": "Generate a video from reference images and/or preset voices, guided by a required text prompt; returns the saved video's absolute path. When telling the user where it was saved, refer to it by its short session-relative path (e.g. `videos/1.mp4`) rather than the absolute path, so it renders as a clickable link that opens the video. Provide up to 7 `images` (style/content references: people, objects, clothing, settings) and/or up to 3 `voices` (preset voice identifiers the subjects speak in); at least one of either is required. Tag references in the prompt as `<IMAGE_0>`, `<IMAGE_1>`, ... and `<AUDIO_0>`, `<AUDIO_1>`, ... Use this tool when the user wants a video referencing existing images without locking the first frame, or wants a speaking subject with a specific voice. Example: reference_to_video(prompt=\"The person from <IMAGE_0> presents the product from <IMAGE_1>, speaking with the voice from <AUDIO_0>\", images=[\"/Users/me/host.jpg\", \"/Users/me/product.jpg\"], voices=[\"eve\"], aspect_ratio=\"16:9\", duration=10, resolution_name=\"480p\")"
+    "description": "Generate a video from reference images, preset voices, and/or pinned keyframes, guided by a required text prompt; returns the saved video's absolute path. When telling the user where it was saved, refer to it by its short session-relative path (e.g. `videos/1.mp4`) rather than the absolute path, so it renders as a clickable link that opens the video. Provide up to 14 `images` (style/content references: people, objects, clothing, settings — they appear re-rendered, not as literal frames) and/or up to 3 `voices` (preset voice identifiers the subjects speak in). To pin EXACT frames instead, set `first_frame` and/or `last_frame` (those images appear literally as the video's first/last frame; set both to interpolate, or the same image for a perfect loop) and/or `keyframes` (up to 4 `{image, timestamp_s}` anchors strictly inside the clip, snapped to a 1/3-second grid). At least one of `images`, `voices`, `first_frame`, `last_frame`, or `keyframes` is required. Tag references in the prompt as `<IMAGE_i>` and voices as `<AUDIO_0>`, ...; the index space follows the upload order `first_frame`, `images`, `keyframes`, `last_frame` — so with `first_frame` set, the first `images` entry is `<IMAGE_1>`, not `<IMAGE_0>`. Pinned frames never need prompt tags (their timing is explicit). Example: reference_to_video(prompt=\"The person from <IMAGE_1> walks toward the camera, speaking with the voice from <AUDIO_0>\", first_frame=\"/Users/me/wide_shot.jpg\", images=[\"/Users/me/person.jpg\"], keyframes=[{\"image\": \"/Users/me/closeup.jpg\", \"timestamp_s\": 3.0}], last_frame=\"/Users/me/closeup.jpg\", voices=[\"eve\"], aspect_ratio=\"16:9\", duration=6, resolution_name=\"480p\")"
   }
 }
