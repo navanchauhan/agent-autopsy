@@ -59,15 +59,15 @@ Observed release: `0.157.1`
 
 ## grok
 
-Observed release: `1.0.31`
+Observed release: `1.0.32`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.31` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
-| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.31` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
-| `grok.prompt.agent.grok-4-7.interactive` | agent prompt | `grok-4.7` | `interactive` | current | `1.0.31` | [grok-4.7-interactive.md](grok/prompts/grok-4.7-interactive.md) |
-| `grok.steering.catalog` | steering messages | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive` | current | `1.0.31` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md), [grok-4.7-interactive-steering.md](grok/misc/grok-4.7-interactive-steering.md) |
-| `grok.tool.catalog` | tool schemas | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive`, `session-title` | current | `1.0.31` | 31 files ([manifest](grok/SURFACES.json)) |
+| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.32` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
+| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.32` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
+| `grok.prompt.agent.grok-4-7.interactive` | agent prompt | `grok-4.7` | `interactive` | current | `1.0.32` | [grok-4.7-interactive.md](grok/prompts/grok-4.7-interactive.md) |
+| `grok.steering.catalog` | steering messages | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive` | current | `1.0.32` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md), [grok-4.7-interactive-steering.md](grok/misc/grok-4.7-interactive-steering.md) |
+| `grok.tool.catalog` | tool schemas | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive`, `session-title` | current | `1.0.32` | 31 files ([manifest](grok/SURFACES.json)) |
 
 ## qwen-code
 
