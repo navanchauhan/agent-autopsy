@@ -2,40 +2,40 @@
   "schema_version": 1,
   "tools": {
     "claude-code": {
-      "plan_hash": "8f2e04ba76e231c3b4fea04d2b9f562178be870d02e5af1b0fa397b60ff61165",
+      "plan_hash": "d70a0fe4e64bf8732300b4dedc2dc9a04d821ad57d32f6f0fe18de086567adc4",
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260927",
-      "last_reviewer_input_hash": "0f9e9e7f37e59e62c5da7fe620682706ad741e32f73d0ca05cc7064e2002c65b",
+      "last_fresh_bucket": "20260928",
+      "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
     "grok": {
-      "plan_hash": "70e5fbea2d641f8eb3ae451678b726973cc7e5150c3c5e61bfc2238dde901e6a",
+      "plan_hash": "0d8675055cdc8c650b3e01c51d0daa5e922cdda186f4bed2e8f78143f45f9b13",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260927",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
-    "antigravity": {
-      "plan_hash": "17297704d76c7bccf6805247efe4cee0a5dd93835858f29a2ab19fde894ed731",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260927",
+      "last_fresh_bucket": "20260928",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "qwen-code": {
-      "plan_hash": "26ceaf459f879dba7944206ab1bb9778922e6c19fa1ed2d7dd7b768e50fc7a5d",
+      "plan_hash": "65c51ec83948e363481653acefa36242510923b006a90bf774521ee5f3b90dd3",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260927",
-      "last_reviewer_input_hash": "41c16b0cdcdb069e663e2c96500f6569efcfbbaefddf464a3b6f3577e561a6be",
+      "last_fresh_bucket": "20260928",
+      "last_reviewer_input_hash": null,
       "reason": null
+    },
+    "antigravity": {
+      "plan_hash": "1f216783fc4b804f879b178918b4a4f1c036be53f7ec64332e342443cbdd92f3",
+      "state": "suppress_positive",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260928",
+      "last_reviewer_input_hash": null,
+      "reason": "capture_retry"
     }
   }
 }
