@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "grok",
-  "observed_release": "1.0.33",
+  "observed_release": "1.0.34",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.33",
-      "verified_release": "1.0.33",
+      "captured_release": "1.0.34",
+      "verified_release": "1.0.34",
       "models": [
         "grok-4.6"
       ],
@@ -30,15 +30,15 @@
         "prompts/grok-4.6.md"
       ],
       "artifact_sha256": "17727cc3903c2a753303b33e865b6f6509de1af4de1d8115e485cba333255802",
-      "evidence_sha256": "3b8fffec2e64115c3544b327d8c24fa9239e108e9f96466f2d276d01de17f865"
+      "evidence_sha256": "f4444167135563361cb91cc58909e1d63e7e32ad7c2f7a25b4dbc4859b2566a6"
     },
     {
       "id": "grok.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.33",
-      "verified_release": "1.0.33",
+      "captured_release": "1.0.34",
+      "verified_release": "1.0.34",
       "models": [
         "grok-4.6"
       ],
@@ -50,41 +50,19 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "3b8fffec2e64115c3544b327d8c24fa9239e108e9f96466f2d276d01de17f865"
-    },
-    {
-      "id": "grok.prompt.agent.grok-4-7.interactive",
-      "category": "agent prompt",
-      "status": "current",
-      "capture_method": "source-and-model-request",
-      "captured_release": "1.0.33",
-      "verified_release": "1.0.33",
-      "models": [
-        "grok-4.7"
-      ],
-      "modes": [
-        "interactive"
-      ],
-      "dynamic_inputs": [],
-      "artifacts": [
-        "prompts/grok-4.7-interactive.md"
-      ],
-      "artifact_sha256": "c4088a31edf21498e604a1ba042b41963beb6d07a532c07b96402a0aa0fd9c1b",
-      "evidence_sha256": "3b8fffec2e64115c3544b327d8c24fa9239e108e9f96466f2d276d01de17f865"
+      "evidence_sha256": "f4444167135563361cb91cc58909e1d63e7e32ad7c2f7a25b4dbc4859b2566a6"
     },
     {
       "id": "grok.steering.catalog",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.33",
-      "verified_release": "1.0.33",
+      "captured_release": "1.0.34",
+      "verified_release": "1.0.34",
       "models": [
-        "grok-4.6",
-        "grok-4.7"
+        "grok-4.6"
       ],
       "modes": [
-        "interactive",
         "non-interactive"
       ],
       "dynamic_inputs": [
@@ -94,25 +72,22 @@
         "AGENTS instructions"
       ],
       "artifacts": [
-        "misc/grok-4.6-steering.md",
-        "misc/grok-4.7-interactive-steering.md"
+        "misc/grok-4.6-steering.md"
       ],
-      "artifact_sha256": "a20946e3ea3de686bb2c7affd2bce2745dcd55e020bcd4d75b9566541053247b",
-      "evidence_sha256": "3b8fffec2e64115c3544b327d8c24fa9239e108e9f96466f2d276d01de17f865"
+      "artifact_sha256": "efcc71ad2e479be1f181a182c07b03ea23b21ea21cb4bcbc729331a2dbc50420",
+      "evidence_sha256": "f4444167135563361cb91cc58909e1d63e7e32ad7c2f7a25b4dbc4859b2566a6"
     },
     {
       "id": "grok.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.33",
-      "verified_release": "1.0.33",
+      "captured_release": "1.0.34",
+      "verified_release": "1.0.34",
       "models": [
-        "grok-4.6",
-        "grok-4.7"
+        "grok-4.6"
       ],
       "modes": [
-        "interactive",
         "non-interactive",
         "session-title"
       ],
@@ -128,8 +103,6 @@
         "tools/image_to_video.json",
         "tools/kill_command_or_subagent.json",
         "tools/list_dir.json",
-        "tools/memory_get.json",
-        "tools/memory_search.json",
         "tools/monitor.json",
         "tools/read_file.json",
         "tools/reference_to_video.json",
@@ -144,14 +117,13 @@
         "tools/spawn_subagent.json",
         "tools/todo_write.json",
         "tools/use_tool.json",
-        "tools/web_fetch.json",
         "tools/web_search.json",
         "tools/workflow.json",
         "tools/write.json",
         "tools/x_search.json"
       ],
-      "artifact_sha256": "57e69b937c3e01622b26fb9faeef9a1c50c75f2c69f90db53472cc22e949b7aa",
-      "evidence_sha256": "3b8fffec2e64115c3544b327d8c24fa9239e108e9f96466f2d276d01de17f865"
+      "artifact_sha256": "21317378758ec0f798dfe7bc3fb4cc88cff32446047bc09377f52172f46e976a",
+      "evidence_sha256": "f4444167135563361cb91cc58909e1d63e7e32ad7c2f7a25b4dbc4859b2566a6"
     }
   ]
 }

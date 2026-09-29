@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "codex",
-  "observed_release": "0.158.0",
+  "observed_release": "0.159.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.158.0",
-      "verified_release": "0.158.0",
+      "captured_release": "0.159.0",
+      "verified_release": "0.159.0",
       "models": [
         "gpt-6-astra",
         "gpt-5",
@@ -52,15 +52,15 @@
         "prompts/review.md"
       ],
       "artifact_sha256": "92ad4c140aec7b571f303faafbb0e45cd138a58bc95e28d291b0a0696071a9f1",
-      "evidence_sha256": "e5f3362d9c5799916328c60d0f2e37bbe71fcf3082a82fd88e4b50f1a9a7b5c0"
+      "evidence_sha256": "b2f3cd1451b1a26843e51af85a99e04fa00797132faa8e177bb9afcaef8466c0"
     },
     {
       "id": "codex.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.158.0",
-      "verified_release": "0.158.0",
+      "captured_release": "0.159.0",
+      "verified_release": "0.159.0",
       "models": [
         "all"
       ],
@@ -96,15 +96,15 @@
         "tools/write_stdin.json"
       ],
       "artifact_sha256": "a03389fbbf3b43b64c667f63c6b835aba3dbe3a3c2d03d73a525ea8b9030a576",
-      "evidence_sha256": "e5f3362d9c5799916328c60d0f2e37bbe71fcf3082a82fd88e4b50f1a9a7b5c0"
+      "evidence_sha256": "b2f3cd1451b1a26843e51af85a99e04fa00797132faa8e177bb9afcaef8466c0"
     },
     {
       "id": "codex.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.158.0",
-      "verified_release": "0.158.0",
+      "captured_release": "0.159.0",
+      "verified_release": "0.159.0",
       "models": [
         "all"
       ],
@@ -147,7 +147,7 @@
         "misc/review-exit-success.xml"
       ],
       "artifact_sha256": "eb4750534feef01dc68aa286f61af4fe855ad7bc7caf26ee27dade84dfaa15e3",
-      "evidence_sha256": "e5f3362d9c5799916328c60d0f2e37bbe71fcf3082a82fd88e4b50f1a9a7b5c0"
+      "evidence_sha256": "b2f3cd1451b1a26843e51af85a99e04fa00797132faa8e177bb9afcaef8466c0"
     },
     {
       "id": "codex.assembly.model-mode",

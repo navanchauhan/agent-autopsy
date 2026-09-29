@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.2.12",
+  "observed_release": "1.2.13",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.12",
-      "verified_release": "1.2.12",
+      "captured_release": "1.2.13",
+      "verified_release": "1.2.13",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -29,16 +29,16 @@
       "artifacts": [
         "prompts/gemini-3.8-flash-high-interactive.md"
       ],
-      "artifact_sha256": "0fc841a3f6cc488bb7ee93e6462c6d4b5ab24a1b16d24706005ac739b8fc4808",
-      "evidence_sha256": "04fff41ae730c1b64ef46d36b54b140e9ad7e6ec68638f70a420cff7c96a8181"
+      "artifact_sha256": "2fab7c32a03ca4f61ccd63a5c343f4e198f64f7d493409872dcca42e9dbb593f",
+      "evidence_sha256": "7a2053e24a859dc5bb359cbce28f77d86451606dc84bddd88ad1fb712c95bb0f"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.12",
-      "verified_release": "1.2.12",
+      "captured_release": "1.2.13",
+      "verified_release": "1.2.13",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -49,16 +49,16 @@
       "artifacts": [
         "prompts/gemini-3.8-flash-high.md"
       ],
-      "artifact_sha256": "993ce4f213bdedf6c4121d4e5d9a3d6dac82dd1604dbdd4673e6e788a24c3930",
-      "evidence_sha256": "04fff41ae730c1b64ef46d36b54b140e9ad7e6ec68638f70a420cff7c96a8181"
+      "artifact_sha256": "f68d901063683148947030080f2aca1bcffe384e28a6954dd2ba9184417c5bcc",
+      "evidence_sha256": "7a2053e24a859dc5bb359cbce28f77d86451606dc84bddd88ad1fb712c95bb0f"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.12",
-      "verified_release": "1.2.12",
+      "captured_release": "1.2.13",
+      "verified_release": "1.2.13",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -84,7 +84,7 @@
         "tools/write_to_file.json"
       ],
       "artifact_sha256": "49a51fdce0c4db8cddf14134608fe6ffdd38a464b61cb07b4c1c671c468df027",
-      "evidence_sha256": "04fff41ae730c1b64ef46d36b54b140e9ad7e6ec68638f70a420cff7c96a8181"
+      "evidence_sha256": "7a2053e24a859dc5bb359cbce28f77d86451606dc84bddd88ad1fb712c95bb0f"
     }
   ]
 }
