@@ -2,11 +2,11 @@
   "schema_version": 1,
   "tools": {
     "codex": {
-      "plan_hash": "f5369434ce4a6c395ba24543b7a64654c2a105e0408d5019c72e1ccf4ab58a31",
+      "plan_hash": "fe7ac1544466b39b51f2f684588263352f23f057f826fc4a316b5a477f3e8aba",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260928",
+      "last_fresh_bucket": "20260929",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -15,30 +15,30 @@
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260928",
+      "last_fresh_bucket": "20260929",
       "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
     "grok": {
-      "plan_hash": "fdfbacadd054c360de2fe0e52afbb5989c167b8f9756f953b895aee7a420d783",
+      "plan_hash": "f1241796d44abc7bbc673a1398e871d7a7a7f037c55f839794390cd490a81ff2",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260928",
+      "last_fresh_bucket": "20260929",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "antigravity": {
+      "plan_hash": "23e29a8da044006a3d57ed3f291abd1bc1a643bcc54f53e45057d67751e3a4d3",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20260929",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "qwen-code": {
       "plan_hash": "65c51ec83948e363481653acefa36242510923b006a90bf774521ee5f3b90dd3",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20260928",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
-    "antigravity": {
-      "plan_hash": "1f216783fc4b804f879b178918b4a4f1c036be53f7ec64332e342443cbdd92f3",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
