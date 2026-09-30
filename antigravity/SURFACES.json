@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.2.13",
+  "observed_release": "1.2.14",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.13",
-      "verified_release": "1.2.13",
+      "captured_release": "1.2.14",
+      "verified_release": "1.2.14",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -30,15 +30,15 @@
         "prompts/gemini-3.8-flash-high-interactive.md"
       ],
       "artifact_sha256": "2fab7c32a03ca4f61ccd63a5c343f4e198f64f7d493409872dcca42e9dbb593f",
-      "evidence_sha256": "7a2053e24a859dc5bb359cbce28f77d86451606dc84bddd88ad1fb712c95bb0f"
+      "evidence_sha256": "1a21bcc7e8284a83b68c240534473eeb03d700b4198ad571de71d51982afea64"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.13",
-      "verified_release": "1.2.13",
+      "captured_release": "1.2.14",
+      "verified_release": "1.2.14",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -50,15 +50,15 @@
         "prompts/gemini-3.8-flash-high.md"
       ],
       "artifact_sha256": "f68d901063683148947030080f2aca1bcffe384e28a6954dd2ba9184417c5bcc",
-      "evidence_sha256": "7a2053e24a859dc5bb359cbce28f77d86451606dc84bddd88ad1fb712c95bb0f"
+      "evidence_sha256": "1a21bcc7e8284a83b68c240534473eeb03d700b4198ad571de71d51982afea64"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.13",
-      "verified_release": "1.2.13",
+      "captured_release": "1.2.14",
+      "verified_release": "1.2.14",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -84,7 +84,7 @@
         "tools/write_to_file.json"
       ],
       "artifact_sha256": "49a51fdce0c4db8cddf14134608fe6ffdd38a464b61cb07b4c1c671c468df027",
-      "evidence_sha256": "7a2053e24a859dc5bb359cbce28f77d86451606dc84bddd88ad1fb712c95bb0f"
+      "evidence_sha256": "1a21bcc7e8284a83b68c240534473eeb03d700b4198ad571de71d51982afea64"
     }
   ]
 }
