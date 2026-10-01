@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "qwen-code",
-  "observed_release": "0.24.1",
+  "observed_release": "0.24.2",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.24.1",
-      "verified_release": "0.24.1",
+      "captured_release": "0.24.2",
+      "verified_release": "0.24.2",
       "models": [
         "all"
       ],
@@ -34,15 +34,15 @@
         "prompts/core-interactive-qwen3-coder-plus.md"
       ],
       "artifact_sha256": "200834d9cf0a8c3ac2800ff1fde352a5273ee5eb194c4750bb5e382bbfeea66e",
-      "evidence_sha256": "87e1e5980712305279f359e4e066f0a6192358b8ab51c71a953b5a0d4767d8cf"
+      "evidence_sha256": "9c26ae3924385e2de0ec062c2efefd8b91e6a2cacfe17a3ff6d6278a208c3dd3"
     },
     {
       "id": "qwen-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.24.1",
-      "verified_release": "0.24.1",
+      "captured_release": "0.24.2",
+      "verified_release": "0.24.2",
       "models": [
         "all"
       ],
@@ -102,16 +102,16 @@
         "tools/exec.json",
         "tools/propose_goal.json"
       ],
-      "artifact_sha256": "c23b58d67871d247e595644b37560071b583fa7deefc3da4e1284d6cc9b1aa9b",
-      "evidence_sha256": "87e1e5980712305279f359e4e066f0a6192358b8ab51c71a953b5a0d4767d8cf"
+      "artifact_sha256": "7b6d59fb374e59a45f7cccbf2c7e45aa322f2420a068444b47ad6e5775b43cb2",
+      "evidence_sha256": "9c26ae3924385e2de0ec062c2efefd8b91e6a2cacfe17a3ff6d6278a208c3dd3"
     },
     {
       "id": "qwen-code.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.24.1",
-      "verified_release": "0.24.1",
+      "captured_release": "0.24.2",
+      "verified_release": "0.24.2",
       "models": [
         "all"
       ],
@@ -140,7 +140,7 @@
         "misc/workflow-authoring.md"
       ],
       "artifact_sha256": "a46919d6ead2a58953d1b9db1dd938932c086ef0fc79a7c09883a5663bec7744",
-      "evidence_sha256": "87e1e5980712305279f359e4e066f0a6192358b8ab51c71a953b5a0d4767d8cf"
+      "evidence_sha256": "9c26ae3924385e2de0ec062c2efefd8b91e6a2cacfe17a3ff6d6278a208c3dd3"
     },
     {
       "id": "qwen-code.context.session",

@@ -3,7 +3,6 @@ OS Version: linux
 Shell: /bin/bash
 Workspace Path: <harnessVariable>{{workspacePath=/Users/example/Developer/example-repo}}</harnessVariable>
 Today's date: <harnessVariable>{{currentDate=2026-01-02}}</harnessVariable>
-Note: Prefer using relative paths over absolute paths as tool call args when possible.
 </user_info>
 
 <git_status>
@@ -46,6 +45,15 @@ The following skills are available for use:
 Example:
 - example-skill: Example user-installed skill description.
   Absolute path: /Users/example/.grok/skills/example-skill/SKILL.md
+</system-reminder>
+
+---
+
+<system-reminder>
+MCP server connected:
+- tasks (10 tools)
+
+To use MCP tools, you MUST call `search_tool` first to retrieve the tool's input schema before calling `use_tool`. NEVER guess parameter names — always use the exact schema returned by `search_tool`.
 </system-reminder>
 
 ---

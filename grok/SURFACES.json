@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "grok",
-  "observed_release": "1.0.35",
+  "observed_release": "1.0.36",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.35",
-      "verified_release": "1.0.35",
+      "captured_release": "1.0.36",
+      "verified_release": "1.0.36",
       "models": [
         "grok-4.6"
       ],
@@ -29,16 +29,16 @@
       "artifacts": [
         "prompts/grok-4.6.md"
       ],
-      "artifact_sha256": "17727cc3903c2a753303b33e865b6f6509de1af4de1d8115e485cba333255802",
-      "evidence_sha256": "d444de6f228ab919d98ad6a602df7135f11089bc66550d6548ddf02dad310610"
+      "artifact_sha256": "874b355dffc1e05680e62418fba2e7cd3fdc8066c8e573e49394f1c2627ed129",
+      "evidence_sha256": "9462ea3735bedc8a878b4079ebc590212e6321af965757823bed2c8cef2fa3f8"
     },
     {
       "id": "grok.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.35",
-      "verified_release": "1.0.35",
+      "captured_release": "1.0.36",
+      "verified_release": "1.0.36",
       "models": [
         "grok-4.6"
       ],
@@ -50,15 +50,15 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "d444de6f228ab919d98ad6a602df7135f11089bc66550d6548ddf02dad310610"
+      "evidence_sha256": "9462ea3735bedc8a878b4079ebc590212e6321af965757823bed2c8cef2fa3f8"
     },
     {
       "id": "grok.steering.catalog",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.35",
-      "verified_release": "1.0.35",
+      "captured_release": "1.0.36",
+      "verified_release": "1.0.36",
       "models": [
         "grok-4.6",
         "grok-4.7"
@@ -77,16 +77,16 @@
         "misc/grok-4.6-steering.md",
         "misc/grok-4.7-interactive-steering.md"
       ],
-      "artifact_sha256": "e429e236b23a60b262d2a889e990a589442bd6789ddec993a4b391dbef9dd802",
-      "evidence_sha256": "d444de6f228ab919d98ad6a602df7135f11089bc66550d6548ddf02dad310610"
+      "artifact_sha256": "53b578f6741d894348d100b9f05faa2eba08b12fd40c22e95a160195854bc30f",
+      "evidence_sha256": "9462ea3735bedc8a878b4079ebc590212e6321af965757823bed2c8cef2fa3f8"
     },
     {
       "id": "grok.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.35",
-      "verified_release": "1.0.35",
+      "captured_release": "1.0.36",
+      "verified_release": "1.0.36",
       "models": [
         "grok-4.6",
         "grok-4.7"
@@ -128,16 +128,16 @@
         "tools/write.json",
         "tools/x_search.json"
       ],
-      "artifact_sha256": "31d8a86c1b8f618869d79d086fbb1b48860a8ae30e10ccc9c3ea52890ed124de",
-      "evidence_sha256": "d444de6f228ab919d98ad6a602df7135f11089bc66550d6548ddf02dad310610"
+      "artifact_sha256": "34e3c9b9b0bef8a179e1c3396449948beef6c5c93cf8ca1102daf6fa9f362fd9",
+      "evidence_sha256": "9462ea3735bedc8a878b4079ebc590212e6321af965757823bed2c8cef2fa3f8"
     },
     {
       "id": "grok.prompt.agent.grok-4-7.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.35",
-      "verified_release": "1.0.35",
+      "captured_release": "1.0.36",
+      "verified_release": "1.0.36",
       "models": [
         "grok-4.7"
       ],
@@ -148,8 +148,8 @@
       "artifacts": [
         "prompts/grok-4.7-interactive.md"
       ],
-      "artifact_sha256": "275169b6ea4d27efefaef485c63d50409b4a168c32c7514144ab1933e2f6d84e",
-      "evidence_sha256": "d444de6f228ab919d98ad6a602df7135f11089bc66550d6548ddf02dad310610"
+      "artifact_sha256": "df8a3f16d5a980ce3fa6d92e95d2027344a341e46ba8f50dedff28e691a68b2a",
+      "evidence_sha256": "9462ea3735bedc8a878b4079ebc590212e6321af965757823bed2c8cef2fa3f8"
     }
   ]
 }
