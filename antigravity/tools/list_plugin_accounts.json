@@ -1,0 +1,38 @@
+{
+  "name": "list_plugin_accounts",
+  "models": [
+    "gemini-3.8-flash-high"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "list_plugin_accounts",
+        "description": "List the accounts the user has connected for installed plugins: each plugin's auth providers, their sign-in status, the identity signed in as, and the CLIs they power. Use this to check whether the user is signed in before running a plugin CLI, and to tell the user exactly which provider to reconnect in the Plugins Manager when authentication fails. When a provider has multiple accounts connected, select one for a sandboxed CLI command by prefixing the command with AGY_ACCOUNT=<account> (an account name from this tool's output); without the prefix, the default account is used.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "toolAction": {
+              "type": "STRING",
+              "description": "Brief 2-5 word phrase in -ing form describing the specific action. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Checking git status', 'Running tests', 'Searching code'."
+            },
+            "toolSummary": {
+              "type": "STRING",
+              "description": "Brief 2-5 word noun phrase describing the specific task. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'Git status check', 'Test execution', 'Code search'."
+            }
+          },
+          "required": [
+            "toolSummary",
+            "toolAction"
+          ]
+        }
+      }
+    ]
+  },
+  "capture_modes": [
+    "non-interactive",
+    "interactive"
+  ]
+}

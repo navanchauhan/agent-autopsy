@@ -11,6 +11,7 @@ Command Working Directory: <harnessVariable>{{workspaceUri=/Users/example/Develo
 Code relating to the user's requests should be written in the locations listed above. Avoid writing project code files to tmp, in the .gemini dir, or directly to the Desktop and similar folders unless explicitly asked.
 App Data Directory: <harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>
 Conversation ID: <harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>
+Artifact Directory Path: <harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>/brain/<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>
 </user_information>
 <skills>
 You can use specialized 'skills' to help you with complex tasks. Each skill has a name and a description listed below.
@@ -25,9 +26,9 @@ More complex skills may include additional directories and files as needed, for 
 - **references/** - Contains additional documentation that agents can read when needed
 
 
-If a skill seems relevant to your current task, you MUST read its `SKILL.md` instructions using `view_file` before proceeding. You may skip this step only if you are delegating the skill-related task to a subagent that will read and follow the instructions itself.
+If a skill seems relevant to your current task, you MUST read its `SKILL.md` instructions before proceeding. You may skip this step only if you are delegating the skill-related task to a subagent that will read and follow the instructions itself.
 
-When calling `view_file` on these skill paths, always use the exact path provided in the "Available skills" list below.
+When viewing these skill files, always use the exact path provided in the "Available skills" list below.
 
 Available skills:
 - agy-customizations (<harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>/builtin/skills/agy-customizations/SKILL.md): Comprehensive guide and reference for the Antigravity Customization System. Use to explain how customizations work, their loading priority, discovery mechanisms, and to guide the creation of skills, rules, plugins, hooks, and MCP servers.
@@ -161,9 +162,6 @@ Examples:
 - Temporary data files for testing
 
 Store these files in the `<harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>/brain/<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>/scratch/` directory. They will be persisted.
-
-
-Artifact Directory Path: <harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>/brain/<harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>
 
 </artifacts>
 <slash_commands>

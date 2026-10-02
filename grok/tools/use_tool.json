@@ -4,24 +4,127 @@
     "type": "function",
     "name": "use_tool",
     "parameters": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "required": [
-        "tool_name",
-        "tool_input"
-      ],
+      "type": "object",
       "properties": {
         "tool_name": {
-          "description": "The qualified name of the integration tool to call (e.g., \"linear__save_issue\").\nMust be a tool previously discovered via `search_tool`.",
+          "description": "Discovered MCP target name",
           "type": "string"
         },
         "tool_input": {
-          "description": "The arguments to pass to the tool, as a JSON object.\nUse the parameter schema returned by `search_tool` to construct this.",
+          "description": "Inline remote arguments; use the discovered input schema",
           "type": "object",
           "additionalProperties": true
+        },
+        "tool_input_file": {
+          "description": "UTF-8 JSON file containing only the complete remote argument object",
+          "type": "string",
+          "minLength": 1
+        },
+        "file": {
+          "description": "UTF-8 JSON file containing canonical tool_name and object tool_input",
+          "type": "string",
+          "minLength": 1
         }
       },
-      "type": "object"
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "tool_name": {
+              "description": "Discovered MCP target name",
+              "type": "string"
+            },
+            "tool_input": {
+              "description": "Inline remote arguments; use the discovered input schema",
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "tool_name",
+            "tool_input"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "tool_input_file"
+                ]
+              },
+              {
+                "required": [
+                  "file"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool_name": {
+              "description": "Discovered MCP target name",
+              "type": "string"
+            },
+            "tool_input_file": {
+              "description": "UTF-8 JSON file containing only the complete remote argument object",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "tool_name",
+            "tool_input_file"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "tool_input"
+                ]
+              },
+              {
+                "required": [
+                  "file"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "file": {
+              "description": "UTF-8 JSON file containing canonical tool_name and object tool_input",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "file"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "tool_name"
+                ]
+              },
+              {
+                "required": [
+                  "tool_input"
+                ]
+              },
+              {
+                "required": [
+                  "tool_input_file"
+                ]
+              }
+            ]
+          }
+        }
+      ]
     },
-    "description": "Call an MCP integration tool.\n\nThe `tool_name` must be the qualified `server__tool` name (e.g., `linear__save_issue`). The `tool_input` must conform exactly to the tool's input schema as returned by `search_tool`."
+    "description": "Call a discovered MCP integration tool.\n\nSupply exactly one form: `tool_name` plus `tool_input` inline; `tool_name` plus `tool_input_file` for a UTF-8 JSON arguments-only object; or `file` for a UTF-8 JSON document with canonical `tool_name` and object `tool_input`. File forms require Read permission, then normal MCP approval. Files must be complete regular files, at most 8 MiB. Do not mix forms or delegate to another file or native tool. Remote keys and JSON-encoded strings remain unchanged. Arguments must match the discovered schema from `search_tool`."
   }
 }

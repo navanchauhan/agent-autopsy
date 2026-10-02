@@ -5,11 +5,6 @@ Workspace Path: <harnessVariable>{{workspacePath=/Users/example/Developer/exampl
 Today's date: <harnessVariable>{{currentDate=2026-01-02}}</harnessVariable>
 </user_info>
 
-<git_status>
-This is the git status at the start of the conversation. Note that this status is a snapshot in time, and will not update during the conversation.
-## master...origin/master
-</git_status>
-
 <rules>
 The rules section has a number of possible rules/memories/context that you should consider. In each subsection, we provide instructions about what information the subsection contains and how you should consider/follow the contents of the subsection.
 
@@ -54,6 +49,7 @@ MCP server connected:
 - tasks (10 tools)
 
 To use MCP tools, you MUST call `search_tool` first to retrieve the tool's input schema before calling `use_tool`. NEVER guess parameter names — always use the exact schema returned by `search_tool`.
+For large MCP arguments, prepare one complete UTF-8 JSON file and call `use_tool` with {"file":"/tmp/mcp-call.json"}; the document contains canonical tool_name and object tool_input. Alternatively supply the target plus `tool_input_file` for an arguments-only object. File reads require Read permission before MCP approval.
 </system-reminder>
 
 ---
