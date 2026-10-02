@@ -2,11 +2,11 @@
   "schema_version": 1,
   "tools": {
     "codex": {
-      "plan_hash": "f379f211290d6be5c9724da38266cf9ad4e342becec770b72900c7f576b83a95",
+      "plan_hash": "a59bbf074740a32c576c4b8750ef6ff656fa315026ba3756c735c4351d860b68",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261001",
+      "last_fresh_bucket": "20261002",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -15,34 +15,34 @@
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261001",
+      "last_fresh_bucket": "20261002",
       "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
     "grok": {
-      "plan_hash": "404e9e645c8a59e4be0c5f844580fe33efc07d422fdaef4ef474bbe5d8e6b3a5",
+      "plan_hash": "50bb6ccf6b6e3189cc8ae839c0f01a9672119b350bd9e5a1ac56b375cadf54a7",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261001",
+      "last_fresh_bucket": "20261002",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "antigravity": {
+      "plan_hash": "383598f31aafce98364e907635a8dc5007bc7722ceef78024fb5cf95721c9ab2",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20261002",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "qwen-code": {
-      "plan_hash": "65c51ec83948e363481653acefa36242510923b006a90bf774521ee5f3b90dd3",
+      "plan_hash": "5ff8cfe2a66b910fc14300f6e28d448f3be5eca328cfb071bb5d6a4f4b30d8cb",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261001",
-      "last_reviewer_input_hash": "62eb8f5fa13f0f12a774f04948957e4ff5cd64c60609a7fb7f11b7e56dc3e10d",
-      "reason": null
-    },
-    "antigravity": {
-      "plan_hash": "86cb334b25c616095e68babcaa1ee1ca4c6b47c44e012629e68d07c00d29d0a2",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261001",
+      "last_fresh_bucket": "20261002",
       "last_reviewer_input_hash": null,
       "reason": null
     }
