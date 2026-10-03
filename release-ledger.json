@@ -4,11 +4,6 @@
     "codex": [
       {
         "tool": "codex",
-        "new_version": "0.159.3",
-        "new_revision": "01fc69f4026735edfdf6789820549727a4867b11"
-      },
-      {
-        "tool": "codex",
         "new_version": "0.160.0",
         "new_revision": "a956835d020762cb2b570053af06f643a11c0ecc"
       }
@@ -120,14 +115,6 @@
     "grok": [
       {
         "tool": "grok",
-        "new_version": "1.0.37",
-        "new_revision": "9bb727ccdff0a793ee73bcde4e2e09cbef6b5387",
-        "mirror_revision": "4247f661689354b831191f11eeeac8424993fe3d",
-        "artifact_url": "https://x.ai/cli/grok-1.0.37-linux-x86_64",
-        "artifact_sha256": "5b18c917d4e3ab41d23dde88d46bc3cb22488de042697d26ee4975811bd92b5c"
-      },
-      {
-        "tool": "grok",
         "new_version": "1.0.38",
         "new_revision": "9bb727ccdff0a793ee73bcde4e2e09cbef6b5387",
         "mirror_revision": "4247f661689354b831191f11eeeac8424993fe3d",
@@ -194,9 +181,9 @@
     "antigravity": [
       {
         "tool": "antigravity",
-        "new_version": "1.2.15",
-        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.15-5434575321694208/linux-x64/cli_linux_x64.tar.gz",
-        "artifact_sha512": "6d2e2eeda0cad6eac8e8b2df11257d684210f8d384a2ee011dc6ad0edacfa33e1ec9c554589f6ff6ef0697f4c3c777ba46b6e84639711f173377cc1554c67436"
+        "new_version": "1.2.16",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.16-5594158052802560/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "c31f09265d4f6aef7c03b5105661ae98f9a8365c6c812c68adcc4a5e1f8b8f96c05fd2e4408a52f5e87e1b561ac350f4ffa7ad41a191893be7a3730ccf9d6553"
       }
     ],
     "qwen-code": [
