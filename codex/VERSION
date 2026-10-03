@@ -1,7 +1,7 @@
 source = openai/codex
-revision = 01fc69f4026735edfdf6789820549727a4867b11
-describe = 01fc69f4
-codex_cli_package_version = 0.159.3
+revision = a956835d020762cb2b570053af06f643a11c0ecc
+describe = a956835d
+codex_cli_package_version = 0.160.0
 reference_path = references/codex
 capture_mode = direct source extraction
 prompts = 16

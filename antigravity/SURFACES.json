@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.2.15",
+  "observed_release": "1.2.16",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.15",
-      "verified_release": "1.2.15",
+      "captured_release": "1.2.16",
+      "verified_release": "1.2.16",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -29,16 +29,16 @@
       "artifacts": [
         "prompts/gemini-3.8-flash-high-interactive.md"
       ],
-      "artifact_sha256": "08b61bf9a2bb4dae5e64600853984da0185f1c0044795e391047727b6bee1adb",
-      "evidence_sha256": "55cb57d2732e535e2e150b292ba82178b01a16f467c123a4b9a428e5b534c1e7"
+      "artifact_sha256": "0ca1e5dea72f9883be8e48bd85f1f4f1e0b83dbaa563c420525b9e11e42b70a0",
+      "evidence_sha256": "7a84f317a68efc69d02f8aec89794d7a123d3f6492dfecb58aff3e542461ae72"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.15",
-      "verified_release": "1.2.15",
+      "captured_release": "1.2.16",
+      "verified_release": "1.2.16",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -49,16 +49,16 @@
       "artifacts": [
         "prompts/gemini-3.8-flash-high.md"
       ],
-      "artifact_sha256": "f2c9596a8e8d78392730f35fe92e180046eb006f1c07af29e4275050694d98f4",
-      "evidence_sha256": "55cb57d2732e535e2e150b292ba82178b01a16f467c123a4b9a428e5b534c1e7"
+      "artifact_sha256": "350fc78f1154deaac34b3b9c33de88733292a49da15e7dd998faa92e0813430a",
+      "evidence_sha256": "7a84f317a68efc69d02f8aec89794d7a123d3f6492dfecb58aff3e542461ae72"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.2.15",
-      "verified_release": "1.2.15",
+      "captured_release": "1.2.16",
+      "verified_release": "1.2.16",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -70,9 +70,7 @@
       "artifacts": [
         "tools/ask_question.json",
         "tools/define_subagent.json",
-        "tools/generate_image.json",
         "tools/invoke_subagent.json",
-        "tools/list_plugin_accounts.json",
         "tools/manage_subagents.json",
         "tools/manage_task.json",
         "tools/read_url_content.json",
@@ -84,8 +82,8 @@
         "tools/view_file.json",
         "tools/write_to_file.json"
       ],
-      "artifact_sha256": "f96f07409e5c3f3d46d9673382e6e658cb9047cf875f417e94f27bde09986eed",
-      "evidence_sha256": "55cb57d2732e535e2e150b292ba82178b01a16f467c123a4b9a428e5b534c1e7"
+      "artifact_sha256": "2f2d337414caaa967fdb5434d1ca655eb779ee79ea7d6d8ed27b3812ed22e4bb",
+      "evidence_sha256": "7a84f317a68efc69d02f8aec89794d7a123d3f6492dfecb58aff3e542461ae72"
     }
   ]
 }
