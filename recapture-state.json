@@ -1,48 +1,39 @@
 {
   "schema_version": 1,
   "tools": {
-    "codex": {
-      "plan_hash": "ab1f6ab0577d32097476e344eb5252f4316ff06758d19a37e860434217b2da32",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261003",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
     "claude-code": {
       "plan_hash": "8f2e04ba76e231c3b4fea04d2b9f562178be870d02e5af1b0fa397b60ff61165",
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261003",
+      "last_fresh_bucket": "20261004",
       "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
     "grok": {
-      "plan_hash": "98dea23bb82ac40cd2f61c400238ec21b7781ad5a19737d1f4f1ee55e8c8ca13",
+      "plan_hash": "e8552d22c2aefd3bdb9cc4af153f33e7be87e573575c756e7f4b76e258dd769d",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261003",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
-    "antigravity": {
-      "plan_hash": "4f84b4b271c936bbe680d430d41ebb67b21f88f0c1d1aae7f7012a637cfbdcee",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261003",
+      "last_fresh_bucket": "20261004",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "qwen-code": {
-      "plan_hash": "5ff8cfe2a66b910fc14300f6e28d448f3be5eca328cfb071bb5d6a4f4b30d8cb",
+      "plan_hash": "470b68a5905a6cee864267df4390342620b27f293d3bc0cd112c6fc0f9a1a362",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261002",
+      "last_fresh_bucket": "20261004",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "antigravity": {
+      "plan_hash": "c8e365422585914ff5238f035393ca81876d6479454beccc4d9059d9461f1ffe",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20261004",
       "last_reviewer_input_hash": null,
       "reason": null
     }
