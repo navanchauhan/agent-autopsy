@@ -1,7 +1,7 @@
 source = QwenLM/qwen-code
-revision = 557f36ba83bcf98bc031eefc94e60991289dc4f2
-describe = 557f36ba
-version = 0.24.3
+revision = 9674d6efdc8ac16583270bd2a55cfa49e3ec254e
+describe = 9674d6ef
+version = 0.24.4
 reference_path = references/qwen-code
 capture_mode = direct source extraction
 prompts = 3
