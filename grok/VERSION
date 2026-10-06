@@ -1,11 +1,11 @@
 source = xai-org/grok-build
 distribution = native Rust binary
-version = 1.0.40
+version = 1.0.41
 revision = 84745de98b3d3996729aefcefd518890ffb73930
 mirror_revision = 07e35a3dfeed2f200d319ef6c893b5ea286d9a51
 channel = stable
 platform = linux-x86_64
-sha256 = 92c997dfd109c0672d40d5ae6fbd15835d53ffaf12cf9ea124d22aaef3ff23fc
+sha256 = 9ce03ed23e16ea01072b4496263d6213a27899e1e3e107f008d36edf82e70407
 endpoint = https://api.x.ai/v1/responses (API key); https://cli-chat-proxy.grok.com/v1/responses (OAuth)
 capture_method = redacted mitmproxy network capture
 capture_modes = non-interactive, interactive, session-title
