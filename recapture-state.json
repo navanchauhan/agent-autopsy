@@ -1,48 +1,39 @@
 {
   "schema_version": 1,
   "tools": {
-    "codex": {
-      "plan_hash": "805892c990b8d363f29052daf9d63f2a935e6b1b220c38210205ed32403dd724",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261005",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
     "claude-code": {
       "plan_hash": "8f2e04ba76e231c3b4fea04d2b9f562178be870d02e5af1b0fa397b60ff61165",
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261005",
+      "last_fresh_bucket": "20261006",
       "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
     "grok": {
-      "plan_hash": "05a77ec2d498893e724e1735cc287c615a5b51410bd93283bd7d61e3174f7f9d",
+      "plan_hash": "7c850c25594ac449d3a217d8e4d671047d93de5937eeafc9f27ba2c2f38d41fd",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261005",
+      "last_fresh_bucket": "20261006",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "antigravity": {
-      "plan_hash": "d2a67428b2b14fa5f81db769089bc161de23fce7df14030b17925d6e3749991d",
+      "plan_hash": "14d14c1a9be0879a593d63cc10e5217f483485d4e7350f8cc8bd8f8d7addab49",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261005",
+      "last_fresh_bucket": "20261006",
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "qwen-code": {
-      "plan_hash": "c4a1eb803b5559ea748ac34936c9f18ec20e630e2a7f3f18ebc33ba3ea4302fa",
+      "plan_hash": "28537565e6483a4c87a7fd8bc163634467ac4d326d1f7721e3bea668122af9bb",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261005",
+      "last_fresh_bucket": "20261006",
       "last_reviewer_input_hash": null,
       "reason": null
     }
