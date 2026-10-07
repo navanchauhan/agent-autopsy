@@ -1,7 +1,13 @@
 {
   "schema_version": 1,
   "queues": {
-    "codex": [],
+    "codex": [
+      {
+        "tool": "codex",
+        "new_version": "0.161.0",
+        "new_revision": "979011409de0a60b52f179721948e65531d26144"
+      }
+    ],
     "claude-code": [
       {
         "tool": "claude-code",
@@ -128,17 +134,15 @@
         "new_version": "2.1.292",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.292/linux-x64/claude",
         "artifact_sha256": "a967e7b1d8b4e47ee421d5433027880347952b0c0857abf880e2c942a4ec93b3"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.293",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.293/linux-x64/claude",
+        "artifact_sha256": "8968405e26db478af44eabc4635ab5ca557057b702a54460a59c13e1b253e978"
       }
     ],
     "grok": [
-      {
-        "tool": "grok",
-        "new_version": "1.0.41",
-        "new_revision": "84745de98b3d3996729aefcefd518890ffb73930",
-        "mirror_revision": "07e35a3dfeed2f200d319ef6c893b5ea286d9a51",
-        "artifact_url": "https://x.ai/cli/grok-1.0.41-linux-x86_64",
-        "artifact_sha256": "9ce03ed23e16ea01072b4496263d6213a27899e1e3e107f008d36edf82e70407"
-      },
       {
         "tool": "grok",
         "new_version": "1.0.42",
@@ -175,9 +179,9 @@
     "antigravity": [
       {
         "tool": "antigravity",
-        "new_version": "1.3.0",
-        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.3.0-6233328509124608/linux-x64/cli_linux_x64.tar.gz",
-        "artifact_sha512": "f6f5e16f356ae8a345fd6ab265ad2a4e4dc8d0b7f4ac345249d0e250a06edd496677b8ac0193b258971feb7ccfbba2fccc2f482db1d62cc650498e352ef85280"
+        "new_version": "1.3.1",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.3.1-4582356770750464/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "3b8349d72678795baf8788481815e20d7acf3b80f9d2f867a607e712bc6be7fb18fd7d4fcf3aeee4ae593b0f469684c6d3497524f10a4c426a1a2bdec20b1f68"
       }
     ],
     "qwen-code": [
