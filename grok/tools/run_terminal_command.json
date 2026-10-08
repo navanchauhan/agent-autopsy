@@ -14,29 +14,22 @@
           "description": "The bash command to run.",
           "type": "string"
         },
-        "timeout": {
-          "description": "Optional timeout in milliseconds (max 36000000). Default: 120000. Kill deadline for a command that is still in the foreground. This does not extend how long the tool waits: a foreground command still running after about 15s is moved to the background and you receive a task id. Once backgrounded, the command is no longer bound by this value; it runs until it exits (background cap 10h). If you do not receive a task id, the command was killed at timeout instead.",
+        "block_until_ms": {
+          "description": "How long to block and wait for the command to complete before moving it to background (in milliseconds). Defaults to 30000ms. Set to 0 to immediately run the command in the background. The timer includes the shell startup time.",
           "type": [
             "integer",
             "null"
           ],
           "format": "uint64",
-          "minimum": 0,
-          "default": 120000,
-          "maximum": 36000000
+          "minimum": 0
         },
         "description": {
           "description": "One sentence explanation as to why this command needs to be run and how it contributes to the goal.",
           "type": "string"
-        },
-        "background": {
-          "description": "Set to true for long-running commands that should run in the background (e.g., dev servers, long builds). Returns a task id immediately while the command keeps running in the background; you are notified on completion, so do not poll or sleep-wait for it.",
-          "type": "boolean",
-          "default": false
         }
       },
       "type": "object"
     },
-    "description": "Run a bash command and return its output.\n\nUsage notes:\n  - You can specify an optional timeout in milliseconds (up to 36000000ms). Foreground commands block this tool for at most about 15s. A command still running at that point is moved to the background — it is not killed and has not timed out — and you receive a task id; wait for it with get_command_or_subagent_output. If you do not receive a task id, the command was killed at timeout instead. timeout is a separate kill deadline that only applies while the command is still in the foreground; once backgrounded the command runs until it exits (background cap 10h). Setting timeout never makes this tool wait longer than about 15s. Commands launched with background: true are not bounded by the default: with timeout omitted or 0 they run until they exit or are killed; a positive timeout still applies.\n  - Timeout enforcement:when the timeout fires on an explicit `background: true` command, the wrapper kills the child process group (SIGTERM, escalated to SIGKILL after a ~1s grace period). Descendants that did not detach via `setsid` / `nohup` will also be killed. `timeout: 0` in `background: true` mode disables the wrapper timeout entirely; the child's lifetime is owned by the model via kill_command_or_subagent.\n  - If the output exceeds 40000 characters, the middle is truncated (you keep the beginning and end) and the result includes the path to a log file with the full output, which you can read or search.\n  - You can use the background parameter to run the command in the background (e.g., dev servers, long builds): it returns a task id immediately and keeps running in the background. You are notified on completion, so do not poll or sleep-wait for it. You do not need to use '&' at the end of the command when using this parameter."
+    "description": "Run a bash command and return its output.\n\nUsage notes:\n  - You can specify an optional block_until_ms in milliseconds (up to 36000000ms). A foreground command still running at block_until_ms is moved to the background instead of killed; once backgrounded it runs until it exits (background cap 10h). You will receive a task id; wait for it with get_command_or_subagent_output. `block_until_ms: 0` runs the command in the background immediately.\n  - Background commands run until they exit, until you stop them with kill_command_or_subagent, or until the 10h background cap. kill_command_or_subagent sends SIGTERM to the process group, then SIGKILL after ~1s; processes that did not detach via `setsid` / `nohup` are killed with it.\n  - If the output exceeds 40000 characters, the middle is truncated (you keep the beginning and end) and the result includes the path to a log file with the full output, which you can read or search.\n  - Set `block_until_ms` to 0 to run the command in the background (e.g., dev servers, long builds): it returns a task id immediately and keeps running in the background. You are notified when it completes, so you can keep working; only poll it with get_command_or_subagent_output when it needs close monitoring (long-running jobs that can hang or degrade before finishing), and poll later if you end up blocked on the result. You do not need to use '&' at the end of the command when using this parameter."
   }
 }

@@ -20,7 +20,7 @@
       },
       "login": {
         "type": "boolean",
-        "description": "True runs with login shell semantics; false disables them. Defaults to true."
+        "description": "True runs the shell with -l/-i semantics; false disables them. Defaults to true."
       },
       "sandbox_permissions": {
         "type": "string",

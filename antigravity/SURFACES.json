@@ -30,7 +30,7 @@
         "prompts/gemini-3.8-flash-high-interactive.md"
       ],
       "artifact_sha256": "0ca1e5dea72f9883be8e48bd85f1f4f1e0b83dbaa563c420525b9e11e42b70a0",
-      "evidence_sha256": "4da9802ab871ceca79ad2dee903e707d7e9d693d524f2e97033ab643cf41a807"
+      "evidence_sha256": "9e824c67b4589aeb87332e804223af5f4b0a23dbb0ac29233e2bd49b0374b93f"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
@@ -50,7 +50,7 @@
         "prompts/gemini-3.8-flash-high.md"
       ],
       "artifact_sha256": "350fc78f1154deaac34b3b9c33de88733292a49da15e7dd998faa92e0813430a",
-      "evidence_sha256": "4da9802ab871ceca79ad2dee903e707d7e9d693d524f2e97033ab643cf41a807"
+      "evidence_sha256": "9e824c67b4589aeb87332e804223af5f4b0a23dbb0ac29233e2bd49b0374b93f"
     },
     {
       "id": "antigravity.tool.catalog",
@@ -83,7 +83,7 @@
         "tools/write_to_file.json"
       ],
       "artifact_sha256": "2f2d337414caaa967fdb5434d1ca655eb779ee79ea7d6d8ed27b3812ed22e4bb",
-      "evidence_sha256": "4da9802ab871ceca79ad2dee903e707d7e9d693d524f2e97033ab643cf41a807"
+      "evidence_sha256": "9e824c67b4589aeb87332e804223af5f4b0a23dbb0ac29233e2bd49b0374b93f"
     }
   ]
 }

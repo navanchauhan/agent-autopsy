@@ -1,0 +1,20 @@
+{
+  "name": "search_memory",
+  "description": "Use visible memory metadata when sufficient. Fetch exact refs copied from the memory tree; search terms or phrases when the ref or relevant body section is unknown; explore categories for an overview. Continue a truncated body with fetch using its returned ref and cursor.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "mode": {"type": "string", "enum": ["fetch", "search", "explore"], "description": "mode"},
+      "refs": {"type": "array", "description": "fetch only: exact opaque refs copied from the tree/results, e.g. project:project/compaction-pipeline.md", "items": {"type": "string"}, "minItems": 1, "maxItems": 5},
+      "cursor": {"type": "string", "description": "fetch only: cursor returned for the sole ref; copy the returned continuation"},
+      "keywords": {"type": "array", "description": "search only: 1-5 terms, phrases, or identifiers", "items": {"type": "string", "maxLength": 64}, "minItems": 1, "maxItems": 5},
+      "scopes": {"type": "array", "description": "search/explore only: visible memory scopes", "items": {"type": "string", "enum": ["project", "user", "team"]}, "minItems": 1},
+      "categories": {"type": "array", "description": "search only: category filters", "items": {"type": "string", "enum": ["basic_information", "hobbies", "communication_preference", "behavior_habit", "project_introduction", "tech_stack", "build_configuration", "dependency_configuration", "ide_configuration", "scm_configuration", "environment_configuration", "code_standard", "practice_standard", "testing_standard", "comment_standard", "tool_experience", "mcp_experience", "common_pitfall", "important_decision", "task_summary", "uncategorized"]}, "minItems": 1},
+      "limit": {"type": "integer", "description": "search only: result limit", "minimum": 1, "maximum": 5},
+      "branches": {"type": "array", "description": "explore only: category branches", "maxItems": 3, "items": {"type": "object", "properties": {"category": {"type": "string", "enum": ["basic_information", "hobbies", "communication_preference", "behavior_habit", "project_introduction", "tech_stack", "build_configuration", "dependency_configuration", "ide_configuration", "scm_configuration", "environment_configuration", "code_standard", "practice_standard", "testing_standard", "comment_standard", "tool_experience", "mcp_experience", "common_pitfall", "important_decision", "task_summary", "uncategorized"]}, "cursor": {"type": "string"}}, "required": ["category"], "additionalProperties": false}},
+      "limitPerBranch": {"type": "integer", "description": "explore only: leaf limit per branch", "minimum": 1, "maximum": 20}
+    },
+    "required": ["mode"],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "manage_memory",
+  "description": "Use only when the user asks to remember, update, or forget something. Never save information merely learned while doing another task. remember creates or updates; forget removes.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "action": {"type": "string", "enum": ["remember", "forget"], "description": "remember creates or updates; forget removes"},
+      "content": {"type": "string", "description": "durable fact to remember/update, or memory to forget"}
+    },
+    "required": ["action", "content"],
+    "additionalProperties": false
+  }
+}

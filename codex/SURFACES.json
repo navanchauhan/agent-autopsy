@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "codex",
-  "observed_release": "0.161.0",
+  "observed_release": "0.162.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,14 +17,13 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.161.0",
-      "verified_release": "0.161.0",
+      "captured_release": "0.162.0",
+      "verified_release": "0.162.0",
       "models": [
         "gpt-6-astra",
         "gpt-5",
         "gpt-5.1",
         "gpt-5.2",
-        "gpt-5.4",
         "gpt-5.5",
         "gpt-5.6"
       ],
@@ -42,7 +41,6 @@
         "prompts/gpt-5.2-codex.md",
         "prompts/gpt-5.2.md",
         "prompts/gpt-5.4-mini.md",
-        "prompts/gpt-5.4.md",
         "prompts/gpt-5.5.md",
         "prompts/gpt-5.6-luna.md",
         "prompts/gpt-5.6-sol.md",
@@ -51,16 +49,16 @@
         "prompts/prompt-with-apply-patch-instructions.md",
         "prompts/review.md"
       ],
-      "artifact_sha256": "92ad4c140aec7b571f303faafbb0e45cd138a58bc95e28d291b0a0696071a9f1",
-      "evidence_sha256": "0e58f3e5d100aa3c4248776382ae969b31e9c740a6bd726b98641a1123496c4f"
+      "artifact_sha256": "3103304d4c34ed0f13f462c9e291fe1ef67658c3c88088f16c86ea4ab51679a0",
+      "evidence_sha256": "8dbffd898b9e4b3118540490109f12d909910c7b7952053cc789238b1229f91d"
     },
     {
       "id": "codex.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.161.0",
-      "verified_release": "0.161.0",
+      "captured_release": "0.162.0",
+      "verified_release": "0.162.0",
       "models": [
         "all"
       ],
@@ -95,16 +93,16 @@
         "tools/web_search_text_and_image.json",
         "tools/write_stdin.json"
       ],
-      "artifact_sha256": "a03389fbbf3b43b64c667f63c6b835aba3dbe3a3c2d03d73a525ea8b9030a576",
-      "evidence_sha256": "0e58f3e5d100aa3c4248776382ae969b31e9c740a6bd726b98641a1123496c4f"
+      "artifact_sha256": "15d77c9512284bac8f4d48291aeabf2a532f7c80a68091e8563d5287b6ab4a39",
+      "evidence_sha256": "8dbffd898b9e4b3118540490109f12d909910c7b7952053cc789238b1229f91d"
     },
     {
       "id": "codex.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.161.0",
-      "verified_release": "0.161.0",
+      "captured_release": "0.162.0",
+      "verified_release": "0.162.0",
       "models": [
         "all"
       ],
@@ -147,7 +145,7 @@
         "misc/review-exit-success.xml"
       ],
       "artifact_sha256": "eb4750534feef01dc68aa286f61af4fe855ad7bc7caf26ee27dade84dfaa15e3",
-      "evidence_sha256": "0e58f3e5d100aa3c4248776382ae969b31e9c740a6bd726b98641a1123496c4f"
+      "evidence_sha256": "8dbffd898b9e4b3118540490109f12d909910c7b7952053cc789238b1229f91d"
     },
     {
       "id": "codex.assembly.model-mode",
