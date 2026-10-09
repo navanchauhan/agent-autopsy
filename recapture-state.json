@@ -2,11 +2,11 @@
   "schema_version": 1,
   "tools": {
     "codex": {
-      "plan_hash": "d913d1d4ca1416bb3d6a3000251c0bc1b510a15d756a1d7a7c9d4fd820f8917e",
+      "plan_hash": "6e84d19fad635988194d96e278e14a279609b559f6ec3a8e00687327f1f80847",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261008",
+      "last_fresh_bucket": "20261009",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -20,29 +20,29 @@
       "reason": "capture_retry"
     },
     "grok": {
-      "plan_hash": "b8b211abb1b30479a7029f243aeea891cff527e8dafbef757ad260c9150a7a6d",
+      "plan_hash": "a34486ade3fd2462a3f2919179c8f054d616e57b8f702b64e9ed7c9d1f7d23fe",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261008",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
-    "qwen-code": {
-      "plan_hash": "23130bc7f7a77d07ee2c7549085d56fd2528ac753ca87fbee216e9f036430388",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261008",
+      "last_fresh_bucket": null,
       "last_reviewer_input_hash": null,
       "reason": null
     },
     "antigravity": {
-      "plan_hash": "ee380b72f8e4667ef52615b25d241344db69db9ab63ace79526cdabb18ca660d",
+      "plan_hash": "fb474f1393cec0f0c3d6156c425e819101f436c034ef1eab1e53356aefa4d3c6",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261008",
+      "last_fresh_bucket": null,
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "qwen-code": {
+      "plan_hash": "683878132fb3c6d41b7a6678fddaa9265622596f0739bd6463a4768eb73eb12a",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": null,
       "last_reviewer_input_hash": null,
       "reason": null
     }
