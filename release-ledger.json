@@ -4,8 +4,8 @@
     "codex": [
       {
         "tool": "codex",
-        "new_version": "0.162.0",
-        "new_revision": "c1382380de69521303b416720a52f42d51af6248"
+        "new_version": "0.162.1",
+        "new_revision": "092d3acd6bec3e3a14bdc7e7a2810ab628ab759d"
       }
     ],
     "claude-code": [
@@ -152,17 +152,15 @@
         "new_version": "2.1.295",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.295/linux-x64/claude",
         "artifact_sha256": "4503bfe11a6c7fcc1e0b39b5e0d347c04248f750b03b0977b3ad6b531fe6f358"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.296",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.296/linux-x64/claude",
+        "artifact_sha256": "24972e3bc859fab2b46ed4c1e51f7d6130f06d3bd550811a114640de3370d0de"
       }
     ],
     "grok": [
-      {
-        "tool": "grok",
-        "new_version": "1.0.43",
-        "new_revision": "f589e31cc17fbf9a41072a379dba4673f6aa0861",
-        "mirror_revision": "97f190f644ae1ba07fd6ee185ef54c650e142666",
-        "artifact_url": "https://x.ai/cli/grok-1.0.43-linux-x86_64",
-        "artifact_sha256": "34444fab6c1d77ae28f01a903d453032d48f8c85af4e5bb195d487031b265901"
-      },
       {
         "tool": "grok",
         "new_version": "1.0.44",
@@ -180,13 +178,15 @@
         "artifact_sha256": "3ef9bf5689ae9cc58f1bc918ae6067627a3667c7519245b9e8aacd9288559718"
       }
     ],
-    "antigravity": [],
-    "qwen-code": [
+    "antigravity": [
       {
-        "tool": "qwen-code",
-        "new_version": "0.24.7",
-        "new_revision": "b12edec1401a28fc53cd9e714d5928b285071fc8"
-      },
+        "tool": "antigravity",
+        "new_version": "1.3.2",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.3.2-5813501495738368/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "8dc2bb8471cfa6326e29e2896add767ad2d1f3714304b70fbae720d68af011182e7afde43964a7a3f54c604ab72c4fad772c8595608b059cfc582fb6798a25d2"
+      }
+    ],
+    "qwen-code": [
       {
         "tool": "qwen-code",
         "new_version": "0.25.0",
