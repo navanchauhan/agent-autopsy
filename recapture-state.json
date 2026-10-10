@@ -15,7 +15,7 @@
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261008",
+      "last_fresh_bucket": "20261010",
       "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
@@ -24,7 +24,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": null,
+      "last_fresh_bucket": "20261010",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -33,7 +33,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": null,
+      "last_fresh_bucket": "20261010",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -42,7 +42,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": null,
+      "last_fresh_bucket": "20261010",
       "last_reviewer_input_hash": null,
       "reason": null
     }
