@@ -1,0 +1,15 @@
+{
+  "name": "thread_review",
+  "description": "Post your conclusion and hand the thread back for a person to check. You cannot mark a thread done; only a person can.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "summary": {
+        "type": "string",
+        "description": "What you concluded, and what a person should check. When the thread frame states \"Done when\", answer it point by point and say plainly which parts you did not meet."
+      }
+    },
+    "required": ["summary"],
+    "additionalProperties": false
+  }
+}

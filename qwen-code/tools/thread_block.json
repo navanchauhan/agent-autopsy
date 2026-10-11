@@ -1,0 +1,15 @@
+{
+  "name": "thread_block",
+  "description": "Ask a person a question, mark the thread blocked, and end your run. Costs nothing while you wait, and their reply wakes you again. Use this instead of guessing.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "question": {
+        "type": "string",
+        "description": "What you need a person to decide or supply."
+      }
+    },
+    "required": ["question"],
+    "additionalProperties": false
+  }
+}

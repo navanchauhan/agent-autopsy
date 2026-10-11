@@ -1,0 +1,15 @@
+{
+  "name": "thread_post",
+  "description": "Post a message to the thread you are currently working on. Mention a peer with @name to hand work to them. You cannot post to another thread: this always writes to your current one.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string",
+        "description": "What to post. Use @name to address an enabled peer listed in your run frame."
+      }
+    },
+    "required": ["text"],
+    "additionalProperties": false
+  }
+}

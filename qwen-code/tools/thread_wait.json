@@ -1,0 +1,9 @@
+{
+  "name": "thread_wait",
+  "description": "End your run after delegating live work, without asking a person or claiming the thread is ready for review. Refused unless another run is live on this thread or a sub-thread is open, because otherwise nothing could wake the thread again.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  }
+}
