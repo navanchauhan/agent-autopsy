@@ -269,6 +269,9 @@ function markHarnessVariables(text) {
       harnessScalar("workspaceUri", "/Users/example/Developer/example-repo"),
     );
   }
+  // The capture host's own cwd (/workspace) can show up as an extra Active
+  // Workspaces entry; it is capture-environment noise, not release content.
+  out = out.replace(/^(Active Workspaces:\n(?:- .*\n)*?)- \/workspace\n/m, "$1");
   const literalExamples = new Map();
   const addLiteralExample = (value, name) => {
     if (value && !literalExamples.has(value)) literalExamples.set(value, name);

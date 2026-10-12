@@ -189,9 +189,8 @@ Available skills:
 <user_information>
 The USER's OS version is <harnessVariable>{{userOsVersion=linux}}</harnessVariable>.
 Active Workspaces:
-- /workspace
 - <harnessVariable>{{workspaceUri=/Users/example/Developer/example-repo}}</harnessVariable>
-Command Working Directory: /workspace
+Command Working Directory: <harnessVariable>{{workspaceUri=/Users/example/Developer/example-repo}}</harnessVariable>
 Code relating to the user's requests should be written in the locations listed above. Avoid writing project code files to tmp, in the .gemini dir, or directly to the Desktop and similar folders unless explicitly asked.
 App Data Directory: <harnessVariable>{{antigravityAppDataDirectory=/Users/example/.gemini/antigravity-cli}}</harnessVariable>
 Conversation ID: <harnessVariable>{{conversationId=00000000-0000-4000-8000-000000000000}}</harnessVariable>
