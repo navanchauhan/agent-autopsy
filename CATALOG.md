@@ -29,19 +29,26 @@ Observed release: `1.3.3`
 
 ## claude-code
 
-Observed release: `2.1.270`
+Observed release: `2.1.296`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `claude-code.prompt.agent.claude-fable-5-1.non-interactive` | agent prompt | `claude-fable-5-1` | `non-interactive` | current | `2.1.270` | [claude-fable-5-1.md](claude-code/prompts/claude-fable-5-1.md) |
-| `claude-code.prompt.agent.claude-haiku-4-5-20251001.non-interactive` | agent prompt | `claude-haiku-4-5-20251001` | `non-interactive` | current | `2.1.270` | [claude-haiku-4-5-20251001.md](claude-code/prompts/claude-haiku-4-5-20251001.md) |
-| `claude-code.prompt.agent.claude-opus-5.non-interactive` | agent prompt | `claude-opus-5` | `non-interactive` | current | `2.1.270` | [claude-opus-5.md](claude-code/prompts/claude-opus-5.md) |
-| `claude-code.prompt.agent.claude-sonnet-5.interactive` | agent prompt | `claude-sonnet-5` | `interactive` | current | `2.1.270` | [claude-sonnet-5-interactive.md](claude-code/prompts/claude-sonnet-5-interactive.md) |
-| `claude-code.prompt.agent.claude-sonnet-5.non-interactive` | agent prompt | `claude-sonnet-5` | `non-interactive` | current | `2.1.270` | [claude-sonnet-5.md](claude-code/prompts/claude-sonnet-5.md) |
-| `claude-code.prompt.special.session-title` | session title prompt | `claude-haiku-4-5-20251001` | `session-title` | current | `2.1.270` | [claude-haiku-4-5-20251001-session-title.md](claude-code/prompts/claude-haiku-4-5-20251001-session-title.md) |
-| `claude-code.steering.interactive` | steering messages | `claude-sonnet-5` | `interactive` | current | `2.1.270` | [claude-sonnet-5-interactive-steering.md](claude-code/misc/claude-sonnet-5-interactive-steering.md) |
-| `claude-code.steering.non-interactive` | steering messages | `claude-fable-5-1`, `claude-haiku-4-5-20251001`, `claude-opus-5`, `claude-sonnet-5` | `non-interactive` | current | `2.1.270` | [claude-fable-5-1-steering.md](claude-code/misc/claude-fable-5-1-steering.md), [claude-haiku-4-5-20251001-steering.md](claude-code/misc/claude-haiku-4-5-20251001-steering.md), [claude-opus-5-steering.md](claude-code/misc/claude-opus-5-steering.md), [claude-sonnet-5-steering.md](claude-code/misc/claude-sonnet-5-steering.md) |
-| `claude-code.tool.catalog` | tool schemas | `claude-fable-5-1`, `claude-haiku-4-5-20251001`, `claude-opus-5`, `claude-sonnet-5` | `interactive`, `non-interactive` | current | `2.1.270` | 37 files ([manifest](claude-code/SURFACES.json)) |
+| `claude-code.prompt.agent.claude-fable-5-1.non-interactive` | agent prompt | `claude-fable-5-1` | `non-interactive` | current | `2.1.296` | [claude-fable-5-1.md](claude-code/prompts/claude-fable-5-1.md) |
+| `claude-code.prompt.agent.claude-haiku-5-5.non-interactive` | agent prompt | `claude-haiku-5-5` | `non-interactive` | current | `2.1.296` | [claude-haiku-5-5.md](claude-code/prompts/claude-haiku-5-5.md) |
+| `claude-code.prompt.agent.claude-opus-5-5.non-interactive` | agent prompt | `claude-opus-5-5` | `non-interactive` | current | `2.1.296` | [claude-opus-5-5.md](claude-code/prompts/claude-opus-5-5.md) |
+| `claude-code.prompt.agent.claude-sonnet-5-5.non-interactive` | agent prompt | `claude-sonnet-5-5` | `non-interactive` | current | `2.1.296` | [claude-sonnet-5-5.md](claude-code/prompts/claude-sonnet-5-5.md) |
+| `claude-code.prompt.agent.claude-sonnet-5-5.interactive` | agent prompt | `claude-sonnet-5-5` | `interactive` | current | `2.1.296` | [claude-sonnet-5-5-interactive.md](claude-code/prompts/claude-sonnet-5-5-interactive.md) |
+| `claude-code.prompt.special.prompt-suggestion` | prompt suggestion prompt | `claude-sonnet-5-5` | `interactive` | current | `2.1.296` | [prompt-suggestion.md](claude-code/misc/prompt-suggestion.md) |
+| `claude-code.prompt.special.session-title` | session title prompt | `claude-haiku-5-5` | `session-title` | current | `2.1.296` | [claude-haiku-5-5-session-title-message.md](claude-code/misc/claude-haiku-5-5-session-title-message.md), [claude-haiku-5-5-session-title.md](claude-code/prompts/claude-haiku-5-5-session-title.md) |
+| `claude-code.steering.interactive` | steering messages | `claude-sonnet-5-5` | `interactive` | current | `2.1.296` | [claude-sonnet-5-5-interactive-steering.md](claude-code/misc/claude-sonnet-5-5-interactive-steering.md) |
+| `claude-code.steering.non-interactive` | steering messages | `claude-fable-5-1`, `claude-haiku-5-5`, `claude-opus-5-5`, `claude-sonnet-5-5` | `non-interactive` | current | `2.1.296` | [claude-fable-5-1-steering.md](claude-code/misc/claude-fable-5-1-steering.md), [claude-haiku-5-5-steering.md](claude-code/misc/claude-haiku-5-5-steering.md), [claude-opus-5-5-steering.md](claude-code/misc/claude-opus-5-5-steering.md), [claude-sonnet-5-5-steering.md](claude-code/misc/claude-sonnet-5-5-steering.md) |
+| `claude-code.tool.catalog` | tool schemas | `claude-fable-5-1`, `claude-haiku-5-5`, `claude-opus-5-5`, `claude-sonnet-5-5` | `interactive`, `non-interactive` | current | `2.1.296` | 34 files ([manifest](claude-code/SURFACES.json)) |
+| `claude-code.tool.legacy` | tool schemas | `claude-haiku-4-5-20251001`, `claude-sonnet-5` | `interactive`, `non-interactive` | stale | `2.1.270` | 5 files ([manifest](claude-code/SURFACES.json)) |
+| `claude-code.prompt.agent.claude-haiku-4-5-20251001.non-interactive` | agent prompt | `claude-haiku-4-5-20251001` | `non-interactive` | stale | `2.1.270` | [claude-haiku-4-5-20251001.md](claude-code/prompts/claude-haiku-4-5-20251001.md) |
+| `claude-code.prompt.agent.claude-opus-5.non-interactive` | agent prompt | `claude-opus-5` | `non-interactive` | stale | `2.1.270` | [claude-opus-5.md](claude-code/prompts/claude-opus-5.md) |
+| `claude-code.prompt.agent.claude-sonnet-5.non-interactive` | agent prompt | `claude-sonnet-5` | `non-interactive` | stale | `2.1.270` | [claude-sonnet-5.md](claude-code/prompts/claude-sonnet-5.md) |
+| `claude-code.prompt.agent.claude-sonnet-5.interactive` | agent prompt | `claude-sonnet-5` | `interactive` | stale | `2.1.270` | [claude-sonnet-5-interactive.md](claude-code/prompts/claude-sonnet-5-interactive.md) |
+| `claude-code.steering.legacy` | steering messages | `claude-haiku-4-5-20251001`, `claude-opus-5`, `claude-sonnet-5` | `interactive`, `non-interactive` | stale | `2.1.270` | [claude-haiku-4-5-20251001-steering.md](claude-code/misc/claude-haiku-4-5-20251001-steering.md), [claude-opus-5-steering.md](claude-code/misc/claude-opus-5-steering.md), [claude-sonnet-5-interactive-steering.md](claude-code/misc/claude-sonnet-5-interactive-steering.md), [claude-sonnet-5-steering.md](claude-code/misc/claude-sonnet-5-steering.md) |
 
 ## codex
 

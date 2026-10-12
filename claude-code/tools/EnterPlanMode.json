@@ -3,7 +3,7 @@
   "variants": [
     {
       "models": [
-        "claude-sonnet-5"
+        "claude-sonnet-5-5"
       ],
       "runs": [
         "interactive"

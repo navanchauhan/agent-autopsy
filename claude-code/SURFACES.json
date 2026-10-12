@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "claude-code",
-  "observed_release": "2.1.270",
+  "observed_release": "2.1.296",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.270",
-      "verified_release": "2.1.270",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
       "models": [
         "claude-fable-5-1"
       ],
@@ -29,181 +29,209 @@
       "artifacts": [
         "prompts/claude-fable-5-1.md"
       ],
-      "notes": "The prompt was captured from the current 2.1.270 model-facing request.",
-      "artifact_sha256": "623904289002db9cbf964699f170f2b3a79acbe0b2f235b56ecfc15c7d740940",
-      "evidence_sha256": "78c37f3ac142b7dc88ac3c1879fba4876cf421612eb755b221dc3d91456ff044"
+      "notes": "System blocks from the first request of a 2.1.296 `claude -p` thread on claude-fable-5-1, joined in order. The /model picker at 2.1.296 offers Sonnet 5.5 (default), Opus 5.5, Haiku 5.5, and Fable 5.1; every one of these was captured.",
+      "artifact_sha256": "63d7789a7ddd1289733fc50650833c3faa193fb6bd4c71ff28055e93325a692b",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
     },
     {
-      "id": "claude-code.prompt.agent.claude-haiku-4-5-20251001.non-interactive",
+      "id": "claude-code.prompt.agent.claude-haiku-5-5.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.270",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
       "models": [
-        "claude-haiku-4-5-20251001"
+        "claude-haiku-5-5"
       ],
       "modes": [
         "non-interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/claude-haiku-4-5-20251001.md"
+        "prompts/claude-haiku-5-5.md"
       ],
-      "notes": "The stored artifact's embedded billing header records the model-request build variant.",
-      "verified_release": "2.1.270",
-      "artifact_sha256": "68d22ab51d1468ebeeedd529e56e0f16206205253bf28fcef944fa3453f36280",
-      "evidence_sha256": "78c37f3ac142b7dc88ac3c1879fba4876cf421612eb755b221dc3d91456ff044"
+      "notes": "System blocks from the first request of a 2.1.296 `claude -p` thread on claude-haiku-5-5, joined in order. The /model picker at 2.1.296 offers Sonnet 5.5 (default), Opus 5.5, Haiku 5.5, and Fable 5.1; every one of these was captured.",
+      "artifact_sha256": "13aef2f2fb390282a6d22dfb6476e017ba6a365471afc6282e540839825e0918",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
     },
     {
-      "id": "claude-code.prompt.agent.claude-opus-5.non-interactive",
+      "id": "claude-code.prompt.agent.claude-opus-5-5.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.270",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
       "models": [
-        "claude-opus-5"
+        "claude-opus-5-5"
       ],
       "modes": [
         "non-interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/claude-opus-5.md"
+        "prompts/claude-opus-5-5.md"
       ],
-      "notes": "The stored artifact's embedded billing header records the model-request build variant.",
-      "verified_release": "2.1.270",
-      "artifact_sha256": "2f658d579a2c804476176ccae4e2d0a73199ad286c00f01313a6b8aa8d367166",
-      "evidence_sha256": "78c37f3ac142b7dc88ac3c1879fba4876cf421612eb755b221dc3d91456ff044"
+      "notes": "System blocks from the first request of a 2.1.296 `claude -p` thread on claude-opus-5-5, joined in order. The /model picker at 2.1.296 offers Sonnet 5.5 (default), Opus 5.5, Haiku 5.5, and Fable 5.1; every one of these was captured.",
+      "artifact_sha256": "5442c462a4181caa2559dc444c45d1d2315d1879827f0e8c8b899ac256d0f74a",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
     },
     {
-      "id": "claude-code.prompt.agent.claude-sonnet-5.interactive",
+      "id": "claude-code.prompt.agent.claude-sonnet-5-5.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.270",
-      "verified_release": "2.1.270",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
       "models": [
-        "claude-sonnet-5"
+        "claude-sonnet-5-5"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-sonnet-5-5.md"
+      ],
+      "notes": "System blocks from the first request of a 2.1.296 `claude -p` thread on claude-sonnet-5-5, joined in order. The /model picker at 2.1.296 offers Sonnet 5.5 (default), Opus 5.5, Haiku 5.5, and Fable 5.1; every one of these was captured.",
+      "artifact_sha256": "29a3e1fa3431b55cc85817787a05732375bc2873e03887ce4ff02f812c9c7f46",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-sonnet-5-5.interactive",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "model-request",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
+      "models": [
+        "claude-sonnet-5-5"
       ],
       "modes": [
         "interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/claude-sonnet-5-interactive.md"
+        "prompts/claude-sonnet-5-5-interactive.md"
       ],
-      "notes": "The interactive prompt was normalized from the current 2.1.270 model-facing request.",
-      "artifact_sha256": "0cf6adfa845262de45b9b03bfd903df9894dbdaf6502edfdaea00c50e5afe9f8",
-      "evidence_sha256": "78c37f3ac142b7dc88ac3c1879fba4876cf421612eb755b221dc3d91456ff044"
+      "notes": "System blocks from the first request of a 2.1.296 TUI thread on the default model (Sonnet 5.5).",
+      "artifact_sha256": "427e7241ff70d603ef392db320fdeb3213e1692be18e025a53cd867dc594f278",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
     },
     {
-      "id": "claude-code.prompt.agent.claude-sonnet-5.non-interactive",
-      "category": "agent prompt",
+      "id": "claude-code.prompt.special.prompt-suggestion",
+      "category": "prompt suggestion prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.270",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
       "models": [
-        "claude-sonnet-5"
+        "claude-sonnet-5-5"
       ],
       "modes": [
-        "non-interactive"
+        "interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/claude-sonnet-5.md"
+        "misc/prompt-suggestion.md"
       ],
-      "notes": "The stored artifact's embedded billing header records the model-request build variant.",
-      "verified_release": "2.1.270",
-      "artifact_sha256": "d712310913983ec09e423bca6ab3dfebb6346ae207f9611ec37766b15afe6ccf",
-      "evidence_sha256": "78c37f3ac142b7dc88ac3c1879fba4876cf421612eb755b221dc3d91456ff044"
+      "notes": "Final user message of the auxiliary request the 2.1.296 TUI sends after a turn to predict the next user input. The request reuses the main thread's system prompt, tools, and conversation.",
+      "artifact_sha256": "12aef6ae4cf594ad6444ad724aa74aa98452aa3ba5305948eb30ee9967dafed5",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
     },
     {
       "id": "claude-code.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.270",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
       "models": [
-        "claude-haiku-4-5-20251001"
+        "claude-haiku-5-5"
       ],
       "modes": [
         "session-title"
       ],
-      "dynamic_inputs": [],
-      "artifacts": [
-        "prompts/claude-haiku-4-5-20251001-session-title.md"
+      "dynamic_inputs": [
+        "session content"
       ],
-      "notes": "The session-title prompt was captured from the current 2.1.270 model-facing request.",
-      "verified_release": "2.1.270",
-      "artifact_sha256": "c3006ce153a6d1ecee6ce20966b5daee64ba2f640267f9f281b29533133cac56",
-      "evidence_sha256": "78c37f3ac142b7dc88ac3c1879fba4876cf421612eb755b221dc3d91456ff044"
+      "artifacts": [
+        "misc/claude-haiku-5-5-session-title-message.md",
+        "prompts/claude-haiku-5-5-session-title.md"
+      ],
+      "notes": "Captured from the 2.1.296 TUI. Session titles now use claude-haiku-5-5 (previously claude-haiku-4-5-20251001). The misc file holds the user-message wrapper and the structured-output schema.",
+      "artifact_sha256": "c201ac9dcccdb5aa1792f40fd9cff31a7f99dffb84e5be8d9dbd49e29be07c30",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
     },
     {
       "id": "claude-code.steering.interactive",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.270",
-      "verified_release": "2.1.270",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
       "models": [
-        "claude-sonnet-5"
+        "claude-sonnet-5-5"
       ],
       "modes": [
         "interactive"
       ],
       "dynamic_inputs": [
-        "deferred tools",
-        "user skills",
-        "current date"
+        "Git status",
+        "environment",
+        "current date",
+        "user agents and skills"
       ],
       "artifacts": [
-        "misc/claude-sonnet-5-interactive-steering.md"
+        "misc/claude-sonnet-5-5-interactive-steering.md"
       ],
-      "notes": "The interactive steering message was normalized from the current 2.1.270 model-facing request.",
-      "artifact_sha256": "e014a8a2576fad1961861ffebeb8d4953b5ff7543c725581afbbcf9eb4cf97c3",
-      "evidence_sha256": "78c37f3ac142b7dc88ac3c1879fba4876cf421612eb755b221dc3d91456ff044"
+      "notes": "Message blocks that precede the user's prompt in the first 2.1.296 TUI request, plus the mid-conversation `role: system` message (marked with an HTML comment) that now carries the environment, model, deferred-tool, agent, and skill listings. Lists were captured with no user agents, skills, or MCP servers configured. The deferred-tool listing is dynamic: the published one (18 deferred tools, without EndConversation) is one observed variant; other sessions list 19 tools including EndConversation from the first request.",
+      "artifact_sha256": "6c85902cfc71f2b33a74c012c800fb1d43b5aba7e1a45837a31c6642f3ca92f8",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
     },
     {
       "id": "claude-code.steering.non-interactive",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.270",
-      "verified_release": "2.1.270",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
       "models": [
         "claude-fable-5-1",
-        "claude-haiku-4-5-20251001",
-        "claude-opus-5",
-        "claude-sonnet-5"
+        "claude-haiku-5-5",
+        "claude-opus-5-5",
+        "claude-sonnet-5-5"
       ],
       "modes": [
         "non-interactive"
       ],
       "dynamic_inputs": [
-        "Git status"
+        "Git status",
+        "environment",
+        "current date",
+        "user agents and skills"
       ],
       "artifacts": [
         "misc/claude-fable-5-1-steering.md",
-        "misc/claude-haiku-4-5-20251001-steering.md",
-        "misc/claude-opus-5-steering.md",
-        "misc/claude-sonnet-5-steering.md"
+        "misc/claude-haiku-5-5-steering.md",
+        "misc/claude-opus-5-5-steering.md",
+        "misc/claude-sonnet-5-5-steering.md"
       ],
-      "notes": "Only one model has a stored non-interactive steering surface.",
-      "artifact_sha256": "b4d83fe94d7259e04f3d125fb6c7cc0f98977984c4e0a698b490d0bce1d15bbd",
-      "evidence_sha256": "78c37f3ac142b7dc88ac3c1879fba4876cf421612eb755b221dc3d91456ff044"
+      "notes": "Message blocks that precede the user's prompt in the first 2.1.296 `claude -p` request for each default model, including the mid-conversation `role: system` message (marked with an HTML comment).",
+      "artifact_sha256": "ad07df96082d6ab9a51f07e0414174972b73e919cb39e17578fd907888b8c827",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
     },
     {
       "id": "claude-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "2.1.270",
-      "verified_release": "2.1.270",
+      "captured_release": "2.1.296",
+      "verified_release": "2.1.296",
       "models": [
         "claude-fable-5-1",
-        "claude-haiku-4-5-20251001",
-        "claude-opus-5",
-        "claude-sonnet-5"
+        "claude-haiku-5-5",
+        "claude-opus-5-5",
+        "claude-sonnet-5-5"
       ],
       "modes": [
         "interactive",
@@ -213,6 +241,8 @@
       "artifacts": [
         "tools/Agent.json",
         "tools/Artifact.json",
+        "tools/ArtifactComments.json",
+        "tools/ArtifactData.json",
         "tools/AskUserQuestion.json",
         "tools/Bash.json",
         "tools/CronCreate.json",
@@ -237,21 +267,152 @@
         "tools/SendFeedback.json",
         "tools/SendMessage.json",
         "tools/Skill.json",
-        "tools/TaskCreate.json",
-        "tools/TaskGet.json",
-        "tools/TaskList.json",
-        "tools/TaskOutput.json",
         "tools/TaskStop.json",
-        "tools/TaskUpdate.json",
         "tools/ToolSearch.json",
         "tools/WebFetch.json",
         "tools/WebSearch.json",
         "tools/Workflow.json",
         "tools/Write.json"
       ],
-      "notes": "Expanded deferred-tool schemas were present in the current 2.1.270 model-facing requests; the catalog includes the supported current variants.",
-      "artifact_sha256": "a77ff05bde6647770f93c8084a5dd7edb1932b59893da2c30331b4dbfefd424b",
-      "evidence_sha256": "78c37f3ac142b7dc88ac3c1879fba4876cf421612eb755b221dc3d91456ff044"
+      "notes": "Exact tool objects from 2.1.296 requests. Deferred tools were captured from the follow-up request after ToolSearch loaded every listed deferred tool; the TUI deferred-tool listing is dynamic, so EndConversation can be missing from the first request's listing and arrive later as a deferred-tool delta on a follow-up turn (in other sessions it is listed from the first request).",
+      "artifact_sha256": "cba8fad19c98f91bde7c3cdf058fc7526c9753225dd1437f22fc9e07e79fd58a",
+      "evidence_sha256": "36b5ed688af70424c41906bf075aaa83bf62abc1d8128707b4d643f16ee0931b"
+    },
+    {
+      "id": "claude-code.tool.legacy",
+      "category": "tool schemas",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.270",
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "modes": [
+        "interactive",
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "tools/TaskCreate.json",
+        "tools/TaskGet.json",
+        "tools/TaskList.json",
+        "tools/TaskOutput.json",
+        "tools/TaskUpdate.json"
+      ],
+      "notes": "Retained from 2.1.270. No 2.1.296 request sent these tools, and ToolSearch did not load them by name. TaskCreate, TaskGet, TaskList, and TaskUpdate descriptions still ship in the 2.1.296 binary; the 2.1.270 TaskOutput description does not.",
+      "artifact_sha256": "ce48209ed0cd1b74782be181e100dfc50c28ab97f5a7c419bd3e195062b691fd"
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-haiku-4-5-20251001.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.270",
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-haiku-4-5-20251001.md"
+      ],
+      "notes": "Retained from 2.1.270. claude-haiku-4-5-20251001 is no longer offered by default at 2.1.296 (the /model picker lists only Sonnet 5.5, Opus 5.5, Haiku 5.5, and Fable 5.1), so it was not recaptured.",
+      "verified_release": "2.1.270",
+      "artifact_sha256": "68d22ab51d1468ebeeedd529e56e0f16206205253bf28fcef944fa3453f36280"
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-opus-5.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.270",
+      "models": [
+        "claude-opus-5"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-opus-5.md"
+      ],
+      "notes": "Retained from 2.1.270. claude-opus-5 is no longer offered by default at 2.1.296 (the /model picker lists only Sonnet 5.5, Opus 5.5, Haiku 5.5, and Fable 5.1), so it was not recaptured.",
+      "verified_release": "2.1.270",
+      "artifact_sha256": "2f658d579a2c804476176ccae4e2d0a73199ad286c00f01313a6b8aa8d367166"
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-sonnet-5.non-interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.270",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "modes": [
+        "non-interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-sonnet-5.md"
+      ],
+      "notes": "Retained from 2.1.270. claude-sonnet-5 is no longer offered by default at 2.1.296 (the /model picker lists only Sonnet 5.5, Opus 5.5, Haiku 5.5, and Fable 5.1), so it was not recaptured.",
+      "verified_release": "2.1.270",
+      "artifact_sha256": "d712310913983ec09e423bca6ab3dfebb6346ae207f9611ec37766b15afe6ccf"
+    },
+    {
+      "id": "claude-code.prompt.agent.claude-sonnet-5.interactive",
+      "category": "agent prompt",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.270",
+      "verified_release": "2.1.270",
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/claude-sonnet-5-interactive.md"
+      ],
+      "notes": "Retained from 2.1.270. claude-sonnet-5 is no longer offered by default at 2.1.296 (the /model picker lists only Sonnet 5.5, Opus 5.5, Haiku 5.5, and Fable 5.1), so it was not recaptured.",
+      "artifact_sha256": "0cf6adfa845262de45b9b03bfd903df9894dbdaf6502edfdaea00c50e5afe9f8"
+    },
+    {
+      "id": "claude-code.steering.legacy",
+      "category": "steering messages",
+      "status": "stale",
+      "capture_method": "model-request",
+      "captured_release": "2.1.270",
+      "verified_release": "2.1.270",
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-opus-5",
+        "claude-sonnet-5"
+      ],
+      "modes": [
+        "interactive",
+        "non-interactive"
+      ],
+      "dynamic_inputs": [
+        "Git status",
+        "deferred tools",
+        "user skills",
+        "current date"
+      ],
+      "artifacts": [
+        "misc/claude-haiku-4-5-20251001-steering.md",
+        "misc/claude-opus-5-steering.md",
+        "misc/claude-sonnet-5-interactive-steering.md",
+        "misc/claude-sonnet-5-steering.md"
+      ],
+      "notes": "Retained from 2.1.270 for models that 2.1.296 no longer offers by default.",
+      "artifact_sha256": "6e002f95d9206a24b529ff4d3e096953ee6351ef96edb0163234ff76448e20b7"
     }
   ]
 }
