@@ -5,6 +5,10 @@ name: Agentic refresh
 # Goals: .github/agentic/goal.md, review.md, providers/*.yaml.
 
 on:
+  # TEMPORARY: lets the pipeline be exercised from its feature branch before merge.
+  push:
+    branches: [agentic/pipeline]
+    paths: [.github/agentic/**, .github/workflows/agentic-refresh.yml]
   workflow_dispatch:
     inputs:
       providers:
