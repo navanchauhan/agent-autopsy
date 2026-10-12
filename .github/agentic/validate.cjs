@@ -31,7 +31,7 @@ const literalSecrets = (process.env.SECRET_VALUES_FILE && fs.existsSync(process.
   .map((value) => value.trim()).filter((value) => value.length >= 12);
 
 // Scope: the change may touch only the provider directory and the generated catalog.
-const changed = git("status", "--porcelain=v1", "-z", "--untracked-files=all")
+const changed = git("status", "--porcelain=v1", "-z", "--untracked-files=all", "--no-renames")
   .split("\0").filter(Boolean).map((line) => line.slice(3));
 for (const file of changed) {
   if (file !== "CATALOG.md" && !file.startsWith(`${provider}/`)) errors.push(`out of scope: ${file}`);

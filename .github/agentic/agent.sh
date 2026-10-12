@@ -29,7 +29,7 @@ prompt="$(
   printf '\n## Provider spec\n\n```yaml\n%s\n```\n' "$(cat "$trusted/providers/$provider.yaml")"
   printf '\n## Release plan\n\n```json\n%s\n```\n' "$(jq . "$plan")"
   if [ -s /scratch/feedback.md ]; then
-    printf '\n## Previous attempt was not accepted\n\nThe repository copy still holds that attempt; fix it.\n\n%s\n' \
+    printf '\n## Previous attempt was not accepted\n\nThe repository copy still holds that attempt (`git diff base` shows it); fix it. Your final message must still summarize the whole update, not only this fix.\n\n%s\n' \
       "$(cat /scratch/feedback.md)"
   fi
 )"

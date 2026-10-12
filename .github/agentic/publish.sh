@@ -8,6 +8,7 @@ set -euo pipefail
 
 bundles="${1:?}"; mode="${2:?}"
 repo="$(git rev-parse --show-toplevel)"; cd "$repo"
+trusted="${TRUSTED_DIR:-$repo}"  # checkout whose .github/agentic validates the patches
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
@@ -27,7 +28,7 @@ for bundle in "$bundles"/*/; do
   fi
   git apply --index --whitespace=nowarn "$patch"
   node .github/scripts/generate-catalog.cjs >/dev/null
-  node .github/agentic/validate.cjs "$provider" "$field" "$new"
+  node "$trusted/.github/agentic/validate.cjs" "$provider" "$field" "$new"
   git add -A -- "$provider" CATALOG.md
 
   summary="$(cat "$bundle/summary.md" 2>/dev/null || true)"

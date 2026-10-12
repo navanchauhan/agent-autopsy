@@ -5,10 +5,9 @@ name: Agentic refresh
 # Goals: .github/agentic/goal.md, review.md, providers/*.yaml.
 
 on:
-  # TEMPORARY: lets the pipeline be exercised from its feature branch before merge.
-  push:
-    branches: [agentic/pipeline]
-    paths: [.github/agentic/**, .github/workflows/agentic-refresh.yml]
+  schedule:
+    # Daily at 17:17 UTC; scheduled runs release to the default branch.
+    - cron: "17 17 * * *"
   workflow_dispatch:
     inputs:
       providers:
@@ -140,4 +139,4 @@ jobs:
           merge-multiple: true
       - env:
           GH_TOKEN: ${{ github.token }}
-        run: bash .github/agentic/publish.sh "$RUNNER_TEMP/bundles" "${{ inputs.publish || 'branch' }}"
+        run: bash .github/agentic/publish.sh "$RUNNER_TEMP/bundles" "${{ inputs.publish || (github.event_name == 'schedule' && 'release' || 'branch') }}"

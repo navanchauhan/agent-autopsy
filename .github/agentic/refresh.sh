@@ -32,8 +32,11 @@ for name in CLAUDE_CODE_OAUTH_TOKEN GROK_AUTH_JSON ANTIGRAVITY_GEMINI_CREDS CODE
 done >"$secrets_file"
 export SECRET_VALUES_FILE="$secrets_file"
 
-# The agent edits a .git-less copy, so nothing it writes can reach host git config or hooks.
+# The agent edits a copy with its own throwaway history, so nothing it writes can
+# reach the host checkout's git config or hooks.
 git -C "$repo" archive HEAD | tar -x -C "$work"
+git -C "$work" init -q -b base && git -C "$work" add -A &&
+  git -C "$work" -c user.name=base -c user.email=base@localhost commit -qm "base"
 
 provider_env=()
 case "$provider" in

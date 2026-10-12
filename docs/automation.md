@@ -41,5 +41,6 @@ and review notes leave the job.
 To change what gets captured, edit the goal or a provider spec rather than code.
 Specs hold only facts an agent cannot cheaply rediscover.
 
-The older `daily-refresh.yml` pipeline shares a concurrency group with this
-workflow, so the two never use rotating provider logins at the same time.
+The older script-driven `daily-refresh.yml` pipeline is no longer scheduled. It
+can still be run by hand. It shares a concurrency group with this workflow, so
+the two never use rotating provider logins at the same time.
