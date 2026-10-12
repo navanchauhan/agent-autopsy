@@ -15,7 +15,7 @@
           "type": "string"
         },
         "block_until_ms": {
-          "description": "How long to block and wait for the command to complete before moving it to background (in milliseconds). Defaults to 30000ms. Set to 0 to immediately run the command in the background. The timer includes the shell startup time.",
+          "description": "How long to wait for the command, in milliseconds, before moving it to the background. The default is 30000 (30 seconds). The maximum is 36000000. 0 starts the command in the background immediately. The wait includes shell startup.",
           "type": [
             "integer",
             "null"
@@ -24,12 +24,12 @@
           "minimum": 0
         },
         "description": {
-          "description": "One sentence explanation as to why this command needs to be run and how it contributes to the goal.",
+          "description": "One short sentence that says what this command does and why you run it.",
           "type": "string"
         }
       },
       "type": "object"
     },
-    "description": "Run a bash command and return its output.\n\nUsage notes:\n  - You can specify an optional block_until_ms in milliseconds (up to 36000000ms). A foreground command still running at block_until_ms is moved to the background instead of killed; once backgrounded it runs until it exits (background cap 10h). You will receive a task id; wait for it with get_command_or_subagent_output. `block_until_ms: 0` runs the command in the background immediately.\n  - Background commands run until they exit, until you stop them with kill_command_or_subagent, or until the 10h background cap. kill_command_or_subagent sends SIGTERM to the process group, then SIGKILL after ~1s; processes that did not detach via `setsid` / `nohup` are killed with it.\n  - If the output exceeds 40000 characters, the middle is truncated (you keep the beginning and end) and the result includes the path to a log file with the full output, which you can read or search.\n  - Set `block_until_ms` to 0 to run the command in the background (e.g., dev servers, long builds): it returns a task id immediately and keeps running in the background. You are notified when it completes, so you can keep working; only poll it with get_command_or_subagent_output when it needs close monitoring (long-running jobs that can hang or degrade before finishing), and poll later if you end up blocked on the result. You do not need to use '&' at the end of the command when using this parameter."
+    "description": "Run a bash command and return its output.\n\n- A command that is still running when block_until_ms ends moves to the background and keeps running. You get a task id.\n- If you cannot continue without the result, set block_until_ms longer than the command takes. Otherwise set it to 0 and do independent work while the command runs. You get a notification when it finishes, in a later tool result or in a new turn after your turn ends. To wait for it sooner, use get_command_or_subagent_output. You do not need `&` with block_until_ms. To react to each line of output while a script runs, use monitor.\n- A background command runs until it exits or until you stop it with kill_command_or_subagent. It is killed after 10 hours. When you stop it, the command gets SIGTERM, sent to its process group, then SIGKILL after about 1 second. Child processes that did not detach with `setsid` or `nohup` are also stopped.\n- If the output is longer than 20000 characters, the middle is cut. The result keeps the start and the end and gives the path of a log file with the full output."
   }
 }

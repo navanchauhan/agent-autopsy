@@ -1,6 +1,6 @@
 <user_info>
 OS Version: linux
-Shell: /bin/sh
+Shell: <harnessVariable>{{shell=/bin/bash}}</harnessVariable>
 Workspace Path: <harnessVariable>{{workspacePath=/Users/example/Developer/example-repo}}</harnessVariable>
 Today's date: <harnessVariable>{{currentDate=2026-01-02}}</harnessVariable>
 </user_info>
@@ -23,7 +23,7 @@ When implementing or fixing anything in a web application (UI, layout, styling, 
 - Check every page and route that shares the state, data, or components you touched. Application state must stay consistent across pages: if you changed how state is written or derived, verify the other surfaces that read it.
 - Hunt for regressions. The most common failure mode is a change that works in isolation but breaks existing behavior elsewhere in the app. Navigate the surrounding flows and look for what broke.
 - Verify the paths and edge states your change touches (empty states, error states, route and flag variants), not only the main path.
-- When layout or styling changed, check both desktop and mobile viewports.
+- When layout or styling changed, consider whether you need to verify both desktop and mobile viewports.
 - If verification finds a problem, fix it and re-verify. Do not finish with unverified UI work.
 
 If no browser tools are available, verify through the closest available substitute (tests, curl against the dev server, rendering scripts) and say what you could not verify.
@@ -38,7 +38,7 @@ The following workflows are available:
 
 - deep-research: Research a query with bounded parallelism, cross-check the evidence, and write a cited report
   Use when: Compare, investigate, or research a question that needs sourced claims. /deep-research, research this, write a cited report.
-  Absolute path: /example/_work/xai/xai/crates/codegen/xai-grok-shell/src/session/workflows/deep_research.rhai
+  Absolute path: <harnessVariable>{{workflowPath=/example/xai/spacexai-checks/crates/codegen/xai-grok-shell/src/session/workflows/deep_research.rhai}}</harnessVariable>
 </system-reminder>
 
 ---

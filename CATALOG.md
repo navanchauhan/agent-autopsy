@@ -66,15 +66,19 @@ Observed release: `0.162.1`
 
 ## grok
 
-Observed release: `1.0.44`
+Observed release: `1.0.52`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.44` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
-| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.44` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
-| `grok.steering.catalog` | steering messages | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive` | current | `1.0.44` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md), [grok-4.7-interactive-steering.md](grok/misc/grok-4.7-interactive-steering.md) |
-| `grok.tool.catalog` | tool schemas | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive`, `session-title` | current | `1.0.44` | 29 files ([manifest](grok/SURFACES.json)) |
-| `grok.prompt.agent.grok-4-7.interactive` | agent prompt | `grok-4.7` | `interactive` | current | `1.0.44` | [grok-4.7-interactive.md](grok/prompts/grok-4.7-interactive.md) |
+| `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.52` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
+| `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.52` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
+| `grok.steering.catalog` | steering messages | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive` | current | `1.0.52` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md), [grok-4.7-auxiliary-user-templates.md](grok/misc/grok-4.7-auxiliary-user-templates.md), [grok-4.7-interactive-steering.md](grok/misc/grok-4.7-interactive-steering.md) |
+| `grok.tool.catalog` | tool schemas | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive`, `session-title` | current | `1.0.52` | 29 files ([manifest](grok/SURFACES.json)) |
+| `grok.prompt.agent.grok-4-7.interactive` | agent prompt | `grok-4.7` | `interactive` | current | `1.0.52` | [grok-4.7-interactive.md](grok/prompts/grok-4.7-interactive.md) |
+| `grok.prompt.special.memory-capture` | memory capture prompt | `grok-4.7` | `interactive` | current | `1.0.52` | [grok-memory-capture.md](grok/prompts/grok-memory-capture.md), [grok-memory-capture-output-schema.json](grok/misc/grok-memory-capture-output-schema.json) |
+| `grok.prompt.special.prompt-suggestion` | prompt suggestion prompt | `grok-4.7` | `interactive` | current | `1.0.52` | [grok-prompt-suggestion.md](grok/prompts/grok-prompt-suggestion.md) |
+| `grok.prompt.special.turn-summary` | turn summary prompt | `grok-4.7` | `interactive` | current | `1.0.52` | [grok-turn-summary.md](grok/prompts/grok-turn-summary.md) |
+| `grok.source.snapshot` | source prompt and tool construction | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive`, `session-title` | gap | — | — |
 
 ## qwen-code
 

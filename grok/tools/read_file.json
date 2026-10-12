@@ -11,27 +11,27 @@
       "type": "object",
       "properties": {
         "target_file": {
-          "description": "The path of the file to read. You can use either a relative path in the workspace or an absolute path. If an absolute path is provided, it will be preserved as is.",
+          "description": "Path of the file to read. Use a path relative to the workspace or an absolute path.",
           "type": "string"
         },
         "offset": {
-          "description": "The line number to start reading from. Only provide if the file is too large to read at once.",
+          "description": "Line number to start from.",
           "type": "integer",
           "default": 1
         },
         "limit": {
-          "description": "The number of lines to read. Only provide if the file is too large to read at once.",
+          "description": "Number of lines to read.",
           "type": "integer"
         },
         "pages": {
-          "description": "Page range for PDF files (e.g. '1-5', '3', '10-'). Required for PDFs with more than 10 pages. Max 20 pages per call. Ignored for non-PDF files.",
+          "description": "Page range to read from a PDF file, for example '1-5', '3', or '10-'. Required for a PDF with more than 10 pages. The maximum is 20 pages for each call.",
           "type": [
             "string",
             "null"
           ]
         },
         "format": {
-          "description": "Output format for PDF files. 'image' (default) renders pages as images. 'text' extracts text content. Ignored for non-PDF files.",
+          "description": "How to read a PDF file. 'image' shows the pages as images and is the default. 'text' extracts the text.",
           "type": [
             "string",
             "null"
@@ -39,6 +39,6 @@
         }
       }
     },
-    "description": "Read a file.\n\nUsage:\n- The target_file parameter can be a relative path in the workspace or an absolute path\n- By default, it reads up to 1000 lines starting from the beginning of the file (SKILL.md and AGENTS.md/CLAUDE.md files are always returned whole; offset and limit are ignored for them)\n- Line numbers (1-based) appear as anchors in the format LINE_NUMBER→LINE_CONTENT on the first returned line and on every 10th line of the file; the lines in between show content only. Count from the nearest anchor when referring to a specific line\n- This tool can read PDF files (.pdf), PowerPoint files (.pptx), Jupyter notebooks (.ipynb files), and image files (e.g. PNG, JPG, etc).\n- When reading an image file the contents are presented visually as this tool uses multimodal LLMs."
+    "description": "Read a file.\n\n- The tool reads up to 1000 lines, starting at offset. A read that is too large fails, so use offset and limit to read a large file in parts. A SKILL.md, AGENTS.md, or CLAUDE.md file is always read whole if it fits in one read, and offset and limit are ignored for it.\n- The first line and every 10th line start with the line number and →, for example `10→`. The other lines show only their content. Count from the nearest number to find a line.\n- The tool can read PDF, PPTX, and image files. You see image files as images. A Jupyter notebook is shown as its JSON."
   }
 }

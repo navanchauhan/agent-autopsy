@@ -7,7 +7,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "properties": {
         "task_id": {
-          "description": "Id of an existing task to update in place: provided fields replace old values, omitted ones are unchanged, the schedule keeps its phase, and an unknown id errors. Omit to create a task.",
+          "description": "ID of the scheduled task to change. Leave it out to create a new task. When you change a task, the fields you pass replace the old values. The other fields stay the same.",
           "type": [
             "string",
             "null"
@@ -15,7 +15,7 @@
           "default": null
         },
         "interval": {
-          "description": "Interval between executions, e.g. \"5m\", \"2h\", \"1d\". Required to create; optional with task_id",
+          "description": "Time between runs. Use a whole number followed by s, m, h, or d, for example \"10m\", \"2h\", or \"1d\". The minimum is 60s. A smaller value runs every 60s. Required when you create a task.",
           "type": [
             "string",
             "null"
@@ -23,7 +23,7 @@
           "default": null
         },
         "prompt": {
-          "description": "The prompt text to execute on each scheduled fire. Required to create; optional with task_id",
+          "description": "Instructions for the subagent that does each run. Include all the context it needs. Required when you create a task.",
           "type": [
             "string",
             "null"
@@ -31,7 +31,7 @@
           "default": null
         },
         "durable": {
-          "description": "Whether the task persists across sessions. Default: false. Create-only: ignored with task_id",
+          "description": "Keep the task after this session is closed and reopened. Used only when you create a task. The default is false.",
           "type": [
             "boolean",
             "null"
@@ -39,7 +39,7 @@
           "default": null
         },
         "fire_immediately": {
-          "description": "Whether to fire immediately on creation (true) or wait for the first interval (false). Default: false. Create-only: ignored with task_id",
+          "description": "Also run the task once when you create it. Used only when you create a task. The default is false.",
           "type": "boolean",
           "default": false
         }
@@ -47,6 +47,6 @@
       "type": "object",
       "required": []
     },
-    "description": "Create a scheduled task that runs a prompt on a recurring interval, or update an existing one in place.\n\nUse this tool when a user asks you to loop, repeat, or schedule a prompt or a task.\n\nSet fire_immediately: true to also fire once on creation; by default the first run waits for the interval.\n\nTo change an existing task, pass its task_id: provided fields replace old values, omitted ones are unchanged, and the schedule keeps its phase. An unknown id errors.\n\nUsage notes:\n- Interval format: \"5m\" (minutes), \"2h\" (hours), \"1d\" (days), \"60s\" (seconds, min 60)\n- Maximum 50 scheduled tasks at once\n- Tasks auto-expire after 7 days\n- For one-time delayed work, run a background terminal command (e.g. `sleep 1800 && <command>`) instead; its completion notifies you"
+    "description": "Run a prompt on a repeating interval, or change an existing scheduled task.\n\nEach run starts a background subagent with the prompt. The result of each run arrives in a new turn after your current turn ends. If the previous run is still going, the next run is skipped. Scheduled tasks expire 7 days after creation.\n\nRuns happen only while this session is open. When the session is reopened, an overdue durable task runs once. Missed runs are not made up.\n\nUse this tool for work that repeats, for example summarizing new issues every hour. For a single delayed action, run a background terminal command, for example `sleep 1800 && <command>`. To watch CI status or react to each line that a script prints, use monitor."
   }
 }

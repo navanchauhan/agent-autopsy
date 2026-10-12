@@ -7,7 +7,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "properties": {
         "task_ids": {
-          "description": "Task IDs to get output from. Pass one or more; for a single task use a one-element array. With a positive timeout_ms, multiple ids wait until all complete. Omit timeout_ms or pass 0 for a non-blocking snapshot.",
+          "description": "One or more task IDs.",
           "type": "array",
           "items": {
             "type": "string"
@@ -15,7 +15,7 @@
           "default": []
         },
         "timeout_ms": {
-          "description": "Max wait time in milliseconds, up to 3600000 (~1 h). A positive value waits for completion; omit or pass 0 for a non-blocking status poll.",
+          "description": "How long to wait in milliseconds. The maximum is 3600000, which is about 1 hour. Leave it out or pass 0 to return at once.",
           "type": [
             "integer",
             "null"
@@ -29,6 +29,6 @@
       "type": "object",
       "required": []
     },
-    "description": "Get output and status from a background task, monitor, or subagent.\n\nUsage notes:\n- Pass task_ids with one or more ids from block_until_ms=0 commands or background=true subagents (a monitor's task_id is returned by monitor); for a single task use a one-element array. Multiple ids with a positive timeout_ms wait until all complete\n- Omit timeout_ms or pass 0 for a non-blocking status snapshot; set a positive timeout_ms to wait up to that many milliseconds, capped at 3600000 (~1 h)\n- Returns current output, status, and exit code if completed\n- If output is large, use read_file on the output_file path"
+    "description": "Get the output and status of a background command, monitor, or subagent.\n\n- Pass the task_ids from background commands, background subagents, or the monitor tool.\n- Set timeout_ms to wait up to that long for all the tasks to finish. Leave it out to get the current status immediately.\n- The result has the output, the status, and the exit code if the task is done. If the output is long, read the output_file path with read_file.\n- For a monitor, the output is everything the script has printed so far."
   }
 }

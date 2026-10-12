@@ -8,7 +8,9 @@ The automated resolver uses the stable pointer as the upper bound, enumerates ve
 
 `mitm-capture-grok.py` records requests to a scratch JSONL file, omits authentication-shaped request and response headers, and records response status, completion, response-marker, byte-count, and body-digest evidence. `extract-grok-capture.cjs` rejects incomplete or unsuccessful required modes, groups requests by model and mode, writes system prompts and steering, and preserves exact `tools[]` entries or variants.
 
-The archive covers default Grok 4.5 in non-interactive and interactive modes plus the session-title request.
+The archive covers the default models in each mode: Grok 4.6 for non-interactive runs and Grok 4.7 for interactive runs. It also covers the session-title request and the tool-less interactive side requests for memory capture, next-prompt suggestion, and turn summary.
+
+Release 1.0.52 is not in the public mirror; its newest release changelog is 1.0.45. For this release, the archive compares captured requests with strings in the official binary. Tool descriptions, the session-title prompt, the side-request prompts, and the default user rules appear in the binary as plaintext. The main agent system prompts do not, so they come from the captured requests only. The skill list in the steering messages comes from the server's bundle archive, so it is stored as a template.
 
 ## Refresh
 

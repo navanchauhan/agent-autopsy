@@ -10,11 +10,11 @@
       ],
       "properties": {
         "query": {
-          "description": "Keywords to match against tool names, server names, and descriptions.\nInclude the server name and action for best results\n(e.g. \"linear create issue\", \"slack read thread history\").",
+          "description": "Keywords to match against tool names, server names, and descriptions. Include the server name and the action, for example \"linear create issue\".",
           "type": "string"
         },
         "limit": {
-          "description": "Maximum number of results to return (default 5).",
+          "description": "Maximum number of results. The default is 5.",
           "type": [
             "integer",
             "null"
@@ -27,6 +27,6 @@
       },
       "type": "object"
     },
-    "description": "Search for MCP tools by keyword and retrieve their input schemas.\n\nIf status is \"partial\", some servers may still be connecting."
+    "description": "Find MCP tools by keyword and get their input schemas.\n\nIf the result status is \"partial\", some servers are still connecting."
   }
 }

@@ -9,6 +9,6 @@
       "properties": {},
       "required": []
     },
-    "description": "Exit plan mode and present your plan to the user.\n\nUse this after you have finished writing your plan to the plan file in plan mode."
+    "description": "Show your plan to the user for approval. Plan mode ends when the user approves the plan."
   }
 }
