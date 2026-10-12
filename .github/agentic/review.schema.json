@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["decision", "pii_free", "secrets_free", "evidence_supported", "issues", "summary"],
+  "properties": {
+    "decision": { "enum": ["approve", "reject"] },
+    "pii_free": { "type": "boolean" },
+    "secrets_free": { "type": "boolean" },
+    "evidence_supported": { "type": "boolean" },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "problem"],
+        "properties": {
+          "path": { "type": "string" },
+          "problem": { "type": "string" }
+        }
+      }
+    },
+    "summary": { "type": "string" }
+  }
+}

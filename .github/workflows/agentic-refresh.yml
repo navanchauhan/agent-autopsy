@@ -1,0 +1,139 @@
+name: Agentic refresh
+
+# One Claude Code agent per provider captures the pinned release, authors the archive,
+# and is checked by trusted validation plus an independent read-only reviewer agent.
+# Goals: .github/agentic/goal.md, review.md, providers/*.yaml.
+
+on:
+  workflow_dispatch:
+    inputs:
+      providers:
+        description: Comma-separated providers, or "all"
+        default: all
+      force:
+        description: Refresh even when the recorded version is current
+        type: boolean
+        default: false
+      publish:
+        description: Push a review branch, or commit to the default branch and tag a release
+        type: choice
+        options: [branch, release]
+        default: branch
+      effort:
+        description: Driver effort
+        type: choice
+        options: [low, medium, high, xhigh, max]
+        default: medium
+
+permissions:
+  contents: read
+
+# Shared with daily-refresh.yml so rotating provider logins are never used concurrently.
+concurrency:
+  group: capture-refresh-${{ github.repository }}
+  cancel-in-progress: false
+
+env:
+  AGENT_MODEL: claude-opus-5-5
+
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      plan: ${{ steps.plan.outputs.plan }}
+      has_work: ${{ steps.plan.outputs.has_work }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - id: plan
+        env:
+          PROVIDERS: ${{ inputs.providers || 'all' }}
+          FORCE: ${{ inputs.force || false }}
+        run: |
+          plan="$(bash .github/agentic/plan.sh)"
+          echo "plan=$plan" >>"$GITHUB_OUTPUT"
+          echo "has_work=$(jq -r '(.include | length) > 0' <<<"$plan")" >>"$GITHUB_OUTPUT"
+          jq -r '.include[] | "- \(.provider): \(.old_version) -> \(.new_version)"' <<<"$plan" >>"$GITHUB_STEP_SUMMARY"
+
+  refresh:
+    needs: plan
+    if: needs.plan.outputs.has_work == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    environment: agent-autopsy-capture
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.plan).include }}
+    name: refresh (${{ matrix.provider }} ${{ matrix.new_version }})
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Stage trusted code before any model or provider code runs
+        run: |
+          mkdir -p "$RUNNER_TEMP/trusted"
+          cp -R .github "$RUNNER_TEMP/trusted/.github"
+          chmod -R a-w "$RUNNER_TEMP/trusted"
+
+      - name: Build pinned provider image
+        env:
+          DRIVER: ${{ toJSON(fromJSON(needs.plan.outputs.plan).driver) }}
+          TARGET: ${{ toJSON(matrix.target) }}
+        run: |
+          arg() { jq -r --arg k "$2" '.[$k] // ""' <<<"$1"; }
+          for attempt in 1 2 3; do
+            docker build -f .github/agentic/Dockerfile -t "agentic-${{ matrix.provider }}" \
+              --build-arg DRIVER_URL="$(arg "$DRIVER" url)" --build-arg DRIVER_SHA256="$(arg "$DRIVER" sha256)" \
+              --build-arg TARGET_KIND="$(arg "$TARGET" kind)" --build-arg TARGET_URL="$(arg "$TARGET" url)" \
+              --build-arg TARGET_SHA256="$(arg "$TARGET" sha256)" --build-arg TARGET_SHA512="$(arg "$TARGET" sha512)" \
+              --build-arg TARGET_BIN="$(arg "$TARGET" bin)" --build-arg TARGET_TAR_MEMBER="$(arg "$TARGET" tar_member)" \
+              --build-arg TARGET_NPM="$(arg "$TARGET" npm)" . && exit 0
+            sleep $((attempt * 30))
+          done
+          exit 1
+
+      - name: Capture, author, validate, review
+        env:
+          PLAN_ENTRY: ${{ toJSON(matrix) }}
+          IMAGE: agentic-${{ matrix.provider }}
+          AGENT_EFFORT: ${{ inputs.effort || 'medium' }}
+          AGENT_TIMEOUT: "5400"
+          MAX_ATTEMPTS: "3"
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GROK_AUTH_JSON: ${{ matrix.provider == 'grok' && secrets.GROK_AUTH_JSON || '' }}
+          ANTIGRAVITY_GEMINI_CREDS: ${{ matrix.provider == 'antigravity' && secrets.ANTIGRAVITY_GEMINI_CREDS || '' }}
+          CODEX_CHATGPT_AUTH_JSON: ${{ matrix.provider == 'codex' && secrets.CODEX_CHATGPT_AUTH_JSON || '' }}
+          REPO_SECRETS_PAT: ${{ matrix.provider != 'claude-code' && matrix.provider != 'qwen-code' && secrets.REPO_SECRETS_PAT || '' }}
+        run: |
+          RUN_ROOT="$RUNNER_TEMP/run" OUT_DIR="$RUNNER_TEMP/bundle/${{ matrix.provider }}" \
+            bash "$RUNNER_TEMP/trusted/.github/agentic/refresh.sh"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bundle-${{ matrix.provider }}
+          path: ${{ runner.temp }}/bundle/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  publish:
+    needs: [plan, refresh]
+    if: always() && needs.plan.outputs.has_work == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: bundle-*
+          path: ${{ runner.temp }}/bundles
+          merge-multiple: true
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/agentic/publish.sh "$RUNNER_TEMP/bundles" "${{ inputs.publish || 'branch' }}"
