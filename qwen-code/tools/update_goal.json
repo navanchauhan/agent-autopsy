@@ -1,6 +1,6 @@
 {
   "name": "update_goal",
-  "description": "Propose that the current Goal is complete or blocked. Before calling, call get_goal in the current turn and cite only values from evidenceCatalog.entries[].uuid, never goalId, turnId, or lineageTurnIds. If completion depends on user-facing content delivered in the current turn, emit only the content required by the objective, then call get_goal, wait for its result, and call update_goal in a later model step with the returned delivered_output UUID. Do not add progress or completion commentary when the objective requires an exact output format. For blocked proposals, use authority when a user or maintainer decision or permission is required, external when an unavailable external resource or capability is evidenced, and repeated for the same evidenced blocker with the exact same reason text across three consecutive Goal turns; omitting blockerKind follows the repeated-blocker audit. Core records at most one proposal for the exact permitted turn and queues eligible proposals for independent verification. This tool never changes the Goal lifecycle or claims a terminal result. Do not tell the user the Goal is complete or blocked. If this tool reports readyForVerification, end the turn without additional user-facing text; otherwise continue the turn without claiming a terminal result. The Goal status card reports the independent verification result.",
+  "description": "Propose that the current Goal is complete or blocked; an independent verifier decides and this tool never changes the Goal's status.\n\nThe verifier reads only the most recent records of this Goal's transcript (your visible output, tool results, the user's messages), so run the checks that prove every objective condition immediately before calling. If completion depends on content delivered in this turn, emit only what the objective requires first, with no progress or completion commentary. For blocked, set blockerKind: authority (a user or maintainer decision or permission is required), external (an evidenced external resource or capability is unavailable), or infeasible (a tool result, not your own text, shows the objective cannot be satisfied as written: it contradicts itself, names a target that verifiably does not exist, or needs an action no tool can perform; never for difficulty, uncertainty, information you could still obtain, or wanting to ask; the reason must state what was checked and why no in-scope work could satisfy the objective). The verifier may accept those three on the first turn they are proposed; a rejected proposal leaves the Goal running. Omit blockerKind, or set repeated, for the same blocker with the exact same reason text across three consecutive Goal turns, which is only sent to the verifier on the third. Never tell the user the Goal is complete or blocked: when the result reports readyForVerification, end the turn with no further text; otherwise keep working. The Goal status card reports the verdict.",
   "parametersJsonSchema": {
     "type": "object",
     "properties": {
@@ -16,32 +16,20 @@
         "minLength": 1,
         "maxLength": 8000
       },
-      "evidenceRefs": {
-        "type": "array",
-        "minItems": 1,
-        "uniqueItems": true,
-        "maxItems": 100,
-        "description": "Exact values from the latest get_goal evidenceCatalog.entries[].uuid.",
-        "items": {
-          "type": "string",
-          "minLength": 1,
-          "description": "A transcript record uuid from evidenceCatalog.entries, not a turnId or lineageTurnId."
-        }
-      },
       "blockerKind": {
         "type": "string",
         "enum": [
           "authority",
           "external",
-          "repeated"
+          "repeated",
+          "infeasible"
         ],
-        "description": "authority: a user or maintainer decision or permission is required; external: an evidenced external resource or capability is unavailable; repeated: the same evidenced blocker with the exact same reason text across three consecutive Goal turns. Omission uses the repeated-blocker audit."
+        "description": "Which blocker a blocked proposal reports; the tool description says when each applies."
       }
     },
     "required": [
       "status",
-      "reason",
-      "evidenceRefs"
+      "reason"
     ],
     "additionalProperties": false
   }

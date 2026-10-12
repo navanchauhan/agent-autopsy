@@ -82,11 +82,11 @@ Observed release: `1.0.52`
 
 ## qwen-code
 
-Observed release: `0.25.0`
+Observed release: `0.25.1`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `qwen-code.prompt.agent.catalog` | agent prompts | `all` | `interactive`, `headless`, `acp` | current | `0.25.0` | [core-acp-qwen3-coder-plus.md](qwen-code/prompts/core-acp-qwen3-coder-plus.md), [core-headless-qwen3-coder-plus.md](qwen-code/prompts/core-headless-qwen3-coder-plus.md), [core-interactive-qwen3-coder-plus.md](qwen-code/prompts/core-interactive-qwen3-coder-plus.md) |
-| `qwen-code.tool.catalog` | tool schemas | `all` | `configured`, `deferred` | current | `0.25.0` | 58 files ([manifest](qwen-code/SURFACES.json)) |
-| `qwen-code.steering.catalog` | runtime messages | `all` | `configured`, `planning`, `compression`, `insights` | current | `0.25.0` | 15 files ([manifest](qwen-code/SURFACES.json)) |
+| `qwen-code.prompt.agent.catalog` | agent prompts | `all` | `interactive`, `headless`, `acp` | current | `0.25.1` | [core-acp-qwen3-coder-plus.md](qwen-code/prompts/core-acp-qwen3-coder-plus.md), [core-headless-qwen3-coder-plus.md](qwen-code/prompts/core-headless-qwen3-coder-plus.md), [core-interactive-qwen3-coder-plus.md](qwen-code/prompts/core-interactive-qwen3-coder-plus.md) |
+| `qwen-code.tool.catalog` | tool schemas | `all` | `configured`, `deferred` | current | `0.25.1` | 53 files ([manifest](qwen-code/SURFACES.json)) |
+| `qwen-code.steering.catalog` | runtime messages | `all` | `configured`, `planning`, `compression`, `insights` | current | `0.25.1` | 16 files ([manifest](qwen-code/SURFACES.json)) |
 | `qwen-code.context.session` | dynamic context | `all` | `all` | dynamic | — | — |

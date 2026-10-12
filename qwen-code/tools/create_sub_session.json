@@ -1,6 +1,6 @@
 {
   "name": "create_sub_session",
-  "description": "Spawn a fresh, independent sub-session (its own clean context and transcript) and run a prompt in it. Use to fan work out into a separate session — e.g. a self-contained sub-task you want isolated from this conversation.\n\nONLY available when running under `qwen serve` (daemon mode); it is inert in a plain interactive session.\n\n## Completion modes\n- `first-turn` (default): waits for the sub-session's first turn to finish and returns its result to you. Use when you need the answer back.\n- `sent`: returns immediately after dispatching the prompt, without waiting. Use for fire-and-forget launches whose output you do not need inline.\n\nThe sub-session runs the prompt with full tool access, starting from zero context — brief it completely in `prompt` (it cannot see this conversation).",
+  "description": "Spawn a fresh, independent sub-session (its own clean context and transcript) and run a prompt in it. Use to fan work out into a separate session — e.g. a self-contained sub-task you want isolated from this conversation.\n\nONLY available when running under `qwen serve` (daemon mode); it is not declared at all in plain interactive or headless sessions.\n\n## Completion modes\n- `first-turn` (default): waits for the sub-session's first turn to finish and returns its result to you. Use when you need the answer back.\n- `sent`: returns immediately after dispatching the prompt, without waiting. Use for fire-and-forget launches whose output you do not need inline.\n\nThe sub-session runs the prompt with full tool access, starting from zero context — brief it completely in `prompt` (it cannot see this conversation).",
   "parametersJsonSchema": {
     "type": "object",
     "properties": {
@@ -18,7 +18,7 @@
       },
       "model": {
         "type": "string",
-        "description": "Optional model service id for the sub-session. Omit to use the default model."
+        "description": "Optional model service id for the sub-session. Omit to use the default model. Must be a non-empty string of at most 256 characters without control characters; the daemon rejects the call otherwise."
       },
       "name": {
         "type": "string",

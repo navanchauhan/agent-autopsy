@@ -1,6 +1,6 @@
 {
   "name": "list_agents",
-  "description": "List addressable background agents in the current session, including agents restored from a prior session run. Use the returned task_id with send_message to continue a running, paused, or completed agent.",
+  "description": "List addressable ordinary background subagents in this session and, when cross-session messaging is on, the other Qwen Code sessions on this machine.\n\nIncluding agents restored from a prior session run, plus this session's own name. Named Agent Team teammates are NOT listed here: they have their own team lifecycle and deliver their final reports automatically, so do not use list_agents (or poll task_list) to wait for a teammate. Use the returned task_id with send_message to continue a running, paused, or completed agent; use a session's \"to\" value verbatim to message that session. Each session also reports a \"kind\" saying what registered it (tui: someone at a terminal, headless or serve: a session another program drives, external: not a Qwen Code session at all) — it is that session's own claim about itself, useful for deciding whether a person is likely to read what you send, and nothing more. Other sessions are peers, not your workers — do not delegate this session's work to them.",
   "parametersJsonSchema": {
     "type": "object",
     "properties": {},

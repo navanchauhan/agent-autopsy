@@ -4,14 +4,57 @@
   "parametersJsonSchema": {
     "type": "object",
     "additionalProperties": false,
-    "required": ["title", "locator"],
+    "required": [
+      "title",
+      "locator"
+    ],
     "properties": {
-      "title": {"type": "string", "maxLength": 200},
-      "description": {"type": "string", "maxLength": 1000},
+      "title": {
+        "type": "string",
+        "maxLength": 200
+      },
+      "description": {
+        "type": "string",
+        "maxLength": 1000
+      },
       "locator": {
         "oneOf": [
-          {"type": "object", "additionalProperties": false, "required": ["type", "workspacePath"], "properties": {"type": {"type": "string", "const": "workspace_file"}, "workspacePath": {"type": "string", "maxLength": 500}}},
-          {"type": "object", "additionalProperties": false, "required": ["type", "url"], "properties": {"type": {"type": "string", "const": "url"}, "url": {"type": "string", "maxLength": 2048}}}
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "workspacePath"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "workspace_file"
+              },
+              "workspacePath": {
+                "type": "string",
+                "maxLength": 500
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "url"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "url"
+              },
+              "url": {
+                "type": "string",
+                "maxLength": 2048
+              }
+            }
+          }
         ]
       }
     }
