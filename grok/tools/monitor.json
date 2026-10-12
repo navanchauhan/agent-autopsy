@@ -12,15 +12,15 @@
       "type": "object",
       "properties": {
         "command": {
-          "description": "Shell command or script. Each stdout line is an event; exit ends the watch.",
+          "description": "Shell command or script to run. Each line it prints to stdout is an event.",
           "type": "string"
         },
         "description": {
-          "description": "Short human-readable description of what you are monitoring (shown in every notification).",
+          "description": "Short description of what you watch. Each notification shows it.",
           "type": "string"
         },
         "timeout_ms": {
-          "description": "Kill the monitor after this deadline (ms). Default: 36000000 (10 hr). Max: 36000000 (10 hr).",
+          "description": "Stop the monitor after this many milliseconds. The default and the maximum are 36000000, which is 10 hours.",
           "type": [
             "integer",
             "null"
@@ -30,12 +30,12 @@
           "default": 36000000
         },
         "persistent": {
-          "description": "Run for the lifetime of the session (no timeout). Stop with kill_command_or_subagent.",
+          "description": "Run until the session ends or for at most 10 hours. Stop it with kill_command_or_subagent.",
           "type": "boolean",
           "default": false
         }
       }
     },
-    "description": "Start a background monitor that streams events from a long-running script. Each stdout line is an event - you can keep working and notifications arrive in the chat. Exit ends the watch.\n\n**Output volume**: Every stdout line is a main-agent wake. Print only `DONE`/`FAILED`/`CANCELLED`. No progress or CHANGE lines. Use `grep --line-buffered` in pipes (plain `grep` buffers and delays events by minutes).\n\n**Responsiveness**: Emit `FAILED` to notify immediately when any required item fails; never wait for unrelated work to finish. Include every tracked failure signal in this immediate failure condition.\n\nSet `persistent: true` for session-length watches (PR monitoring, log tails) -- the monitor runs until you call kill_command_or_subagent or until the session ends. Otherwise it stops at `timeout_ms` (default 10h)."
+    "description": "Run a script in the background and watch its output. Each line that the script prints to stdout is an event. You get each event as a notification while you keep working. When the script exits, you get a notification in a later tool result or in a new turn after your turn ends. The monitor stops when the script exits.\n\nUse this tool to react to lines that a script prints while it runs, for example changes in CI status or new log lines. For one long command whose result you wait for, use a background run_terminal_command command. For work that repeats on an interval, use scheduler_create.\n\nEach line interrupts you. Print a line only when you must act, for example when a check fails or the work is done. Print a failure as soon as it happens. Lines are sent in batches. If the script prints too fast, lines are dropped, and a script that stays too noisy is stopped. In a pipe, use `grep --line-buffered`, because plain `grep` delays its output.\n\nSet `persistent` to true to watch for the whole session, for example a PR or a log."
   }
 }

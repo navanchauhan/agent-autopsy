@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.3.2",
+  "observed_release": "1.3.3",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.3.2",
-      "verified_release": "1.3.2",
+      "captured_release": "1.3.3",
+      "verified_release": "1.3.3",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -30,15 +30,15 @@
         "prompts/gemini-3.8-flash-high-interactive.md"
       ],
       "artifact_sha256": "f51ca982f9100a988b02df24a1d9dbd12cb3fbacbc1d53e0ab86d9ed98398a62",
-      "evidence_sha256": "111ac6937e835c7c7eecf607b15d61bca812919b0abaed14a1c33cde1846744a"
+      "evidence_sha256": "d34081b645defda4aa75fccc69f5f22221dedcc103f49954a34901a6b5edd666"
     },
     {
       "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
       "category": "agent prompt",
-      "status": "current",
+      "status": "verified-unchanged",
       "capture_method": "model-request",
-      "captured_release": "1.3.2",
-      "verified_release": "1.3.2",
+      "captured_release": "1.3.3",
+      "verified_release": "1.3.3",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -49,16 +49,16 @@
       "artifacts": [
         "prompts/gemini-3.8-flash-high.md"
       ],
-      "artifact_sha256": "51e4bbe21375992592d0f4a630f53e0d97c261a0b680f9e42ea8931ca72a84bc",
-      "evidence_sha256": "111ac6937e835c7c7eecf607b15d61bca812919b0abaed14a1c33cde1846744a"
+      "artifact_sha256": "24d2464b84efdbad2491493e8ef89b2c1a7a444097c4a84619c50078d78aff11",
+      "evidence_sha256": "d34081b645defda4aa75fccc69f5f22221dedcc103f49954a34901a6b5edd666"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.3.2",
-      "verified_release": "1.3.2",
+      "captured_release": "1.3.3",
+      "verified_release": "1.3.3",
       "models": [
         "gemini-3.8-flash-high"
       ],
@@ -82,8 +82,8 @@
         "tools/view_file.json",
         "tools/write_to_file.json"
       ],
-      "artifact_sha256": "2f2d337414caaa967fdb5434d1ca655eb779ee79ea7d6d8ed27b3812ed22e4bb",
-      "evidence_sha256": "111ac6937e835c7c7eecf607b15d61bca812919b0abaed14a1c33cde1846744a"
+      "artifact_sha256": "da404d5683b211a876bd9707fc08b857ca6c0257e61a85bb35dfeb690aadb6a1",
+      "evidence_sha256": "d34081b645defda4aa75fccc69f5f22221dedcc103f49954a34901a6b5edd666"
     }
   ]
 }

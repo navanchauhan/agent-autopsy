@@ -10,12 +10,12 @@
       ],
       "properties": {
         "task_id": {
-          "description": "The task ID to terminate",
+          "description": "ID of the task to stop.",
           "type": "string"
         }
       },
       "type": "object"
     },
-    "description": "Terminate a running background task, monitor, or subagent.\n\nUsage notes:\n- Pass its task_id (a monitor's task_id is returned by monitor).\n- Sends SIGTERM/SIGKILL to a bash task or monitor; sends Cancel+Shutdown to a subagent.\n- Returns success if the task was killed or had already exited."
+    "description": "Stop a running background command, monitor, or subagent.\n\n- Pass the task_id from background commands, background subagents, or the monitor tool.\n- A command or monitor gets SIGTERM, sent to its process group, then SIGKILL after about 1 second.\n- For a subagent, the tool starts the cancellation.\n- The tool succeeds if the task stopped or had already exited."
   }
 }

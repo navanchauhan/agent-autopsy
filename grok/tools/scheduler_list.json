@@ -9,6 +9,6 @@
       "properties": {},
       "required": []
     },
-    "description": "List all active scheduled tasks with their IDs, prompts, intervals, and next fire times."
+    "description": "List scheduled tasks with their IDs, prompts, intervals, and next run times."
   }
 }

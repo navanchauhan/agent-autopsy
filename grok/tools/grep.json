@@ -53,7 +53,7 @@
           ]
         },
         "head_limit": {
-          "description": "Limit output to first N lines/entries, equivalent to \"| head -N\". Defaults to 200 lines or 500 entries.",
+          "description": "Limit output to the first N matching lines in content mode, or the first N entries in the other modes. Defaults to 200 lines or 500 entries.",
           "type": "integer"
         },
         "multiline": {
@@ -63,6 +63,6 @@
         }
       }
     },
-    "description": "Search file contents with regular expressions (ripgrep).\n\n- Full regex syntax, so escape literal special characters: `functionCall\\(`, or `interface\\{\\}` to find interface{} in Go.\n- Pass pattern as a raw regex string — no surrounding quotes.\n- Respects .gitignore unless you pass a broad glob like '--glob *'.\n- Only filter by 'type' or 'glob' when you are sure of the file type; import paths may not match source file types (.js vs .ts).\n- Output is ripgrep-style: ':' marks match lines, '-' marks context lines, grouped by file. Large results are capped and report \"at least\" counts."
+    "description": "Search file contents with a regular expression. This tool uses ripgrep.\n\n- To match a regex special character literally, escape it. For example, use `functionCall\\(` or `interface\\{\\}`.\n- Pass pattern as a raw regex with no quotes around it.\n- The search skips files that .gitignore ignores. To search those files too, pass a 'glob' that matches them, for example `*`.\n- Use 'type' or 'glob' only when you are sure of the file type. An import path can use a different extension than the source file, for example .js and .ts.\n- Results are grouped by file. A `:` marks a matching line and a `-` marks a context line. Large results are cut off and show \"at least\" counts."
   }
 }

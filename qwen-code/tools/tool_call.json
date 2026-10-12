@@ -1,0 +1,23 @@
+{
+  "name": "tool_call",
+  "description": "Invokes a deferred tool after its schema has been reviewed with tool_search. Pass the exact deferred tool name and arguments matching the reviewed schema. Permissions, hooks, and approvals apply to the underlying tool.",
+  "parametersJsonSchema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Exact deferred tool name returned by tool_search.",
+        "minLength": 1
+      },
+      "arguments": {
+        "type": "object",
+        "description": "Arguments matching the deferred tool schema returned by tool_search."
+      }
+    },
+    "required": [
+      "name",
+      "arguments"
+    ],
+    "additionalProperties": false
+  }
+}

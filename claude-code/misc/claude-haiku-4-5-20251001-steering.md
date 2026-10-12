@@ -4,8 +4,8 @@ You have been invoked in the following environment:
  - Primary working directory: <harnessVariable>{{primaryWorkingDirectory=/Users/example/Developer/example-repo}}</harnessVariable>
  - Is a git repository: <harnessVariable>{{isGitRepository=true}}</harnessVariable>
  - Platform: <harnessVariable>{{platform=linux}}</harnessVariable>
- - Shell: <harnessVariable>{{shell=unknown}}</harnessVariable>
- - OS Version: <harnessVariable>{{osVersion=Linux 6.17.0-1022-azure}}</harnessVariable>
+ - Shell: <harnessVariable>{{shell=bash}}</harnessVariable>
+ - OS Version: <harnessVariable>{{osVersion=Linux 6.8.0-example}}</harnessVariable>
 </system-reminder>
 
 <system-reminder>

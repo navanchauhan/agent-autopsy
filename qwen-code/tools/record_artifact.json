@@ -1,12 +1,13 @@
 {
   "name": "record_artifact",
-  "description": "Registers a session artifact so clients can show it in an artifacts panel. Use it after creating a useful file, URL, image, report, notebook, or other intermediate result that the user may want to open later, unless the producing tool already returned artifact metadata. For example, write_file automatically records HTML, image, PDF, and notebook files it writes inside the workspace, so do not call record_artifact again for the same workspacePath; still call it for other formats such as Markdown, CSV, JSON, and plain text, and for files produced outside write_file. When the session creates a remote resource, such as a pull request, issue, or comment submitted via gh, record its URL with kind \"link\" and the url locator so the user can reopen it later.\n\nThis tool only records metadata. It does not publish, upload, read, write, or verify the referenced resource. Provide exactly one locator: workspacePath, managedId, or url. Use the Artifact tool, not record_artifact, for published interactive HTML artifacts.",
+  "description": "Registers a session artifact so clients can show it in an artifacts panel. Use it after creating a useful file, URL, image, report, notebook, or other intermediate result that the user may want to open later, unless the producing tool already returned artifact metadata. For example, write_file automatically records HTML, image, PDF, notebook, CSV, and office documents it writes inside the workspace, so do not call record_artifact again for the same workspacePath; still call it for other formats such as Markdown, JSON, and plain text, and for files produced outside write_file. When the session creates a remote resource, such as a pull request, issue, or comment submitted via gh, record its URL with kind \"link\" and the url locator so the user can reopen it later.\n\nProvide exactly one locator: workspacePath, managedId, or url. Do not use the old \"path\" field. Use the Artifact tool, not record_artifact, for published interactive HTML artifacts.\n\nFor workspace files, workspacePath must be relative to the current execution directory (for example \"report.csv\" or \"reports/summary.html\") or an absolute path inside the bound workspace. Do not add workspace folder prefixes such as \"w/agent/\", and do not use \"..\" to walk up from a worktree. This tool resolves the path and verifies it stays inside the workspace. A regular file is stored as one workspace-root-relative canonical workspacePath. A directory is never stored as an artifact; each recordable file inside it is recorded separately. Word, Excel, PowerPoint, and other office documents use kind \"document\". A successful file result includes status=available, the canonical workspacePath, and resolvedPath. A successful directory result lists the expanded files instead of \"Recorded artifact\". If verification fails, the tool returns an error — do not tell the user the artifact can be opened or downloaded.",
   "parametersJsonSchema": {
     "type": "object",
+    "additionalProperties": false,
     "properties": {
       "title": {
         "type": "string",
-        "description": "Concise title shown in the client artifact list."
+        "description": "Concise title for a link or managed artifact. A workspace file is recorded and shown under its filename; if this title differs and description is empty, it is kept as the description."
       },
       "kind": {
         "type": "string",
@@ -19,6 +20,7 @@
           "audio",
           "pdf",
           "notebook",
+          "document",
           "other"
         ],
         "description": "Best-effort artifact type for client rendering."
@@ -38,7 +40,7 @@
       },
       "workspacePath": {
         "type": "string",
-        "description": "Workspace-relative path for a file produced in the current workspace."
+        "description": "Path relative to the current execution directory, or an absolute path inside the bound workspace. The tool verifies a regular file, or expands a directory into one artifact per recordable file."
       },
       "managedId": {
         "type": "string",

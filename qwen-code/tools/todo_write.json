@@ -32,7 +32,7 @@
                 "maxLength": 500
               },
               "uniqueItems": true,
-              "description": "Todo IDs that must be completed before this item"
+              "description": "Todo IDs that must be completed before this item. Active-plan updates preserve omitted dependencies for existing IDs; use [] to remove them."
             }
           },
           "required": [

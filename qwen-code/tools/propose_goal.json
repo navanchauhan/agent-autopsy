@@ -1,6 +1,6 @@
 {
   "name": "propose_goal",
-  "description": "Propose a session Goal for the user to approve. The user sees the objective in an approval dialog and decides; only their approval sets the Goal. This tool never sets one on its own. Unavailable in plan mode, in subagents, and in headless runs.",
+  "description": "Propose a session Goal only when the user asked for a verifiable multi-turn outcome, never to widen their request; the user approves it in a dialog.\n\nThe user approves or declines it in a dialog that no permission rule or approval mode skips, and only approval sets it; a `/goal-draft` produced objective also qualifies. If a Goal is active this tool refuses: give the user a `/goal edit …` or `/goal set …` line instead. A stopped Goal is replaced on approval. If the user declines you are not told why: do not ask, and do not propose the same or a reworded objective again. Write the objective on one line, at most 1500 characters, so the verifier can judge it from the transcript alone: one outcome; numbered binary \"Done when\" checks that name a command and ask to paste its output; what must not change; a budget; what to do when blocked. After approval, acknowledge in one sentence and stop with no further tool calls; the Goal starts on its own when the turn ends. Not available in plan mode.",
   "parametersJsonSchema": {
     "type": "object",
     "properties": {
@@ -8,10 +8,12 @@
         "type": "string",
         "minLength": 1,
         "maxLength": 1500,
-        "description": "The objective to propose, written so the Goal verifier can judge it from the transcript. At most 1500 characters; the user reads all of it in the approval dialog."
+        "description": "The objective, on one line, at most 1500 characters; the user reads all of it in the approval dialog."
       }
     },
-    "required": ["objective"],
+    "required": [
+      "objective"
+    ],
     "additionalProperties": false
   }
 }

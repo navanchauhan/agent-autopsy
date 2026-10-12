@@ -11,11 +11,11 @@
       "type": "object",
       "properties": {
         "url": {
-          "description": "The URL to fetch content from.",
+          "description": "The URL to fetch.",
           "type": "string"
         }
       }
     },
-    "description": "Fetch the content of a specific URL and return it as markdown.\n\nIMPORTANT: web_fetch WILL FAIL for authenticated or private URLs (e.g. Google Docs, Confluence, Jira, GitHub private repos). Use specialized MCP tools for those instead.\n\nUsage notes:\n  - HTTP URLs will be automatically upgraded to HTTPS\n  - Long pages will be truncated to fit your context window"
+    "description": "Fetch a URL and return its content as markdown.\n\n- The tool fails for private URLs and URLs that need a login, for example Google Docs, Confluence, Jira, and private GitHub repos. Use an MCP tool for those if one is available.\n- HTTP URLs are upgraded to HTTPS.\n- Long pages are cut to fit your context."
   }
 }

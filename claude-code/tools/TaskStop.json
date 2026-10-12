@@ -3,8 +3,10 @@
   "variants": [
     {
       "models": [
-        "claude-haiku-4-5-20251001",
-        "claude-sonnet-5"
+        "claude-fable-5-1",
+        "claude-haiku-5-5",
+        "claude-opus-5-5",
+        "claude-sonnet-5-5"
       ],
       "runs": [
         "non-interactive",
@@ -17,7 +19,7 @@
       ],
       "schema": {
         "name": "TaskStop",
-        "description": "\n- Stops a running background task by its ID\n- Takes a task_id parameter identifying the task to stop\n- To stop an agent-team teammate, pass its agent ID (\"name@team\") or bare teammate name as task_id\n- To stop a background agent spawned with a name, pass that name as task_id\n- Returns a success or failure status\n- Use this tool when you need to terminate a long-running task\n",
+        "description": "\n- Stops a running background task by its ID\n- Takes a task_id parameter identifying the task to stop\n- To stop an agent-team teammate, pass its agent ID or bare teammate name as task_id\n- To stop a background agent spawned with a name, pass that name as task_id\n- Returns a success or failure status\n- Use this tool when you need to terminate a long-running task\n",
         "input_schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",

@@ -11,16 +11,16 @@
       ],
       "properties": {
         "file_path": {
-          "description": "The absolute path to the file to write.",
+          "description": "Absolute path of the file.",
           "type": "string"
         },
         "content": {
-          "description": "The full file content to write.",
+          "description": "The full content of the file.",
           "type": "string"
         }
       },
       "type": "object"
     },
-    "description": "Create or overwrite a file.\n\n- Writing to an existing path replaces the file — read it first with the read_file tool.\n- Parent directories are created for you."
+    "description": "Create a file or replace all of its content.\n\n- If the file exists, this tool replaces it. Read the file with read_file before you replace it.\n- The tool creates missing parent directories."
   }
 }

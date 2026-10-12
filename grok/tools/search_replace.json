@@ -12,25 +12,25 @@
       ],
       "properties": {
         "file_path": {
-          "description": "The path to the file to modify. You can use either a relative path in the workspace or an absolute path.",
+          "description": "Path of the file to change. Use a path relative to the workspace or an absolute path.",
           "type": "string"
         },
         "old_string": {
-          "description": "The text to replace",
+          "description": "The text to replace.",
           "type": "string"
         },
         "new_string": {
-          "description": "The text to replace it with (must be different from old_string)",
+          "description": "The new text. It must differ from old_string.",
           "type": "string"
         },
         "replace_all": {
-          "description": "Replace all occurrences of old_string (default false)",
+          "description": "Replace every match of old_string. The default is false.",
           "type": "boolean",
           "default": false
         }
       },
       "type": "object"
     },
-    "description": "Replace an exact string in a file.\n\n- `read_file` prefixes each line with \"LINE_NUMBER→\". That prefix is not part of the file: match only what comes after the →, with its exact indentation.\n- `old_string` must match exactly one place in the file. If it appears more than once, add surrounding lines to make it unique, or set `replace_all` to change every occurrence (handy for renaming an identifier).\n- To create a new file, set `old_string` to an empty string."
+    "description": "Replace an exact string in a file.\n\n- The line numbers and → that `read_file` shows are not part of the file. Match the file text exactly, with its indentation.\n- `old_string` must match exactly one place in the file. If it matches more than one place, add nearby lines to make it unique. To change every match, set `replace_all` to true.\n- To create a new file, set `old_string` to an empty string."
   }
 }

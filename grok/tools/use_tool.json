@@ -7,21 +7,21 @@
       "type": "object",
       "properties": {
         "tool_name": {
-          "description": "Discovered MCP target name",
+          "description": "Name of the MCP tool.",
           "type": "string"
         },
         "tool_input": {
-          "description": "Inline remote arguments; use the discovered input schema",
+          "description": "Arguments for the MCP tool. They must match its input schema.",
           "type": "object",
           "additionalProperties": true
         },
         "tool_input_file": {
-          "description": "UTF-8 JSON file containing only the complete remote argument object",
+          "description": "UTF-8 JSON file that holds only the complete arguments object.",
           "type": "string",
           "minLength": 1
         },
         "file": {
-          "description": "UTF-8 JSON file containing canonical tool_name and object tool_input",
+          "description": "UTF-8 JSON file with tool_name and a tool_input object.",
           "type": "string",
           "minLength": 1
         }
@@ -31,11 +31,11 @@
           "type": "object",
           "properties": {
             "tool_name": {
-              "description": "Discovered MCP target name",
+              "description": "Name of the MCP tool.",
               "type": "string"
             },
             "tool_input": {
-              "description": "Inline remote arguments; use the discovered input schema",
+              "description": "Arguments for the MCP tool. They must match its input schema.",
               "type": "object",
               "additionalProperties": true
             }
@@ -63,11 +63,11 @@
           "type": "object",
           "properties": {
             "tool_name": {
-              "description": "Discovered MCP target name",
+              "description": "Name of the MCP tool.",
               "type": "string"
             },
             "tool_input_file": {
-              "description": "UTF-8 JSON file containing only the complete remote argument object",
+              "description": "UTF-8 JSON file that holds only the complete arguments object.",
               "type": "string",
               "minLength": 1
             }
@@ -95,7 +95,7 @@
           "type": "object",
           "properties": {
             "file": {
-              "description": "UTF-8 JSON file containing canonical tool_name and object tool_input",
+              "description": "UTF-8 JSON file with tool_name and a tool_input object.",
               "type": "string",
               "minLength": 1
             }
@@ -125,6 +125,6 @@
         }
       ]
     },
-    "description": "Call a discovered MCP integration tool.\n\nSupply exactly one form: `tool_name` plus `tool_input` inline; `tool_name` plus `tool_input_file` for a UTF-8 JSON arguments-only object; or `file` for a UTF-8 JSON document with canonical `tool_name` and object `tool_input`. File forms require Read permission, then normal MCP approval. Files must be complete regular files, at most 8 MiB. Do not mix forms or delegate to another file or native tool. Remote keys and JSON-encoded strings remain unchanged. Arguments must match the discovered schema from `search_tool`."
+    "description": "Call an MCP tool that you found with `search_tool`. Use exactly one of these forms.\n\n- `tool_name` with `tool_input`, which holds the arguments.\n- `tool_name` with `tool_input_file`, a UTF-8 JSON file that holds only the arguments object.\n- `file`, a UTF-8 JSON file with `tool_name` and a `tool_input` object.\n\nA file must be a complete regular file of at most 8 MiB. A file needs Read permission and then the normal MCP approval. The arguments are passed to the MCP tool unchanged. They must match the input schema of the tool."
   }
 }

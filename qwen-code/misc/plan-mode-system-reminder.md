@@ -44,5 +44,5 @@ An exact one-off approval for an unknown shell command approves only that invoca
 
 ### When to Converge
 
-Your plan is ready when you have addressed all ambiguities and it covers: what to change, which files to modify, what existing code to reuse (with file paths), and how to verify the changes. Present your plan directly. Do NOT make any file changes or run any tools that modify the system state in any way until the user has confirmed the plan.
+Your plan is ready when you have addressed all ambiguities and it covers: what to change, which files to modify, what existing code to reuse (with file paths), and how to verify the changes. Present your plan by calling the exit_plan_mode tool, which will prompt the user to confirm the plan. Do NOT make any file changes or run any tools that modify the system state in any way until the user has confirmed the plan.
 </system-reminder>

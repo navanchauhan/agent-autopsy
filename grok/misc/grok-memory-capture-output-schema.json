@@ -1,0 +1,81 @@
+{
+  "name": "memory-capture structured output",
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "name": "structured_output",
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "outcome",
+          "observations"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "noop",
+              "observations"
+            ]
+          },
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "topic_hint",
+                "statement",
+                "keywords",
+                "aliases",
+                "body"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "user",
+                    "feedback",
+                    "project",
+                    "reference"
+                  ]
+                },
+                "topic_hint": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "statement": {
+                  "type": "string",
+                  "maxLength": 1024
+                },
+                "keywords": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "aliases": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "body": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "strict": true
+    }
+  }
+}

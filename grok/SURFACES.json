@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "grok",
-  "observed_release": "1.0.44",
+  "observed_release": "1.0.52",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -16,9 +16,9 @@
       "id": "grok.prompt.agent.grok-4-6.non-interactive",
       "category": "agent prompt",
       "status": "current",
-      "capture_method": "source-and-model-request",
-      "captured_release": "1.0.44",
-      "verified_release": "1.0.44",
+      "capture_method": "model-request",
+      "captured_release": "1.0.52",
+      "verified_release": "1.0.52",
       "models": [
         "grok-4.6"
       ],
@@ -29,16 +29,17 @@
       "artifacts": [
         "prompts/grok-4.6.md"
       ],
-      "artifact_sha256": "56a878a196ba2df0bc8eeff144d641bd45f1b2c6a4ab70680cb44180185376b2",
-      "evidence_sha256": "f96d2ee23ea0874a2f512fe705a74f905bd410d821642cbb13e9e2d430b19110"
+      "artifact_sha256": "556eb3f6e98aba15ea0749cc91295a9c50421e4c8874df15cf5a52b52ebd62db",
+      "evidence_sha256": "9e4199dafdd05951101b06b3e0d864a971ce5a609e3ca5bfb53e3a55d6b87e5f",
+      "notes": "Captured from the 1.0.52 non-interactive request. The 1.0.52 source is not in the public mirror, and the prompt text is not stored as plaintext in the binary."
     },
     {
       "id": "grok.prompt.special.session-title",
       "category": "session title prompt",
       "status": "current",
-      "capture_method": "model-request",
-      "captured_release": "1.0.44",
-      "verified_release": "1.0.44",
+      "capture_method": "source-and-model-request",
+      "captured_release": "1.0.52",
+      "verified_release": "1.0.52",
       "models": [
         "grok-4.6"
       ],
@@ -50,15 +51,16 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "f96d2ee23ea0874a2f512fe705a74f905bd410d821642cbb13e9e2d430b19110"
+      "evidence_sha256": "9e4199dafdd05951101b06b3e0d864a971ce5a609e3ca5bfb53e3a55d6b87e5f",
+      "notes": "Captured from the 1.0.52 session-title request and found verbatim in the 1.0.52 binary."
     },
     {
       "id": "grok.steering.catalog",
       "category": "steering messages",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.0.44",
-      "verified_release": "1.0.44",
+      "captured_release": "1.0.52",
+      "verified_release": "1.0.52",
       "models": [
         "grok-4.6",
         "grok-4.7"
@@ -69,24 +71,28 @@
       ],
       "dynamic_inputs": [
         "workspace",
+        "shell",
         "user query",
         "skills",
-        "AGENTS instructions"
+        "AGENTS instructions",
+        "transcript"
       ],
       "artifacts": [
         "misc/grok-4.6-steering.md",
+        "misc/grok-4.7-auxiliary-user-templates.md",
         "misc/grok-4.7-interactive-steering.md"
       ],
-      "artifact_sha256": "b4e5b3451ee26a120fdfff94642b3643bfe6cc3da467057989d7de8d5df9feba",
-      "evidence_sha256": "f96d2ee23ea0874a2f512fe705a74f905bd410d821642cbb13e9e2d430b19110"
+      "artifact_sha256": "86738caa8a9f67abc98f80162aa9b8b788aea0abbd730fcf29dc95d13cb01ad4",
+      "evidence_sha256": "9e4199dafdd05951101b06b3e0d864a971ce5a609e3ca5bfb53e3a55d6b87e5f",
+      "notes": "Captured from the 1.0.52 requests. The default user rules are bundled in the binary. The skill list comes from the server bundle archive, so it is stored as a typed template."
     },
     {
       "id": "grok.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "source-and-model-request",
-      "captured_release": "1.0.44",
-      "verified_release": "1.0.44",
+      "captured_release": "1.0.52",
+      "verified_release": "1.0.52",
       "models": [
         "grok-4.6",
         "grok-4.7"
@@ -128,16 +134,17 @@
         "tools/write.json",
         "tools/x_search.json"
       ],
-      "artifact_sha256": "84aaa59137a9200d696e987f1b6747a91deb897ba7107ca320e739a274dcde89",
-      "evidence_sha256": "f96d2ee23ea0874a2f512fe705a74f905bd410d821642cbb13e9e2d430b19110"
+      "artifact_sha256": "f20e3cc5da5c1e81c16f6da746ad3316d7999f04c58fe48477ddf35401e371b5",
+      "evidence_sha256": "9e4199dafdd05951101b06b3e0d864a971ce5a609e3ca5bfb53e3a55d6b87e5f",
+      "notes": "Exact tools[] entries from the 1.0.52 requests, with description text cross-checked against the 1.0.52 binary. grok-4.6 non-interactive sends 27 tools; grok-4.7 interactive also sends web_fetch."
     },
     {
       "id": "grok.prompt.agent.grok-4-7.interactive",
       "category": "agent prompt",
       "status": "current",
-      "capture_method": "source-and-model-request",
-      "captured_release": "1.0.44",
-      "verified_release": "1.0.44",
+      "capture_method": "model-request",
+      "captured_release": "1.0.52",
+      "verified_release": "1.0.52",
       "models": [
         "grok-4.7"
       ],
@@ -148,8 +155,91 @@
       "artifacts": [
         "prompts/grok-4.7-interactive.md"
       ],
-      "artifact_sha256": "696c6b2ddc2309f266d50ec5337d03f9412b63de87e47bd86a4c9962cb6e5712",
-      "evidence_sha256": "f96d2ee23ea0874a2f512fe705a74f905bd410d821642cbb13e9e2d430b19110"
+      "artifact_sha256": "a2a64e38262822a1e1d5fb39a84006e11ad9754b30530f5c77fc5a082cdc31ef",
+      "evidence_sha256": "9e4199dafdd05951101b06b3e0d864a971ce5a609e3ca5bfb53e3a55d6b87e5f",
+      "notes": "Captured from the 1.0.52 interactive request. The 1.0.52 source is not in the public mirror, and the prompt text is not stored as plaintext in the binary."
+    },
+    {
+      "id": "grok.prompt.special.memory-capture",
+      "category": "memory capture prompt",
+      "status": "current",
+      "capture_method": "source-and-model-request",
+      "captured_release": "1.0.52",
+      "verified_release": "1.0.52",
+      "models": [
+        "grok-4.7"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/grok-memory-capture.md",
+        "misc/grok-memory-capture-output-schema.json"
+      ],
+      "notes": "Captured from the 1.0.52 interactive post-turn memory-capture request and found verbatim in the binary. The service returned 403 for this account, but the request body was sent. The structured-output schema is stored alongside.",
+      "artifact_sha256": "4a8ee587a24b3547d5c43783a14c77a7cb01a8b45991e98c41e2f630aa915ea4",
+      "evidence_sha256": "9e4199dafdd05951101b06b3e0d864a971ce5a609e3ca5bfb53e3a55d6b87e5f"
+    },
+    {
+      "id": "grok.prompt.special.prompt-suggestion",
+      "category": "prompt suggestion prompt",
+      "status": "current",
+      "capture_method": "source-and-model-request",
+      "captured_release": "1.0.52",
+      "verified_release": "1.0.52",
+      "models": [
+        "grok-4.7"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/grok-prompt-suggestion.md"
+      ],
+      "notes": "Captured from the 1.0.52 interactive next-prompt suggestion request and found verbatim in the binary.",
+      "artifact_sha256": "732913320d6b97729bda0d49de6e7d6e1b20bb227b1c0c1e9f6de1720c731e5c",
+      "evidence_sha256": "9e4199dafdd05951101b06b3e0d864a971ce5a609e3ca5bfb53e3a55d6b87e5f"
+    },
+    {
+      "id": "grok.prompt.special.turn-summary",
+      "category": "turn summary prompt",
+      "status": "current",
+      "capture_method": "source-and-model-request",
+      "captured_release": "1.0.52",
+      "verified_release": "1.0.52",
+      "models": [
+        "grok-4.7"
+      ],
+      "modes": [
+        "interactive"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "prompts/grok-turn-summary.md"
+      ],
+      "notes": "Captured from the 1.0.52 interactive turn-summary request and found verbatim in the binary.",
+      "artifact_sha256": "6c4eea6119a6678ac6cfec0cafeeccca734c88b346429d8345b4a4bf0f92dade",
+      "evidence_sha256": "9e4199dafdd05951101b06b3e0d864a971ce5a609e3ca5bfb53e3a55d6b87e5f"
+    },
+    {
+      "id": "grok.source.snapshot",
+      "category": "source prompt and tool construction",
+      "status": "gap",
+      "capture_method": "unavailable",
+      "models": [
+        "grok-4.6",
+        "grok-4.7"
+      ],
+      "modes": [
+        "interactive",
+        "non-interactive",
+        "session-title"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "The public xai-org/grok-build mirror has no 1.0.52 changelog or source snapshot; its newest release changelog is 1.0.45. Source-level prompt and tool construction for 1.0.52 was not inspected."
     }
   ]
 }

@@ -1,39 +1,128 @@
 {
   "name": "report_findings",
-  "description": "Report review findings to the client UI. Copy findings from the review findings artifact. A follow-up report after fixes must include the complete same finding set with outcomes.",
+  "description": "Reports code-review findings as typed data so clients (the terminal UI, the Web Shell, ACP hosts) can render a per-finding list. Use it only when an active review flow (such as the bundled review skill) instructs you to report findings with it; otherwise present findings as ordinary text. Call it once per report with the complete list, most severe first — a later call replaces the whole list, it never appends. When the review wrote a findings artifact, copy each field verbatim from it (id, severity, confidence, source, file/line, summary, shortSummary, failureScenario, category, direction, baseline); do not re-derive or re-word values — the artifact is the oracle.\n\nAfter fixes are applied — at the review's own fix step, or ANY later time in the session a reported finding's disposition changes — call it again with the same findings, each carrying \"outcome\" (\"fixed\", \"skipped\", or \"no_change_needed\"; \"outcomeNote\" for the reason). Client per-finding status trusts only a call that carries outcomes, and a call where some findings carry an outcome and others do not is refused: account for every finding.\n\nThis tool renders data for the client and nothing else: it persists nothing, decides no verdict, and a failure is a UI-delivery failure — disclose it and move on without changing the review's artifacts or verdict.",
   "parametersJsonSchema": {
     "type": "object",
+    "additionalProperties": false,
     "properties": {
       "level": {
         "type": "string",
-        "enum": ["low", "medium", "high"]
+        "enum": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "description": "The review effort the findings came from."
       },
       "findings": {
         "type": "array",
         "maxItems": 50,
         "items": {
           "type": "object",
+          "additionalProperties": false,
           "properties": {
-            "id": {"type": "string"},
-            "severity": {"type": "string", "enum": ["Critical", "Suggestion", "Nice to have"]},
-            "confidence": {"type": "string", "enum": ["high", "low"]},
-            "source": {"type": "string", "enum": ["review", "build", "test", "probe", "lint"]},
-            "file": {"type": "string", "maxLength": 4096},
-            "line": {"type": "number"},
-            "summary": {"type": "string"},
-            "shortSummary": {"type": "string", "maxLength": 60},
-            "failureScenario": {"type": "string"},
-            "category": {"type": "string"},
-            "outcome": {"type": "string", "enum": ["fixed", "skipped", "no_change_needed"]},
-            "outcomeNote": {"type": "string"}
+            "id": {
+              "type": "string",
+              "maxLength": 64,
+              "description": "The findings artifact id (e.g. \"R1-2\"), when the review produced one."
+            },
+            "severity": {
+              "type": "string",
+              "enum": [
+                "Critical",
+                "Suggestion",
+                "Nice to have"
+              ]
+            },
+            "confidence": {
+              "type": "string",
+              "enum": [
+                "high",
+                "low"
+              ],
+              "description": "Verification confidence. Omit on an unverified (low-effort) pass."
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "review",
+                "build",
+                "test",
+                "probe",
+                "lint"
+              ],
+              "description": "Where the finding came from. Defaults to \"review\"."
+            },
+            "file": {
+              "type": "string",
+              "maxLength": 4096,
+              "description": "Repo-relative path, or the review's \"(body)\" stand-in for an unanchored finding."
+            },
+            "line": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "summary": {
+              "type": "string",
+              "description": "One sentence stating the defect."
+            },
+            "shortSummary": {
+              "type": "string",
+              "description": "Compressed label for a compact list UI (<= 60 characters; longer values are compressed, and it is derived from \"summary\" when absent)."
+            },
+            "failureScenario": {
+              "type": "string",
+              "maxLength": 4000,
+              "description": "The concrete trigger and wrong outcome."
+            },
+            "category": {
+              "type": "string",
+              "maxLength": 64,
+              "description": "Free-form kebab-case tag (\"correctness\", \"security\", \"test-coverage\", …)."
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "certifies-falsely",
+                "fails-closed"
+              ],
+              "description": "Which way a Critical fails, from the artifact: \"certifies-falsely\" (a wrong result presented as correct) or \"fails-closed\" (refuses, wedges or degrades without a wrong result). Omit when the artifact carries none."
+            },
+            "baseline": {
+              "type": "string",
+              "enum": [
+                "regression",
+                "new-surface"
+              ],
+              "description": "What a Critical is measured against, from the artifact: \"regression\" (the merge base handled the trigger correctly) or \"new-surface\" (the failing path does not exist at the merge base). Omit when the artifact carries none."
+            },
+            "outcome": {
+              "type": "string",
+              "enum": [
+                "fixed",
+                "skipped",
+                "no_change_needed"
+              ],
+              "description": "Set ONLY on a re-report after fixes were applied: what happened to this finding. All findings in the call must carry one, or none."
+            },
+            "outcomeNote": {
+              "type": "string",
+              "maxLength": 1000,
+              "description": "The fixer's reason — required reading for \"skipped\"."
+            }
           },
-          "required": ["severity", "file", "summary", "failureScenario"],
-          "additionalProperties": false
-        }
+          "required": [
+            "severity",
+            "file",
+            "summary",
+            "failureScenario"
+          ]
+        },
+        "description": "The complete findings list, most severe first. An empty array is a valid \"nothing found\" report."
       }
     },
-    "required": ["findings"],
-    "additionalProperties": false,
-    "$schema": "http://json-schema.org/draft-07/schema#"
+    "required": [
+      "findings"
+    ]
   }
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "qwen-code",
-  "observed_release": "0.25.0",
+  "observed_release": "0.25.1",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -16,9 +16,9 @@
       "id": "qwen-code.prompt.agent.catalog",
       "category": "agent prompts",
       "status": "current",
-      "capture_method": "direct-source",
-      "captured_release": "0.25.0",
-      "verified_release": "0.25.0",
+      "capture_method": "source-and-model-request",
+      "captured_release": "0.25.1",
+      "verified_release": "0.25.1",
       "models": [
         "all"
       ],
@@ -33,16 +33,17 @@
         "prompts/core-headless-qwen3-coder-plus.md",
         "prompts/core-interactive-qwen3-coder-plus.md"
       ],
-      "artifact_sha256": "01b60a7a85af72731bcd42ef442cad83b7a2528d22dffe6bf5a1fce58cc8493e",
-      "evidence_sha256": "427b3882cd491871e3175b1e121302c925261172fce515bb0e82ba47e3124de8"
+      "artifact_sha256": "bfdcecf66aeab0a3955e2c28479b13482b329ebdf7f1101bb2ac85fe8003dfa7",
+      "notes": "Rendered by the shipped getCoreSystemPrompt for qwen3-coder-plus with default options (direct tool mode, todo_write guidance off, no tool-surface gating, no git repository, outside a sandbox). The headless rendering matches a recorded /chat/completions system message byte-for-byte up to the appended session memory, which is dynamic.",
+      "evidence_sha256": "7b1cfad2660f1a4690b7a16aa9ad7739f459cfd55f4ac27fb6cd3c1f49f06646"
     },
     {
       "id": "qwen-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
-      "capture_method": "direct-source",
-      "captured_release": "0.25.0",
-      "verified_release": "0.25.0",
+      "capture_method": "source-and-model-request",
+      "captured_release": "0.25.1",
+      "verified_release": "0.25.1",
       "models": [
         "all"
       ],
@@ -52,13 +53,11 @@
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "tools/agent.json",
         "tools/advisor.json",
+        "tools/agent.json",
         "tools/artifact.json",
         "tools/ask_user_question.json",
         "tools/create_sub_session.json",
-        "tools/report_findings.json",
-        "tools/request_shutdown.json",
         "tools/cron_create.json",
         "tools/cron_delete.json",
         "tools/cron_list.json",
@@ -66,6 +65,7 @@
         "tools/edit.json",
         "tools/enter_plan_mode.json",
         "tools/enter_worktree.json",
+        "tools/exec.json",
         "tools/exit_plan_mode.json",
         "tools/exit_worktree.json",
         "tools/get_goal.json",
@@ -76,21 +76,20 @@
         "tools/list_directory.json",
         "tools/loop_wakeup.json",
         "tools/lsp.json",
+        "tools/manage_memory.json",
         "tools/monitor.json",
         "tools/notebook_edit.json",
+        "tools/propose_goal.json",
         "tools/read_file.json",
         "tools/read_mcp_resource.json",
         "tools/record_artifact.json",
         "tools/record_source.json",
+        "tools/report_findings.json",
+        "tools/request_shutdown.json",
         "tools/run_shell_command.json",
+        "tools/search_memory.json",
         "tools/send_message.json",
         "tools/skill.json",
-        "tools/thread_block.json",
-        "tools/thread_create.json",
-        "tools/thread_post.json",
-        "tools/thread_read.json",
-        "tools/thread_review.json",
-        "tools/thread_wait.json",
         "tools/task_create.json",
         "tools/task_list.json",
         "tools/task_stop.json",
@@ -99,28 +98,26 @@
         "tools/team_delete.json",
         "tools/team_plan_approval.json",
         "tools/todo_write.json",
+        "tools/tool_call.json",
         "tools/tool_search.json",
         "tools/update_goal.json",
         "tools/web_fetch.json",
         "tools/web_search.json",
         "tools/workflow.json",
         "tools/write_file.json",
-        "tools/zoom_image.json",
-        "tools/exec.json",
-        "tools/propose_goal.json",
-        "tools/manage_memory.json",
-        "tools/search_memory.json"
+        "tools/zoom_image.json"
       ],
-      "artifact_sha256": "8e8ded13052c1a78543d103dc13933fc6811a726057436560d8ba584cf138b50",
-      "evidence_sha256": "427b3882cd491871e3175b1e121302c925261172fce515bb0e82ba47e3124de8"
+      "artifact_sha256": "1cc345e8111a7f9666e2e50d3cbcee6af42e3da27d43ffc770729315226e83cc",
+      "notes": "Schemas recorded from model requests with optional features enabled (interactive, agent team, todo_write, list_directory, workflows, structured memory recall, LSP, advisor, image generation, web search; Code Mode for exec), using the Gemini wire format, which carries parametersJsonSchema unchanged. The OpenAI-compatible wire strips $schema and additionalProperties. read_file uses the text-only-model description. record_source and create_sub_session register only in managed or daemon sessions and were instantiated from the shipped bundle. Agent, skill, and exec descriptions list the session's agents, skills, and tool signatures. The thread_* tools were removed in 0.25.1; tool_call is now archived.",
+      "evidence_sha256": "7b1cfad2660f1a4690b7a16aa9ad7739f459cfd55f4ac27fb6cd3c1f49f06646"
     },
     {
       "id": "qwen-code.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.25.0",
-      "verified_release": "0.25.0",
+      "captured_release": "0.25.1",
+      "verified_release": "0.25.1",
       "models": [
         "all"
       ],
@@ -144,12 +141,14 @@
         "misc/insight-memorable_moment.md",
         "misc/insight-project_areas.md",
         "misc/manual-plan-exit-system-reminder.template.md",
+        "misc/plan-mode-only-system-reminder.md",
         "misc/plan-mode-system-reminder.md",
         "misc/project-summary-prompt.md",
         "misc/workflow-authoring.md"
       ],
-      "artifact_sha256": "a46919d6ead2a58953d1b9db1dd938932c086ef0fc79a7c09883a5663bec7744",
-      "evidence_sha256": "427b3882cd491871e3175b1e121302c925261172fce515bb0e82ba47e3124de8"
+      "artifact_sha256": "692d7a8e7189474f1be0505d9c34afa89af1075671f5bfafa8ff4a6814f0858f",
+      "notes": "Rendered by the shipped prompt functions (compression, project summary, plan-mode reminders, Arena and manual plan-exit templates, insight prompts); workflow-authoring.md is the bundled skill, identical to the tagged source.",
+      "evidence_sha256": "7b1cfad2660f1a4690b7a16aa9ad7739f459cfd55f4ac27fb6cd3c1f49f06646"
     },
     {
       "id": "qwen-code.context.session",

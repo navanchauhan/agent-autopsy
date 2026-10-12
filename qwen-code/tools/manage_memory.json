@@ -4,10 +4,23 @@
   "parametersJsonSchema": {
     "type": "object",
     "properties": {
-      "action": {"type": "string", "enum": ["remember", "forget"], "description": "remember creates or updates; forget removes"},
-      "content": {"type": "string", "description": "durable fact to remember/update, or memory to forget"}
+      "action": {
+        "type": "string",
+        "enum": [
+          "remember",
+          "forget"
+        ],
+        "description": "remember creates or updates; forget removes"
+      },
+      "content": {
+        "type": "string",
+        "description": "durable fact to remember/update, or memory to forget"
+      }
     },
-    "required": ["action", "content"],
+    "required": [
+      "action",
+      "content"
+    ],
     "additionalProperties": false
   }
 }
