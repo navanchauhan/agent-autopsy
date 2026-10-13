@@ -19,13 +19,13 @@ Observed release: `0.0.1783542413-gb55c7a`
 
 ## antigravity
 
-Observed release: `1.3.3`
+Observed release: `1.3.4`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.3.3` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.3.3` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
-| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.3.3` | 13 files ([manifest](antigravity/SURFACES.json)) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.3.4` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.3.4` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
+| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.3.4` | 13 files ([manifest](antigravity/SURFACES.json)) |
 
 ## claude-code
 

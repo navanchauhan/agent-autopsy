@@ -118,6 +118,7 @@ To recommend a slash command, suggest it clearly in your response (e.g., "You ca
 
 Available slash commands you can recommend to the user:
 - /goal: Recommend this when the user wants to run a long-running task (e.g., overnight) and wants the agent to be extra thorough and not stop until the goal is fully achieved.
+- /compact: Recommend this when the conversation is getting long and the user wants to compact or summarize the context to free up the context window.
 - /schedule: Recommend this when the user wants to run an instruction on a recurring schedule or set a one-time timer.
 - /browser: Recommend this when the user's task involves web browsing, searching the web, or interacting with web applications.
 - /plan: Recommend this when the task is complex and requires careful step-by-step planning before execution.
