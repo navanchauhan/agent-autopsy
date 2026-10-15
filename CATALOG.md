@@ -19,13 +19,13 @@ Observed release: `0.0.1783542413-gb55c7a`
 
 ## antigravity
 
-Observed release: `1.3.5`
+Observed release: `1.3.6`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.3.5` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
-| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.3.5` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
-| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.3.5` | 13 files ([manifest](antigravity/SURFACES.json)) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.interactive` | agent prompt | `gemini-3.8-flash-high` | `interactive` | current | `1.3.6` | [gemini-3.8-flash-high-interactive.md](antigravity/prompts/gemini-3.8-flash-high-interactive.md) |
+| `antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive` | agent prompt | `gemini-3.8-flash-high` | `non-interactive` | current | `1.3.6` | [gemini-3.8-flash-high.md](antigravity/prompts/gemini-3.8-flash-high.md) |
+| `antigravity.tool.catalog` | tool schemas | `gemini-3.8-flash-high` | `interactive`, `non-interactive` | current | `1.3.6` | 13 files ([manifest](antigravity/SURFACES.json)) |
 
 ## claude-code
 
@@ -65,17 +65,16 @@ Observed release: `1.0.45`
 | --- | --- | --- | --- | --- | --- | --- |
 | `grok.prompt.agent.grok-4-6.non-interactive` | agent prompt | `grok-4.6` | `non-interactive` | current | `1.0.45` | [grok-4.6.md](grok/prompts/grok-4.6.md) |
 | `grok.prompt.special.session-title` | session title prompt | `grok-4.6` | `session-title` | current | `1.0.45` | [grok-session-title.md](grok/prompts/grok-session-title.md) |
-| `grok.steering.catalog` | steering messages | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive` | current | `1.0.45` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md), [grok-4.7-interactive-steering.md](grok/misc/grok-4.7-interactive-steering.md) |
-| `grok.tool.catalog` | tool schemas | `grok-4.6`, `grok-4.7` | `interactive`, `non-interactive`, `session-title` | current | `1.0.45` | 29 files ([manifest](grok/SURFACES.json)) |
-| `grok.prompt.agent.grok-4-7.interactive` | agent prompt | `grok-4.7` | `interactive` | current | `1.0.45` | [grok-4.7-interactive.md](grok/prompts/grok-4.7-interactive.md) |
+| `grok.steering.catalog` | steering messages | `grok-4.6` | `non-interactive` | current | `1.0.45` | [grok-4.6-steering.md](grok/misc/grok-4.6-steering.md) |
+| `grok.tool.catalog` | tool schemas | `grok-4.6` | `non-interactive`, `session-title` | current | `1.0.45` | 28 files ([manifest](grok/SURFACES.json)) |
 
 ## qwen-code
 
-Observed release: `0.25.1`
+Observed release: `0.25.2`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `qwen-code.prompt.agent.catalog` | agent prompts | `all` | `interactive`, `headless`, `acp` | current | `0.25.1` | [core-acp-qwen3-coder-plus.md](qwen-code/prompts/core-acp-qwen3-coder-plus.md), [core-headless-qwen3-coder-plus.md](qwen-code/prompts/core-headless-qwen3-coder-plus.md), [core-interactive-qwen3-coder-plus.md](qwen-code/prompts/core-interactive-qwen3-coder-plus.md) |
-| `qwen-code.tool.catalog` | tool schemas | `all` | `configured`, `deferred` | current | `0.25.1` | 52 files ([manifest](qwen-code/SURFACES.json)) |
-| `qwen-code.steering.catalog` | runtime messages | `all` | `configured`, `planning`, `compression`, `insights` | current | `0.25.1` | 15 files ([manifest](qwen-code/SURFACES.json)) |
+| `qwen-code.prompt.agent.catalog` | agent prompts | `all` | `interactive`, `headless`, `acp` | current | `0.25.2` | [core-acp-qwen3-coder-plus.md](qwen-code/prompts/core-acp-qwen3-coder-plus.md), [core-headless-qwen3-coder-plus.md](qwen-code/prompts/core-headless-qwen3-coder-plus.md), [core-interactive-qwen3-coder-plus.md](qwen-code/prompts/core-interactive-qwen3-coder-plus.md) |
+| `qwen-code.tool.catalog` | tool schemas | `all` | `configured`, `deferred` | current | `0.25.2` | 52 files ([manifest](qwen-code/SURFACES.json)) |
+| `qwen-code.steering.catalog` | runtime messages | `all` | `configured`, `planning`, `compression`, `insights` | current | `0.25.2` | 15 files ([manifest](qwen-code/SURFACES.json)) |
 | `qwen-code.context.session` | dynamic context | `all` | `all` | dynamic | — | — |
