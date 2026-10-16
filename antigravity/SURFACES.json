@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.3.6",
+  "observed_release": "1.4.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -13,54 +13,54 @@
   },
   "surfaces": [
     {
-      "id": "antigravity.prompt.agent.gemini-3-8-flash-high.interactive",
+      "id": "antigravity.prompt.agent.gemini-4-argon-medium.interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.3.6",
-      "verified_release": "1.3.6",
+      "captured_release": "1.4.0",
+      "verified_release": "1.4.0",
       "models": [
-        "gemini-3.8-flash-high"
+        "gemini-4-argon-medium"
       ],
       "modes": [
         "interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/gemini-3.8-flash-high-interactive.md"
+        "prompts/gemini-4-argon-medium-interactive.md"
       ],
-      "artifact_sha256": "81e1e81a2497253c6ac82f082e4f8ef6358f434a00e8a7a3a4df8f3ebaf1f9a9",
-      "evidence_sha256": "3144e72bf1e3e036050b1c3a0c0a5c3da9c23cbd121a98d444e96cc7b681a812"
+      "artifact_sha256": "df94e7d971b4da5452b95efb044f2ad2ccde5b39e45dced0fe49e4ef1be59df5",
+      "evidence_sha256": "72635a6ebded5ad4373095bf0744e9447eb400efd442e7bfe6af606cb43d1d59"
     },
     {
-      "id": "antigravity.prompt.agent.gemini-3-8-flash-high.non-interactive",
+      "id": "antigravity.prompt.agent.gemini-4-argon-medium.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.3.6",
-      "verified_release": "1.3.6",
+      "captured_release": "1.4.0",
+      "verified_release": "1.4.0",
       "models": [
-        "gemini-3.8-flash-high"
+        "gemini-4-argon-medium"
       ],
       "modes": [
         "non-interactive"
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "prompts/gemini-3.8-flash-high.md"
+        "prompts/gemini-4-argon-medium.md"
       ],
-      "artifact_sha256": "5ed480486a0ad58d97c96f92c9bb9995d2a5cc4f436ddc12a8ef97d153ecc9b8",
-      "evidence_sha256": "3144e72bf1e3e036050b1c3a0c0a5c3da9c23cbd121a98d444e96cc7b681a812"
+      "artifact_sha256": "3f5dd99e1cb76bbae781e393a39712263a28b7075faba5908091c227750e7de2",
+      "evidence_sha256": "72635a6ebded5ad4373095bf0744e9447eb400efd442e7bfe6af606cb43d1d59"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.3.6",
-      "verified_release": "1.3.6",
+      "captured_release": "1.4.0",
+      "verified_release": "1.4.0",
       "models": [
-        "gemini-3.8-flash-high"
+        "gemini-4-argon-medium"
       ],
       "modes": [
         "interactive",
@@ -82,8 +82,8 @@
         "tools/view_file.json",
         "tools/write_to_file.json"
       ],
-      "artifact_sha256": "da404d5683b211a876bd9707fc08b857ca6c0257e61a85bb35dfeb690aadb6a1",
-      "evidence_sha256": "3144e72bf1e3e036050b1c3a0c0a5c3da9c23cbd121a98d444e96cc7b681a812"
+      "artifact_sha256": "43fbec10eed09989e92d218b61cb37dd8dccf277567c43a129d02c5496fd438a",
+      "evidence_sha256": "72635a6ebded5ad4373095bf0744e9447eb400efd442e7bfe6af606cb43d1d59"
     }
   ]
 }

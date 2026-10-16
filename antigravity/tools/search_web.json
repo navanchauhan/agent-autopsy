@@ -1,7 +1,7 @@
 {
   "name": "search_web",
   "models": [
-    "gemini-3.8-flash-high"
+    "gemini-4-argon-medium"
   ],
   "request_kinds": [
     "agent"
