@@ -1,13 +1,7 @@
 {
   "schema_version": 1,
   "queues": {
-    "codex": [
-      {
-        "tool": "codex",
-        "new_version": "0.163.0",
-        "new_revision": "83086188ae0614bd882818ff1aa23f3194962012"
-      }
-    ],
+    "codex": [],
     "claude-code": [
       {
         "tool": "claude-code",
@@ -176,17 +170,16 @@
         "new_version": "2.1.301",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.301/linux-x64/claude",
         "artifact_sha256": "bc1aad9982c7b59c7d889ff92595d61cf46e0a6eae074cb551d932a989bcd222"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.302",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.302/linux-x64/claude",
+        "artifact_sha256": "60d7eb7f12fbb28a52533fe8be5884097403562aa02dc73991a021c7067e29a5"
       }
     ],
     "grok": [],
-    "antigravity": [
-      {
-        "tool": "antigravity",
-        "new_version": "1.4.0",
-        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/linux-x64/cli_linux_x64.tar.gz",
-        "artifact_sha512": "6c4b298c2a69b6bd0f58567031cc56d8097a32be54c4b633aa80ad395871b389618ab3860d4ba0a12599831b8226b51b03e258ee2ec7fae105a45b8e0fce2188"
-      }
-    ],
+    "antigravity": [],
     "qwen-code": []
   }
 }
