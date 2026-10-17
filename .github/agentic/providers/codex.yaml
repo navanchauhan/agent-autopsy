@@ -1,0 +1,17 @@
+# Facts the refresh agent can't cheaply rediscover. Goals live in ../goal.md.
+provider: codex
+release_field: codex_cli_package_version
+target:
+  package: /opt/target  # npm install of @openai/codex at the planned version (`codex` on PATH)
+  source: https://github.com/openai/codex at the planned revision (tag rust-v<version>)
+  auth: ~/.codex/auth.json (ChatGPT login)
+  credential_scope: codex-driver
+cover:
+  - model-facing prompts, runtime messages, and tool schemas for each model family
+    the release supports, extracted from the tagged source
+  - live requests from the released binary where they confirm or add to the source
+known:
+  - Prompt locations move between revisions. Locate text by content, and check how
+    the source assembles it.
+  - Code-mode tool listings for GPT-5.6+ are assembled per session. They are dynamic,
+    not fixed files.

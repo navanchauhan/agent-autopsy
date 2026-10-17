@@ -1,0 +1,12 @@
+# Facts the refresh agent can't cheaply rediscover. Goals live in ../goal.md.
+provider: qwen-code
+release_field: version
+target:
+  package: /opt/target  # npm install of @qwen-code/qwen-code at the planned version
+  source: https://github.com/QwenLM/qwen-code at tag v<version>
+cover:
+  - model-facing prompts, runtime messages, and tool schemas defined in the tagged
+    source, cross-checked against the shipped bundle
+known:
+  - No credentials are provided. This archive is source-derived. A version advance
+    should resolve existing `gap` surfaces where the source now allows it.

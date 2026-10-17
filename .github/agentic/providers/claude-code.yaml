@@ -1,0 +1,18 @@
+# Facts the refresh agent can't cheaply rediscover. Goals live in ../goal.md.
+provider: claude-code
+release_field: version
+target:
+  binary: /opt/target/bin/claude  # native Bun binary; JS bundle is embedded
+  auth: CLAUDE_CODE_OAUTH_TOKEN
+  credential_scope: claude-code
+cover:
+  - headless (`claude -p`) requests for every model the release offers by default
+  - interactive TUI requests (drive it with tmux), including the session-title request
+  - every deferred tool's full schema, as sent after ToolSearch loads it
+known:
+  - The driving agent is also Claude Code. Unset CLAUDECODE and CLAUDE_CODE_* driver
+    variables before launching the target, and keep DISABLE_AUTOUPDATER=1.
+  - Since 2.1.271, follow-up turns continue a server-side thread and carry only deltas.
+    Take full prompts from each thread's first request.
+  - Since 2.1.283, API calls bypass globalThis.fetch, so in-process fetch hooks see
+    nothing. The proxy works with HTTPS_PROXY and NODE_EXTRA_CA_CERTS.
