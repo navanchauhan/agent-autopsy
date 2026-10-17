@@ -1,41 +1,32 @@
 {
   "schema_version": 1,
   "tools": {
-    "codex": {
-      "plan_hash": "0de936b76060f9408a361c1bf92e6b6a9256ff66f8fe36bcc57248e598150934",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261016",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
     "claude-code": {
       "plan_hash": "8f2e04ba76e231c3b4fea04d2b9f562178be870d02e5af1b0fa397b60ff61165",
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261016",
+      "last_fresh_bucket": "20261017",
       "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
-    "antigravity": {
-      "plan_hash": "455ef711f63b1f25ea38e0625b403c784d8bf3e8a17e8874126fca73e6fd9a57",
-      "state": "clear",
-      "request_after_run_id": null,
-      "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261016",
-      "last_reviewer_input_hash": null,
-      "reason": null
-    },
     "grok": {
       "plan_hash": "f2c911a8245fc402a8d00b43f65dae8319a76088bd00c29f68730e7aa288af79",
-      "state": "clear",
+      "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261016",
-      "last_reviewer_input_hash": null,
-      "reason": null
+      "last_fresh_bucket": "20261017",
+      "last_reviewer_input_hash": "319be8d89fd195bf4cf97fdcca640cd6dfb7883f34ce4231337850bc0811c667",
+      "reason": "reviewer"
+    },
+    "antigravity": {
+      "plan_hash": "9d42c6228149768a91c08d74cca8353a007fbde10b82ee29788d90501b5a706e",
+      "state": "suppress_positive",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20261017",
+      "last_reviewer_input_hash": "7c0e792c29b81863ccf20315542783947fd1d9c5d70a017cc6a493381235484c",
+      "reason": "reviewer"
     }
   }
 }
