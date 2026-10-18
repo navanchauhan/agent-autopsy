@@ -1,12 +1,12 @@
 source = antigravity.google/cli
 distribution = native Go binary
-version = 1.4.0
+version = 1.4.1
 platform = linux-x64
 installer_url = https://antigravity.google/cli/install.sh
 manifest_url = https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json
-manifest_version = 1.4.0
-manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.0-5281842794987520/linux-x64/cli_linux_x64.tar.gz
-manifest_tarball_sha512 = 6c4b298c2a69b6bd0f58567031cc56d8097a32be54c4b633aa80ad395871b389618ab3860d4ba0a12599831b8226b51b03e258ee2ec7fae105a45b8e0fce2188
+manifest_version = 1.4.1
+manifest_tarball_url = https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.1-6385551759245312/linux-x64/cli_linux_x64.tar.gz
+manifest_tarball_sha512 = e291adba20debd0f309297a58fa6355b278c6abc21cfcb2e3245783c4f3708bac14a7639600973e2d03cca5a63b842f6263e99ffe563f7460663004fee07b38c
 capture_script = antigravity/misc/scripts/extract-antigravity-log.cjs
 network_capture_script = antigravity/misc/scripts/mitm-capture-antigravity.py
 auth_source = local Antigravity Google OAuth/keyring

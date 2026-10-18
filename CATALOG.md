@@ -19,13 +19,13 @@ Observed release: `0.0.1783542413-gb55c7a`
 
 ## antigravity
 
-Observed release: `1.4.0`
+Observed release: `1.4.1`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `antigravity.prompt.agent.gemini-4-argon-medium.interactive` | agent prompt | `gemini-4-argon-medium` | `interactive` | current | `1.4.0` | [gemini-4-argon-medium-interactive.md](antigravity/prompts/gemini-4-argon-medium-interactive.md) |
-| `antigravity.prompt.agent.gemini-4-argon-medium.non-interactive` | agent prompt | `gemini-4-argon-medium` | `non-interactive` | current | `1.4.0` | [gemini-4-argon-medium.md](antigravity/prompts/gemini-4-argon-medium.md) |
-| `antigravity.tool.catalog` | tool schemas | `gemini-4-argon-medium` | `interactive`, `non-interactive` | current | `1.4.0` | 13 files ([manifest](antigravity/SURFACES.json)) |
+| `antigravity.prompt.agent.gemini-4-argon-medium.interactive` | agent prompt | `gemini-4-argon-medium` | `interactive` | current | `1.4.1` | [gemini-4-argon-medium-interactive.md](antigravity/prompts/gemini-4-argon-medium-interactive.md) |
+| `antigravity.prompt.agent.gemini-4-argon-medium.non-interactive` | agent prompt | `gemini-4-argon-medium` | `non-interactive` | current | `1.4.1` | [gemini-4-argon-medium.md](antigravity/prompts/gemini-4-argon-medium.md) |
+| `antigravity.tool.catalog` | tool schemas | `gemini-4-argon-medium` | `interactive`, `non-interactive` | current | `1.4.1` | 13 files ([manifest](antigravity/SURFACES.json)) |
 
 ## claude-code
 
