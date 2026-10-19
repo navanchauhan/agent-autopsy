@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "qwen-code",
-  "observed_release": "0.25.2",
+  "observed_release": "0.25.3",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.25.2",
-      "verified_release": "0.25.2",
+      "captured_release": "0.25.3",
+      "verified_release": "0.25.3",
       "models": [
         "all"
       ],
@@ -34,15 +34,15 @@
         "prompts/core-interactive-qwen3-coder-plus.md"
       ],
       "artifact_sha256": "01b60a7a85af72731bcd42ef442cad83b7a2528d22dffe6bf5a1fce58cc8493e",
-      "evidence_sha256": "eeffa1f40f3e0306ebd0bb85c46d14bc8238e8ae8cc7cfbd28990b888e78b223"
+      "evidence_sha256": "742b24a01a79648c73cfdf7662b62500594e3199af90775b7756f3d518dac290"
     },
     {
       "id": "qwen-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.25.2",
-      "verified_release": "0.25.2",
+      "captured_release": "0.25.3",
+      "verified_release": "0.25.3",
       "models": [
         "all"
       ],
@@ -105,16 +105,16 @@
         "tools/manage_memory.json",
         "tools/search_memory.json"
       ],
-      "artifact_sha256": "05cd9b13079cae9928e4e432749abf360dd7bfc2f2b2eb79f08699ab307b4850",
-      "evidence_sha256": "eeffa1f40f3e0306ebd0bb85c46d14bc8238e8ae8cc7cfbd28990b888e78b223"
+      "artifact_sha256": "0c70dab1a49b5812cb9de10a345c16e95b7c09eb40b6ffe303fa4dd45ef721f6",
+      "evidence_sha256": "742b24a01a79648c73cfdf7662b62500594e3199af90775b7756f3d518dac290"
     },
     {
       "id": "qwen-code.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.25.2",
-      "verified_release": "0.25.2",
+      "captured_release": "0.25.3",
+      "verified_release": "0.25.3",
       "models": [
         "all"
       ],
@@ -143,7 +143,7 @@
         "misc/workflow-authoring.md"
       ],
       "artifact_sha256": "a46919d6ead2a58953d1b9db1dd938932c086ef0fc79a7c09883a5663bec7744",
-      "evidence_sha256": "eeffa1f40f3e0306ebd0bb85c46d14bc8238e8ae8cc7cfbd28990b888e78b223"
+      "evidence_sha256": "742b24a01a79648c73cfdf7662b62500594e3199af90775b7756f3d518dac290"
     },
     {
       "id": "qwen-code.context.session",
