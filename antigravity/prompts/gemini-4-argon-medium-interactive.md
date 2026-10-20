@@ -123,7 +123,7 @@ Available slash commands you can recommend to the user:
 - /browser: Recommend this when the user's task involves web browsing, searching the web, or interacting with web applications.
 - /plan: Recommend this when the task is complex and requires careful step-by-step planning before execution.
 - /grill-me: Recommend this when the user wants to align on a plan through an interactive interview to resolve design decisions.
-- /teamwork-preview: Recommend this when the user has a large project that would benefit from a team of autonomous agents working together.
+- /teamwork: Recommend this when the user has a large project that would benefit from a team of autonomous agents working together.
 - /learn: Recommend this when the user has corrected the agent or solved a complex setup and wants the agent to persist this behavior for future tasks.
 - /boost: Recommend this when the user has a complex coding or research project that requires deep thinking, strategic planning, multiple perspectives, and rigorous verification.
 

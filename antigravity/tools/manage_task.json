@@ -10,13 +10,13 @@
     "functionDeclarations": [
       {
         "name": "manage_task",
-        "description": "Manage background tasks. Use this tool to list running tasks or interact with tasks that were sent to the background.\n\nActions:\n- 'list': List all currently running background tasks\n- 'kill': Cancel the task's execution\n- 'status': Check the task's current status and log file location\n- 'send_input': Send input to a running task\n\nWhen mentioning tasks to the user, avoid using full task IDs and start timestamps; keep them human-readable.",
+        "description": "Manage the background tasks of this conversation: 'list' the running tasks, check a task's 'status' and recent log output, 'send_input' to a running task, or 'kill' one. Refer to tasks by the TaskId that 'list' reports; keep task references human-readable when talking to the user.",
         "parameters": {
           "type": "OBJECT",
           "properties": {
             "Action": {
               "type": "STRING",
-              "description": "The action to perform: 'list' (list all running tasks), 'kill' (cancel the task), 'status' (check the task status and log URI), 'send_input' (send input to a running task).",
+              "description": "'list' reports the running tasks; the other actions operate on the task named in TaskId.",
               "enum": [
                 "list",
                 "kill",
@@ -26,25 +26,15 @@
             },
             "Input": {
               "type": "STRING",
-              "description": "The input to send to the task. Required when Action is 'send_input'."
+              "description": "Input to deliver to the task. Required for 'send_input'."
             },
             "TaskId": {
               "type": "STRING",
-              "description": "The task ID to manage. Required when Action is 'kill', 'status', or 'send_input'."
-            },
-            "toolAction": {
-              "type": "STRING",
-              "description": "Brief 2-5 word phrase in -ing form describing the specific action. Capitalize like a sentence. Some examples: 'Analyzing directory', 'Searching the web', 'Checking git status', 'Running tests', 'Searching code'."
-            },
-            "toolSummary": {
-              "type": "STRING",
-              "description": "Brief 2-5 word noun phrase describing the specific task. Capitalize like a sentence. Some examples: 'Directory analysis', 'Web search', 'Git status check', 'Test execution', 'Code search'."
+              "description": "Task to manage, as reported by 'list'. Required for 'kill', 'status' and 'send_input'."
             }
           },
           "required": [
-            "Action",
-            "toolSummary",
-            "toolAction"
+            "Action"
           ]
         }
       }

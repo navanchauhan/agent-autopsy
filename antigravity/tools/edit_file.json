@@ -1,0 +1,68 @@
+{
+  "name": "edit_file",
+  "models": [
+    "gemini-4-argon-medium"
+  ],
+  "request_kinds": [
+    "agent"
+  ],
+  "schema": {
+    "functionDeclarations": [
+      {
+        "name": "edit_file",
+        "description": "Use this tool to edit an existing file. Follow these rules:\n1. Use this tool for a single contiguous block of edits. To edit multiple non-adjacent regions, make separate calls.\n2. Target must exactly match existing file text, including whitespace. Replacement must be a complete drop-in replacement for the Target.\n3. If Target appears multiple times in the file, every occurrence is replaced.",
+        "parameters": {
+          "type": "OBJECT",
+          "properties": {
+            "ArtifactMetadata": {
+              "type": "OBJECT",
+              "description": "Metadata updates if updating an artifact file in the artifact directory. Omit this field when editing non-artifact files. Should be updated if the content is changing meaningfully.",
+              "properties": {
+                "RequestFeedback": {
+                  "type": "BOOLEAN",
+                  "description": "Whether to request user feedback on this artifact if its contents are executable (e.g., a plan). The user is given a 'Proceed' button to execute it."
+                },
+                "Summary": {
+                  "type": "STRING",
+                  "description": "Detailed multi-line summary of the artifact's contents and purpose."
+                },
+                "UserFacing": {
+                  "type": "BOOLEAN",
+                  "description": "Whether this artifact should be presented to the user."
+                }
+              },
+              "required": [
+                "Summary",
+                "UserFacing",
+                "RequestFeedback"
+              ]
+            },
+            "Path": {
+              "type": "STRING",
+              "description": "The absolute path of the file to modify.",
+              "minLength": "1"
+            },
+            "Replacement": {
+              "type": "STRING",
+              "description": "The content to replace the target with. Leave empty to delete the target."
+            },
+            "Target": {
+              "type": "STRING",
+              "description": "The exact string to be replaced. This must be the exact character-sequence to be replaced, including whitespace. Be very careful to include any leading whitespace otherwise this will not work at all. If the string appears multiple times in the file, every occurrence is replaced.",
+              "minLength": "1"
+            }
+          },
+          "required": [
+            "Path",
+            "Target",
+            "Replacement"
+          ]
+        }
+      }
+    ]
+  },
+  "capture_modes": [
+    "non-interactive",
+    "interactive"
+  ]
+}

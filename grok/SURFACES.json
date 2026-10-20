@@ -30,7 +30,7 @@
         "prompts/grok-4.6.md"
       ],
       "artifact_sha256": "56a878a196ba2df0bc8eeff144d641bd45f1b2c6a4ab70680cb44180185376b2",
-      "evidence_sha256": "6c71aedbfbcda006f3a95d69c6ec34cad7c8b928cadcf5576d820198849d318a"
+      "evidence_sha256": "7dbfe532aada41081ab4941f26c70f211a3fd05d67777e80c17f492810f85764"
     },
     {
       "id": "grok.prompt.special.session-title",
@@ -50,7 +50,7 @@
         "prompts/grok-session-title.md"
       ],
       "artifact_sha256": "18c33bd30be09d07f7c920ee1a0f4fdad68d6c044c19f2a4c745fe1b1e8d3591",
-      "evidence_sha256": "6c71aedbfbcda006f3a95d69c6ec34cad7c8b928cadcf5576d820198849d318a"
+      "evidence_sha256": "7dbfe532aada41081ab4941f26c70f211a3fd05d67777e80c17f492810f85764"
     },
     {
       "id": "grok.prompt.agent.grok-4-7.interactive",
@@ -70,7 +70,7 @@
         "prompts/grok-4.7-interactive.md"
       ],
       "artifact_sha256": "696c6b2ddc2309f266d50ec5337d03f9412b63de87e47bd86a4c9962cb6e5712",
-      "evidence_sha256": "6c71aedbfbcda006f3a95d69c6ec34cad7c8b928cadcf5576d820198849d318a"
+      "evidence_sha256": "7dbfe532aada41081ab4941f26c70f211a3fd05d67777e80c17f492810f85764"
     },
     {
       "id": "grok.steering.catalog",
@@ -97,8 +97,8 @@
         "misc/grok-4.6-steering.md",
         "misc/grok-4.7-interactive-steering.md"
       ],
-      "artifact_sha256": "bce97c217e350684c456255fc12222e78361f618ed42be0c8cf87455c7ba35d9",
-      "evidence_sha256": "6c71aedbfbcda006f3a95d69c6ec34cad7c8b928cadcf5576d820198849d318a"
+      "artifact_sha256": "52faf53fae45f99fc07cdb202c74c9ea77b4e2b8bb6f37a848651c847e5956b2",
+      "evidence_sha256": "7dbfe532aada41081ab4941f26c70f211a3fd05d67777e80c17f492810f85764"
     },
     {
       "id": "grok.tool.catalog",
@@ -149,7 +149,7 @@
         "tools/x_search.json"
       ],
       "artifact_sha256": "84aaa59137a9200d696e987f1b6747a91deb897ba7107ca320e739a274dcde89",
-      "evidence_sha256": "6c71aedbfbcda006f3a95d69c6ec34cad7c8b928cadcf5576d820198849d318a"
+      "evidence_sha256": "7dbfe532aada41081ab4941f26c70f211a3fd05d67777e80c17f492810f85764"
     }
   ]
 }
