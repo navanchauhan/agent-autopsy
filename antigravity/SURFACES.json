@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.4.3",
+  "observed_release": "1.4.4",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.4.3",
-      "verified_release": "1.4.3",
+      "captured_release": "1.4.4",
+      "verified_release": "1.4.4",
       "models": [
         "gemini-4-argon-medium"
       ],
@@ -30,15 +30,15 @@
         "prompts/gemini-4-argon-medium-interactive.md"
       ],
       "artifact_sha256": "40acb9c8d383de582881eb8224c30bb7082757582c647f63b6d91d716ad8e045",
-      "evidence_sha256": "aed775406f14b84a2ce0b0319c76f888820f9d905844e4bd3e335ef442d49053"
+      "evidence_sha256": "caf1bafa6e87bcc2e0f90f83c4706a7518f26e16b09081fd60839d02b9f9fa61"
     },
     {
       "id": "antigravity.prompt.agent.gemini-4-argon-medium.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.4.3",
-      "verified_release": "1.4.3",
+      "captured_release": "1.4.4",
+      "verified_release": "1.4.4",
       "models": [
         "gemini-4-argon-medium"
       ],
@@ -50,15 +50,15 @@
         "prompts/gemini-4-argon-medium.md"
       ],
       "artifact_sha256": "0dbd8898424374309fb057ba156fbb83b41b15bee2fd28a7837b10c885e673e6",
-      "evidence_sha256": "aed775406f14b84a2ce0b0319c76f888820f9d905844e4bd3e335ef442d49053"
+      "evidence_sha256": "caf1bafa6e87bcc2e0f90f83c4706a7518f26e16b09081fd60839d02b9f9fa61"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.4.3",
-      "verified_release": "1.4.3",
+      "captured_release": "1.4.4",
+      "verified_release": "1.4.4",
       "models": [
         "gemini-4-argon-medium"
       ],
@@ -82,7 +82,7 @@
         "tools/write_file.json"
       ],
       "artifact_sha256": "7c59d2d4afa028c75a92bbf5f6b7ad43ea88c46e57f239de600c6267110dc6d3",
-      "evidence_sha256": "aed775406f14b84a2ce0b0319c76f888820f9d905844e4bd3e335ef442d49053"
+      "evidence_sha256": "caf1bafa6e87bcc2e0f90f83c4706a7518f26e16b09081fd60839d02b9f9fa61"
     }
   ]
 }
