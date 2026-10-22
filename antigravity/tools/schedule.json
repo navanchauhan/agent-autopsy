@@ -10,7 +10,7 @@
     "functionDeclarations": [
       {
         "name": "schedule",
-        "description": "Schedule a one-shot timer (DurationSeconds) or a recurring cron job (CronExpression) that notifies you via Prompt. This tool call runs as a background task and returns immediately; end your turn (call no more tools) to wait for notifications. A timer with a TimerCondition is cancelled early by a matching message, which is itself your wakeup. Set IsDaemon only for a cron that should keep firing after the current task is done. Use the manage_task tool to cancel active schedules, and never use a shell sleep command as a timer.",
+        "description": "Schedule a one-shot timer (DurationSeconds) or a recurring cron job (CronExpression) that notifies you via Prompt. This tool call runs as a background task and returns immediately; end your turn (call no more tools) to wait for notifications. A timer with a TimerCondition is cancelled early by a matching message, which is itself your wakeup. Set IsDaemon only for a cron that should keep firing after the current task is done. Set ExactTiming only when a cron must fire at the exact wall-clock time without jitter. Use the manage_task tool to cancel active schedules, and never use a shell sleep command as a timer.",
         "parameters": {
           "type": "OBJECT",
           "properties": {
@@ -21,6 +21,10 @@
             "DurationSeconds": {
               "type": "INTEGER",
               "description": "Seconds to wait for a one-shot timer. Mutually exclusive with CronExpression."
+            },
+            "ExactTiming": {
+              "type": "BOOLEAN",
+              "description": "Cron only. Set true only when the user explicitly requires the schedule to fire at the exact wall-clock time without jitter. Leave false (the default) for polling, monitoring, or periodic tasks so triggers are jittered to avoid load spikes."
             },
             "IsDaemon": {
               "type": "BOOLEAN",

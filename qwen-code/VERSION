@@ -1,9 +1,9 @@
 source = QwenLM/qwen-code
-revision = b28b0d948fa28b89750ac5f1525b95e1746f47ab
-describe = b28b0d9
-version = 0.25.3
+revision = ac97ce7a70d9b2ea5d62b357e3d9b0851423afc9
+describe = ac97ce7
+version = 0.26.0
 reference_path = references/qwen-code
 capture_mode = direct source extraction
 prompts = 3
 tools = 52
-misc = 15
+misc = 16

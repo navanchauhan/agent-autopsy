@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "qwen-code",
-  "observed_release": "0.25.3",
+  "observed_release": "0.26.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.25.3",
-      "verified_release": "0.25.3",
+      "captured_release": "0.26.0",
+      "verified_release": "0.26.0",
       "models": [
         "all"
       ],
@@ -27,22 +27,29 @@
         "headless",
         "acp"
       ],
-      "dynamic_inputs": [],
+      "dynamic_inputs": [
+        "workspace",
+        "settings",
+        "memory",
+        "extensions",
+        "hooks",
+        "MCP"
+      ],
       "artifacts": [
         "prompts/core-acp-qwen3-coder-plus.md",
         "prompts/core-headless-qwen3-coder-plus.md",
         "prompts/core-interactive-qwen3-coder-plus.md"
       ],
       "artifact_sha256": "01b60a7a85af72731bcd42ef442cad83b7a2528d22dffe6bf5a1fce58cc8493e",
-      "evidence_sha256": "742b24a01a79648c73cfdf7662b62500594e3199af90775b7756f3d518dac290"
+      "evidence_sha256": "ebda8f49b8da42dcdfb015ba1f635afdc10fb4f15449b378ece3a89b2619d3e3"
     },
     {
       "id": "qwen-code.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.25.3",
-      "verified_release": "0.25.3",
+      "captured_release": "0.26.0",
+      "verified_release": "0.26.0",
       "models": [
         "all"
       ],
@@ -50,7 +57,14 @@
         "configured",
         "deferred"
       ],
-      "dynamic_inputs": [],
+      "dynamic_inputs": [
+        "workspace",
+        "settings",
+        "memory",
+        "extensions",
+        "hooks",
+        "MCP"
+      ],
       "artifacts": [
         "tools/agent.json",
         "tools/advisor.json",
@@ -105,16 +119,16 @@
         "tools/manage_memory.json",
         "tools/search_memory.json"
       ],
-      "artifact_sha256": "0c70dab1a49b5812cb9de10a345c16e95b7c09eb40b6ffe303fa4dd45ef721f6",
-      "evidence_sha256": "742b24a01a79648c73cfdf7662b62500594e3199af90775b7756f3d518dac290"
+      "artifact_sha256": "3a0442e7315b18c7bb235d743d89c903821ee439f6b4084fd3d49d6c39989b94",
+      "evidence_sha256": "ebda8f49b8da42dcdfb015ba1f635afdc10fb4f15449b378ece3a89b2619d3e3"
     },
     {
       "id": "qwen-code.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.25.3",
-      "verified_release": "0.25.3",
+      "captured_release": "0.26.0",
+      "verified_release": "0.26.0",
       "models": [
         "all"
       ],
@@ -124,7 +138,14 @@
         "compression",
         "insights"
       ],
-      "dynamic_inputs": [],
+      "dynamic_inputs": [
+        "workspace",
+        "settings",
+        "memory",
+        "extensions",
+        "hooks",
+        "MCP"
+      ],
       "artifacts": [
         "misc/arena-system-reminder.template.md",
         "misc/compression-prompt.md",
@@ -140,10 +161,11 @@
         "misc/manual-plan-exit-system-reminder.template.md",
         "misc/plan-mode-system-reminder.md",
         "misc/project-summary-prompt.md",
-        "misc/workflow-authoring.md"
+        "misc/workflow-authoring.md",
+        "misc/loop-protection.md"
       ],
-      "artifact_sha256": "a46919d6ead2a58953d1b9db1dd938932c086ef0fc79a7c09883a5663bec7744",
-      "evidence_sha256": "742b24a01a79648c73cfdf7662b62500594e3199af90775b7756f3d518dac290"
+      "artifact_sha256": "2bfb758ae562c837b9accbb7bea86fa1efe830c33d16b1906fa57d5251b4343c",
+      "evidence_sha256": "ebda8f49b8da42dcdfb015ba1f635afdc10fb4f15449b378ece3a89b2619d3e3"
     },
     {
       "id": "qwen-code.context.session",

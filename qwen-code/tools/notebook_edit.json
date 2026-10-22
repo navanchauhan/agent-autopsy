@@ -1,6 +1,6 @@
 {
   "name": "notebook_edit",
-  "description": "Edits a Jupyter notebook (.ipynb) safely at the cell level. Use this instead of edit or write_file for notebook cells. Supports replacing, inserting, and deleting cells. Always read the notebook first with read_file; then use the cell IDs shown in that output.",
+  "description": "Edits a Jupyter notebook (.ipynb). Use this instead of edit or write_file for cells. Always read the notebook first with read_file, then use the cell IDs from that output.",
   "parametersJsonSchema": {
     "properties": {
       "notebook_path": {
@@ -31,6 +31,10 @@
           "insert",
           "delete"
         ]
+      },
+      "record_as_artifact": {
+        "description": "Refresh existing only.",
+        "type": "boolean"
       }
     },
     "required": [
