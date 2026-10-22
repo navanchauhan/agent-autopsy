@@ -6,16 +6,25 @@
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261021",
+      "last_fresh_bucket": "20261022",
       "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
     "antigravity": {
-      "plan_hash": "d4e19b3372dc7651366e2b61b4a0ea576660fc20185d13ebda10c955106388e3",
+      "plan_hash": "84ef4eacf52c1300f611540b7d40b1ea5c3a97db11f5e9aeed3f1fd722c749c3",
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261021",
+      "last_fresh_bucket": "20261022",
+      "last_reviewer_input_hash": null,
+      "reason": null
+    },
+    "qwen-code": {
+      "plan_hash": "6dbffdfb07fb4927864f7b27d7f044ac303d6b8777f18b19ac82764922127a1e",
+      "state": "clear",
+      "request_after_run_id": null,
+      "request_after_run_attempt": null,
+      "last_fresh_bucket": "20261022",
       "last_reviewer_input_hash": null,
       "reason": null
     },
@@ -24,7 +33,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261021",
+      "last_fresh_bucket": "20261022",
       "last_reviewer_input_hash": "319be8d89fd195bf4cf97fdcca640cd6dfb7883f34ce4231337850bc0811c667",
       "reason": null
     }
