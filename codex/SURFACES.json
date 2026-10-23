@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "codex",
-  "observed_release": "0.163.0",
+  "observed_release": "0.164.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompts",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.163.0",
-      "verified_release": "0.163.0",
+      "captured_release": "0.164.0",
+      "verified_release": "0.164.0",
       "models": [
         "gpt-6-astra",
         "gpt-5",
@@ -50,15 +50,15 @@
         "prompts/review.md"
       ],
       "artifact_sha256": "3103304d4c34ed0f13f462c9e291fe1ef67658c3c88088f16c86ea4ab51679a0",
-      "evidence_sha256": "ea5db6980100295c4d638d48f0f3c765e379ebeff846fa22d5ebcb5b3f1e83ce"
+      "evidence_sha256": "95f38c55158e288663cb6710848ffa47168350a3bbf662e8454c300ffbf5e9d5"
     },
     {
       "id": "codex.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.163.0",
-      "verified_release": "0.163.0",
+      "captured_release": "0.164.0",
+      "verified_release": "0.164.0",
       "models": [
         "all"
       ],
@@ -94,15 +94,15 @@
         "tools/write_stdin.json"
       ],
       "artifact_sha256": "15d77c9512284bac8f4d48291aeabf2a532f7c80a68091e8563d5287b6ab4a39",
-      "evidence_sha256": "ea5db6980100295c4d638d48f0f3c765e379ebeff846fa22d5ebcb5b3f1e83ce"
+      "evidence_sha256": "95f38c55158e288663cb6710848ffa47168350a3bbf662e8454c300ffbf5e9d5"
     },
     {
       "id": "codex.steering.catalog",
       "category": "runtime messages",
       "status": "current",
       "capture_method": "direct-source",
-      "captured_release": "0.163.0",
-      "verified_release": "0.163.0",
+      "captured_release": "0.164.0",
+      "verified_release": "0.164.0",
       "models": [
         "all"
       ],
@@ -145,7 +145,7 @@
         "misc/review-exit-success.xml"
       ],
       "artifact_sha256": "eb4750534feef01dc68aa286f61af4fe855ad7bc7caf26ee27dade84dfaa15e3",
-      "evidence_sha256": "ea5db6980100295c4d638d48f0f3c765e379ebeff846fa22d5ebcb5b3f1e83ce"
+      "evidence_sha256": "95f38c55158e288663cb6710848ffa47168350a3bbf662e8454c300ffbf5e9d5"
     },
     {
       "id": "codex.assembly.model-mode",
@@ -161,8 +161,8 @@
       "dynamic_inputs": [],
       "artifacts": [],
       "notes": "No machine-readable recipe maps each model and mode to its ordered prompts, runtime messages, and tools.",
-      "captured_release": "0.159.2",
-      "verified_release": "0.159.2"
+      "captured_release": "0.164.0",
+      "verified_release": "0.164.0"
     },
     {
       "id": "codex.context.session",
@@ -185,8 +185,8 @@
       ],
       "artifacts": [],
       "notes": "Only product-owned wrappers and typed inputs may be stored; captured values are excluded.",
-      "captured_release": "0.159.2",
-      "verified_release": "0.159.2"
+      "captured_release": "0.164.0",
+      "verified_release": "0.164.0"
     },
     {
       "id": "codex.tool.code-mode-listing",
@@ -204,8 +204,8 @@
       ],
       "artifacts": [],
       "notes": "The current archive does not store the dynamic per-session listing or image and audio output-helper schemas.",
-      "captured_release": "0.159.2",
-      "verified_release": "0.159.2"
+      "captured_release": "0.164.0",
+      "verified_release": "0.164.0"
     },
     {
       "id": "codex.policy.external-overrides",
@@ -228,8 +228,8 @@
       ],
       "artifacts": [],
       "notes": "External values are not product-owned fixed artifacts and must not be copied from a capture.",
-      "captured_release": "0.159.2",
-      "verified_release": "0.159.2"
+      "captured_release": "0.164.0",
+      "verified_release": "0.164.0"
     }
   ]
 }

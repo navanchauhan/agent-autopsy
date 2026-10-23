@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "antigravity",
-  "observed_release": "1.4.5",
+  "observed_release": "1.4.6",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -17,8 +17,8 @@
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.4.5",
-      "verified_release": "1.4.5",
+      "captured_release": "1.4.6",
+      "verified_release": "1.4.6",
       "models": [
         "gemini-4-argon-medium"
       ],
@@ -29,16 +29,16 @@
       "artifacts": [
         "prompts/gemini-4-argon-medium-interactive.md"
       ],
-      "artifact_sha256": "40acb9c8d383de582881eb8224c30bb7082757582c647f63b6d91d716ad8e045",
-      "evidence_sha256": "f50fe96049f9d43c532a2acb0ec74f8fee883622cf5c03178593229988cbf898"
+      "artifact_sha256": "9bb0eb866e75ecc6449bb18deaa97c097ee3f1e1aa7f0673a96a41917b0e91a3",
+      "evidence_sha256": "58dc519e6cd9c672fb9b57bf15aa2597ec77fbc3e5b7973a27f34b8b3475b76d"
     },
     {
       "id": "antigravity.prompt.agent.gemini-4-argon-medium.non-interactive",
       "category": "agent prompt",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.4.5",
-      "verified_release": "1.4.5",
+      "captured_release": "1.4.6",
+      "verified_release": "1.4.6",
       "models": [
         "gemini-4-argon-medium"
       ],
@@ -49,16 +49,16 @@
       "artifacts": [
         "prompts/gemini-4-argon-medium.md"
       ],
-      "artifact_sha256": "0dbd8898424374309fb057ba156fbb83b41b15bee2fd28a7837b10c885e673e6",
-      "evidence_sha256": "f50fe96049f9d43c532a2acb0ec74f8fee883622cf5c03178593229988cbf898"
+      "artifact_sha256": "9e31eaabfc725f20dc4641b0371ac9bb304b2d4e804aa22e98c9c044304bbe96",
+      "evidence_sha256": "58dc519e6cd9c672fb9b57bf15aa2597ec77fbc3e5b7973a27f34b8b3475b76d"
     },
     {
       "id": "antigravity.tool.catalog",
       "category": "tool schemas",
       "status": "current",
       "capture_method": "model-request",
-      "captured_release": "1.4.5",
-      "verified_release": "1.4.5",
+      "captured_release": "1.4.6",
+      "verified_release": "1.4.6",
       "models": [
         "gemini-4-argon-medium"
       ],
@@ -82,7 +82,7 @@
         "tools/write_file.json"
       ],
       "artifact_sha256": "9fe0b7395aead371935cfcab6df6db6e218165416c76e3115781e8b5d7cbb52c",
-      "evidence_sha256": "f50fe96049f9d43c532a2acb0ec74f8fee883622cf5c03178593229988cbf898"
+      "evidence_sha256": "58dc519e6cd9c672fb9b57bf15aa2597ec77fbc3e5b7973a27f34b8b3475b76d"
     }
   ]
 }
