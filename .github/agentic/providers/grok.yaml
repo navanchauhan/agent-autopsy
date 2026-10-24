@@ -1,0 +1,18 @@
+# Facts the refresh agent can't cheaply rediscover. Goals live in ../goal.md.
+provider: grok
+release_field: version
+target:
+  binary: /opt/target/bin/grok  # native Rust binary
+  source: https://github.com/xai-org/grok-build (public mirror)
+  auth: ~/.grok/auth.json; auto-update is disabled in ~/.grok/config.toml
+  credential_scope: grok
+cover:
+  - the default model's requests in non-interactive and interactive (tmux) modes, plus
+    the session-title request
+  - bundled prompt and tool construction in the source snapshot for this release
+known:
+  - The mirror adds crates/codegen/xai-grok-shell/changelogs/<version>.md in the commit
+    for each release. That commit's SOURCE_REV file is the upstream `revision`, and the
+    commit itself is `mirror_revision`.
+  - Never use `grok --debug-file`. It prints the live OAuth token.
+  - `grok trace` omits request-level tools[], so it is not enough on its own.

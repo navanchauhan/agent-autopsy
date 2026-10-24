@@ -13,9 +13,7 @@ on:
         required: false
         type: boolean
         default: false
-  schedule:
-    # Check once daily at 17:17 UTC (09:17 PST / 10:17 PDT).
-    - cron: "17 17 * * *"
+  # Superseded by agentic-refresh.yml; kept runnable by hand as a fallback.
 
 permissions:
   contents: read

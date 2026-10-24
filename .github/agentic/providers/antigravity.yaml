@@ -1,0 +1,14 @@
+# Facts the refresh agent can't cheaply rediscover. Goals live in ../goal.md.
+provider: antigravity
+release_field: version
+target:
+  binary: /opt/target/bin/agy  # native Go binary
+  auth: ~/.gemini/antigravity-cli/ (OAuth token + installation id)
+  credential_scope: antigravity
+cover:
+  - requests to streamGenerateContent in non-interactive and interactive (tmux) modes
+known:
+  - AGY_CLI_DISABLE_AUTO_UPDATE=1 is set. Otherwise the CLI replaces itself with the
+    updater's head on launch.
+  - Only the manifest tarball SHA-512 is published, never executable hashes. The host
+    writes it.
