@@ -6,7 +6,7 @@
       "state": "suppress_positive",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261025",
+      "last_fresh_bucket": "20261026",
       "last_reviewer_input_hash": null,
       "reason": "capture_retry"
     },
@@ -33,7 +33,7 @@
       "state": "clear",
       "request_after_run_id": null,
       "request_after_run_attempt": null,
-      "last_fresh_bucket": "20261025",
+      "last_fresh_bucket": "20261026",
       "last_reviewer_input_hash": "319be8d89fd195bf4cf97fdcca640cd6dfb7883f34ce4231337850bc0811c667",
       "reason": null
     }
