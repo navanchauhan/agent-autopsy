@@ -1,7 +1,13 @@
 {
   "schema_version": 1,
   "queues": {
-    "codex": [],
+    "codex": [
+      {
+        "tool": "codex",
+        "new_version": "0.165.0",
+        "new_revision": "360319d8dee62d87e2d59fc0c21805d79519cfed"
+      }
+    ],
     "claude-code": [
       {
         "tool": "claude-code",
@@ -224,6 +230,18 @@
         "new_version": "2.1.310",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.310/linux-x64/claude",
         "artifact_sha256": "b73676430af12f97316a798b8371f81d640f90a58bdcb8f3ce56a835bb47df56"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.311",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.311/linux-x64/claude",
+        "artifact_sha256": "86dc1fcc69498159eaf15f446613e847010f9036bfbbdffd4c49350be8489ada"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.312",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.312/linux-x64/claude",
+        "artifact_sha256": "4f4178ce41d83e23341ebfbaecdbcf8ea6bf7baea0690025abe49eeec3a5d01d"
       }
     ],
     "grok": [],
@@ -233,6 +251,12 @@
         "new_version": "1.4.7",
         "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.7-5900205422411776/linux-x64/cli_linux_x64.tar.gz",
         "artifact_sha512": "beda760587589f5827b0b516c3ec2c5bd5cd2e91eb0e2533807ba1e990a27dcd63aef0191e0b76fb60feab0d16eaa8210fb79842c34dd4809e257e1712edd152"
+      },
+      {
+        "tool": "antigravity",
+        "new_version": "1.4.8",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.8-5447777392656384/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "b23683771438e72bffe0a2231168f65a16a0d73ed2c7a8460b311dc5fe0c3c9d9dfc6cbfb7d8755173340071aa4cc5c7a552fb5d1be3fdd31c2b7559d67e404a"
       }
     ],
     "qwen-code": [
@@ -240,6 +264,11 @@
         "tool": "qwen-code",
         "new_version": "0.26.1",
         "new_revision": "b475278c4a300acebe6cfc990a9e1b1d18819bfc"
+      },
+      {
+        "tool": "qwen-code",
+        "new_version": "0.26.2",
+        "new_revision": "402911146f6b2a80cb97423309faf1956f6defe4"
       }
     ]
   }
