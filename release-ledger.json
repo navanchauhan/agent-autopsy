@@ -257,6 +257,12 @@
         "new_version": "1.4.8",
         "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.8-5447777392656384/linux-x64/cli_linux_x64.tar.gz",
         "artifact_sha512": "b23683771438e72bffe0a2231168f65a16a0d73ed2c7a8460b311dc5fe0c3c9d9dfc6cbfb7d8755173340071aa4cc5c7a552fb5d1be3fdd31c2b7559d67e404a"
+      },
+      {
+        "tool": "antigravity",
+        "new_version": "1.4.9",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.9-4962164969177088/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "96a259b7475ae70a5b002ea8a83b804bba9b6ad2171af0cd0839b3959d9e6046ba36e181bc2d5597522aeceaacc06023564c46232fdb958f26f8c72267d9f0fd"
       }
     ],
     "qwen-code": [
@@ -269,6 +275,11 @@
         "tool": "qwen-code",
         "new_version": "0.26.2",
         "new_revision": "402911146f6b2a80cb97423309faf1956f6defe4"
+      },
+      {
+        "tool": "qwen-code",
+        "new_version": "0.26.3",
+        "new_revision": "eeee1443a7e36ab22b2f1dcded8dec64b621a7ee"
       }
     ]
   }
