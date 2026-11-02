@@ -331,6 +331,11 @@
         "tool": "qwen-code",
         "new_version": "0.26.5",
         "new_revision": "db0e4e24a0d89b211b2a15f4af2be22adac71dfc"
+      },
+      {
+        "tool": "qwen-code",
+        "new_version": "0.26.6",
+        "new_revision": "042c023b7beb4ad2a9ef95b2906b3564e3f23089"
       }
     ]
   }
