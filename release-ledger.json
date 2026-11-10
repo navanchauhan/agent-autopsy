@@ -16,6 +16,11 @@
         "tool": "codex",
         "new_version": "0.167.0",
         "new_revision": "086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a"
+      },
+      {
+        "tool": "codex",
+        "new_version": "0.167.1",
+        "new_revision": "0a94398fa60c4fac0e7659e4213a0a36e613dd46"
       }
     ],
     "claude-code": [
@@ -294,6 +299,12 @@
         "new_version": "2.1.321",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.321/linux-x64/claude",
         "artifact_sha256": "426c33815ca6645a772f722fbff10dbf2cbdb124a8aeab733c1365dbf8bbf61f"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.322",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.322/linux-x64/claude",
+        "artifact_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478"
       }
     ],
     "grok": [],
@@ -357,6 +368,18 @@
         "new_version": "1.5.3",
         "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.3-6604829099950080/linux-x64/cli_linux_x64.tar.gz",
         "artifact_sha512": "e363e1b17daaac2589f18e6973429c039fd5a5e5c15e9c0852fa349836f3992b10fe84732bc8d8c8208e149f0304f15aba9dec696d12efeed03917492c0580eb"
+      },
+      {
+        "tool": "antigravity",
+        "new_version": "1.5.4",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.4-5037094733742080/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "1431a409ef7c7bce23f4abf03f988afab728ba87d91d24ed7db0d5eea3ab71a4b590bf0bf2c79cec84f79b32b674ea38df0417356ce8d5d4f698cd62ea9ee6be"
+      },
+      {
+        "tool": "antigravity",
+        "new_version": "1.5.5",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.5-6740358537805824/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "746a2bd73f83b65d9b44f2fc55d0f0f511ff7f89702846213eeabd76d06bc9c98576b424c2babc7b947f15e518447b946ba02dca260b778363c55c07a7f7a277"
       }
     ],
     "qwen-code": [
@@ -414,6 +437,11 @@
         "tool": "qwen-code",
         "new_version": "0.27.1",
         "new_revision": "c2eccf7459c8d6d4b2a5df3733d2f3833153763b"
+      },
+      {
+        "tool": "qwen-code",
+        "new_version": "0.27.2",
+        "new_revision": "f42fe0f3251172c1174d00382ece522eafb3c6c2"
       }
     ]
   }
