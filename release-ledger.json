@@ -288,6 +288,12 @@
         "new_version": "2.1.319",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.319/linux-x64/claude",
         "artifact_sha256": "dabafec82ca1319fa43d8be36a10fc61b1d11821cb98ad5df04ad95e199b8eed"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.321",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.321/linux-x64/claude",
+        "artifact_sha256": "426c33815ca6645a772f722fbff10dbf2cbdb124a8aeab733c1365dbf8bbf61f"
       }
     ],
     "grok": [],
@@ -403,6 +409,11 @@
         "tool": "qwen-code",
         "new_version": "0.27.0",
         "new_revision": "03b0c2435be1890a21b117860eaf389076787275"
+      },
+      {
+        "tool": "qwen-code",
+        "new_version": "0.27.1",
+        "new_revision": "c2eccf7459c8d6d4b2a5df3733d2f3833153763b"
       }
     ]
   }
