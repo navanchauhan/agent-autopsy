@@ -338,6 +338,12 @@
         "new_version": "2.1.325",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.325/linux-x64/claude",
         "artifact_sha256": "0dc4f4a9a165fc60746d7ae8489712e5fc352f1e7ad4eb22e7141bd0812eb0cf"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.326",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.326/linux-x64/claude",
+        "artifact_sha256": "b6b3647d981130dc44fc670846ae97b6cde531ffb667cf9c4d17cfcafb38cb37"
       }
     ],
     "grok": [],
