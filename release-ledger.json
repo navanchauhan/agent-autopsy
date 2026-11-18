@@ -41,6 +41,11 @@
         "tool": "codex",
         "new_version": "0.169.1",
         "new_revision": "c376cf7396eff83ce4c6ac61b9553df142e7a0be"
+      },
+      {
+        "tool": "codex",
+        "new_version": "0.170.0",
+        "new_revision": "29eb79e9866b3262a777fdf8195c1b9e63684c91"
       }
     ],
     "claude-code": [
@@ -460,6 +465,12 @@
         "new_version": "1.5.10",
         "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.10-5253791805734912/linux-x64/cli_linux_x64.tar.gz",
         "artifact_sha512": "713ae840845d74736e2d4a96f5d84e3353d614e73a875793ddf500997ccee09595448cebfd8e94fdd90ce2a0fa97707bd1cc29763dcfe01c945d80c92234378f"
+      },
+      {
+        "tool": "antigravity",
+        "new_version": "1.5.11",
+        "artifact_url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.11-6132547114106880/linux-x64/cli_linux_x64.tar.gz",
+        "artifact_sha512": "dad3c015e8964fcdc1639b13b7152f4cb84cb1bde385707e2bcdf095d6f1831f4f6521199aec499cc052f9e99906b7fdbc52c273df064d5cb7c84b068ba3ce50"
       }
     ],
     "qwen-code": [
