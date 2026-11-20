@@ -46,6 +46,11 @@
         "tool": "codex",
         "new_version": "0.170.0",
         "new_revision": "29eb79e9866b3262a777fdf8195c1b9e63684c91"
+      },
+      {
+        "tool": "codex",
+        "new_version": "0.171.0",
+        "new_revision": "ccf9be8cc458bd6b8336fe84d68d8893f2691a5e"
       }
     ],
     "claude-code": [
@@ -372,6 +377,12 @@
         "new_version": "2.1.329",
         "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.329/linux-x64/claude",
         "artifact_sha256": "30e2724e2aecb1bf5dc9f3130901afb71c5fa229051c190a6d7ad9aff6378d6d"
+      },
+      {
+        "tool": "claude-code",
+        "new_version": "2.1.330",
+        "artifact_url": "https://downloads.claude.ai/claude-code-releases/2.1.330/linux-x64/claude",
+        "artifact_sha256": "f390eaa0814e6a1bff74cbb47acb74cb9c89d30ced809fe0af5af00c7bfe8ebb"
       }
     ],
     "grok": [],
