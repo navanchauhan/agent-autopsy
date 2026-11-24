@@ -83,6 +83,36 @@
       ],
       "artifact_sha256": "9fe0b7395aead371935cfcab6df6db6e218165416c76e3115781e8b5d7cbb52c",
       "evidence_sha256": "58dc519e6cd9c672fb9b57bf15aa2597ec77fbc3e5b7973a27f34b8b3475b76d"
+    },
+    {
+      "id": "antigravity.prompt.gemini-4-neon.public-gap",
+      "category": "model prompt coverage",
+      "status": "gap",
+      "capture_method": "unavailable",
+      "models": [
+        "Gemini 4 Neon"
+      ],
+      "modes": [
+        "not verified"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Google documents this model in the current selector, but its CLI model-facing prompt is not captured here. Display name is not asserted to be a request model ID. Source: https://antigravity.google/docs/models Local agy 1.5.14 `agy models` listed corresponding low, medium, high and xhigh aliases on 2026-11-24 UTC; the listing does not expose the prompt or prove a model request."
+    },
+    {
+      "id": "antigravity.prompt.gemini-4-hydrogen.public-gap",
+      "category": "model prompt coverage",
+      "status": "gap",
+      "capture_method": "unavailable",
+      "models": [
+        "Gemini 4 Hydrogen"
+      ],
+      "modes": [
+        "not verified"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Google documents this model in the current selector, but its CLI model-facing prompt is not captured here. Display name is not asserted to be a request model ID. Source: https://antigravity.google/docs/models Local agy 1.5.14 `agy models` listed corresponding low, medium, high and xhigh aliases on 2026-11-24 UTC; the listing does not expose the prompt or prove a model request."
     }
   ]
 }

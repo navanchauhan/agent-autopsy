@@ -230,6 +230,36 @@
       "notes": "External values are not product-owned fixed artifacts and must not be copied from a capture.",
       "captured_release": "0.164.0",
       "verified_release": "0.164.0"
+    },
+    {
+      "id": "codex.prompt.gpt-6-2-sol.public-gap",
+      "category": "model prompt coverage",
+      "status": "gap",
+      "capture_method": "unavailable",
+      "models": [
+        "gpt-6.2-sol"
+      ],
+      "modes": [
+        "not verified"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Public source at rust-v0.172.0 lists this model; the archived 0.164.0 prompt catalog has not been refreshed or validated for it. Source: https://github.com/openai/codex/blob/3d86e43b075adeba2193ec5c22ac92f55afd82e6/codex-rs/models-manager/models.json"
+    },
+    {
+      "id": "codex.prompt.gpt-6-2-astra.public-gap",
+      "category": "model prompt coverage",
+      "status": "gap",
+      "capture_method": "unavailable",
+      "models": [
+        "gpt-6.2-astra"
+      ],
+      "modes": [
+        "not verified"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [],
+      "notes": "Public source at rust-v0.172.0 lists this model; the archived 0.164.0 prompt catalog has not been refreshed or validated for it. Source: https://github.com/openai/codex/blob/3d86e43b075adeba2193ec5c22ac92f55afd82e6/codex-rs/models-manager/models.json"
     }
   ]
 }

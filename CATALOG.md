@@ -26,6 +26,8 @@ Observed release: `1.4.6`
 | `antigravity.prompt.agent.gemini-4-argon-medium.interactive` | agent prompt | `gemini-4-argon-medium` | `interactive` | current | `1.4.6` | [gemini-4-argon-medium-interactive.md](antigravity/prompts/gemini-4-argon-medium-interactive.md) |
 | `antigravity.prompt.agent.gemini-4-argon-medium.non-interactive` | agent prompt | `gemini-4-argon-medium` | `non-interactive` | current | `1.4.6` | [gemini-4-argon-medium.md](antigravity/prompts/gemini-4-argon-medium.md) |
 | `antigravity.tool.catalog` | tool schemas | `gemini-4-argon-medium` | `interactive`, `non-interactive` | current | `1.4.6` | 12 files ([manifest](antigravity/SURFACES.json)) |
+| `antigravity.prompt.gemini-4-neon.public-gap` | model prompt coverage | `Gemini 4 Neon` | `not verified` | gap | — | — |
+| `antigravity.prompt.gemini-4-hydrogen.public-gap` | model prompt coverage | `Gemini 4 Hydrogen` | `not verified` | gap | — | — |
 
 ## claude-code
 
@@ -56,6 +58,8 @@ Observed release: `0.164.0`
 | `codex.context.session` | dynamic context | `all` | `all` | dynamic | `0.164.0` | — |
 | `codex.tool.code-mode-listing` | dynamic tool catalog | `gpt-5.6` | `code-mode-only` | dynamic | `0.164.0` | — |
 | `codex.policy.external-overrides` | external policy inputs | `all` | `managed`, `custom`, `realtime` | dynamic | `0.164.0` | — |
+| `codex.prompt.gpt-6-2-sol.public-gap` | model prompt coverage | `gpt-6.2-sol` | `not verified` | gap | — | — |
+| `codex.prompt.gpt-6-2-astra.public-gap` | model prompt coverage | `gpt-6.2-astra` | `not verified` | gap | — | — |
 
 ## grok
 
