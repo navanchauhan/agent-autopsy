@@ -1,5 +1,7 @@
 # Antigravity CLI
 
+For the latest limited public-source check, see [PUBLIC-INVENTORY.md](PUBLIC-INVENTORY.md).
+
 ## Capture method
 
 Antigravity is captured from the installed `agy` binary. A mitmproxy addon records the real request body sent to `streamGenerateContent` without headers, plus response status, completion, response-marker, byte-count, and body-digest evidence; `extract-antigravity-log.cjs` rejects incomplete or unsuccessful captures and extracts the system prompt and Gemini function declarations. Keep a parallel `CODEIUM_VMODULE='*=5'` log to verify the endpoint and response model versions, but do not use its `Cortex API Request` line when the logger truncates a large payload.

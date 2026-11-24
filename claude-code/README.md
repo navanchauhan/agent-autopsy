@@ -1,5 +1,7 @@
 # Claude Code
 
+For the latest limited public-source check, see [PUBLIC-INVENTORY.md](PUBLIC-INVENTORY.md).
+
 ## Capture method
 
 Claude Code is captured by preloading `trace-claude-messages.cjs` into the native Bun binary and recording the real Anthropic `/v1/messages` request. The preload forwards the original request and response unchanged, redacts authentication headers, and records only response status/completion metadata; response bodies are inspected for terminal SSE events but are never retained.

@@ -1,5 +1,7 @@
 # Codex
 
+For the latest limited public-source check, see [PUBLIC-INVENTORY.md](PUBLIC-INVENTORY.md).
+
 ## Source method
 
 Codex is open source, so its artifacts are extracted directly from the upstream source tree. There is no binary tracing, proxying, or live model request in this capture flow. Automated refreshes enumerate stable `@openai/codex` package versions newer than the archive and queue each one only when its exact `rust-v<version>` release tag is available; arbitrary commits on upstream `HEAD` do not trigger releases.
