@@ -47,19 +47,23 @@ Observed release: `2.1.270`
 
 ## codex
 
-Observed release: `0.164.0`
+Observed release: `0.172.0`
 
 | Surface | Category | Models | Modes | Status | Captured | Artifacts |
 | --- | --- | --- | --- | --- | --- | --- |
-| `codex.prompt.agent.catalog` | agent prompts | `gpt-6-astra`, `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | current | `0.164.0` | 15 files ([manifest](codex/SURFACES.json)) |
-| `codex.tool.catalog` | tool schemas | `all` | `configured` | current | `0.164.0` | 25 files ([manifest](codex/SURFACES.json)) |
-| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | current | `0.164.0` | 29 files ([manifest](codex/SURFACES.json)) |
+| `codex.prompt.agent.catalog` | agent prompts | `gpt-6-astra`, `gpt-5`, `gpt-5.1`, `gpt-5.2`, `gpt-5.5`, `gpt-5.6` | `default`, `review` | stale | `0.164.0` | 15 files ([manifest](codex/SURFACES.json)) |
+| `codex.tool.catalog` | tool schemas | `all` | `configured` | stale | `0.164.0` | 24 files ([manifest](codex/SURFACES.json)) |
+| `codex.steering.catalog` | runtime messages | `all` | `configured`, `multi-agent`, `realtime`, `review` | stale | `0.164.0` | 23 files ([manifest](codex/SURFACES.json)) |
 | `codex.assembly.model-mode` | assembly recipe | `all` | `all` | gap | `0.164.0` | — |
 | `codex.context.session` | dynamic context | `all` | `all` | dynamic | `0.164.0` | — |
 | `codex.tool.code-mode-listing` | dynamic tool catalog | `gpt-5.6` | `code-mode-only` | dynamic | `0.164.0` | — |
 | `codex.policy.external-overrides` | external policy inputs | `all` | `managed`, `custom`, `realtime` | dynamic | `0.164.0` | — |
-| `codex.prompt.gpt-6-2-sol.public-gap` | model prompt coverage | `gpt-6.2-sol` | `not verified` | gap | — | — |
-| `codex.prompt.gpt-6-2-astra.public-gap` | model prompt coverage | `gpt-6.2-astra` | `not verified` | gap | — | — |
+| `codex.prompt.agent.gpt-6-2-sol.default` | agent prompt | `gpt-6.2-sol` | `default` | current | `0.172.0` | [gpt-6.2-sol.md](codex/prompts/gpt-6.2-sol.md) |
+| `codex.prompt.agent.gpt-6-2-astra.default` | agent prompt | `gpt-6.2-astra` | `default` | current | `0.172.0` | [gpt-6.2-astra.md](codex/prompts/gpt-6.2-astra.md) |
+| `codex.steering.guardian-policy` | runtime messages | `all` | `review` | current | `0.172.0` | [guardian-policy.md](codex/misc/guardian-policy.md) |
+| `codex.tool.apply-patch.default` | tool schemas | `all` | `configured` | verified-unchanged | `0.164.0` | [apply_patch.json](codex/tools/apply_patch.json) |
+| `codex.tool.apply-patch.multi-environment` | tool schemas | `all` | `multi-environment` | current | `0.172.0` | [apply_patch-multi-environment.json](codex/tools/apply_patch-multi-environment.json) |
+| `codex.steering.static-templates` | runtime messages | `all` | `configured` | verified-unchanged | `0.164.0` | 5 files ([manifest](codex/SURFACES.json)) |
 
 ## grok
 

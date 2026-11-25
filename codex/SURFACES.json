@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "provider": "codex",
-  "observed_release": "0.164.0",
+  "observed_release": "0.172.0",
   "privacy": {
     "tracked_content": "derived-normalized-only",
     "tracked_raw_requests": false,
@@ -15,7 +15,7 @@
     {
       "id": "codex.prompt.agent.catalog",
       "category": "agent prompts",
-      "status": "current",
+      "status": "stale",
       "capture_method": "direct-source",
       "captured_release": "0.164.0",
       "verified_release": "0.164.0",
@@ -50,12 +50,12 @@
         "prompts/review.md"
       ],
       "artifact_sha256": "3103304d4c34ed0f13f462c9e291fe1ef67658c3c88088f16c86ea4ab51679a0",
-      "evidence_sha256": "95f38c55158e288663cb6710848ffa47168350a3bbf662e8454c300ffbf5e9d5"
+      "notes": "Retained from 0.164.0 pending per-artifact verification against 0.172.0."
     },
     {
       "id": "codex.tool.catalog",
       "category": "tool schemas",
-      "status": "current",
+      "status": "stale",
       "capture_method": "direct-source",
       "captured_release": "0.164.0",
       "verified_release": "0.164.0",
@@ -67,7 +67,6 @@
       ],
       "dynamic_inputs": [],
       "artifacts": [
-        "tools/apply_patch.json",
         "tools/clock.json",
         "tools/create_goal.json",
         "tools/exec_command.json",
@@ -93,13 +92,13 @@
         "tools/web_search_text_and_image.json",
         "tools/write_stdin.json"
       ],
-      "artifact_sha256": "15d77c9512284bac8f4d48291aeabf2a532f7c80a68091e8563d5287b6ab4a39",
-      "evidence_sha256": "95f38c55158e288663cb6710848ffa47168350a3bbf662e8454c300ffbf5e9d5"
+      "artifact_sha256": "a19cd0de83832fb95e9c5f0999a84f962fc55c2a69709403218909a83a419d24",
+      "notes": "Retained from 0.164.0 pending per-artifact verification against 0.172.0."
     },
     {
       "id": "codex.steering.catalog",
       "category": "runtime messages",
-      "status": "current",
+      "status": "stale",
       "capture_method": "direct-source",
       "captured_release": "0.164.0",
       "verified_release": "0.164.0",
@@ -118,13 +117,10 @@
         "misc/apply-patch-tool-instructions.md",
         "misc/apps-instructions.md",
         "misc/collab-experimental-prompt.md",
-        "misc/compact-prompt.md",
-        "misc/compact-summary-prefix.md",
         "misc/environments-instructions.md",
         "misc/goal-budget-limit.md",
         "misc/goal-continuation.md",
         "misc/goal-objective-updated.md",
-        "misc/guardian-policy.md",
         "misc/inter-agent-message.md",
         "misc/multi-agent-mode-explicit-request-only.md",
         "misc/multi-agent-mode-proactive.md",
@@ -138,14 +134,11 @@
         "misc/plugins-instructions.md",
         "misc/realtime-backend-prompt.md",
         "misc/realtime-delegation.md",
-        "misc/realtime-end.md",
-        "misc/realtime-start.md",
         "misc/recommended-plugins.md",
-        "misc/review-exit-interrupted.xml",
         "misc/review-exit-success.xml"
       ],
-      "artifact_sha256": "eb4750534feef01dc68aa286f61af4fe855ad7bc7caf26ee27dade84dfaa15e3",
-      "evidence_sha256": "95f38c55158e288663cb6710848ffa47168350a3bbf662e8454c300ffbf5e9d5"
+      "artifact_sha256": "adbbb5fee9936de3e222aac19820907069f24568b6895771a9b7e198dba57241",
+      "notes": "Retained from 0.164.0 pending per-artifact verification against 0.172.0."
     },
     {
       "id": "codex.assembly.model-mode",
@@ -232,34 +225,134 @@
       "verified_release": "0.164.0"
     },
     {
-      "id": "codex.prompt.gpt-6-2-sol.public-gap",
-      "category": "model prompt coverage",
-      "status": "gap",
-      "capture_method": "unavailable",
+      "id": "codex.prompt.agent.gpt-6-2-sol.default",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "direct-source",
+      "captured_release": "0.172.0",
+      "verified_release": "0.172.0",
       "models": [
         "gpt-6.2-sol"
       ],
       "modes": [
-        "not verified"
+        "default"
       ],
       "dynamic_inputs": [],
-      "artifacts": [],
-      "notes": "Public source at rust-v0.172.0 lists this model; the archived 0.164.0 prompt catalog has not been refreshed or validated for it. Source: https://github.com/openai/codex/blob/3d86e43b075adeba2193ec5c22ac92f55afd82e6/codex-rs/models-manager/models.json"
+      "artifacts": [
+        "prompts/gpt-6.2-sol.md"
+      ],
+      "notes": "Bundled instructions_template at 3d86e43b075adeba2193ec5c22ac92f55afd82e6:codex-rs/models-manager/models.json. Trailing line whitespace was normalized. Session assembly and catalog overrides are outside this artifact.",
+      "evidence_sha256": "8d13bfc27c9a3d4ca6b57383b49e01d58a796ca7f7cdad21926f30147fe5e9c0",
+      "artifact_sha256": "90d5fdfda66b4e693bab53dd4b4a115fb02573ae57de0bffe7a981077ce7b4c2"
     },
     {
-      "id": "codex.prompt.gpt-6-2-astra.public-gap",
-      "category": "model prompt coverage",
-      "status": "gap",
-      "capture_method": "unavailable",
+      "id": "codex.prompt.agent.gpt-6-2-astra.default",
+      "category": "agent prompt",
+      "status": "current",
+      "capture_method": "direct-source",
+      "captured_release": "0.172.0",
+      "verified_release": "0.172.0",
       "models": [
         "gpt-6.2-astra"
       ],
       "modes": [
-        "not verified"
+        "default"
       ],
       "dynamic_inputs": [],
-      "artifacts": [],
-      "notes": "Public source at rust-v0.172.0 lists this model; the archived 0.164.0 prompt catalog has not been refreshed or validated for it. Source: https://github.com/openai/codex/blob/3d86e43b075adeba2193ec5c22ac92f55afd82e6/codex-rs/models-manager/models.json"
+      "artifacts": [
+        "prompts/gpt-6.2-astra.md"
+      ],
+      "notes": "Bundled instructions_template at 3d86e43b075adeba2193ec5c22ac92f55afd82e6:codex-rs/models-manager/models.json. Trailing line whitespace was normalized. Session assembly and catalog overrides are outside this artifact.",
+      "evidence_sha256": "8d13bfc27c9a3d4ca6b57383b49e01d58a796ca7f7cdad21926f30147fe5e9c0",
+      "artifact_sha256": "17ef66b5263873536941e70d44c470a0999649484f74b89b8444c093d03cb0d8"
+    },
+    {
+      "id": "codex.steering.guardian-policy",
+      "category": "runtime messages",
+      "status": "current",
+      "capture_method": "direct-source",
+      "captured_release": "0.172.0",
+      "verified_release": "0.172.0",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "review"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "misc/guardian-policy.md"
+      ],
+      "notes": "The pinned public policy template at 3d86e43b075adeba2193ec5c22ac92f55afd82e6:codex-rs/prompts/templates/guardian/policy_template.md changed one line. Existing assembled policy substitutions were retained.",
+      "evidence_sha256": "9d5801140271622c34fb6e5566defb92a9d5dedfc58ba0b7d89e5d974af2e471",
+      "artifact_sha256": "e5f8af1b7c2ff450c83e869cd6afdc664daa3d181b765abc3cb35fac19914d4f"
+    },
+    {
+      "id": "codex.tool.apply-patch.default",
+      "category": "tool schemas",
+      "status": "verified-unchanged",
+      "capture_method": "direct-source",
+      "captured_release": "0.164.0",
+      "verified_release": "0.172.0",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "configured"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "tools/apply_patch.json"
+      ],
+      "notes": "Default freeform variant matches pinned grammar and description. The environment-aware variant is represented separately.",
+      "evidence_sha256": "d2f1204d9335ed1bd8af68f6aad98d0228dda814997f94e98642716118fdd788",
+      "artifact_sha256": "8f8b04ab931574fcad0a3c4ee61a7d6bbdb20997e608cc62f36fe66ff4b80a45"
+    },
+    {
+      "id": "codex.tool.apply-patch.multi-environment",
+      "category": "tool schemas",
+      "status": "current",
+      "capture_method": "direct-source",
+      "captured_release": "0.172.0",
+      "verified_release": "0.172.0",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "multi-environment"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "tools/apply_patch-multi-environment.json"
+      ],
+      "notes": "Freeform variant generated by the pinned tool builder when include_environment_id is true.",
+      "evidence_sha256": "d2f1204d9335ed1bd8af68f6aad98d0228dda814997f94e98642716118fdd788",
+      "artifact_sha256": "45185f64dd4071ff96a534877275d392b22e047fd4c27fe54336a8e62c66adb7"
+    },
+    {
+      "id": "codex.steering.static-templates",
+      "category": "runtime messages",
+      "status": "verified-unchanged",
+      "capture_method": "direct-source",
+      "captured_release": "0.164.0",
+      "verified_release": "0.172.0",
+      "models": [
+        "all"
+      ],
+      "modes": [
+        "configured"
+      ],
+      "dynamic_inputs": [],
+      "artifacts": [
+        "misc/compact-prompt.md",
+        "misc/compact-summary-prefix.md",
+        "misc/realtime-start.md",
+        "misc/realtime-end.md",
+        "misc/review-exit-interrupted.xml"
+      ],
+      "notes": "Compared against the corresponding compact, realtime and review template files in the pinned source, ignoring a trailing newline.",
+      "evidence_sha256": "691882cd30f7c3cc923800a9a633a4fb8f77c56a039d3d06e47662bff348b051",
+      "artifact_sha256": "d2a8c8d63c3ea2cfabd0978a2ed6c1b3ca07f1463a92f66ea96e74be959a09af"
     }
   ]
 }
